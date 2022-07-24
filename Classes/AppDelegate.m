@@ -1,5 +1,5 @@
 #import "AppDelegate.h"
-#import "../Classes/RootViewController.h"
+#import "../Controllers/RootViewController.h"
 
 @implementation AppDelegate
 
