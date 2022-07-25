@@ -17,7 +17,7 @@
 	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 
-	UIBarButtonItem *testButton = [[UIBarButtonItem alloc] initWithTitle:@"Test" style:UIBarButtonItemStylePlain target:self action:@selector(url)];
+	UIBarButtonItem *testButton = [[UIBarButtonItem alloc] initWithTitle:@"Test" style:UIBarButtonItemStylePlain target:self action:@selector(test)];
     self.navigationItem.leftBarButtonItem = testButton;
     
     UIBarButtonItem *urlButton = [[UIBarButtonItem alloc] initWithTitle:@"Url" style:UIBarButtonItemStylePlain target:self action:@selector(url)];
