@@ -114,7 +114,7 @@
 	[player seekToTime:time];
 }
 
-- (void) orientationChanged:(NSNotification *)note {
+- (void)orientationChanged:(NSNotification *)note {
 	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
 	UIDevice *device = note.object;
 	switch(device.orientation) {
