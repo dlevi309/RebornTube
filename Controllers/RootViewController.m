@@ -55,9 +55,11 @@
 
 - (void)info :(NSString *)videoID {
     NSMutableDictionary *returnYouTubeDislikeRequest = [YouTubeExtractor returnYouTubeDislikeRequest:videoID];
-    NSString *videoViewCount = [NSString stringWithFormat:@"%@", returnYouTubeDislikeRequest[@"viewCount"]];
-    NSString *videoLikes = [NSString stringWithFormat:@"%@", returnYouTubeDislikeRequest[@"likes"]];
-    NSString *videoDislikes = [NSString stringWithFormat:@"%@", returnYouTubeDislikeRequest[@"dislikes"]];
+    NSNumberFormatter *formatter = [NSNumberFormatter new];
+	[formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    NSString *videoViewCount = [formatter stringFromNumber:returnYouTubeDislikeRequest[@"viewCount"]];
+    NSString *videoLikes = [formatter stringFromNumber:returnYouTubeDislikeRequest[@"likes"]];
+    NSString *videoDislikes = [formatter stringFromNumber:returnYouTubeDislikeRequest[@"dislikes"]];
 
     NSMutableDictionary *youtubeiAndroidPlayerRequest = [YouTubeExtractor youtubeiAndroidPlayerRequest:videoID];
     NSString *videoTitle = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"title"]];

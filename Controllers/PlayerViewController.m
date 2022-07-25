@@ -82,7 +82,7 @@
 
 	videoInfoLabel = [[UILabel alloc] init];
 	videoInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + playerLayer.frame.size.height + videoTitleLabel.frame.size.height, self.view.bounds.size.width, 60);
-	videoInfoLabel.text = [NSString stringWithFormat:@"%@\n%@\n%@", self.videoViewCount, self.videoLikes, self.videoDislikes];
+	videoInfoLabel.text = [NSString stringWithFormat:@"View Count: %@\nLikes: %@\nDislikes: %@", self.videoViewCount, self.videoLikes, self.videoDislikes];
 	videoInfoLabel.textColor = [UIColor whiteColor];
 	videoInfoLabel.numberOfLines = 3;
 	videoInfoLabel.adjustsFontSizeToFitWidth = true;
@@ -140,6 +140,8 @@
 		rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+		videoTitleLabel.hidden = NO;
+		videoInfoLabel.hidden = NO;
 		break;
 
 		case UIInterfaceOrientationLandscapeLeft:
@@ -147,6 +149,8 @@
 		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
+		videoTitleLabel.hidden = YES;
+		videoInfoLabel.hidden = YES;
 		break;
 
 		case UIInterfaceOrientationLandscapeRight:
@@ -154,6 +158,8 @@
 		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
+		videoTitleLabel.hidden = YES;
+		videoInfoLabel.hidden = YES;
 		break;
 	}
 }
