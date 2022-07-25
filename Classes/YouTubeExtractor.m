@@ -26,4 +26,11 @@
     return [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 }
 
++ (NSMutableDictionary *)returnYouTubeDislikeRequest :(NSString *)videoID {
+    NSMutableURLRequest *innertubeRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://returnyoutubedislikeapi.com/votes?videoId=%@", videoID]]];
+    
+    NSData *data = [NSURLConnection sendSynchronousRequest:innertubeRequest returningResponse:nil error:nil];
+    return [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+}
+
 @end

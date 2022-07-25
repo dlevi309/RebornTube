@@ -54,7 +54,12 @@
 }
 
 - (void)info :(NSString *)videoID {
-	NSMutableDictionary *youtubeiAndroidPlayerRequest = [YouTubeExtractor youtubeiAndroidPlayerRequest:videoID];
+    NSMutableDictionary *returnYouTubeDislikeRequest = [YouTubeExtractor returnYouTubeDislikeRequest:videoID];
+    NSString *videoViewCount = [NSString stringWithFormat:@"%@", returnYouTubeDislikeRequest[@"viewCount"]];
+    NSString *videoLikes = [NSString stringWithFormat:@"%@", returnYouTubeDislikeRequest[@"likes"]];
+    NSString *videoDislikes = [NSString stringWithFormat:@"%@", returnYouTubeDislikeRequest[@"dislikes"]];
+
+    NSMutableDictionary *youtubeiAndroidPlayerRequest = [YouTubeExtractor youtubeiAndroidPlayerRequest:videoID];
     NSString *videoTitle = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"title"]];
     NSArray *videoArtworkArray = youtubeiAndroidPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
     NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
@@ -141,6 +146,9 @@
 
     PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
     playerViewController.videoTitle = videoTitle;
+    playerViewController.videoViewCount = videoViewCount;
+    playerViewController.videoLikes = videoLikes;
+    playerViewController.videoDislikes = videoDislikes;
     playerViewController.videoURL = videoURL;
     playerViewController.audioURL = audioURL;
 

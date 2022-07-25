@@ -9,6 +9,9 @@
 	UIView *rewindView;
 	UIView *playPauseView;
 	UIView *forwardView;
+
+	UILabel *videoTitleLabel;
+	UILabel *videoInfoLabel;
 }
 @end
 
@@ -49,7 +52,6 @@
 
 	rewindView = [[UIView alloc] init];
 	rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
-	// rewindView.backgroundColor = [UIColor blueColor];
 	UITapGestureRecognizer *rewindViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rewindTap:)];
 	rewindViewTap.numberOfTapsRequired = 2;
 	[rewindView addGestureRecognizer:rewindViewTap];
@@ -57,7 +59,6 @@
 	
 	playPauseView = [[UIView alloc] init];
 	playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
-	// playPauseView.backgroundColor = [UIColor redColor];
 	UITapGestureRecognizer *playPauseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
 	playPauseViewTap.numberOfTapsRequired = 2;
 	[playPauseView addGestureRecognizer:playPauseViewTap];
@@ -65,11 +66,28 @@
 
 	forwardView = [[UIView alloc] init];
 	forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
-	// forwardView.backgroundColor = [UIColor greenColor];
 	UITapGestureRecognizer *forwardViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(forwardTap:)];
 	forwardViewTap.numberOfTapsRequired = 2;
 	[forwardView addGestureRecognizer:forwardViewTap];
 	[self.view addSubview:forwardView];
+
+	videoTitleLabel = [[UILabel alloc] init];
+	videoTitleLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + playerLayer.frame.size.height, self.view.bounds.size.width, 40);
+	videoTitleLabel.text = self.videoTitle;
+	videoTitleLabel.textColor = [UIColor whiteColor];
+	videoTitleLabel.numberOfLines = 2;
+	videoTitleLabel.adjustsFontSizeToFitWidth = true;
+	videoTitleLabel.adjustsFontForContentSizeCategory = false;
+	[self.view addSubview:videoTitleLabel];
+
+	videoInfoLabel = [[UILabel alloc] init];
+	videoInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + playerLayer.frame.size.height + videoTitleLabel.frame.size.height, self.view.bounds.size.width, 60);
+	videoInfoLabel.text = [NSString stringWithFormat:@"%@\n%@\n%@", self.videoViewCount, self.videoLikes, self.videoDislikes];
+	videoInfoLabel.textColor = [UIColor whiteColor];
+	videoInfoLabel.numberOfLines = 3;
+	videoInfoLabel.adjustsFontSizeToFitWidth = true;
+	videoInfoLabel.adjustsFontForContentSizeCategory = false;
+	[self.view addSubview:videoInfoLabel];
 }
 
 @end
