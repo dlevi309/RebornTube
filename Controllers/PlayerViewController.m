@@ -23,8 +23,7 @@
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack; */
 
 	[self.navigationController setNavigationBarHidden:YES animated:NO];
-	[[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:[UIDevice currentDevice]];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 	
 	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
 
@@ -114,31 +113,31 @@
 	[player seekToTime:time];
 }
 
-- (void)orientationChanged:(NSNotification *)note {
+- (void)orientationChanged:(NSNotification *)notification {
 	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
-	UIDevice *device = note.object;
-	switch(device.orientation) {
-		case UIDeviceOrientationPortrait:
+	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	switch (orientation) {
+		case UIInterfaceOrientationPortrait:
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		break;
 
-		case UIDeviceOrientationLandscapeLeft:
+		case UIInterfaceOrientationLandscapeLeft:
 		playerLayer.frame = self.view.bounds;
 		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		break;
 
-		case UIDeviceOrientationLandscapeRight:
+		case UIInterfaceOrientationLandscapeRight:
 		playerLayer.frame = self.view.bounds;
 		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		break;
-	};
+	}
 }
 
 @end
