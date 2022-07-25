@@ -10,9 +10,9 @@
 		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string>icon_29pt</string>
-				<string>icon_40pt</string>
-				<string>icon_60pt</string>
+				<string>icon29pt</string>
+				<string>icon40pt</string>
+				<string>icon60pt</string>
 			</array>
 			<key>UIPrerenderedIcon</key>
 			<true/>
