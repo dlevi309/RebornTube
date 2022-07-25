@@ -5,6 +5,10 @@
 	AVPlayer *player;
 	AVPlayerLayer *playerLayer;
 	AVPictureInPictureController *pictureInPictureController;
+
+	UIView *rewindView;
+	UIView *playPauseView;
+	UIView *forwardView;
 }
 @end
 
@@ -41,6 +45,30 @@
 	playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
 	playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 	[self.view.layer addSublayer:playerLayer];
+
+	rewindView = [[UIView alloc] init];
+	rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+	// rewindView.backgroundColor = [UIColor blueColor];
+	UITapGestureRecognizer *rewindViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rewindTap:)];
+	rewindViewTap.numberOfTapsRequired = 2;
+	[rewindView addGestureRecognizer:rewindViewTap];
+	[self.view addSubview:rewindView];
+	
+	playPauseView = [[UIView alloc] init];
+	playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+	// playPauseView.backgroundColor = [UIColor redColor];
+	UITapGestureRecognizer *playPauseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
+	playPauseViewTap.numberOfTapsRequired = 2;
+	[playPauseView addGestureRecognizer:playPauseViewTap];
+	[self.view addSubview:playPauseView];
+
+	forwardView = [[UIView alloc] init];
+	forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+	// forwardView.backgroundColor = [UIColor greenColor];
+	UITapGestureRecognizer *forwardViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(forwardTap:)];
+	forwardViewTap.numberOfTapsRequired = 2;
+	[forwardView addGestureRecognizer:forwardViewTap];
+	[self.view addSubview:forwardView];
 }
 
 @end
@@ -60,6 +88,28 @@
             [player play];
         }
     }
+}
+
+- (void)rewindTap:(UITapGestureRecognizer *)recognizer {
+	NSTimeInterval currentTime = CMTimeGetSeconds(player.currentTime);
+	NSTimeInterval newTime = currentTime - 5.0f;
+	CMTime time = CMTimeMakeWithSeconds(newTime, NSEC_PER_SEC);
+	[player seekToTime:time];
+}
+
+- (void)playPauseTap:(UITapGestureRecognizer *)recognizer {
+	if (player.timeControlStatus == AVPlayerTimeControlStatusPlaying) {
+		[player pause];
+	} else {
+		[player play];
+	}
+}
+
+- (void)forwardTap:(UITapGestureRecognizer *)recognizer {
+	NSTimeInterval currentTime = CMTimeGetSeconds(player.currentTime);
+	NSTimeInterval newTime = currentTime + 5.0f;
+	CMTime time = CMTimeMakeWithSeconds(newTime, NSEC_PER_SEC);
+	[player seekToTime:time];
 }
 
 @end
