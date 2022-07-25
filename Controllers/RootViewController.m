@@ -1,5 +1,6 @@
 #import "RootViewController.h"
 #import "PlayerViewController.h"
+#import "SearchViewController.h"
 #import "../Classes/YouTubeExtractor.h"
 
 @interface RootViewController ()
@@ -20,8 +21,8 @@
 	UIBarButtonItem *testButton = [[UIBarButtonItem alloc] initWithTitle:@"Test" style:UIBarButtonItemStylePlain target:self action:@selector(test)];
     self.navigationItem.leftBarButtonItem = testButton;
     
-    UIBarButtonItem *urlButton = [[UIBarButtonItem alloc] initWithTitle:@"Url" style:UIBarButtonItemStylePlain target:self action:@selector(url)];
-    self.navigationItem.rightBarButtonItem = urlButton;
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStylePlain target:self action:@selector(search)];
+    self.navigationItem.rightBarButtonItem = searchButton;
 }
 
 - (void)viewDidLoad {
@@ -38,6 +39,15 @@
 
 - (void)test {
     [self info:@"0yqm7vrCp-g"];
+}
+
+- (void)search {
+    SearchViewController *searchViewController = [[SearchViewController alloc] init];
+
+    UINavigationController *searchViewControllerView = [[UINavigationController alloc] initWithRootViewController:searchViewController];
+    searchViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+    [self presentViewController:searchViewControllerView animated:YES completion:nil];
 }
 
 - (void)url {
