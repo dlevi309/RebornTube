@@ -63,6 +63,7 @@
 
     NSMutableDictionary *youtubeiAndroidPlayerRequest = [YouTubeExtractor youtubeiAndroidPlayerRequest:videoID];
     NSString *videoTitle = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"title"]];
+    NSString *videoLength = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"lengthSeconds"]];
     NSArray *videoArtworkArray = youtubeiAndroidPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
     NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
     NSDictionary *innertubeAdaptiveFormats = youtubeiAndroidPlayerRequest[@"streamingData"][@"adaptiveFormats"];
@@ -148,6 +149,7 @@
 
     PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
     playerViewController.videoTitle = videoTitle;
+    playerViewController.videoLength = videoLength;
     playerViewController.videoViewCount = videoViewCount;
     playerViewController.videoLikes = videoLikes;
     playerViewController.videoDislikes = videoDislikes;

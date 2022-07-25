@@ -2,6 +2,7 @@
 
 @interface PlayerViewController ()
 {
+	AVPlayerItem *playerItem;
 	AVPlayer *player;
 	AVPlayerLayer *playerLayer;
 	AVPictureInPictureController *pictureInPictureController;
@@ -10,9 +11,11 @@
 	UIView *playPauseView;
 	UIView *forwardView;
 
+	UIProgressView *progressView;
 	UILabel *videoTitleLabel;
 	UILabel *videoInfoLabel;
 }
+- (void)updateProgressView;
 @end
 
 @implementation PlayerViewController
@@ -33,18 +36,23 @@
 	AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
 	AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
 
+	CMTime length = CMTimeMake([self.videoLength intValue], 1);
+
 	AVMutableComposition *mixComposition = [AVMutableComposition composition];
 
-	AVMutableCompositionTrack *compositionCommentaryTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
-	[compositionCommentaryTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioAsset.duration) ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:kCMTimeZero error:nil];
+	AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+	[compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, length) ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:kCMTimeZero error:nil];
 
 	AVMutableCompositionTrack *compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-	[compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, audioAsset.duration) ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:kCMTimeZero error:nil];
+	[compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, length) ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:kCMTimeZero error:nil];
 
-	AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithAsset:mixComposition];
+	playerItem = [[AVPlayerItem alloc] initWithAsset:mixComposition];
 
 	player = [AVPlayer playerWithPlayerItem:playerItem];
 	[player addObserver:self forKeyPath:@"status" options:0 context:nil];
+	[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
+		[self updateProgressView];
+	}];
 
 	playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
 	playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
@@ -71,8 +79,13 @@
 	[forwardView addGestureRecognizer:forwardViewTap];
 	[self.view addSubview:forwardView];
 
+	progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+	progressView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + playerLayer.frame.size.height, self.view.bounds.size.width, 50);
+	progressView.progressTintColor = [UIColor redColor];
+	[self.view addSubview:progressView];
+
 	videoTitleLabel = [[UILabel alloc] init];
-	videoTitleLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + playerLayer.frame.size.height, self.view.bounds.size.width, 40);
+	videoTitleLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + playerLayer.frame.size.height + progressView.frame.size.height, self.view.bounds.size.width, 40);
 	videoTitleLabel.text = self.videoTitle;
 	videoTitleLabel.textColor = [UIColor whiteColor];
 	videoTitleLabel.numberOfLines = 2;
@@ -81,7 +94,7 @@
 	[self.view addSubview:videoTitleLabel];
 
 	videoInfoLabel = [[UILabel alloc] init];
-	videoInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + playerLayer.frame.size.height + videoTitleLabel.frame.size.height, self.view.bounds.size.width, 60);
+	videoInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + playerLayer.frame.size.height + progressView.frame.size.height + videoTitleLabel.frame.size.height, self.view.bounds.size.width, 60);
 	videoInfoLabel.text = [NSString stringWithFormat:@"View Count: %@\nLikes: %@\nDislikes: %@", self.videoViewCount, self.videoLikes, self.videoDislikes];
 	videoInfoLabel.textColor = [UIColor whiteColor];
 	videoInfoLabel.numberOfLines = 3;
@@ -140,6 +153,7 @@
 		rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+		progressView.hidden = NO;
 		videoTitleLabel.hidden = NO;
 		videoInfoLabel.hidden = NO;
 		break;
@@ -149,6 +163,7 @@
 		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
+		progressView.hidden = YES;
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		break;
@@ -158,10 +173,15 @@
 		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
+		progressView.hidden = YES;
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		break;
 	}
+}
+
+- (void)updateProgressView {
+	progressView.progress = CMTimeGetSeconds(player.currentTime) / CMTimeGetSeconds(playerItem.duration);
 }
 
 @end
