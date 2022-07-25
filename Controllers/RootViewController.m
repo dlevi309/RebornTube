@@ -17,11 +17,16 @@
 	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 
-	UIBarButtonItem *urlButton = [[UIBarButtonItem alloc] initWithTitle:@"URL" style:UIBarButtonItemStylePlain target:self action:@selector(url)];
+	UIBarButtonItem *testButton = [[UIBarButtonItem alloc] initWithTitle:@"Test" style:UIBarButtonItemStylePlain target:self action:@selector(url)];
+    self.navigationItem.leftBarButtonItem = testButton;
+    
+    UIBarButtonItem *urlButton = [[UIBarButtonItem alloc] initWithTitle:@"Url" style:UIBarButtonItemStylePlain target:self action:@selector(url)];
     self.navigationItem.rightBarButtonItem = urlButton;
 }
 
 - (void)viewDidLoad {
+    [super viewDidLoad];
+    
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
     [[AVAudioSession sharedInstance] setActive:YES error:nil];
     [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
@@ -30,6 +35,10 @@
 @end
 
 @implementation RootViewController (Privates)
+
+- (void)test {
+    [self info:@"0yqm7vrCp-g"];
+}
 
 - (void)url {
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
@@ -130,12 +139,12 @@
         audioURL = audioLow;
     }
 
-	PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+    PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
     playerViewController.videoTitle = videoTitle;
     playerViewController.videoURL = videoURL;
     playerViewController.audioURL = audioURL;
 
-	UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
+    UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
     playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
     [self presentViewController:playerViewControllerView animated:YES completion:nil];
