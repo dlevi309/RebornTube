@@ -18,8 +18,8 @@
 	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 
-	UIBarButtonItem *testButton = [[UIBarButtonItem alloc] initWithTitle:@"Test" style:UIBarButtonItemStylePlain target:self action:@selector(test)];
-    self.navigationItem.leftBarButtonItem = testButton;
+	UIBarButtonItem *clipboardButton = [[UIBarButtonItem alloc] initWithTitle:@"Clipboard" style:UIBarButtonItemStylePlain target:self action:@selector(clipboard)];
+    self.navigationItem.leftBarButtonItem = clipboardButton;
     
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStylePlain target:self action:@selector(search)];
     self.navigationItem.rightBarButtonItem = searchButton;
@@ -37,10 +37,6 @@
 
 @implementation RootViewController (Privates)
 
-- (void)test {
-    [self info:@"0yqm7vrCp-g"];
-}
-
 - (void)search {
     SearchViewController *searchViewController = [[SearchViewController alloc] init];
 
@@ -50,7 +46,7 @@
     [self presentViewController:searchViewControllerView animated:YES completion:nil];
 }
 
-- (void)url {
+- (void)clipboard {
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     NSString *link = pasteboard.string;
 	NSString *regexString = @"(?<=v(=|/))([-a-zA-Z0-9_]+)|(?<=youtu.be/)([-a-zA-Z0-9_]+)";
