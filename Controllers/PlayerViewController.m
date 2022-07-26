@@ -51,6 +51,7 @@
 	playerItem = [[AVPlayerItem alloc] initWithAsset:mixComposition];
 
 	player = [AVPlayer playerWithPlayerItem:playerItem];
+	player.allowsExternalPlayback = YES;
 	[player addObserver:self forKeyPath:@"status" options:0 context:nil];
 	[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
 		[self updateProgressView];
@@ -105,11 +106,20 @@
 	[self.view addSubview:videoInfoLabel];
 }
 
+- (BOOL)prefersHomeIndicatorAutoHidden {
+	return YES;
+}
+
 @end
 
 @implementation PlayerViewController (Privates)
 
 - (void)done {
+	if ([pictureInPictureController isPictureInPictureActive]) {
+        [pictureInPictureController stopPictureInPicture];
+    }
+    [player pause];
+    [playerLayer removeFromSuperlayer];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -155,6 +165,7 @@
 	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 	switch (orientation) {
 		case UIInterfaceOrientationPortrait:
+		[self.navigationController setNavigationBarHidden:NO animated:NO];
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
@@ -165,6 +176,7 @@
 		break;
 
 		case UIInterfaceOrientationLandscapeLeft:
+		[self.navigationController setNavigationBarHidden:YES animated:NO];
 		playerLayer.frame = self.view.bounds;
 		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
@@ -175,6 +187,7 @@
 		break;
 
 		case UIInterfaceOrientationLandscapeRight:
+		[self.navigationController setNavigationBarHidden:YES animated:NO];
 		playerLayer.frame = self.view.bounds;
 		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
