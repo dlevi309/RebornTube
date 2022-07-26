@@ -65,7 +65,7 @@
 }
 
 - (void)settings {
-    SettingsViewController *videoOptionsController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     UINavigationController *settingsViewControllerView = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
     settingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
