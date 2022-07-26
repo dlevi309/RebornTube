@@ -134,12 +134,14 @@
         if (player.status == AVPlayerStatusReadyToPlay) {
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 
-            if ([AVPictureInPictureController isPictureInPictureSupported]) {
-                pictureInPictureController = [[AVPictureInPictureController alloc] initWithPlayerLayer:playerLayer];
-                pictureInPictureController.delegate = self;
-                if (@available(iOS 14.2, *)) {
-                    pictureInPictureController.canStartPictureInPictureAutomaticallyFromInline = YES;
-                }
+            if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
+				if ([AVPictureInPictureController isPictureInPictureSupported]) {
+					pictureInPictureController = [[AVPictureInPictureController alloc] initWithPlayerLayer:playerLayer];
+					pictureInPictureController.delegate = self;
+					if (@available(iOS 14.2, *)) {
+						pictureInPictureController.canStartPictureInPictureAutomaticallyFromInline = YES;
+					}
+				}
             }
 
             [player play];
