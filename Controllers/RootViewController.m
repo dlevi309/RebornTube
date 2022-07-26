@@ -1,6 +1,7 @@
 #import "RootViewController.h"
 #import "PlayerViewController.h"
 #import "SearchViewController.h"
+#import "SettingsViewController.h"
 #import "../Classes/YouTubeExtractor.h"
 
 @interface RootViewController ()
@@ -22,7 +23,9 @@
     self.navigationItem.leftBarButtonItem = clipboardButton;
     
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStylePlain target:self action:@selector(search)];
-    self.navigationItem.rightBarButtonItem = searchButton;
+    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(settings)];
+    
+    self.navigationItem.rightBarButtonItems = [searchButton, settingsButton];
 }
 
 - (void)viewDidLoad {
@@ -37,15 +40,6 @@
 
 @implementation RootViewController (Privates)
 
-- (void)search {
-    SearchViewController *searchViewController = [[SearchViewController alloc] init];
-
-    UINavigationController *searchViewControllerView = [[UINavigationController alloc] initWithRootViewController:searchViewController];
-    searchViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:searchViewControllerView animated:YES completion:nil];
-}
-
 - (void)clipboard {
 	UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
     NSString *link = pasteboard.string;
@@ -57,6 +51,23 @@
         NSString *videoID = [link substringWithRange:result.range];
 		[self info:videoID];
     }
+}
+
+- (void)search {
+    SearchViewController *searchViewController = [[SearchViewController alloc] init];
+
+    UINavigationController *searchViewControllerView = [[UINavigationController alloc] initWithRootViewController:searchViewController];
+    searchViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+    [self presentViewController:searchViewControllerView animated:YES completion:nil];
+}
+
+- (void)settings {
+    SettingsViewController *videoOptionsController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    UINavigationController *settingsViewControllerView = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+    settingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+    [self presentViewController:settingsViewControllerView animated:YES completion:nil];
 }
 
 - (void)info :(NSString *)videoID {
