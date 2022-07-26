@@ -64,7 +64,9 @@
 
 			UIImageView *videoImage = [[UIImageView alloc] init];
 			videoImage.frame = CGRectMake(0, 0, 80, searchView.frame.size.height);
-			videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"thumbnail"][@"thumbnails"][0][@"url"]]]]];
+            NSArray *videoArtworkArray = searchContents[i][@"compactVideoRenderer"][@"thumbnail"][@"thumbnails"];
+            NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
+			videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:videoArtwork]];
 			[searchView addSubview:videoImage];
 
 			UILabel *videoTitleLabel = [[UILabel alloc] init];
