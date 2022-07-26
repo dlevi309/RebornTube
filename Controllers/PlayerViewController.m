@@ -132,18 +132,20 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (object == player && [keyPath isEqualToString:@"status"]) {
         if (player.status == AVPlayerStatusReadyToPlay) {
-			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+			if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
+				[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+				[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 
-            if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
-				if ([AVPictureInPictureController isPictureInPictureSupported]) {
-					pictureInPictureController = [[AVPictureInPictureController alloc] initWithPlayerLayer:playerLayer];
-					pictureInPictureController.delegate = self;
-					if (@available(iOS 14.2, *)) {
-						pictureInPictureController.canStartPictureInPictureAutomaticallyFromInline = YES;
+				if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
+					if ([AVPictureInPictureController isPictureInPictureSupported]) {
+						pictureInPictureController = [[AVPictureInPictureController alloc] initWithPlayerLayer:playerLayer];
+						pictureInPictureController.delegate = self;
+						if (@available(iOS 14.2, *)) {
+							pictureInPictureController.canStartPictureInPictureAutomaticallyFromInline = YES;
+						}
 					}
 				}
-            }
-
+			}
             [player play];
         }
     }
@@ -172,6 +174,7 @@
 }
 
 - (void)enteredBackground:(NSNotification *)notification {
+	playerLayer.player = nil;
 	MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
     [commandCenter.togglePlayPauseCommand setEnabled:YES];
     [commandCenter.playCommand setEnabled:YES];
@@ -193,6 +196,10 @@
 	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoTitle] forKey:MPMediaItemPropertyTitle];
 
 	[playingInfoCenter setNowPlayingInfo:songInfo];
+}
+
+- (void)enteredForeground:(NSNotification *)notification {
+	playerLayer.player = player;
 }
 
 - (void)orientationChanged:(NSNotification *)notification {

@@ -25,7 +25,7 @@
     UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStylePlain target:self action:@selector(search)];
     UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(settings)];
     
-    self.navigationItem.rightBarButtonItems = @[searchButton, settingsButton];
+    self.navigationItem.rightBarButtonItems = @[settingsButton, searchButton];
 }
 
 - (void)viewDidLoad {
