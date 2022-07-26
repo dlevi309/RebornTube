@@ -182,7 +182,7 @@
 	MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
 	
 	NSMutableDictionary *songInfo = [[NSMutableDictionary alloc] init];
-	[songInfo setObject:@"Title" forKey:MPMediaItemPropertyTitle];
+	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoTitle] forKey:MPMediaItemPropertyTitle];
 
 	[playingInfoCenter setNowPlayingInfo:songInfo];
 }
