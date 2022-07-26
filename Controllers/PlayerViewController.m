@@ -35,6 +35,56 @@
 	
 	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
 
+	rewindView = [[UIView alloc] init];
+	rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+	UITapGestureRecognizer *rewindViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rewindTap:)];
+	rewindViewTap.numberOfTapsRequired = 2;
+	[rewindView addGestureRecognizer:rewindViewTap];
+	[self.view addSubview:rewindView];
+	
+	playPauseView = [[UIView alloc] init];
+	playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+	UITapGestureRecognizer *playPauseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
+	playPauseViewTap.numberOfTapsRequired = 2;
+	[playPauseView addGestureRecognizer:playPauseViewTap];
+	[self.view addSubview:playPauseView];
+
+	forwardView = [[UIView alloc] init];
+	forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+	UITapGestureRecognizer *forwardViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(forwardTap:)];
+	forwardViewTap.numberOfTapsRequired = 2;
+	[forwardView addGestureRecognizer:forwardViewTap];
+	[self.view addSubview:forwardView];
+
+	progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+	progressView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height, self.view.bounds.size.width, 50);
+	progressView.progressTintColor = [UIColor redColor];
+	[self.view addSubview:progressView];
+
+	videoTitleLabel = [[UILabel alloc] init];
+	videoTitleLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height + progressView.frame.size.height, self.view.bounds.size.width, 40);
+	videoTitleLabel.text = self.videoTitle;
+	videoTitleLabel.textColor = [UIColor whiteColor];
+	videoTitleLabel.numberOfLines = 2;
+	videoTitleLabel.adjustsFontSizeToFitWidth = true;
+	videoTitleLabel.adjustsFontForContentSizeCategory = false;
+	[self.view addSubview:videoTitleLabel];
+
+	videoInfoLabel = [[UILabel alloc] init];
+	videoInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height + progressView.frame.size.height + videoTitleLabel.frame.size.height, self.view.bounds.size.width, 60);
+	videoInfoLabel.text = [NSString stringWithFormat:@"View Count: %@\nLikes: %@\nDislikes: %@", self.videoViewCount, self.videoLikes, self.videoDislikes];
+	videoInfoLabel.textColor = [UIColor whiteColor];
+	videoInfoLabel.numberOfLines = 3;
+	videoInfoLabel.adjustsFontSizeToFitWidth = true;
+	videoInfoLabel.adjustsFontForContentSizeCategory = false;
+	[self.view addSubview:videoInfoLabel];
+}
+
+- (void)viewDidLoad {
+	[super viewDidLoad];
+
+	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
+
 	AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
 	AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
 
@@ -60,50 +110,6 @@
 	playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
 	playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 	[self.view.layer addSublayer:playerLayer];
-
-	rewindView = [[UIView alloc] init];
-	rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
-	UITapGestureRecognizer *rewindViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rewindTap:)];
-	rewindViewTap.numberOfTapsRequired = 2;
-	[rewindView addGestureRecognizer:rewindViewTap];
-	[self.view addSubview:rewindView];
-	
-	playPauseView = [[UIView alloc] init];
-	playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
-	UITapGestureRecognizer *playPauseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
-	playPauseViewTap.numberOfTapsRequired = 2;
-	[playPauseView addGestureRecognizer:playPauseViewTap];
-	[self.view addSubview:playPauseView];
-
-	forwardView = [[UIView alloc] init];
-	forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
-	UITapGestureRecognizer *forwardViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(forwardTap:)];
-	forwardViewTap.numberOfTapsRequired = 2;
-	[forwardView addGestureRecognizer:forwardViewTap];
-	[self.view addSubview:forwardView];
-
-	progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-	progressView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playerLayer.frame.size.height, self.view.bounds.size.width, 50);
-	progressView.progressTintColor = [UIColor redColor];
-	[self.view addSubview:progressView];
-
-	videoTitleLabel = [[UILabel alloc] init];
-	videoTitleLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playerLayer.frame.size.height + progressView.frame.size.height, self.view.bounds.size.width, 40);
-	videoTitleLabel.text = self.videoTitle;
-	videoTitleLabel.textColor = [UIColor whiteColor];
-	videoTitleLabel.numberOfLines = 2;
-	videoTitleLabel.adjustsFontSizeToFitWidth = true;
-	videoTitleLabel.adjustsFontForContentSizeCategory = false;
-	[self.view addSubview:videoTitleLabel];
-
-	videoInfoLabel = [[UILabel alloc] init];
-	videoInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playerLayer.frame.size.height + progressView.frame.size.height + videoTitleLabel.frame.size.height, self.view.bounds.size.width, 60);
-	videoInfoLabel.text = [NSString stringWithFormat:@"View Count: %@\nLikes: %@\nDislikes: %@", self.videoViewCount, self.videoLikes, self.videoDislikes];
-	videoInfoLabel.textColor = [UIColor whiteColor];
-	videoInfoLabel.numberOfLines = 3;
-	videoInfoLabel.adjustsFontSizeToFitWidth = true;
-	videoInfoLabel.adjustsFontForContentSizeCategory = false;
-	[self.view addSubview:videoInfoLabel];
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
