@@ -126,6 +126,8 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (object == player && [keyPath isEqualToString:@"status"]) {
         if (player.status == AVPlayerStatusReadyToPlay) {
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+
             if ([AVPictureInPictureController isPictureInPictureSupported]) {
                 pictureInPictureController = [[AVPictureInPictureController alloc] initWithPlayerLayer:playerLayer];
                 pictureInPictureController.delegate = self;
@@ -133,6 +135,7 @@
                     pictureInPictureController.canStartPictureInPictureAutomaticallyFromInline = YES;
                 }
             }
+
             [player play];
         }
     }
@@ -140,7 +143,7 @@
 
 - (void)rewindTap:(UITapGestureRecognizer *)recognizer {
 	NSTimeInterval currentTime = CMTimeGetSeconds(player.currentTime);
-	NSTimeInterval newTime = currentTime - 5.0f;
+	NSTimeInterval newTime = currentTime - 15.0f;
 	CMTime time = CMTimeMakeWithSeconds(newTime, NSEC_PER_SEC);
 	[player seekToTime:time];
 }
@@ -155,9 +158,33 @@
 
 - (void)forwardTap:(UITapGestureRecognizer *)recognizer {
 	NSTimeInterval currentTime = CMTimeGetSeconds(player.currentTime);
-	NSTimeInterval newTime = currentTime + 5.0f;
+	NSTimeInterval newTime = currentTime + 15.0f;
 	CMTime time = CMTimeMakeWithSeconds(newTime, NSEC_PER_SEC);
 	[player seekToTime:time];
+}
+
+- (void)enteredBackground:(NSNotification *)notification {
+	MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
+    [commandCenter.togglePlayPauseCommand setEnabled:YES];
+    [commandCenter.playCommand setEnabled:YES];
+    [commandCenter.pauseCommand setEnabled:YES];
+    [commandCenter.nextTrackCommand setEnabled:NO];
+    [commandCenter.previousTrackCommand setEnabled:NO];
+	[commandCenter.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        [player play];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
+    [commandCenter.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        [player pause];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
+
+	MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
+	
+	NSMutableDictionary *songInfo = [[NSMutableDictionary alloc] init];
+	[songInfo setObject:@"Title" forKey:MPMediaItemPropertyTitle];
+
+	[playingInfoCenter setNowPlayingInfo:songInfo];
 }
 
 - (void)orientationChanged:(NSNotification *)notification {
