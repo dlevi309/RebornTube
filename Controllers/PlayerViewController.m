@@ -10,6 +10,7 @@
 	UIView *rewindView;
 	UIView *playPauseView;
 	UIView *forwardView;
+	UIImageView *videoImage;
 
 	UIProgressView *progressView;
 	UILabel *videoTitleLabel;
@@ -112,9 +113,10 @@
 			[self playerTimeChanged];
 		}];
 
-		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
-		[self.view.layer addSublayer:playerLayer];
+		videoImage = [[UIImageView alloc] init];
+		videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
+		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		[self.view addSubview:videoImage];
 	} else if (self.videoURL != nil & self.audioURL != nil) {
 		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
 		AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
@@ -252,6 +254,7 @@
 		case UIInterfaceOrientationPortrait:
 		[self.navigationController setNavigationBarHidden:NO animated:NO];
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
@@ -263,6 +266,7 @@
 		case UIInterfaceOrientationLandscapeLeft:
 		[self.navigationController setNavigationBarHidden:YES animated:NO];
 		playerLayer.frame = self.view.bounds;
+		videoImage.frame = self.view.bounds;
 		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
@@ -274,6 +278,7 @@
 		case UIInterfaceOrientationLandscapeRight:
 		[self.navigationController setNavigationBarHidden:YES animated:NO];
 		playerLayer.frame = self.view.bounds;
+		videoImage.frame = self.view.bounds;
 		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
