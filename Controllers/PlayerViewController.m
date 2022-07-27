@@ -195,7 +195,10 @@
 	MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
 	
 	NSMutableDictionary *songInfo = [[NSMutableDictionary alloc] init];
+
+	MPMediaItemArtwork *albumArt = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]]];
 	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoTitle] forKey:MPMediaItemPropertyTitle];
+	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
 
 	[playingInfoCenter setNowPlayingInfo:songInfo];
 }

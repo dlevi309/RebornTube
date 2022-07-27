@@ -169,6 +169,7 @@
     PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
     playerViewController.videoTitle = videoTitle;
     playerViewController.videoLength = videoLength;
+    playerViewController.videoArtwork = videoArtwork;
     playerViewController.videoViewCount = videoViewCount;
     playerViewController.videoLikes = videoLikes;
     playerViewController.videoDislikes = videoDislikes;

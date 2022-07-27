@@ -7,6 +7,7 @@
 
 @property (nonatomic, strong) NSString *videoTitle;
 @property (nonatomic, strong) NSString *videoLength;
+@property (nonatomic, strong) NSString *videoArtwork;
 @property (nonatomic, strong) NSString *videoViewCount;
 @property (nonatomic, strong) NSString *videoLikes;
 @property (nonatomic, strong) NSString *videoDislikes;
