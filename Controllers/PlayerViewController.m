@@ -94,7 +94,7 @@
 		player.allowsExternalPlayback = YES;
 		[player addObserver:self forKeyPath:@"status" options:0 context:nil];
 		[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
-			[self playerTimeDidChange];
+			[self playerTimeChanged];
 		}];
 
 		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
