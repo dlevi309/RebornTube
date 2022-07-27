@@ -85,31 +85,48 @@
 
 	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
 
-	AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
-	AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
+	if (self.videoStream != nil) {
+		AVURLAsset *streamAsset = [[AVURLAsset alloc] initWithURL:self.videoStream options:nil];
 
-	CMTime length = CMTimeMake([self.videoLength intValue], 1);
+		playerItem = [[AVPlayerItem alloc] initWithAsset:streamAsset];
 
-	AVMutableComposition *mixComposition = [AVMutableComposition composition];
+		player = [AVPlayer playerWithPlayerItem:playerItem];
+		player.allowsExternalPlayback = YES;
+		[player addObserver:self forKeyPath:@"status" options:0 context:nil];
+		[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
+			[self playerTimeDidChange];
+		}];
 
-	AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
-	[compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, length) ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:kCMTimeZero error:nil];
+		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		[self.view.layer addSublayer:playerLayer];
+	} else {
+		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
+		AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
 
-	AVMutableCompositionTrack *compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-	[compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, length) ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:kCMTimeZero error:nil];
+		CMTime length = CMTimeMake([self.videoLength intValue], 1);
 
-	playerItem = [[AVPlayerItem alloc] initWithAsset:mixComposition];
+		AVMutableComposition *mixComposition = [AVMutableComposition composition];
 
-	player = [AVPlayer playerWithPlayerItem:playerItem];
-	player.allowsExternalPlayback = YES;
-	[player addObserver:self forKeyPath:@"status" options:0 context:nil];
-	[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
-		[self playerTimeDidChange];
-	}];
+		AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+		[compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, length) ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:kCMTimeZero error:nil];
 
-	playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-	playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
-	[self.view.layer addSublayer:playerLayer];
+		AVMutableCompositionTrack *compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
+		[compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, length) ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:kCMTimeZero error:nil];
+
+		playerItem = [[AVPlayerItem alloc] initWithAsset:mixComposition];
+
+		player = [AVPlayer playerWithPlayerItem:playerItem];
+		player.allowsExternalPlayback = YES;
+		[player addObserver:self forKeyPath:@"status" options:0 context:nil];
+		[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
+			[self playerTimeDidChange];
+		}];
+
+		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		[self.view.layer addSublayer:playerLayer];
+	}
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
