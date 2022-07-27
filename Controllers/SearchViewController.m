@@ -219,6 +219,11 @@
             [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:nil:nil:videoStream:sponsorBlockValues];
         }]];
     }
+    if (audioURL != nil) {
+        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Audio Only" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:nil:audioURL:nil:sponsorBlockValues];
+        }]];
+    }
 
     [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
     }]];

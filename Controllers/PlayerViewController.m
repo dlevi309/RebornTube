@@ -100,7 +100,22 @@
 		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		[self.view.layer addSublayer:playerLayer];
-	} else {
+	} else if (self.videoURL == nil & self.audioURL != nil) {
+		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
+
+		playerItem = [[AVPlayerItem alloc] initWithAsset:audioAsset];
+
+		player = [AVPlayer playerWithPlayerItem:playerItem];
+		player.allowsExternalPlayback = YES;
+		[player addObserver:self forKeyPath:@"status" options:0 context:nil];
+		[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
+			[self playerTimeChanged];
+		}];
+
+		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		[self.view.layer addSublayer:playerLayer];
+	} else if (self.videoURL != nil & self.audioURL != nil) {
 		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
 		AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
 
