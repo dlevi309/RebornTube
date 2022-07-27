@@ -1,5 +1,6 @@
 #import "SettingsViewController.h"
 #import "BackgroundModeSettingsViewController.h"
+#import "SponsorBlockSettingsViewController.h"
 #import "../Headers/TheosLinuxFix.h"
 #import "../Headers/iOS15Fix.h"
 
@@ -28,11 +29,14 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
+        return 1;
+    }
+    if (section == 1) {
         return 1;
     }
     return 0;
@@ -68,6 +72,12 @@
                 }
             }
         }
+        if (indexPath.section == 1) {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            if (indexPath.row == 0) {
+                cell.textLabel.text = @"SponsorBlock";
+            }
+        }
     }
     return cell;
 }
@@ -81,6 +91,15 @@
             backgroundModeSettingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
             [self presentViewController:backgroundModeSettingsViewControllerView animated:YES completion:nil];
+        }
+    }
+    if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            SponsorBlockSettingsViewController *sponsorBlockSettingsViewController = [[SponsorBlockSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            UINavigationController *sponsorBlockSettingsViewControllerView = [[UINavigationController alloc] initWithRootViewController:sponsorBlockSettingsViewController];
+            sponsorBlockSettingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+            [self presentViewController:sponsorBlockSettingsViewControllerView animated:YES completion:nil];
         }
     }
 }
