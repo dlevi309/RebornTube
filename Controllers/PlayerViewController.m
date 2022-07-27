@@ -174,7 +174,9 @@
 }
 
 - (void)enteredBackground:(NSNotification *)notification {
-	playerLayer.player = nil;
+	if (![pictureInPictureController isPictureInPictureActive]) {
+		playerLayer.player = nil;
+	}
 	MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
     [commandCenter.togglePlayPauseCommand setEnabled:YES];
     [commandCenter.playCommand setEnabled:YES];
@@ -199,7 +201,9 @@
 }
 
 - (void)enteredForeground:(NSNotification *)notification {
-	playerLayer.player = player;
+	if (![pictureInPictureController isPictureInPictureActive]) {
+		playerLayer.player = player;
+	}
 }
 
 - (void)orientationChanged:(NSNotification *)notification {
