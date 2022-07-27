@@ -12,7 +12,6 @@
 	UIView *forwardView;
 	UIImageView *videoImage;
 
-	UIProgressView *progressView;
 	UISlider *progressSlider;
 	UILabel *videoTitleLabel;
 	UILabel *videoInfoLabel;
@@ -58,19 +57,17 @@
 	[forwardView addGestureRecognizer:forwardViewTap];
 	[self.view addSubview:forwardView];
 
-	progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
-	progressView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height, self.view.bounds.size.width, 50);
-	progressView.progressTintColor = [UIColor redColor];
-	[self.view addSubview:progressView];
-
 	progressSlider = [[UISlider alloc] init];
 	progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height, self.view.bounds.size.width, 50);
-	progressSlider.hidden = YES;
+	progressSlider.minimumTrackTintColor = [UIColor redColor];
+	progressSlider.thumbTintColor = [UIColor redColor];
+	progressSlider.minimumValue = 0.0f;
+	progressSlider.maximumValue = [self.videoLength floatValue];
 	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 	[self.view addSubview:progressSlider];
 
 	videoTitleLabel = [[UILabel alloc] init];
-	videoTitleLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height + progressView.frame.size.height, self.view.bounds.size.width, 40);
+	videoTitleLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height + progressSlider.frame.size.height, self.view.bounds.size.width, 40);
 	videoTitleLabel.text = self.videoTitle;
 	videoTitleLabel.textColor = [UIColor whiteColor];
 	videoTitleLabel.numberOfLines = 2;
@@ -79,7 +76,7 @@
 	[self.view addSubview:videoTitleLabel];
 
 	videoInfoLabel = [[UILabel alloc] init];
-	videoInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height + progressView.frame.size.height + videoTitleLabel.frame.size.height, self.view.bounds.size.width, 60);
+	videoInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height + progressSlider.frame.size.height + videoTitleLabel.frame.size.height, self.view.bounds.size.width, 60);
 	videoInfoLabel.text = [NSString stringWithFormat:@"View Count: %@\nLikes: %@\nDislikes: %@", self.videoViewCount, self.videoLikes, self.videoDislikes];
 	videoInfoLabel.textColor = [UIColor whiteColor];
 	videoInfoLabel.numberOfLines = 3;
@@ -128,7 +125,7 @@
 		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
 		AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
 
-		CMTime length = CMTimeMake([self.videoLength intValue], 1);
+		CMTime length = CMTimeMakeWithSeconds([self.videoLength intValue], NSEC_PER_SEC);
 
 		AVMutableComposition *mixComposition = [AVMutableComposition composition];
 
@@ -265,7 +262,7 @@
 		rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
-		progressView.hidden = NO;
+		progressSlider.hidden = NO;
 		videoTitleLabel.hidden = NO;
 		videoInfoLabel.hidden = NO;
 		break;
@@ -277,7 +274,7 @@
 		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
-		progressView.hidden = YES;
+		progressSlider.hidden = YES;
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		break;
@@ -289,7 +286,7 @@
 		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
-		progressView.hidden = YES;
+		progressSlider.hidden = YES;
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		break;
@@ -297,10 +294,11 @@
 }
 
 - (void)sliderValueChanged:(UISlider *)sender {
+	[player seekToTime:CMTimeMakeWithSeconds(sender.value, NSEC_PER_SEC)];
 }
 
 - (void)playerTimeChanged {
-	progressView.progress = CMTimeGetSeconds(player.currentTime) / CMTimeGetSeconds(playerItem.duration);
+	progressSlider.value = (float)CMTimeGetSeconds(player.currentTime);
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] == 1) {
 		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue]) {
 			[player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue], NSEC_PER_SEC)];
