@@ -17,7 +17,10 @@
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 
 	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
-    self.navigationItem.rightBarButtonItem = doneButton;
+    self.navigationItem.leftBarButtonItem = doneButton;
+
+    UIBarButtonItem *applyButton = [[UIBarButtonItem alloc] initWithTitle:@"Apply" style:UIBarButtonItemStylePlain target:self action:@selector(apply)];
+    self.navigationItem.rightBarButtonItem = applyButton;
 
     if (@available(iOS 15.0, *)) {
     	[self.tableView setSectionHeaderTopPadding:0.0f];
@@ -92,6 +95,10 @@
 
 - (void)done {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)apply {
+    exit(0); 
 }
 
 @end
