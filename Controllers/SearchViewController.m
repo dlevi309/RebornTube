@@ -8,7 +8,7 @@
 	NSMutableDictionary *searchVideoIDDictionary;
 }
 - (void)searchRequest;
-- (void)player :(NSString *)videoTitle :(NSString *)videoLength :(NSString *)videoArtwork :(NSString *)videoViewCount :(NSString *)videoLikes :(NSString *)videoDislikes :(NSURL *)videoURL :(NSURL *)audioURL :(NSURL *)videoStream :(NSMutableDictionary *)sponsorBlockValues;
+- (void)player :(NSString *)videoTitle :(NSString *)videoLength :(NSURL *)videoArtwork :(NSString *)videoViewCount :(NSString *)videoLikes :(NSString *)videoDislikes :(NSURL *)videoURL :(NSURL *)audioURL :(NSURL *)videoStream :(NSMutableDictionary *)sponsorBlockValues;
 @end
 
 @implementation SearchViewController
@@ -231,7 +231,7 @@
     [self presentViewController:alertQualitySelector animated:YES completion:nil];
 }
 
-- (void)player :(NSString *)videoTitle :(NSString *)videoLength :(NSString *)videoArtwork :(NSString *)videoViewCount :(NSString *)videoLikes :(NSString *)videoDislikes :(NSURL *)videoURL :(NSURL *)audioURL :(NSURL *)videoStream :(NSMutableDictionary *)sponsorBlockValues {
+- (void)player :(NSString *)videoTitle :(NSString *)videoLength :(NSURL *)videoArtwork :(NSString *)videoViewCount :(NSString *)videoLikes :(NSString *)videoDislikes :(NSURL *)videoURL :(NSURL *)audioURL :(NSURL *)videoStream :(NSMutableDictionary *)sponsorBlockValues {
     PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
     playerViewController.videoTitle = videoTitle;
     playerViewController.videoLength = videoLength;
