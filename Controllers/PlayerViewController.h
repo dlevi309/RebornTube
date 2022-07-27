@@ -13,5 +13,6 @@
 @property (nonatomic, strong) NSString *videoDislikes;
 @property (nonatomic, strong) NSURL *audioURL;
 @property (nonatomic, strong) NSURL *videoURL;
+@property (nonatomic, strong) NSMutableDictionary *sponsorBlockValues;
 
 @end

@@ -45,4 +45,69 @@
     return [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 }
 
++ (NSMutableDictionary *)sponsorBlockRequest :(NSString *)videoID {
+    NSString *options = @"[%22sponsor%22,%22selfpromo%22,%22interaction%22,%22intro%22,%22outro%22,%22preview%22,%22music_offtopic%22]";
+    NSMutableURLRequest *innertubeRequest = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://sponsor.ajay.app/api/skipSegments?videoID=%@&categories=%@", videoID, options]]];
+    
+    NSData *data = [NSURLConnection sendSynchronousRequest:innertubeRequest returningResponse:nil error:nil];
+    NSMutableDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+    NSMutableDictionary *sponsorBlockValues = [[NSMutableDictionary alloc] init];
+    if ([NSJSONSerialization isValidJSONObject:jsonResponse]) {
+        for (NSMutableDictionary *jsonDictionary in jsonResponse) {
+            if ([[jsonDictionary objectForKey:@"category"] isEqual:@"sponsor"]) {
+                NSMutableArray *arraySponsorBlockValues = [[NSMutableArray alloc] init];
+                [arraySponsorBlockValues removeAllObjects];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][0] floatValue]]];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][1] floatValue]]];
+                [sponsorBlockValues setObject:arraySponsorBlockValues forKey:@"sponsor"];
+            }
+            if ([[jsonDictionary objectForKey:@"category"] isEqual:@"selfpromo"]) {
+                NSMutableArray *arraySponsorBlockValues = [[NSMutableArray alloc] init];
+                [arraySponsorBlockValues removeAllObjects];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][0] floatValue]]];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][1] floatValue]]];
+                [sponsorBlockValues setObject:arraySponsorBlockValues forKey:@"selfpromo"];
+            }
+            if ([[jsonDictionary objectForKey:@"category"] isEqual:@"interaction"]) {
+                NSMutableArray *arraySponsorBlockValues = [[NSMutableArray alloc] init];
+                [arraySponsorBlockValues removeAllObjects];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][0] floatValue]]];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][1] floatValue]]];
+                [sponsorBlockValues setObject:arraySponsorBlockValues forKey:@"interaction"];
+            }
+            if ([[jsonDictionary objectForKey:@"category"] isEqual:@"intro"]) {
+                NSMutableArray *arraySponsorBlockValues = [[NSMutableArray alloc] init];
+                [arraySponsorBlockValues removeAllObjects];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][0] floatValue]]];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][1] floatValue]]];
+                [sponsorBlockValues setObject:arraySponsorBlockValues forKey:@"intro"];
+            }
+            if ([[jsonDictionary objectForKey:@"category"] isEqual:@"outro"]) {
+                NSMutableArray *arraySponsorBlockValues = [[NSMutableArray alloc] init];
+                [arraySponsorBlockValues removeAllObjects];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][0] floatValue]]];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][1] floatValue]]];
+                [sponsorBlockValues setObject:arraySponsorBlockValues forKey:@"outro"];
+            }
+            if ([[jsonDictionary objectForKey:@"category"] isEqual:@"preview"]) {
+                NSMutableArray *arraySponsorBlockValues = [[NSMutableArray alloc] init];
+                [arraySponsorBlockValues removeAllObjects];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][0] floatValue]]];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][1] floatValue]]];
+                [sponsorBlockValues setObject:arraySponsorBlockValues forKey:@"preview"];
+            }
+            if ([[jsonDictionary objectForKey:@"category"] isEqual:@"music_offtopic"]) {
+                NSMutableArray *arraySponsorBlockValues = [[NSMutableArray alloc] init];
+                [arraySponsorBlockValues removeAllObjects];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][0] floatValue]]];
+                [arraySponsorBlockValues addObject:[NSNumber numberWithFloat:[[jsonDictionary objectForKey:@"segment"][1] floatValue]]];
+                [sponsorBlockValues setObject:arraySponsorBlockValues forKey:@"music_offtopic"];
+            }
+        }
+        return sponsorBlockValues;
+    } else {
+        return nil;
+    }
+}
+
 @end

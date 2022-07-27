@@ -95,6 +95,8 @@
 	NSString *searchViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
 	NSString *videoID = [searchVideoIDDictionary valueForKey:searchViewTag];
 
+    NSMutableDictionary *sponsorBlockRequest = [YouTubeExtractor sponsorBlockRequest:videoID];
+
 	NSMutableDictionary *returnYouTubeDislikeRequest = [YouTubeExtractor returnYouTubeDislikeRequest:videoID];
     NSNumberFormatter *formatter = [NSNumberFormatter new];
 	[formatter setNumberStyle:NSNumberFormatterDecimalStyle];
@@ -197,6 +199,7 @@
     playerViewController.videoDislikes = videoDislikes;
     playerViewController.videoURL = videoURL;
     playerViewController.audioURL = audioURL;
+    playerViewController.sponsorBlockValues = sponsorBlockRequest;
 
     UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
     playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;

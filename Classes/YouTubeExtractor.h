@@ -5,4 +5,5 @@
 + (NSMutableDictionary *)youtubeiAndroidSearchRequest :(NSString *)searchQuery;
 + (NSMutableDictionary *)youtubeiiOSPlayerRequest :(NSString *)videoID;
 + (NSMutableDictionary *)returnYouTubeDislikeRequest :(NSString *)videoID;
++ (NSMutableDictionary *)sponsorBlockRequest :(NSString *)videoID;
 @end

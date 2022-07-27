@@ -15,7 +15,7 @@
 	UILabel *videoTitleLabel;
 	UILabel *videoInfoLabel;
 }
-- (void)updateProgressView;
+- (void)playerTimeDidChange;
 @end
 
 @implementation PlayerViewController
@@ -104,7 +104,7 @@
 	player.allowsExternalPlayback = YES;
 	[player addObserver:self forKeyPath:@"status" options:0 context:nil];
 	[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
-		[self updateProgressView];
+		[self playerTimeDidChange];
 	}];
 
 	playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
@@ -250,8 +250,13 @@
 	}
 }
 
-- (void)updateProgressView {
+- (void)playerTimeDidChange {
 	progressView.progress = CMTimeGetSeconds(player.currentTime) / CMTimeGetSeconds(playerItem.duration);
+	/* if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] == 1) {
+		if (CMTimeGetSeconds(player.currentTime) >= CMTimeGetSeconds(CMTimeMake([[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:0] floatValue], 10000)) && CMTimeGetSeconds(player.currentTime) <= CMTimeGetSeconds(CMTimeMake([[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue], 10000))) {
+			[player seekToTime:CMTimeMake([[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue], 10000)];
+		}
+	} */
 }
 
 @end
