@@ -15,7 +15,7 @@
 	UILabel *videoTitleLabel;
 	UILabel *videoInfoLabel;
 }
-- (void)playerTimeDidChange;
+- (void)playerTimeChanged;
 @end
 
 @implementation PlayerViewController
@@ -120,7 +120,7 @@
 		player.allowsExternalPlayback = YES;
 		[player addObserver:self forKeyPath:@"status" options:0 context:nil];
 		[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
-			[self playerTimeDidChange];
+			[self playerTimeChanged];
 		}];
 
 		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
@@ -269,13 +269,43 @@
 	}
 }
 
-- (void)playerTimeDidChange {
+- (void)playerTimeChanged {
 	progressView.progress = CMTimeGetSeconds(player.currentTime) / CMTimeGetSeconds(playerItem.duration);
-	/* if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] == 1) {
-		if (CMTimeGetSeconds(player.currentTime) >= CMTimeGetSeconds(CMTimeMake([[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:0] floatValue], 10000)) && CMTimeGetSeconds(player.currentTime) <= CMTimeGetSeconds(CMTimeMake([[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue], 10000))) {
-			[player seekToTime:CMTimeMake([[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue], 10000)];
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] == 1) {
+		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue]) {
+			[player seekToTime:CMTimeMake([[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue] + 1, 1)];
 		}
-	} */
+	}
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSelfPromoSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSelfPromoSegmentedInt"] == 1) {
+		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"selfpromo"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"selfpromo"] objectAtIndex:1] floatValue]) {
+			[player seekToTime:CMTimeMake([[[self.sponsorBlockValues objectForKey:@"selfpromo"] objectAtIndex:1] floatValue] + 1, 1)];
+		}
+	}
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockInteractionSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockInteractionSegmentedInt"] == 1) {
+		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"interaction"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"interaction"] objectAtIndex:1] floatValue]) {
+			[player seekToTime:CMTimeMake([[[self.sponsorBlockValues objectForKey:@"interaction"] objectAtIndex:1] floatValue] + 1, 1)];
+		}
+	}
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockIntroSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockIntroSegmentedInt"] == 1) {
+		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"intro"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"intro"] objectAtIndex:1] floatValue]) {
+			[player seekToTime:CMTimeMake([[[self.sponsorBlockValues objectForKey:@"intro"] objectAtIndex:1] floatValue] + 1, 1)];
+		}
+	}
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockOutroSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockOutroSegmentedInt"] == 1) {
+		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"outro"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"outro"] objectAtIndex:1] floatValue]) {
+			[player seekToTime:CMTimeMake([[[self.sponsorBlockValues objectForKey:@"outro"] objectAtIndex:1] floatValue] + 1, 1)];
+		}
+	}
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockPreviewSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockPreviewSegmentedInt"] == 1) {
+		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"preview"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"preview"] objectAtIndex:1] floatValue]) {
+			[player seekToTime:CMTimeMake([[[self.sponsorBlockValues objectForKey:@"preview"] objectAtIndex:1] floatValue] + 1, 1)];
+		}
+	}
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockMusicOffTopicSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockMusicOffTopicSegmentedInt"] == 1) {
+		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:1] floatValue]) {
+			[player seekToTime:CMTimeMake([[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:1] floatValue] + 1, 1)];
+		}
+	}
 }
 
 @end
