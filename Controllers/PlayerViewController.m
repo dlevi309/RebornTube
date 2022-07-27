@@ -125,6 +125,8 @@
         [pictureInPictureController stopPictureInPicture];
     }
     [player pause];
+	playerLayer.player = nil;
+	player = nil;
     [playerLayer removeFromSuperlayer];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
