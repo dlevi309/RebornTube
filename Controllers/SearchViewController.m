@@ -8,6 +8,7 @@
 	NSMutableDictionary *searchVideoIDDictionary;
 }
 - (void)searchRequest;
+- (void)loadRequests :(NSString *)searchViewTag :(NSString *)videoID;
 - (void)player :(NSString *)videoTitle :(NSString *)videoLength :(NSURL *)videoArtwork :(NSString *)videoViewCount :(NSString *)videoLikes :(NSString *)videoDislikes :(NSURL *)videoURL :(NSURL *)audioURL :(NSURL *)videoStream :(NSMutableDictionary *)sponsorBlockValues;
 @end
 
@@ -50,7 +51,7 @@
     NSArray *searchContents = youtubeiAndroidSearchRequest[@"contents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
 	
 	UIScrollView *scrollView = [[UIScrollView alloc] init];
-	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + searchTextField.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - self.navigationController.navigationBar.frame.size.height - searchTextField.frame.size.height);
+	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + searchTextField.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - searchTextField.frame.size.height);
 	
 	int viewBounds = 0;
 	for (int i = 1 ; i <= 50 ; i++) {
@@ -96,6 +97,39 @@
 	NSString *searchViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
 	NSString *videoID = [searchVideoIDDictionary valueForKey:searchViewTag];
 
+    NSFileManager *fm = [[NSFileManager alloc] init];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+
+    NSString *historyPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"history.plist"];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSString *date = [dateFormatter stringFromDate:[NSDate date]];
+
+    NSMutableDictionary *historyDictionary;
+    if (![fm fileExistsAtPath:historyPlistFilePath]) {
+        historyDictionary = [[NSMutableDictionary alloc] init];
+    } else {
+        historyDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:historyPlistFilePath];
+    }
+
+    NSMutableArray *historyArray;
+    if ([historyDictionary objectForKey:date]) {
+        historyArray = [historyDictionary objectForKey:date];
+    } else {
+        historyArray = [[NSMutableArray alloc] init];
+    }
+    
+    [historyArray addObject:videoID];
+
+    [historyDictionary setValue:historyArray forKey:date];
+
+    [historyDictionary writeToFile:historyPlistFilePath atomically:YES];
+
+    [self loadRequests:searchViewTag:videoID];
+}
+
+- (void)loadRequests :(NSString *)searchViewTag :(NSString *)videoID {
     NSMutableDictionary *sponsorBlockValues = [YouTubeExtractor sponsorBlockRequest:videoID];
 
 	NSMutableDictionary *returnYouTubeDislikeRequest = [YouTubeExtractor returnYouTubeDislikeRequest:videoID];

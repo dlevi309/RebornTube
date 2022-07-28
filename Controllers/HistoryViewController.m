@@ -1,5 +1,6 @@
 #import "HistoryViewController.h"
 #import "RootViewController.h"
+#import "../Classes/YouTubeExtractor.h"
 
 @interface HistoryViewController ()
 @end
@@ -28,6 +29,52 @@
     tabBar.items = tabBarItems;
     tabBar.selectedItem = [tabBarItems objectAtIndex:1];
     [self.view addSubview:tabBar];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    NSFileManager *fm = [[NSFileManager alloc] init];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+
+    NSString *historyPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"history.plist"];
+    NSMutableDictionary *historyDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:historyPlistFilePath];
+
+    UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] init];
+	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - 50);
+    
+    int trueBounds = 0;
+    for (NSString *key in historyDictionary) {
+        int viewBounds = 0;
+        NSMutableArray *historyArray = [historyDictionary objectForKey:key];
+        for (NSString *videoID in historyArray) {
+            NSMutableDictionary *youtubeiAndroidPlayerRequest = [YouTubeExtractor youtubeiAndroidPlayerRequest:videoID];
+            NSString *videoTitle = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"title"]];
+
+            UIView *historyView = [[UIView alloc] init];
+			historyView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 80);
+			historyView.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+
+            UILabel *videoTitleLabel = [[UILabel alloc] init];
+			videoTitleLabel.frame = CGRectMake(85, 0, historyView.frame.size.width - 85, historyView.frame.size.height);
+			videoTitleLabel.text = videoTitle;
+			videoTitleLabel.textColor = [UIColor whiteColor];
+			videoTitleLabel.numberOfLines = 2;
+			videoTitleLabel.adjustsFontSizeToFitWidth = true;
+			videoTitleLabel.adjustsFontForContentSizeCategory = false;
+			[historyView addSubview:videoTitleLabel];
+
+            viewBounds += 82;
+            trueBounds += 82;
+			[scrollView addSubview:historyView];
+        }
+    }
+
+    scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, trueBounds);
+	[self.view addSubview:scrollView];
 }
 
 @end
