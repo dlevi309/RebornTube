@@ -1,10 +1,9 @@
 #import "RootViewController.h"
+#import "HistoryViewController.h"
 #import "SearchViewController.h"
 #import "SettingsViewController.h"
 
 @interface RootViewController ()
-- (void)url;
-- (void)info :(NSString *)videoID;
 @end
 
 @implementation RootViewController
@@ -21,6 +20,21 @@
     UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(settings)];
     
     self.navigationItem.rightBarButtonItems = @[settingsButton, searchButton];
+
+    UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
+    
+    UITabBar *tabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 50, self.view.bounds.size.width, 50)];
+    tabBar.delegate = self;
+
+    NSMutableArray *tabBarItems = [[NSMutableArray alloc] init];
+    UITabBarItem *tabBarItem1 = [[UITabBarItem alloc] initWithTitle:@"Home" image:nil tag:0];
+    UITabBarItem *tabBarItem2 = [[UITabBarItem alloc] initWithTitle:@"History" image:nil tag:1];
+    [tabBarItems addObject:tabBarItem1];
+    [tabBarItems addObject:tabBarItem2];
+
+    tabBar.items = tabBarItems;
+    tabBar.selectedItem = [tabBarItems objectAtIndex:0];
+    [self.view addSubview:tabBar];
 }
 
 - (void)viewDidLoad {
@@ -36,6 +50,18 @@
 @end
 
 @implementation RootViewController (Privates)
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    int selectedTag = tabBar.selectedItem.tag;
+    if (selectedTag == 1) {
+        HistoryViewController *historyViewController = [[HistoryViewController alloc] init];
+
+        UINavigationController *historyViewControllerView = [[UINavigationController alloc] initWithRootViewController:historyViewController];
+        historyViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+        [self presentViewController:historyViewControllerView animated:NO completion:nil];
+    }
+}
 
 - (void)search {
     SearchViewController *searchViewController = [[SearchViewController alloc] init];
