@@ -36,6 +36,9 @@
 	
 	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
 
+	NSString *playerAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"PlayerAssets" ofType:@"bundle"];
+	NSBundle *playerAssetsBundle = [NSBundle bundleWithPath:playerAssetsBundlePath];
+	
 	rewindView = [[UIView alloc] init];
 	rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 	UITapGestureRecognizer *rewindViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rewindTap:)];
@@ -59,8 +62,11 @@
 
 	progressSlider = [[UISlider alloc] init];
 	progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height, self.view.bounds.size.width, 50);
+	NSString *sliderThumbPath = [playerAssetsBundle pathForResource:@"sliderthumb" ofType:@"png"];
+	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateNormal];
+	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateHighlighted];
 	progressSlider.minimumTrackTintColor = [UIColor redColor];
-	progressSlider.thumbTintColor = [UIColor redColor];
+	// progressSlider.thumbTintColor = [UIColor redColor];
 	progressSlider.minimumValue = 0.0f;
 	progressSlider.maximumValue = [self.videoLength floatValue];
 	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
