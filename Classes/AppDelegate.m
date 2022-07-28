@@ -4,10 +4,10 @@
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-	_window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	_rootViewController = [[UINavigationController alloc] initWithRootViewController:[[RootViewController alloc] init]];
-	_window.rootViewController = _rootViewController;
-	[_window makeKeyAndVisible];
+	self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+	self.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[RootViewController alloc] init]];
+	self.window.rootViewController = self.rootViewController;
+	[self.window makeKeyAndVisible];	
 	return YES;
 }
 
