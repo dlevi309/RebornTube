@@ -133,8 +133,9 @@
 	
 	collapseImage = [[UIImageView alloc] init];
 	NSString *collapseImagePath = [playerAssetsBundle pathForResource:@"collapse" ofType:@"png"];
-	collapseImage.image = [UIImage imageWithContentsOfFile:collapseImagePath];
+	collapseImage.image = [[UIImage imageWithContentsOfFile:collapseImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	collapseImage.frame = CGRectMake(10, boundsWindow.safeAreaInsets.top + 10, 24, 24);
+	collapseImage.tintColor = [UIColor whiteColor];
 	collapseImage.hidden = YES;
 	collapseImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *collapseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(collapseTap:)];
@@ -144,8 +145,9 @@
 	
 	rewindImage = [[UIImageView alloc] init];
 	NSString *rewindImagePath = [playerAssetsBundle pathForResource:@"rewind" ofType:@"png"];
-	rewindImage.image = [UIImage imageWithContentsOfFile:rewindImagePath];
+	rewindImage.image = [[UIImage imageWithContentsOfFile:rewindImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+	rewindImage.tintColor = [UIColor whiteColor];
 	rewindImage.hidden = YES;
 	rewindImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *rewindViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rewindTap:)];
@@ -155,8 +157,9 @@
 
 	playImage = [[UIImageView alloc] init];
 	NSString *playImagePath = [playerAssetsBundle pathForResource:@"play" ofType:@"png"];
-	playImage.image = [UIImage imageWithContentsOfFile:playImagePath];
+	playImage.image = [[UIImage imageWithContentsOfFile:playImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+	playImage.tintColor = [UIColor whiteColor];
 	playImage.hidden = YES;
 	playImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *playViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
@@ -166,8 +169,9 @@
 
 	pauseImage = [[UIImageView alloc] init];
 	NSString *pauseImagePath = [playerAssetsBundle pathForResource:@"pause" ofType:@"png"];
-	pauseImage.image = [UIImage imageWithContentsOfFile:pauseImagePath];
+	pauseImage.image = [[UIImage imageWithContentsOfFile:pauseImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	pauseImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+	pauseImage.tintColor = [UIColor whiteColor];
 	pauseImage.hidden = YES;
 	pauseImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *pauseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
@@ -177,8 +181,9 @@
 
 	forwardImage = [[UIImageView alloc] init];
 	NSString *forwardImagePath = [playerAssetsBundle pathForResource:@"forward" ofType:@"png"];
-	forwardImage.image = [UIImage imageWithContentsOfFile:forwardImagePath];
+	forwardImage.image = [[UIImage imageWithContentsOfFile:forwardImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+	forwardImage.tintColor = [UIColor whiteColor];
 	forwardImage.hidden = YES;
 	forwardImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *forwardViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(forwardTap:)];
