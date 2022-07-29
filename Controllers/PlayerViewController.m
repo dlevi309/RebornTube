@@ -123,6 +123,9 @@
 	rewindImage.image = [[UIImage imageWithContentsOfFile:rewindImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
 	rewindImage.tintColor = [UIColor whiteColor];
+	rewindImage.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+	rewindImage.layer.cornerRadius = rewindImage.bounds.size.width / 2;
+	rewindImage.clipsToBounds = YES;
 	rewindImage.hidden = YES;
 	rewindImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *rewindViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rewindTap:)];
@@ -135,6 +138,9 @@
 	playImage.image = [[UIImage imageWithContentsOfFile:playImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
 	playImage.tintColor = [UIColor whiteColor];
+	playImage.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+	playImage.layer.cornerRadius = playImage.bounds.size.width / 2;
+	playImage.clipsToBounds = YES;
 	playImage.hidden = YES;
 	playImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *playViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
@@ -147,6 +153,9 @@
 	pauseImage.image = [[UIImage imageWithContentsOfFile:pauseImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	pauseImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
 	pauseImage.tintColor = [UIColor whiteColor];
+	pauseImage.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+	pauseImage.layer.cornerRadius = pauseImage.bounds.size.width / 2;
+	pauseImage.clipsToBounds = YES;
 	pauseImage.hidden = YES;
 	pauseImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *pauseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
@@ -159,6 +168,9 @@
 	forwardImage.image = [[UIImage imageWithContentsOfFile:forwardImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
 	forwardImage.tintColor = [UIColor whiteColor];
+	forwardImage.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+	forwardImage.layer.cornerRadius = forwardImage.bounds.size.width / 2;
+	forwardImage.clipsToBounds = YES;
 	forwardImage.hidden = YES;
 	forwardImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *forwardViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(forwardTap:)];
