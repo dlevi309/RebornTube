@@ -1,5 +1,5 @@
 #import "HistoryViewController.h"
-#import "RootViewController.h"
+#import "HomeViewController.h"
 #import "SearchViewController.h"
 #import "SettingsViewController.h"
 #import "PlayerViewController.h"
@@ -111,12 +111,12 @@
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     int selectedTag = tabBar.selectedItem.tag;
     if (selectedTag == 0) {
-        RootViewController *rootViewController = [[RootViewController alloc] init];
+        HomeViewController *homeViewController = [[HomeViewController alloc] init];
 
-        UINavigationController *rootViewControllerView = [[UINavigationController alloc] initWithRootViewController:rootViewController];
-        rootViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+        UINavigationController *homeViewControllerView = [[UINavigationController alloc] initWithRootViewController:homeViewController];
+        homeViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
-        [self presentViewController:rootViewControllerView animated:NO completion:nil];
+        [self presentViewController:homeViewControllerView animated:NO completion:nil];
     }
 }
 

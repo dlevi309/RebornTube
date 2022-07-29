@@ -1,12 +1,12 @@
 #import "AppDelegate.h"
-#import "../Controllers/RootViewController.h"
+#import "../Controllers/HomeViewController.h"
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-	self.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[RootViewController alloc] init]];
-	self.window.rootViewController = self.rootViewController;
+	self.homeViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeViewController alloc] init]];
+	self.window.rootViewController = self.homeViewController;
 	[self.window makeKeyAndVisible];	
 	return YES;
 }

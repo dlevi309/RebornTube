@@ -1,12 +1,12 @@
-#import "RootViewController.h"
+#import "HomeViewController.h"
 #import "HistoryViewController.h"
 #import "SearchViewController.h"
 #import "SettingsViewController.h"
 
-@interface RootViewController ()
+@interface HomeViewController ()
 @end
 
-@implementation RootViewController
+@implementation HomeViewController
 
 - (void)loadView {
 	[super loadView];
@@ -49,7 +49,7 @@
 
 @end
 
-@implementation RootViewController (Privates)
+@implementation HomeViewController (Privates)
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     int selectedTag = tabBar.selectedItem.tag;
