@@ -9,7 +9,7 @@
 }
 - (void)searchRequest;
 - (void)loadRequests :(NSString *)searchViewTag :(NSString *)videoID;
-- (void)player :(NSString *)videoTitle :(NSString *)videoLength :(NSURL *)videoArtwork :(NSString *)videoViewCount :(NSString *)videoLikes :(NSString *)videoDislikes :(NSURL *)videoURL :(NSURL *)audioURL :(NSURL *)videoStream :(NSMutableDictionary *)sponsorBlockValues;
+- (void)player :(NSString *)videoTitle :(NSString *)videoLength :(NSURL *)videoArtwork :(NSString *)videoViewCount :(NSString *)videoLikes :(NSString *)videoDislikes :(NSURL *)audioURL :(NSURL *)videoStream :(NSMutableDictionary *)sponsorBlockValues;
 @end
 
 @implementation SearchViewController
@@ -148,46 +148,11 @@
     NSArray *videoArtworkArray = youtubeiAndroidPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
     NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
     NSDictionary *innertubeAdaptiveFormats = youtubeiAndroidPlayerRequest[@"streamingData"][@"adaptiveFormats"];
-    NSURL *video2160p;
-    NSURL *video1440p;
-    NSURL *video1080p;
-    NSURL *video720p;
-    NSURL *video480p;
-    NSURL *video360p;
-    NSURL *video240p;
     NSURL *audioHigh;
     NSURL *audioMedium;
     NSURL *audioLow;
     for (NSDictionary *format in innertubeAdaptiveFormats) {
-        if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"2160"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"quality"]] isEqual:@"hd2160"]) {
-            if (video2160p == nil) {
-                video2160p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"1440"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"quality"]] isEqual:@"hd1440"]) {
-            if (video1440p == nil) {
-                video1440p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"1080"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"quality"]] isEqual:@"hd1080"]) {
-            if (video1080p == nil) {
-                video1080p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"720"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"quality"]] isEqual:@"hd720"]) {
-            if (video720p == nil) {
-                video720p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"480"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"qualityLabel"]] isEqual:@"480p"]) {
-            if (video480p == nil) {
-                video480p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"360"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"qualityLabel"]] isEqual:@"360p"]) {
-            if (video360p == nil) {
-                video360p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"240"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"qualityLabel"]] isEqual:@"240p"]) {
-            if (video240p == nil) {
-                video240p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"audio/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"audioQuality"]] isEqual:@"AUDIO_QUALITY_HIGH"]) {
+        if ([[format objectForKey:@"mimeType"] containsString:@"audio/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"audioQuality"]] isEqual:@"AUDIO_QUALITY_HIGH"]) {
             if (audioHigh == nil) {
                 audioHigh = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
             }
@@ -213,49 +178,14 @@
 
     UIAlertController *alertQualitySelector = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    if (video240p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"240p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video240p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
-    if (video360p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"360p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video360p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
-    if (video480p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"480p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video480p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
-    if (video720p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"720p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video720p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
-    if (video1080p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"1080p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video1080p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
-    if (video1440p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"1440p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video1440p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
-    if (video2160p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"2160p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video2160p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
     if (videoStream != nil) {
         [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Stream" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:nil:nil:videoStream:sponsorBlockValues];
+            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:nil:videoStream:sponsorBlockValues];
         }]];
     }
     if (audioURL != nil) {
         [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Audio Only" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:nil:audioURL:nil:sponsorBlockValues];
+            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:audioURL:nil:sponsorBlockValues];
         }]];
     }
 
@@ -270,7 +200,7 @@
     [self presentViewController:alertQualitySelector animated:YES completion:nil];
 }
 
-- (void)player :(NSString *)videoTitle :(NSString *)videoLength :(NSURL *)videoArtwork :(NSString *)videoViewCount :(NSString *)videoLikes :(NSString *)videoDislikes :(NSURL *)videoURL :(NSURL *)audioURL :(NSURL *)videoStream :(NSMutableDictionary *)sponsorBlockValues {
+- (void)player :(NSString *)videoTitle :(NSString *)videoLength :(NSURL *)videoArtwork :(NSString *)videoViewCount :(NSString *)videoLikes :(NSString *)videoDislikes :(NSURL *)audioURL :(NSURL *)videoStream :(NSMutableDictionary *)sponsorBlockValues {
     PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
     playerViewController.videoTitle = videoTitle;
     playerViewController.videoLength = videoLength;
@@ -278,7 +208,6 @@
     playerViewController.videoViewCount = videoViewCount;
     playerViewController.videoLikes = videoLikes;
     playerViewController.videoDislikes = videoDislikes;
-    playerViewController.videoURL = videoURL;
     playerViewController.audioURL = audioURL;
     playerViewController.videoStream = videoStream;
     playerViewController.sponsorBlockValues = sponsorBlockValues;

@@ -78,7 +78,7 @@
 		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		[self.view.layer addSublayer:playerLayer];
-	} else if (self.videoURL == nil & self.audioURL != nil) {
+	} else if (self.audioURL != nil) {
 		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
 
 		playerItem = [[AVPlayerItem alloc] initWithAsset:audioAsset];
@@ -94,32 +94,6 @@
 		videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
 		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		[self.view addSubview:videoImage];
-	} else if (self.videoURL != nil & self.audioURL != nil) {
-		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
-		AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
-
-		CMTime length = CMTimeMakeWithSeconds([self.videoLength intValue], NSEC_PER_SEC);
-
-		AVMutableComposition *mixComposition = [AVMutableComposition composition];
-
-		AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
-		[compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, length) ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:kCMTimeZero error:nil];
-
-		AVMutableCompositionTrack *compositionVideoTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeVideo preferredTrackID:kCMPersistentTrackID_Invalid];
-		[compositionVideoTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, length) ofTrack:[[videoAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0] atTime:kCMTimeZero error:nil];
-
-		playerItem = [[AVPlayerItem alloc] initWithAsset:mixComposition];
-
-		player = [AVPlayer playerWithPlayerItem:playerItem];
-		player.allowsExternalPlayback = YES;
-		[player addObserver:self forKeyPath:@"status" options:0 context:nil];
-		[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
-			[self playerTimeChanged];
-		}];
-
-		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
-		[self.view.layer addSublayer:playerLayer];
 	}
 }
 
