@@ -189,7 +189,7 @@
 
 - (void)infoSetup {
 	progressSlider = [[UISlider alloc] init];
-	progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height, self.view.bounds.size.width, 5);
+	progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height, self.view.bounds.size.width, 10);
 	NSString *sliderThumbPath = [playerAssetsBundle pathForResource:@"sliderthumb" ofType:@"png"];
 	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateNormal];
 	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateHighlighted];
@@ -361,7 +361,7 @@
 		playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
-		progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height, self.view.bounds.size.width, 5);
+		progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height, self.view.bounds.size.width, 10);
 		progressSlider.hidden = NO;
 		videoTitleLabel.hidden = NO;
 		videoInfoLabel.hidden = NO;
@@ -377,7 +377,7 @@
 		playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
-		progressSlider.frame = CGRectMake(50, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height - boundsWindow.safeAreaInsets.bottom - 50, self.view.bounds.size.width - 100, 5);
+		progressSlider.frame = CGRectMake(60, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height - boundsWindow.safeAreaInsets.bottom - 60, self.view.bounds.size.width - 120, 10);
 		if (collapseImage.hidden == YES && rewindImage.hidden == YES && playImage.hidden == YES && pauseImage.hidden == YES && forwardImage.hidden == YES) {
 			progressSlider.hidden = YES;
 		}
@@ -395,7 +395,7 @@
 		playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
-		progressSlider.frame = CGRectMake(50, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height - boundsWindow.safeAreaInsets.bottom - 50, self.view.bounds.size.width - 100, 5);
+		progressSlider.frame = CGRectMake(60, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height - boundsWindow.safeAreaInsets.bottom - 60, self.view.bounds.size.width - 120, 10);
 		if (collapseImage.hidden == YES && rewindImage.hidden == YES && playImage.hidden == YES && pauseImage.hidden == YES && forwardImage.hidden == YES) {
 			progressSlider.hidden = YES;
 		}
