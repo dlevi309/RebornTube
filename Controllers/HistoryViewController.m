@@ -65,7 +65,9 @@
     
     self.navigationItem.rightBarButtonItems = @[settingsButton, searchButton];
 
-    UITabBar *tabBar = [[UITabBar alloc] initWithFrame:CGRectMake(0, self.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 50, self.view.bounds.size.width, 50)];
+    UITabBar *tabBar = [[UITabBar alloc] init];
+    tabBar.frame = CGRectMake(0, self.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 50, self.view.bounds.size.width, 50);
+    tabBar.barStyle = UIBarStyleBlack;
     tabBar.delegate = self;
 
     NSMutableArray *tabBarItems = [[NSMutableArray alloc] init];
