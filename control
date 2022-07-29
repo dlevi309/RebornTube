@@ -6,4 +6,4 @@ Description: YouTube Client
 Maintainer: Lillie
 Author: Lillie
 Section: Utilities
-Depends: firmware (>= 15.0)
+Depends: firmware (>= 12.0)
