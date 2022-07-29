@@ -34,7 +34,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 1;
+        return 2;
     }
     if (section == 1) {
         return 1;
@@ -71,11 +71,14 @@
                     }
                 }
             }
+            if (indexPath.row == 1) {
+                cell.textLabel.text = @"SponsorBlock";
+            }
         }
         if (indexPath.section == 1) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             if (indexPath.row == 0) {
-                cell.textLabel.text = @"SponsorBlock";
+                cell.textLabel.text = @"Clear History";
             }
         }
     }
@@ -92,14 +95,29 @@
 
             [self presentViewController:backgroundModeSettingsViewControllerView animated:YES completion:nil];
         }
-    }
-    if (indexPath.section == 1) {
-        if (indexPath.row == 0) {
+        if (indexPath.row == 1) {
             SponsorBlockSettingsViewController *sponsorBlockSettingsViewController = [[SponsorBlockSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             UINavigationController *sponsorBlockSettingsViewControllerView = [[UINavigationController alloc] initWithRootViewController:sponsorBlockSettingsViewController];
             sponsorBlockSettingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
             [self presentViewController:sponsorBlockSettingsViewControllerView animated:YES completion:nil];
+        }
+    }
+    if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:@"Are you sure you want to delete your history?" preferredStyle:UIAlertControllerStyleAlert];
+
+            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            }]];
+
+            [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                NSFileManager *fm = [[NSFileManager alloc] init];
+                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+                NSString *documentsDirectory = [paths objectAtIndex:0];
+                [fm removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:@"history.plist"] error:nil];
+            }]];
+
+            [self presentViewController:alert animated:YES completion:nil];
         }
     }
 }
