@@ -100,6 +100,7 @@
         UIView *historyView = [[UIView alloc] init];
         historyView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 40);
         historyView.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+        historyView.tag = dateCount;
         UITapGestureRecognizer *historyViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(historyTap:)];
         historyViewTap.numberOfTapsRequired = 1;
         [historyView addGestureRecognizer:historyViewTap];
