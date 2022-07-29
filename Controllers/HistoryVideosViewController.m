@@ -1,4 +1,5 @@
 #import "HistoryVideosViewController.h"
+#import "HistoryViewController.h"
 #import "SearchViewController.h"
 #import "SettingsViewController.h"
 #import "PlayerViewController.h"
@@ -8,6 +9,8 @@
 {
     // Keys
 	UIWindow *boundsWindow;
+    NSString *historyAssetsBundlePath;
+	NSBundle *historyAssetsBundle;
 
     // Other
     NSMutableDictionary *videoIDDictionary;
@@ -28,15 +31,17 @@
 
     [self keysSetup];
 
-    UILabel *titleLabel = [[UILabel alloc] init];
-	titleLabel.text = @"RebornTube";
-	titleLabel.textColor = [UIColor whiteColor];
-	titleLabel.numberOfLines = 1;
-	titleLabel.adjustsFontSizeToFitWidth = true;
-	titleLabel.adjustsFontForContentSizeCategory = false;
-    UIBarButtonItem *titleButton = [[UIBarButtonItem alloc] initWithCustomView:titleLabel];
+    UIImageView *backImage = [[UIImageView alloc] init];
+	NSString *backImagePath = [historyAssetsBundle pathForResource:@"back" ofType:@"png"];
+	backImage.image = [[UIImage imageWithContentsOfFile:backImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	backImage.tintColor = [UIColor whiteColor];
+    backImage.userInteractionEnabled = YES;
+	UITapGestureRecognizer *backViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(back:)];
+	backViewTap.numberOfTapsRequired = 1;
+	[backImage addGestureRecognizer:backViewTap];
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:backImage];
 
-    self.navigationItem.leftBarButtonItem = titleButton;
+    self.navigationItem.leftBarButtonItem = backButton;
 
 	UILabel *searchLabel = [[UILabel alloc] init];
 	searchLabel.text = @"Search";
@@ -124,11 +129,22 @@
 
 - (void)keysSetup {
 	boundsWindow = [[UIApplication sharedApplication] keyWindow];
+    historyAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"HistoryAssets" ofType:@"bundle"];
+	historyAssetsBundle = [NSBundle bundleWithPath:historyAssetsBundlePath];
 }
 
 @end
 
 @implementation HistoryVideosViewController (Privates)
+
+- (void)back:(UITapGestureRecognizer *)recognizer {
+    HistoryViewController *historyViewController = [[HistoryViewController alloc] init];
+    
+    UINavigationController *historyViewControllerView = [[UINavigationController alloc] initWithRootViewController:historyViewController];
+    historyViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+    [self presentViewController:historyViewControllerView animated:NO completion:nil];
+}
 
 - (void)search:(UITapGestureRecognizer *)recognizer {
     SearchViewController *searchViewController = [[SearchViewController alloc] init];
