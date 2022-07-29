@@ -109,7 +109,11 @@
 
         UILabel *historyDateLabel = [[UILabel alloc] init];
         historyDateLabel.frame = CGRectMake(10, 0, historyView.frame.size.width - 10, historyView.frame.size.height);
-        historyDateLabel.text = key;
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+        NSDate *date = [dateFormatter dateFromString:key];
+        [dateFormatter setDateFormat:@"MMMM dd, yyyy"];
+        historyDateLabel.text = [dateFormatter stringFromDate:date];
         historyDateLabel.textColor = [UIColor whiteColor];
         historyDateLabel.numberOfLines = 1;
         historyDateLabel.adjustsFontSizeToFitWidth = true;
