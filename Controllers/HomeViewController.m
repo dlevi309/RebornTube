@@ -28,7 +28,7 @@
 
 	UILabel *searchLabel = [[UILabel alloc] init];
 	searchLabel.text = @"Search";
-	searchLabel.textColor = [UIColor blueColor];
+	searchLabel.textColor = [UIColor systemBlueColor];
 	searchLabel.numberOfLines = 1;
 	searchLabel.adjustsFontSizeToFitWidth = true;
 	searchLabel.adjustsFontForContentSizeCategory = false;
@@ -39,7 +39,7 @@
 
     UILabel *settingsLabel = [[UILabel alloc] init];
 	settingsLabel.text = @"Settings";
-	settingsLabel.textColor = [UIColor blueColor];
+	settingsLabel.textColor = [UIColor systemBlueColor];
 	settingsLabel.numberOfLines = 1;
 	settingsLabel.adjustsFontSizeToFitWidth = true;
 	settingsLabel.adjustsFontForContentSizeCategory = false;
