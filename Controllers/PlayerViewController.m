@@ -2,20 +2,35 @@
 
 @interface PlayerViewController ()
 {
+	// Keys
+	UIWindow *boundsWindow;
+	NSString *playerAssetsBundlePath;
+	NSBundle *playerAssetsBundle;
+
+	// Player
 	AVPlayerItem *playerItem;
 	AVPlayer *player;
 	AVPlayerLayer *playerLayer;
 	AVPictureInPictureController *pictureInPictureController;
-
-	UIView *rewindView;
-	UIView *playPauseView;
-	UIView *forwardView;
 	UIImageView *videoImage;
 
+	// Overlay
+	UIView *overlayView;
+	UIImageView *collapseImage;
+	UIImageView *rewindImage;
+	UIImageView *playImage;
+	UIImageView *pauseImage;
+	UIImageView *forwardImage;
+
+	// Info
 	UISlider *progressSlider;
 	UILabel *videoTitleLabel;
 	UILabel *videoInfoLabel;
 }
+- (void)keysSetup;
+- (void)playerSetup;
+- (void)overlaySetup;
+- (void)infoSetup;
 - (void)playerTimeChanged;
 @end
 
@@ -24,78 +39,27 @@
 - (void)loadView {
 	[super loadView];
 
-	self.title = @"";
 	self.view.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
-	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+	[self.navigationController setNavigationBarHidden:YES animated:NO];
 
 	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
     self.navigationItem.rightBarButtonItem = doneButton;
 
+	[self keysSetup];
+	[self playerSetup];
+	[self overlaySetup];
+	[self infoSetup];
+
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-	
-	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
-
-	NSString *playerAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"PlayerAssets" ofType:@"bundle"];
-	NSBundle *playerAssetsBundle = [NSBundle bundleWithPath:playerAssetsBundlePath];
-	
-	rewindView = [[UIView alloc] init];
-	rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
-	UITapGestureRecognizer *rewindViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rewindTap:)];
-	rewindViewTap.numberOfTapsRequired = 2;
-	[rewindView addGestureRecognizer:rewindViewTap];
-	[self.view addSubview:rewindView];
-	
-	playPauseView = [[UIView alloc] init];
-	playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
-	UITapGestureRecognizer *playPauseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
-	playPauseViewTap.numberOfTapsRequired = 2;
-	[playPauseView addGestureRecognizer:playPauseViewTap];
-	[self.view addSubview:playPauseView];
-
-	forwardView = [[UIView alloc] init];
-	forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
-	UITapGestureRecognizer *forwardViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(forwardTap:)];
-	forwardViewTap.numberOfTapsRequired = 2;
-	[forwardView addGestureRecognizer:forwardViewTap];
-	[self.view addSubview:forwardView];
-
-	progressSlider = [[UISlider alloc] init];
-	progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height, self.view.bounds.size.width, 50);
-	NSString *sliderThumbPath = [playerAssetsBundle pathForResource:@"sliderthumb" ofType:@"png"];
-	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateNormal];
-	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateHighlighted];
-	progressSlider.minimumTrackTintColor = [UIColor redColor];
-	// progressSlider.thumbTintColor = [UIColor redColor];
-	progressSlider.minimumValue = 0.0f;
-	progressSlider.maximumValue = [self.videoLength floatValue];
-	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-	[self.view addSubview:progressSlider];
-
-	videoTitleLabel = [[UILabel alloc] init];
-	videoTitleLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height + progressSlider.frame.size.height, self.view.bounds.size.width, 40);
-	videoTitleLabel.text = self.videoTitle;
-	videoTitleLabel.textColor = [UIColor whiteColor];
-	videoTitleLabel.numberOfLines = 2;
-	videoTitleLabel.adjustsFontSizeToFitWidth = true;
-	videoTitleLabel.adjustsFontForContentSizeCategory = false;
-	[self.view addSubview:videoTitleLabel];
-
-	videoInfoLabel = [[UILabel alloc] init];
-	videoInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playPauseView.frame.size.height + progressSlider.frame.size.height + videoTitleLabel.frame.size.height, self.view.bounds.size.width, 60);
-	videoInfoLabel.text = [NSString stringWithFormat:@"View Count: %@\nLikes: %@\nDislikes: %@", self.videoViewCount, self.videoLikes, self.videoDislikes];
-	videoInfoLabel.textColor = [UIColor whiteColor];
-	videoInfoLabel.numberOfLines = 3;
-	videoInfoLabel.adjustsFontSizeToFitWidth = true;
-	videoInfoLabel.adjustsFontForContentSizeCategory = false;
-	[self.view addSubview:videoInfoLabel];
 }
 
-- (void)viewDidLoad {
-	[super viewDidLoad];
+- (void)keysSetup {
+	boundsWindow = [[UIApplication sharedApplication] keyWindow];
+	playerAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"PlayerAssets" ofType:@"bundle"];
+	playerAssetsBundle = [NSBundle bundleWithPath:playerAssetsBundlePath];
+}
 
-	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
-
+- (void)playerSetup {
 	if (self.videoStream != nil) {
 		AVURLAsset *streamAsset = [[AVURLAsset alloc] initWithURL:self.videoStream options:nil];
 
@@ -109,7 +73,7 @@
 		}];
 
 		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		[self.view.layer addSublayer:playerLayer];
 	} else if (self.videoURL == nil & self.audioURL != nil) {
 		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
@@ -125,7 +89,7 @@
 
 		videoImage = [[UIImageView alloc] init];
 		videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
-		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		[self.view addSubview:videoImage];
 	} else if (self.videoURL != nil & self.audioURL != nil) {
 		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
@@ -151,9 +115,105 @@
 		}];
 
 		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		[self.view.layer addSublayer:playerLayer];
 	}
+}
+
+- (void)overlaySetup {
+	overlayView = [[UIView alloc] init];
+	overlayView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+	overlayView.userInteractionEnabled = YES;
+	UITapGestureRecognizer *overlayViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTap:)];
+	overlayViewTap.numberOfTapsRequired = 1;
+	[overlayView addGestureRecognizer:overlayViewTap];
+	[self.view addSubview:overlayView];
+	
+	collapseImage = [[UIImageView alloc] init];
+	NSString *collapseImagePath = [playerAssetsBundle pathForResource:@"collapse" ofType:@"png"];
+	collapseImage.image = [UIImage imageWithContentsOfFile:collapseImagePath];
+	collapseImage.frame = CGRectMake(10, boundsWindow.safeAreaInsets.top + 10, 24, 24);
+	collapseImage.hidden = YES;
+	collapseImage.userInteractionEnabled = YES;
+	UITapGestureRecognizer *collapseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(collapseTap:)];
+	collapseViewTap.numberOfTapsRequired = 1;
+	[collapseImage addGestureRecognizer:collapseViewTap];
+	[self.view addSubview:collapseImage];
+	
+	rewindImage = [[UIImageView alloc] init];
+	NSString *rewindImagePath = [playerAssetsBundle pathForResource:@"rewind" ofType:@"png"];
+	rewindImage.image = [UIImage imageWithContentsOfFile:rewindImagePath];
+	rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+	rewindImage.hidden = YES;
+	rewindImage.userInteractionEnabled = YES;
+	UITapGestureRecognizer *rewindViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rewindTap:)];
+	rewindViewTap.numberOfTapsRequired = 1;
+	[rewindImage addGestureRecognizer:rewindViewTap];
+	[self.view addSubview:rewindImage];
+
+	playImage = [[UIImageView alloc] init];
+	NSString *playImagePath = [playerAssetsBundle pathForResource:@"play" ofType:@"png"];
+	playImage.image = [UIImage imageWithContentsOfFile:playImagePath];
+	playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+	playImage.hidden = YES;
+	playImage.userInteractionEnabled = YES;
+	UITapGestureRecognizer *playViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
+	playViewTap.numberOfTapsRequired = 1;
+	[playImage addGestureRecognizer:playViewTap];
+	[self.view addSubview:playImage];
+
+	pauseImage = [[UIImageView alloc] init];
+	NSString *pauseImagePath = [playerAssetsBundle pathForResource:@"pause" ofType:@"png"];
+	pauseImage.image = [UIImage imageWithContentsOfFile:pauseImagePath];
+	pauseImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+	pauseImage.hidden = YES;
+	pauseImage.userInteractionEnabled = YES;
+	UITapGestureRecognizer *pauseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
+	pauseViewTap.numberOfTapsRequired = 1;
+	[pauseImage addGestureRecognizer:pauseViewTap];
+	[self.view addSubview:pauseImage];
+
+	forwardImage = [[UIImageView alloc] init];
+	NSString *forwardImagePath = [playerAssetsBundle pathForResource:@"forward" ofType:@"png"];
+	forwardImage.image = [UIImage imageWithContentsOfFile:forwardImagePath];
+	forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+	forwardImage.hidden = YES;
+	forwardImage.userInteractionEnabled = YES;
+	UITapGestureRecognizer *forwardViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(forwardTap:)];
+	forwardViewTap.numberOfTapsRequired = 1;
+	[forwardImage addGestureRecognizer:forwardViewTap];
+	[self.view addSubview:forwardImage];
+}
+
+- (void)infoSetup {
+	progressSlider = [[UISlider alloc] init];
+	progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + 2, self.view.frame.size.width, 0);
+	NSString *sliderThumbPath = [playerAssetsBundle pathForResource:@"sliderthumb" ofType:@"png"];
+	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateNormal];
+	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateHighlighted];
+	progressSlider.minimumTrackTintColor = [UIColor redColor];
+	progressSlider.minimumValue = 0.0f;
+	progressSlider.maximumValue = [self.videoLength floatValue];
+	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+	[self.view addSubview:progressSlider];
+
+	videoTitleLabel = [[UILabel alloc] init];
+	videoTitleLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 15, self.view.bounds.size.width, 40);
+	videoTitleLabel.text = self.videoTitle;
+	videoTitleLabel.textColor = [UIColor whiteColor];
+	videoTitleLabel.numberOfLines = 2;
+	videoTitleLabel.adjustsFontSizeToFitWidth = true;
+	videoTitleLabel.adjustsFontForContentSizeCategory = false;
+	[self.view addSubview:videoTitleLabel];
+
+	videoInfoLabel = [[UILabel alloc] init];
+	videoInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 20 + videoTitleLabel.frame.size.height, self.view.bounds.size.width, 60);
+	videoInfoLabel.text = [NSString stringWithFormat:@"View Count: %@\nLikes: %@\nDislikes: %@", self.videoViewCount, self.videoLikes, self.videoDislikes];
+	videoInfoLabel.textColor = [UIColor whiteColor];
+	videoInfoLabel.numberOfLines = 3;
+	videoInfoLabel.adjustsFontSizeToFitWidth = true;
+	videoInfoLabel.adjustsFontForContentSizeCategory = false;
+	[self.view addSubview:videoInfoLabel];
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
@@ -163,17 +223,6 @@
 @end
 
 @implementation PlayerViewController (Privates)
-
-- (void)done {
-	if ([pictureInPictureController isPictureInPictureActive]) {
-        [pictureInPictureController stopPictureInPicture];
-    }
-    [player pause];
-	playerLayer.player = nil;
-	player = nil;
-    [playerLayer removeFromSuperlayer];
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (object == player && [keyPath isEqualToString:@"status"]) {
@@ -197,6 +246,36 @@
     }
 }
 
+- (void)overlayTap:(UITapGestureRecognizer *)recognizer {
+	if (collapseImage.hidden == YES && rewindImage.hidden == YES && playImage.hidden == YES && pauseImage.hidden == YES && forwardImage.hidden == YES) {
+		collapseImage.hidden = NO;
+		rewindImage.hidden = NO;
+		if (player.timeControlStatus == AVPlayerTimeControlStatusPlaying) {
+			pauseImage.hidden = NO;
+		} else {
+			playImage.hidden = NO;
+		}
+		forwardImage.hidden = NO;
+	} else {
+		collapseImage.hidden = YES;
+		rewindImage.hidden = YES;
+		playImage.hidden = YES;
+		pauseImage.hidden = YES;
+		forwardImage.hidden = YES;
+	}
+}
+
+- (void)collapseTap:(UITapGestureRecognizer *)recognizer {
+	if ([pictureInPictureController isPictureInPictureActive]) {
+        [pictureInPictureController stopPictureInPicture];
+    }
+    [player pause];
+	playerLayer.player = nil;
+	player = nil;
+    [playerLayer removeFromSuperlayer];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)rewindTap:(UITapGestureRecognizer *)recognizer {
 	NSTimeInterval currentTime = CMTimeGetSeconds(player.currentTime);
 	NSTimeInterval newTime = currentTime - 15.0f;
@@ -207,8 +286,12 @@
 - (void)playPauseTap:(UITapGestureRecognizer *)recognizer {
 	if (player.timeControlStatus == AVPlayerTimeControlStatusPlaying) {
 		[player pause];
+		playImage.hidden = NO;
+		pauseImage.hidden = YES;
 	} else {
 		[player play];
+		playImage.hidden = YES;
+		pauseImage.hidden = NO;
 	}
 }
 
@@ -258,40 +341,27 @@
 }
 
 - (void)orientationChanged:(NSNotification *)notification {
-	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
 	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 	switch (orientation) {
 		case UIInterfaceOrientationPortrait:
-		[self.navigationController setNavigationBarHidden:NO animated:NO];
-		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
-		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
-		rewindView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
-		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
-		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		progressSlider.hidden = NO;
 		videoTitleLabel.hidden = NO;
 		videoInfoLabel.hidden = NO;
 		break;
 
 		case UIInterfaceOrientationLandscapeLeft:
-		[self.navigationController setNavigationBarHidden:YES animated:NO];
 		playerLayer.frame = self.view.bounds;
 		videoImage.frame = self.view.bounds;
-		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
-		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
-		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		progressSlider.hidden = YES;
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		break;
 
 		case UIInterfaceOrientationLandscapeRight:
-		[self.navigationController setNavigationBarHidden:YES animated:NO];
 		playerLayer.frame = self.view.bounds;
 		videoImage.frame = self.view.bounds;
-		rewindView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
-		playPauseView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
-		forwardView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		progressSlider.hidden = YES;
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
