@@ -4,6 +4,7 @@
 {
 	// Keys
 	UIWindow *boundsWindow;
+	BOOL deviceOrientation;
 	NSString *playerAssetsBundlePath;
 	NSBundle *playerAssetsBundle;
 
@@ -55,6 +56,7 @@
 
 - (void)keysSetup {
 	boundsWindow = [[UIApplication sharedApplication] keyWindow];
+	deviceOrientation = 0;
 	playerAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"PlayerAssets" ofType:@"bundle"];
 	playerAssetsBundle = [NSBundle bundleWithPath:playerAssetsBundlePath];
 }
@@ -187,7 +189,7 @@
 
 - (void)infoSetup {
 	progressSlider = [[UISlider alloc] init];
-	progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + 2, self.view.frame.size.width, 0);
+	progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height, self.view.bounds.size.width, 5);
 	NSString *sliderThumbPath = [playerAssetsBundle pathForResource:@"sliderthumb" ofType:@"png"];
 	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateNormal];
 	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateHighlighted];
@@ -256,12 +258,18 @@
 			playImage.hidden = NO;
 		}
 		forwardImage.hidden = NO;
+		progressSlider.hidden = NO;
 	} else {
 		collapseImage.hidden = YES;
 		rewindImage.hidden = YES;
 		playImage.hidden = YES;
 		pauseImage.hidden = YES;
 		forwardImage.hidden = YES;
+		if (deviceOrientation == 1) {
+			progressSlider.hidden = YES;
+		} else {
+			progressSlider.hidden = NO;
+		}
 	}
 }
 
@@ -344,25 +352,53 @@
 	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 	switch (orientation) {
 		case UIInterfaceOrientationPortrait:
+		deviceOrientation = 0;
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		overlayView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		collapseImage.alpha = 1.0;
+		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		pauseImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height, self.view.bounds.size.width, 5);
 		progressSlider.hidden = NO;
 		videoTitleLabel.hidden = NO;
 		videoInfoLabel.hidden = NO;
 		break;
 
 		case UIInterfaceOrientationLandscapeLeft:
+		deviceOrientation = 1;
 		playerLayer.frame = self.view.bounds;
 		videoImage.frame = self.view.bounds;
-		progressSlider.hidden = YES;
+		overlayView.frame = self.view.bounds;
+		collapseImage.alpha = 0.0;
+		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		pauseImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		progressSlider.frame = CGRectMake(50, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height - boundsWindow.safeAreaInsets.bottom - 50, self.view.bounds.size.width - 100, 5);
+		if (collapseImage.hidden == YES && rewindImage.hidden == YES && playImage.hidden == YES && pauseImage.hidden == YES && forwardImage.hidden == YES) {
+			progressSlider.hidden = YES;
+		}
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		break;
 
 		case UIInterfaceOrientationLandscapeRight:
+		deviceOrientation = 1;
 		playerLayer.frame = self.view.bounds;
 		videoImage.frame = self.view.bounds;
-		progressSlider.hidden = YES;
+		overlayView.frame = self.view.bounds;
+		collapseImage.alpha = 0.0;
+		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		pauseImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		progressSlider.frame = CGRectMake(50, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height - boundsWindow.safeAreaInsets.bottom - 50, self.view.bounds.size.width - 100, 5);
+		if (collapseImage.hidden == YES && rewindImage.hidden == YES && playImage.hidden == YES && pauseImage.hidden == YES && forwardImage.hidden == YES) {
+			progressSlider.hidden = YES;
+		}
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		break;
