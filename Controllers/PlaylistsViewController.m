@@ -83,14 +83,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    UIView *createPlaylistsView = [[UIView alloc] init];
-    createPlaylistsView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, 40);
-    createPlaylistsView.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
-    UITapGestureRecognizer *createPlaylistsViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(createPlaylistsTap:)];
-    createPlaylistsViewTap.numberOfTapsRequired = 1;
-    [createPlaylistsView addGestureRecognizer:createPlaylistsViewTap];
+    UILabel *createPlaylistsLabel = [[UILabel alloc] init];
+    createPlaylistsLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, 40);
+    createPlaylistsLabel.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+    createPlaylistsLabel.text = @"Create Playlist";
+    createPlaylistsLabel.textColor = [UIColor whiteColor];
+    createPlaylistsLabel.numberOfLines = 1;
+    createPlaylistsLabel.adjustsFontSizeToFitWidth = true;
+    createPlaylistsLabel.adjustsFontForContentSizeCategory = false;
+    createPlaylistsLabel.userInteractionEnabled = true;
+    UITapGestureRecognizer *createPlaylistsLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(createPlaylistsTap:)];
+    createPlaylistsLabelTap.numberOfTapsRequired = 1;
+    [createPlaylistsLabel addGestureRecognizer:createPlaylistsLabelTap];
 
-    [self.view addSubview:createPlaylistsView];
+    [self.view addSubview:createPlaylistsLabel];
 }
 
 - (void)keysSetup {
