@@ -6,7 +6,9 @@ include $(THEOS)/makefiles/common.mk
 
 APPLICATION_NAME = RebornTube
 RebornTube_FILES = main.m $(shell find Classes -name '*.m') $(shell find Controllers -name '*.m')
-RebornTube_FRAMEWORKS = UIKit Foundation AVFoundation AVKit Photos CoreGraphics
+RebornTube_FRAMEWORKS = UIKit Foundation AVFoundation AVKit Photos CoreGraphics AudioToolbox CFNetwork CoreFoundation CoreMedia CoreText CoreVideo OpenGLES QuartzCore Security VideoToolbox
+RebornTube_LDFLAGS += -rpath @loader_path/Frameworks/
+RebornTube_LIBRARIES = bz2 c++ iconv xml2
 RebornTube_CFLAGS = -fobjc-arc
 ARCHS = arm64
 
