@@ -8,7 +8,7 @@
 	NSMutableDictionary *searchVideoIDDictionary;
 }
 - (void)searchRequest;
-- (void)loadRequests :(NSString *)searchViewTag :(NSString *)videoID;
+- (void)loadRequests :(NSString *)videoID;
 - (void)player :(NSString *)videoTitle :(NSString *)videoLength :(NSURL *)videoArtwork :(NSString *)videoViewCount :(NSString *)videoLikes :(NSString *)videoDislikes :(NSURL *)audioURL :(NSURL *)videoStream :(NSMutableDictionary *)sponsorBlockValues;
 @end
 
@@ -126,10 +126,10 @@
 
     [historyDictionary writeToFile:historyPlistFilePath atomically:YES];
 
-    [self loadRequests:searchViewTag:videoID];
+    [self loadRequests:videoID];
 }
 
-- (void)loadRequests :(NSString *)searchViewTag :(NSString *)videoID {
+- (void)loadRequests :(NSString *)videoID {
     NSMutableDictionary *sponsorBlockValues = [YouTubeExtractor sponsorBlockRequest:videoID];
 
 	NSMutableDictionary *returnYouTubeDislikeRequest = [YouTubeExtractor returnYouTubeDislikeRequest:videoID];
