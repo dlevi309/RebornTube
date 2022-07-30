@@ -4,7 +4,6 @@
 #import "SearchViewController.h"
 #import "SettingsViewController.h"
 #import "HistoryVideosViewController.h"
-#import "../Classes/YouTubeExtractor.h"
 
 @interface HistoryViewController ()
 {
