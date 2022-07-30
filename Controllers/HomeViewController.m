@@ -1,5 +1,6 @@
 #import "HomeViewController.h"
 #import "HistoryViewController.h"
+#import "PlaylistsViewController.h"
 #import "SearchViewController.h"
 #import "SettingsViewController.h"
 
@@ -63,8 +64,10 @@
     NSMutableArray *tabBarItems = [[NSMutableArray alloc] init];
     UITabBarItem *tabBarItem1 = [[UITabBarItem alloc] initWithTitle:@"Home" image:nil tag:0];
     UITabBarItem *tabBarItem2 = [[UITabBarItem alloc] initWithTitle:@"History" image:nil tag:1];
+    UITabBarItem *tabBarItem3 = [[UITabBarItem alloc] initWithTitle:@"Playlists" image:nil tag:2];
     [tabBarItems addObject:tabBarItem1];
     [tabBarItems addObject:tabBarItem2];
+    [tabBarItems addObject:tabBarItem3];
 
     tabBar.items = tabBarItems;
     tabBar.selectedItem = [tabBarItems objectAtIndex:0];
@@ -94,6 +97,14 @@
         historyViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
         [self presentViewController:historyViewControllerView animated:NO completion:nil];
+    }
+    if (selectedTag == 2) {
+        PlaylistsViewController *playlistsViewController = [[PlaylistsViewController alloc] init];
+
+        UINavigationController *playlistsViewControllerView = [[UINavigationController alloc] initWithRootViewController:playlistsViewController];
+        playlistsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+        [self presentViewController:playlistsViewControllerView animated:NO completion:nil];
     }
 }
 

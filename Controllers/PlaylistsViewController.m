@@ -1,23 +1,18 @@
-#import "HistoryViewController.h"
-#import "HomeViewController.h"
 #import "PlaylistsViewController.h"
+#import "HomeViewController.h"
+#import "HistoryViewController.h"
 #import "SearchViewController.h"
 #import "SettingsViewController.h"
-#import "HistoryVideosViewController.h"
-#import "../Classes/YouTubeExtractor.h"
 
-@interface HistoryViewController ()
+@interface PlaylistsViewController ()
 {
     // Keys
 	UIWindow *boundsWindow;
-    
-    // Other
-    NSMutableDictionary *historyIDDictionary;
 }
 - (void)keysSetup;
 @end
 
-@implementation HistoryViewController
+@implementation PlaylistsViewController
 
 - (void)loadView {
 	[super loadView];
@@ -80,58 +75,8 @@
     [tabBarItems addObject:tabBarItem3];
 
     tabBar.items = tabBarItems;
-    tabBar.selectedItem = [tabBarItems objectAtIndex:1];
+    tabBar.selectedItem = [tabBarItems objectAtIndex:2];
     [self.view addSubview:tabBar];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-    historyIDDictionary = [NSMutableDictionary new];
-
-    NSFileManager *fm = [[NSFileManager alloc] init];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-
-    NSString *historyPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"history.plist"];
-    NSMutableDictionary *historyDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:historyPlistFilePath];
-
-    UIScrollView *scrollView = [[UIScrollView alloc] init];
-	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - 50);
-    
-    int viewBounds = 0;
-    int dateCount = 1;
-    for (NSString *key in historyDictionary) {
-        UIView *historyView = [[UIView alloc] init];
-        historyView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 40);
-        historyView.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
-        historyView.tag = dateCount;
-        UITapGestureRecognizer *historyViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(historyTap:)];
-        historyViewTap.numberOfTapsRequired = 1;
-        [historyView addGestureRecognizer:historyViewTap];
-
-        UILabel *historyDateLabel = [[UILabel alloc] init];
-        historyDateLabel.frame = CGRectMake(10, 0, historyView.frame.size.width - 10, historyView.frame.size.height);
-        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-        NSDate *date = [dateFormatter dateFromString:key];
-        [dateFormatter setDateFormat:@"MMMM dd, yyyy"];
-        historyDateLabel.text = [dateFormatter stringFromDate:date];
-        historyDateLabel.textColor = [UIColor whiteColor];
-        historyDateLabel.numberOfLines = 1;
-        historyDateLabel.adjustsFontSizeToFitWidth = true;
-        historyDateLabel.adjustsFontForContentSizeCategory = false;
-        [historyView addSubview:historyDateLabel];
-
-        [historyIDDictionary setValue:key forKey:[NSString stringWithFormat:@"%d", dateCount]];
-        viewBounds += 42;
-        dateCount += 1;
-
-        [scrollView addSubview:historyView];
-    }
-
-    scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, viewBounds);
-	[self.view addSubview:scrollView];
 }
 
 - (void)keysSetup {
@@ -140,7 +85,7 @@
 
 @end
 
-@implementation HistoryViewController (Privates)
+@implementation PlaylistsViewController (Privates)
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
     int selectedTag = tabBar.selectedItem.tag;
@@ -152,13 +97,13 @@
 
         [self presentViewController:homeViewControllerView animated:NO completion:nil];
     }
-    if (selectedTag == 2) {
-        PlaylistsViewController *playlistsViewController = [[PlaylistsViewController alloc] init];
+    if (selectedTag == 1) {
+        HistoryViewController *historyViewController = [[HistoryViewController alloc] init];
 
-        UINavigationController *playlistsViewControllerView = [[UINavigationController alloc] initWithRootViewController:playlistsViewController];
-        playlistsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+        UINavigationController *historyViewControllerView = [[UINavigationController alloc] initWithRootViewController:historyViewController];
+        historyViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
-        [self presentViewController:playlistsViewControllerView animated:NO completion:nil];
+        [self presentViewController:historyViewControllerView animated:NO completion:nil];
     }
 }
 
@@ -177,19 +122,6 @@
     settingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
     [self presentViewController:settingsViewControllerView animated:YES completion:nil];
-}
-
-- (void)historyTap:(UITapGestureRecognizer *)recognizer {
-    NSString *historyViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
-	NSString *historyViewID = [historyIDDictionary valueForKey:historyViewTag];
-
-    HistoryVideosViewController *historyVideosViewController = [[HistoryVideosViewController alloc] init];
-    historyVideosViewController.historyViewID = historyViewID;
-    
-    UINavigationController *historyVideosViewControllerView = [[UINavigationController alloc] initWithRootViewController:historyVideosViewController];
-    historyVideosViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:historyVideosViewControllerView animated:NO completion:nil];
 }
 
 @end
