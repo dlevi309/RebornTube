@@ -71,7 +71,7 @@
 
 			UILabel *videoTitleLabel = [[UILabel alloc] init];
 			videoTitleLabel.frame = CGRectMake(85, 0, searchView.frame.size.width - 85, searchView.frame.size.height);
-			videoTitleLabel.text = searchContents[i][@"compactVideoRenderer"][@"title"][@"runs"][0][@"text"];
+			videoTitleLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"title"][@"runs"][0][@"text"]];
 			videoTitleLabel.textColor = [UIColor whiteColor];
 			videoTitleLabel.numberOfLines = 2;
 			videoTitleLabel.adjustsFontSizeToFitWidth = true;
