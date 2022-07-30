@@ -9,6 +9,7 @@
 	NSBundle *playerAssetsBundle;
 
 	// VLC
+	UIView *vlcView;
 	VLCMediaPlayer *mediaplayer;
 }
 - (void)keysSetup;
@@ -31,11 +32,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+	vlcView = [[UIView alloc] init];
+	vlcView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+	[self.view addSubview:vlcView];
+
     mediaplayer = [[VLCMediaPlayer alloc] init];
     mediaplayer.delegate = self;
-    mediaplayer.drawable = self.view;
+    mediaplayer.drawable = vlcView;
 
-    mediaplayer.media = [VLCMedia mediaWithURL:[NSURL URLWithString:@"http://streams.videolan.org/streams/mp4/Mr_MrsSmith-h264_aac.mp4"]];
+    mediaplayer.media = [VLCMedia mediaWithURL:self.videoURL];
+	[mediaplayer addPlaybackSlave:self.audioURL type:VLCMediaPlaybackSlaveTypeAudio enforce:YES];
 
 	[mediaplayer play];
 }

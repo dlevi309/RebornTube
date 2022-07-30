@@ -79,7 +79,7 @@
     UITabBarItem *tabBarItem3 = [[UITabBarItem alloc] initWithTitle:@"Playlists" image:nil tag:2];
     [tabBarItems addObject:tabBarItem1];
     [tabBarItems addObject:tabBarItem2];
-    // [tabBarItems addObject:tabBarItem3];
+    [tabBarItems addObject:tabBarItem3];
 
     tabBar.items = tabBarItems;
     tabBar.selectedItem = [tabBarItems objectAtIndex:0];
