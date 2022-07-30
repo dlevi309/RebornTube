@@ -8,8 +8,6 @@
 	UITextField *searchTextField;
 	NSMutableDictionary *searchVideoIDDictionary;
 }
-- (void)searchRequest;
-- (void)loadRequests :(NSString *)videoID;
 @end
 
 @implementation SearchViewController
