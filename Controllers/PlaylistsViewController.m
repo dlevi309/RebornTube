@@ -1,4 +1,5 @@
 #import "PlaylistsViewController.h"
+#import "CreatePlaylistsViewController.h"
 #import "HomeViewController.h"
 #import "HistoryViewController.h"
 #import "SearchViewController.h"
@@ -79,6 +80,19 @@
     [self.view addSubview:tabBar];
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+    UIView *createPlaylistsView = [[UIView alloc] init];
+    createPlaylistsView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, 40);
+    createPlaylistsView.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+    UITapGestureRecognizer *createPlaylistsViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(createPlaylistsTap:)];
+    createPlaylistsViewTap.numberOfTapsRequired = 1;
+    [createPlaylistsView addGestureRecognizer:createPlaylistsViewTap];
+
+    [self.view addSubview:createPlaylistsView];
+}
+
 - (void)keysSetup {
 	boundsWindow = [[UIApplication sharedApplication] keyWindow];
 }
@@ -122,6 +136,12 @@
     settingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
     [self presentViewController:settingsViewControllerView animated:YES completion:nil];
+}
+
+- (void)createPlaylistsTap:(UITapGestureRecognizer *)recognizer {
+    CreatePlaylistsViewController *createPlaylistsViewController = [[CreatePlaylistsViewController alloc] init];
+
+    [self presentViewController:createPlaylistsViewController animated:YES completion:nil];
 }
 
 @end
