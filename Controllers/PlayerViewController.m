@@ -67,6 +67,8 @@
 		AVURLAsset *streamAsset = [[AVURLAsset alloc] initWithURL:self.videoStream options:nil];
 
 		playerItem = [[AVPlayerItem alloc] initWithAsset:streamAsset];
+		AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
+		[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
 
 		player = [AVPlayer playerWithPlayerItem:playerItem];
 		player.allowsExternalPlayback = YES;
@@ -82,6 +84,8 @@
 		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
 
 		playerItem = [[AVPlayerItem alloc] initWithAsset:audioAsset];
+		AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
+		[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
 
 		player = [AVPlayer playerWithPlayerItem:playerItem];
 		player.allowsExternalPlayback = YES;
