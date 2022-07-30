@@ -1,6 +1,4 @@
 #import "SponsorBlockSettingsViewController.h"
-#import "../Headers/TheosLinuxFix.h"
-#import "../Headers/iOS15Fix.h"
 
 @interface SponsorBlockSettingsViewController ()
 @end

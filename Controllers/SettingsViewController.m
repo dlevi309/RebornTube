@@ -1,8 +1,6 @@
 #import "SettingsViewController.h"
 #import "BackgroundModeSettingsViewController.h"
 #import "SponsorBlockSettingsViewController.h"
-#import "../Headers/TheosLinuxFix.h"
-#import "../Headers/iOS15Fix.h"
 
 @interface SettingsViewController ()
 @end
