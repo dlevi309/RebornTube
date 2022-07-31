@@ -91,36 +91,49 @@
     int videoCount = 1;
     for (NSString *videoID in historyArray) {
         NSMutableDictionary *youtubeiAndroidPlayerRequest = [YouTubeExtractor youtubeiAndroidPlayerRequest:videoID];
+        @try {
+            UIView *historyView = [[UIView alloc] init];
+            historyView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 100);
+            historyView.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+            historyView.tag = videoCount;
+            UITapGestureRecognizer *historyViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(historyTap:)];
+            historyViewTap.numberOfTapsRequired = 1;
+            [historyView addGestureRecognizer:historyViewTap];
 
-        UIView *historyView = [[UIView alloc] init];
-        historyView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 80);
-        historyView.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
-        historyView.tag = videoCount;
-        UITapGestureRecognizer *historyViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(historyTap:)];
-        historyViewTap.numberOfTapsRequired = 1;
-        [historyView addGestureRecognizer:historyViewTap];
+            UIImageView *videoImage = [[UIImageView alloc] init];
+            videoImage.frame = CGRectMake(0, 0, 80, 80);
+            NSArray *videoArtworkArray = youtubeiAndroidPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
+            NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
+            videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:videoArtwork]];
+            [historyView addSubview:videoImage];
 
-        UIImageView *historyImage = [[UIImageView alloc] init];
-        historyImage.frame = CGRectMake(0, 0, 80, historyView.frame.size.height);
-        NSArray *historyArtworkArray = youtubeiAndroidPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
-        NSURL *historyArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", historyArtworkArray[([historyArtworkArray count] - 1)][@"url"]]];
-        historyImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:historyArtwork]];
-        [historyView addSubview:historyImage];
+            UILabel *videoTitleLabel = [[UILabel alloc] init];
+            videoTitleLabel.frame = CGRectMake(85, 0, historyView.frame.size.width - 85, 80);
+            videoTitleLabel.text = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"title"]];
+            videoTitleLabel.textColor = [UIColor whiteColor];
+            videoTitleLabel.numberOfLines = 2;
+            videoTitleLabel.adjustsFontSizeToFitWidth = true;
+            videoTitleLabel.adjustsFontForContentSizeCategory = false;
+            [historyView addSubview:videoTitleLabel];
 
-        UILabel *historyTitleLabel = [[UILabel alloc] init];
-        historyTitleLabel.frame = CGRectMake(85, 0, historyView.frame.size.width - 85, historyView.frame.size.height);
-        historyTitleLabel.text = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"title"]];
-        historyTitleLabel.textColor = [UIColor whiteColor];
-        historyTitleLabel.numberOfLines = 2;
-        historyTitleLabel.adjustsFontSizeToFitWidth = true;
-        historyTitleLabel.adjustsFontForContentSizeCategory = false;
-        [historyView addSubview:historyTitleLabel];
+            UILabel *videoAuthorLabel = [[UILabel alloc] init];
+            videoAuthorLabel.frame = CGRectMake(5, 80, historyView.frame.size.width - 5, 20);
+            videoAuthorLabel.text = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"author"]];
+            videoAuthorLabel.textColor = [UIColor whiteColor];
+            videoAuthorLabel.numberOfLines = 1;
+            [videoAuthorLabel setFont:[UIFont systemFontOfSize:12]];
+            videoAuthorLabel.adjustsFontSizeToFitWidth = true;
+            videoAuthorLabel.adjustsFontForContentSizeCategory = false;
+            [historyView addSubview:videoAuthorLabel];
+            
+            [videoIDDictionary setValue:videoID forKey:[NSString stringWithFormat:@"%d", videoCount]];
+            viewBounds += 102;
+            videoCount += 1;
 
-        [videoIDDictionary setValue:videoID forKey:[NSString stringWithFormat:@"%d", videoCount]];
-        viewBounds += 82;
-        videoCount += 1;
-
-        [scrollView addSubview:historyView];
+            [scrollView addSubview:historyView];
+        }
+        @catch (NSException *exception) {
+        }
     }
 
     scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, viewBounds);
