@@ -310,8 +310,15 @@
         [self presentViewController:playerViewControllerView animated:YES completion:nil];
     } else {
         VlcPlayerViewController *playerViewController = [[VlcPlayerViewController alloc] init];
+        playerViewController.videoTitle = videoTitle;
+        playerViewController.videoLength = videoLength;
+        playerViewController.videoArtwork = videoArtwork;
+        playerViewController.videoViewCount = videoViewCount;
+        playerViewController.videoLikes = videoLikes;
+        playerViewController.videoDislikes = videoDislikes;
         playerViewController.videoURL = videoURL;
         playerViewController.audioURL = audioURL;
+        playerViewController.sponsorBlockValues = sponsorBlockValues;
 
         UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
         playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
