@@ -223,7 +223,7 @@
 }
 
 - (void)collapseTap:(UITapGestureRecognizer *)recognizer {
-	[mediaPlayer pause];
+	[mediaPlayer stop];
 	mediaPlayer = nil;
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
