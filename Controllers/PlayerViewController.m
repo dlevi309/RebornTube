@@ -27,6 +27,7 @@
 	UISlider *progressSlider;
 	UILabel *videoTitleLabel;
 	UILabel *videoInfoLabel;
+	UIButton *shareButton;
 }
 - (void)keysSetup;
 - (void)playerSetup;
@@ -214,6 +215,13 @@
 	videoInfoLabel.adjustsFontSizeToFitWidth = true;
 	videoInfoLabel.adjustsFontForContentSizeCategory = false;
 	[self.view addSubview:videoInfoLabel];
+
+	shareButton = [[UIButton alloc] init];
+	shareButton.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width, 60);
+	[shareButton setTitle:@"Share" forState:UIControlStateNormal];
+	shareButton.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+	shareButton.tintColor = [UIColor whiteColor];
+	[self.view addSubview:shareButton];
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
