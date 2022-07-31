@@ -72,7 +72,7 @@
             UILabel *videoTimeLabel = [[UILabel alloc] init];
 			videoTimeLabel.frame = CGRectMake(40, 65, 40, 15);
 			videoTimeLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"lengthText"][@"runs"][0][@"text"]];
-            videoTimeLabel.textAlignment = UITextAlignmentCenter;
+            videoTimeLabel.textAlignment = NSTextAlignmentCenter;
 			videoTimeLabel.textColor = [UIColor whiteColor];
 			videoTimeLabel.numberOfLines = 1;
             videoTimeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];

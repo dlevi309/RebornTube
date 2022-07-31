@@ -76,7 +76,6 @@
 
     videoIDDictionary = [NSMutableDictionary new];
 
-    NSFileManager *fm = [[NSFileManager alloc] init];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
 
