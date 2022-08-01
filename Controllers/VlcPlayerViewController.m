@@ -24,6 +24,7 @@
 	UISlider *progressSlider;
 	UILabel *videoTitleLabel;
 	UILabel *videoInfoLabel;
+	UIButton *shareButton;
 }
 - (void)keysSetup;
 - (void)playerSetup;
@@ -187,6 +188,14 @@
 	videoInfoLabel.adjustsFontSizeToFitWidth = true;
 	videoInfoLabel.adjustsFontForContentSizeCategory = false;
 	[self.view addSubview:videoInfoLabel];
+
+	shareButton = [[UIButton alloc] init];
+	shareButton.frame = CGRectMake(20, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width - 20, 60);
+	[shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+ 	[shareButton setTitle:@"Share" forState:UIControlStateNormal];
+	shareButton.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+	shareButton.tintColor = [UIColor whiteColor];
+	[self.view addSubview:shareButton];
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
@@ -289,6 +298,7 @@
 		progressSlider.hidden = NO;
 		videoTitleLabel.hidden = NO;
 		videoInfoLabel.hidden = NO;
+		shareButton.hidden = NO;
 		break;
 
 		case UIInterfaceOrientationLandscapeLeft:
@@ -306,6 +316,7 @@
 		}
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
+		shareButton.hidden = YES;
 		break;
 
 		case UIInterfaceOrientationLandscapeRight:
@@ -323,6 +334,7 @@
 		}
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
+		shareButton.hidden = YES;
 		break;
 	}
 }
@@ -331,6 +343,11 @@
 }
 
 - (void)playerTimeChanged {
+}
+
+- (void)shareButtonClicked:(UIButton *)sender {
+	UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
+	pasteBoard.text = [NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", self.videoID];
 }
 
 @end

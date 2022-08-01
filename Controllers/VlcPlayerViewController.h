@@ -4,6 +4,7 @@
 
 @interface VlcPlayerViewController : UIViewController <VLCMediaPlayerDelegate>
 
+@property (nonatomic, strong) NSString *videoID;
 @property (nonatomic, strong) NSString *videoTitle;
 @property (nonatomic, strong) NSString *videoLength;
 @property (nonatomic, strong) NSURL *videoArtwork;
