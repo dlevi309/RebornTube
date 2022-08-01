@@ -25,6 +25,9 @@
 	UILabel *videoTitleLabel;
 	UILabel *videoInfoLabel;
 	UIButton *shareButton;
+
+	// Developer
+	UILabel *developerInfoLabel;
 }
 - (void)keysSetup;
 - (void)playerSetup;
@@ -67,7 +70,9 @@
     mediaPlayer.delegate = self;
     mediaPlayer.drawable = vlcView;
 
-    mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
+    [mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    [mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
+	mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
 	[mediaPlayer addPlaybackSlave:self.audioURL type:VLCMediaPlaybackSlaveTypeAudio enforce:YES];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
@@ -190,12 +195,26 @@
 	[self.view addSubview:videoInfoLabel];
 
 	shareButton = [[UIButton alloc] init];
-	shareButton.frame = CGRectMake(20, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width - 20, 60);
+	shareButton.frame = CGRectMake(20, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width - 40, 60);
 	[shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[shareButton setTitle:@"Share" forState:UIControlStateNormal];
 	shareButton.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
 	shareButton.tintColor = [UIColor whiteColor];
-	[self.view addSubview:shareButton];
+	shareButton.layer.cornerRadius = 5;
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == NO) {
+		[self.view addSubview:shareButton];
+	}
+
+	developerInfoLabel = [[UILabel alloc] init];
+	developerInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width, 60);
+	developerInfoLabel.text = @"";
+	developerInfoLabel.textColor = [UIColor whiteColor];
+	developerInfoLabel.numberOfLines = 3;
+	developerInfoLabel.adjustsFontSizeToFitWidth = true;
+	developerInfoLabel.adjustsFontForContentSizeCategory = false;
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {
+		[self.view addSubview:developerInfoLabel];
+	}
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
@@ -299,6 +318,7 @@
 		videoTitleLabel.hidden = NO;
 		videoInfoLabel.hidden = NO;
 		shareButton.hidden = NO;
+		developerInfoLabel.hidden = NO;
 		break;
 
 		case UIInterfaceOrientationLandscapeLeft:
@@ -317,6 +337,7 @@
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		shareButton.hidden = YES;
+		developerInfoLabel.hidden = YES;
 		break;
 
 		case UIInterfaceOrientationLandscapeRight:
@@ -335,6 +356,7 @@
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		shareButton.hidden = YES;
+		developerInfoLabel.hidden = YES;
 		break;
 	}
 }
@@ -342,7 +364,11 @@
 - (void)sliderValueChanged:(UISlider *)sender {
 }
 
-- (void)playerTimeChanged {
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	// Developer
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {
+		developerInfoLabel.text = [NSString stringWithFormat:@"Current Time: %f\nLength: %@", mediaPlayer.position, [mediaPlayer.media.length stringValue]];
+	}
 }
 
 - (void)shareButtonClicked:(UIButton *)sender {

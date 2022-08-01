@@ -28,6 +28,9 @@
 	UILabel *videoTitleLabel;
 	UILabel *videoInfoLabel;
 	UIButton *shareButton;
+
+	// Developer
+	UILabel *developerInfoLabel;
 }
 - (void)keysSetup;
 - (void)playerSetup;
@@ -217,12 +220,26 @@
 	[self.view addSubview:videoInfoLabel];
 
 	shareButton = [[UIButton alloc] init];
-	shareButton.frame = CGRectMake(20, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width - 20, 60);
+	shareButton.frame = CGRectMake(20, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width - 40, 60);
 	[shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[shareButton setTitle:@"Share" forState:UIControlStateNormal];
 	shareButton.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
 	shareButton.tintColor = [UIColor whiteColor];
-	[self.view addSubview:shareButton];
+	shareButton.layer.cornerRadius = 5;
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == NO) {
+		[self.view addSubview:shareButton];
+	}
+
+	developerInfoLabel = [[UILabel alloc] init];
+	developerInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width, 60);
+	developerInfoLabel.text = @"";
+	developerInfoLabel.textColor = [UIColor whiteColor];
+	developerInfoLabel.numberOfLines = 3;
+	developerInfoLabel.adjustsFontSizeToFitWidth = true;
+	developerInfoLabel.adjustsFontForContentSizeCategory = false;
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {
+		[self.view addSubview:developerInfoLabel];
+	}
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
@@ -373,6 +390,7 @@
 		videoTitleLabel.hidden = NO;
 		videoInfoLabel.hidden = NO;
 		shareButton.hidden = NO;
+		developerInfoLabel.hidden = NO;
 		break;
 
 		case UIInterfaceOrientationLandscapeLeft:
@@ -392,6 +410,7 @@
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		shareButton.hidden = YES;
+		developerInfoLabel.hidden = YES;
 		break;
 
 		case UIInterfaceOrientationLandscapeRight:
@@ -411,6 +430,7 @@
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		shareButton.hidden = YES;
+		developerInfoLabel.hidden = YES;
 		break;
 	}
 }
@@ -455,6 +475,10 @@
 		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:1] floatValue]) {
 			[player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
 		}
+	}
+	// Developer
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {
+		developerInfoLabel.text = [NSString stringWithFormat:@"Current Time: %f\nLength: %f", CMTimeGetSeconds(player.currentTime), CMTimeGetSeconds(playerItem.duration)];
 	}
 }
 
