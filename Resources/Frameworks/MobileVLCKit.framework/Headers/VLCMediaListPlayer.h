@@ -28,8 +28,6 @@
 
 @class VLCMedia, VLCMediaPlayer, VLCMediaList, VLCMediaListPlayer;
 
-NS_ASSUME_NONNULL_BEGIN
-
 /**
  * VLCRepeatMode
  * (don't repeat anything, repeat one, repeat all)
@@ -70,14 +68,14 @@ typedef NS_ENUM(NSInteger, VLCRepeatMode) {
  * setter/getter for mediaList to play within the player
  * \note This list is erased when setting a rootMedia on the list player instance
  */
-@property (readwrite, nullable) VLCMediaList *mediaList;
+@property (readwrite) VLCMediaList *mediaList;
 
 /**
  * rootMedia - Use this method to play a media and its subitems.
  * This will erase mediaList.
  * Setting mediaList will erase rootMedia.
  */
-@property (readwrite, nullable) VLCMedia *rootMedia;
+@property (readwrite) VLCMedia *rootMedia;
 
 /**
  * the media player instance used for playback by the list player
@@ -87,7 +85,7 @@ typedef NS_ENUM(NSInteger, VLCRepeatMode) {
 /**
  * Receiver's delegate
  */
-@property (nonatomic, weak, nullable) id <VLCMediaListPlayerDelegate> delegate;
+@property (nonatomic, weak) id <VLCMediaListPlayerDelegate> delegate;
 
 /**
  * initializer with a certain drawable
@@ -153,5 +151,3 @@ typedef NS_ENUM(NSInteger, VLCRepeatMode) {
 - (void)playMedia:(VLCMedia *)media;
 
 @end
-
-NS_ASSUME_NONNULL_END

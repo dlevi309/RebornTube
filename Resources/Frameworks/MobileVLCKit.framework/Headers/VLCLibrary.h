@@ -24,9 +24,11 @@
  *****************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "VLCAudio.h"
+#import "VLCMediaList.h"
+#import "VLCMedia.h"
 
-@class VLCAudio, VLCMediaList, VLCMedia;
-@protocol VLCLogging;
+@class VLCAudio;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -57,21 +59,13 @@ NS_ASSUME_NONNULL_BEGIN
  - (instancetype)initWithOptions:(NSArray *)options;
 
 /**
- * \brief The loggers array
- * \note Defaults to nil
- */
-@property (readwrite, nonatomic, nullable) NSArray< id<VLCLogging> > *loggers;
-
-/**
- * \brief Enables/disables logging to console
- * \discussion Setting this to YES will assign a single VLCConsoleLogger to -[VLCLibrary loggers] array.
- * Setting this to NO will assign nil to -[VLCLibrary loggers]
+ * Enables/disables debug logging to console
  * \note NSLog is used to log messages
  */
-@property (readwrite, nonatomic) BOOL debugLogging __deprecated_msg("Set loggers with -[VLCLibrary setLoggers:] instead");
+@property (readwrite, nonatomic) BOOL debugLogging;
 
 /**
- * Gets/sets the logging level
+ * Gets/sets the debug logging level
  * \note Logging level
  * 0: info/notice
  * 1: error
@@ -80,25 +74,24 @@ NS_ASSUME_NONNULL_BEGIN
  * \note values set here will be consired only when logging to console
  * \warning If an invalid level is provided, level defaults to 0
  */
-@property (readwrite, nonatomic) int debugLoggingLevel __deprecated_msg("Use -[VLCLibrary setLogger:] with a VLCConsoleLogger instance instead");
+@property (readwrite, nonatomic) int debugLoggingLevel;
 
 /**
  * Activates debug logging to a file stream
  * If the file already exists, the log will be appended by the end. If it does not exist, will be created.
  * The file will continously updated with new messages from this library instance.
- * \param filePath The absolute path to the file where logs will be appended
  * \note It is the client app's obligation to ensure that the target file path is writable and all subfolders exist
  * \warning when enabling this feature, logging to the console or an object target will be stopped automatically
  * \return Returns NO on failure
  */
-- (BOOL)setDebugLoggingToFile:(NSString *)filePath __deprecated_msg("Use -[VLCLibrary setLogger:] with a VLCFileLogger instance instead");
+- (BOOL)setDebugLoggingToFile:(NSString *)filePath;
 
 /**
  * Activates debug logging to an object target following the VLCLibraryLogReceiverProtocol protocol
  * The target will be continously called as new messages arrive from this library instance.
  * \warning when enabling this feature, logging to the console or a file will be stopped automatically
  */
-@property (readwrite, nonatomic, nullable) id<VLCLibraryLogReceiverProtocol> debugLoggingTarget __deprecated_msg("Use -[VLCLibrary setLogger:] with an object conforming to VLCLogging protocol instead");
+@property (readwrite, nonatomic) id<VLCLibraryLogReceiverProtocol> debugLoggingTarget;
 
 /**
  * Returns the library's version
@@ -143,11 +136,11 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @protocol VLCLibraryLogReceiverProtocol <NSObject>
-@optional
+@required
 /**
- * called when VLC wants to print a log message
- * \param message the log message
- * \param level the log level
+ * called when VLC wants to print a debug message
+ * \param message the debug message
+ * \param level the debug level
  */
 - (void)handleMessage:(NSString *)message
            debugLevel:(int)level;

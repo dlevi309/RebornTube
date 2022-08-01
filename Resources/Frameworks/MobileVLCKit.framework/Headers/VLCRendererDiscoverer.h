@@ -21,7 +21,8 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
  *****************************************************************************/
 
-@class VLCRendererItem, VLCRendererDiscoverer;
+@class VLCRendererItem;
+@class VLCRendererDiscoverer;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -81,7 +82,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * Receiver's delegate
  */
-@property (nonatomic, weak, nullable) id <VLCRendererDiscovererDelegate> delegate;
+@property (nonatomic, weak) id <VLCRendererDiscovererDelegate> _Nullable delegate;
 
 - (instancetype)init NS_UNAVAILABLE;
 
@@ -90,7 +91,7 @@ NS_ASSUME_NONNULL_BEGIN
  * \param name Name of the renderer discoverer
  * \return A new `VLCRendererDiscoverer` object, only if there were no errors
  */
-- (nullable instancetype)initWithName:(NSString *)name;
+- (instancetype _Nullable)initWithName:(NSString *)name;
 
 
 /**
@@ -117,7 +118,7 @@ NS_ASSUME_NONNULL_BEGIN
  * `VLCRendererDiscoverer`
  * \return An `NSArray` of `VLCRendererDiscovererDescription`
  */
-+ (nullable NSArray<VLCRendererDiscovererDescription *> *)list;
++ (NSArray<VLCRendererDiscovererDescription *> * _Nullable)list;
 
 @end
 

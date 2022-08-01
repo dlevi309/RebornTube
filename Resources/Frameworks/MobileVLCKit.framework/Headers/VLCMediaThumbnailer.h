@@ -23,10 +23,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreGraphics/CoreGraphics.h>
 
-@class VLCMedia, VLCLibrary;
+@class VLCMedia;
+@class VLCLibrary;
 @protocol VLCMediaThumbnailerDelegate;
-
-NS_ASSUME_NONNULL_BEGIN
 
 /**
  * a facility allowing you to do thumbnails in an efficient manner
@@ -48,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
  * \param library a library instance, potentially configured by you in a special way
  * \return the thumbnailer instance
  */
-+ (VLCMediaThumbnailer *)thumbnailerWithMedia:(VLCMedia *)media delegate:(id<VLCMediaThumbnailerDelegate>)delegate andVLCLibrary:(nullable VLCLibrary *)library;
++ (VLCMediaThumbnailer *)thumbnailerWithMedia:(VLCMedia *)media delegate:(id<VLCMediaThumbnailerDelegate>)delegate andVLCLibrary:(VLCLibrary *)library;
 
 /**
  * Starts the thumbnailing process
@@ -58,7 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * delegate object associated with the thumbnailer instance implementing the required protocol
  */
-@property (readwrite, weak, nonatomic, nullable) id<VLCMediaThumbnailerDelegate> delegate;
+@property (readwrite, weak, nonatomic) id<VLCMediaThumbnailerDelegate> delegate;
 /**
  * the media object that is being thumbnailed
  */
@@ -66,7 +65,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  * The thumbnail created for the media object
  */
-@property (readwrite, assign, nonatomic, nullable) CGImageRef thumbnail;
+@property (readwrite, assign, nonatomic) CGImageRef thumbnail;
 /**
  * the libvlc instance used for thumbnailing
  * \note Whatever you do, using this instance is most likely wrong
@@ -116,5 +115,3 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)mediaThumbnailer:(VLCMediaThumbnailer *)mediaThumbnailer didFinishThumbnail:(CGImageRef)thumbnail;
 @end
-
-NS_ASSUME_NONNULL_END

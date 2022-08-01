@@ -23,8 +23,6 @@
 
 @class VLCLibrary;
 
-NS_ASSUME_NONNULL_BEGIN
-
 typedef NS_ENUM(NSUInteger, VLCDialogQuestionType) {
     VLCDialogQuestionNormal,
     VLCDialogQuestionWarning,
@@ -41,8 +39,8 @@ typedef NS_ENUM(NSUInteger, VLCDialogQuestionType) {
  * \param error the dialog title
  * \param message the error message
  */
-- (void)showErrorWithTitle:(NSString *)error
-      message:(NSString *)message;
+- (void)showErrorWithTitle:(NSString * _Nonnull)error
+      message:(NSString * _Nonnull)message;
 
 /**
  * called when user logs in to something
@@ -53,11 +51,11 @@ typedef NS_ENUM(NSUInteger, VLCDialogQuestionType) {
  * \param askingForStorage indicator whether storing is even a possibility
  * \param reference you need to send the results to
  */
-- (void)showLoginWithTitle:(NSString *)title
-                   message:(NSString *)message
-           defaultUsername:(nullable NSString *)username
+- (void)showLoginWithTitle:(NSString * _Nonnull)title
+                   message:(NSString * _Nonnull)message
+           defaultUsername:(NSString * _Nullable)username
           askingForStorage:(BOOL)askingForStorage
-             withReference:(NSValue *)reference;
+             withReference:(NSValue * _Nonnull)reference;
 
 /**
  * called when VLC needs the user to decide something
@@ -69,13 +67,13 @@ typedef NS_ENUM(NSUInteger, VLCDialogQuestionType) {
  * \param action2String action 2 text
  * \param reference you need to send the action to
  */
-- (void)showQuestionWithTitle:(NSString *)title
-                      message:(NSString *)message
+- (void)showQuestionWithTitle:(NSString * _Nonnull)title
+                      message:(NSString * _Nonnull)message
                          type:(VLCDialogQuestionType)questionType
-                 cancelString:(nullable NSString *)cancelString
-                action1String:(nullable NSString *)action1String
-                action2String:(nullable NSString *)action2String
-                withReference:(NSValue *)reference;
+                 cancelString:(NSString * _Nullable)cancelString
+                action1String:(NSString * _Nullable)action1String
+                action2String:(NSString * _Nullable)action2String
+                withReference:(NSValue * _Nonnull)reference;
 
 /**
  * called when VLC wants to show some progress
@@ -86,26 +84,26 @@ typedef NS_ENUM(NSUInteger, VLCDialogQuestionType) {
  * \param cancelString optional string for cancel button if operation is cancellable
  * \param reference VLC will include in updates
  */
-- (void)showProgressWithTitle:(NSString *)title
-                      message:(NSString *)message
+- (void)showProgressWithTitle:(NSString * _Nonnull)title
+                      message:(NSString * _Nonnull)message
               isIndeterminate:(BOOL)isIndeterminate
                      position:(float)position
-                 cancelString:(nullable NSString *)cancelString
-                withReference:(NSValue *)reference;
+                 cancelString:(NSString * _Nullable)cancelString
+                withReference:(NSValue * _Nonnull)reference;
 
 /** called when VLC wants to update an existing progress dialog
  * \param reference to the existing progress dialog
  * \param message updated message
  * \param position current position
  */
-- (void)updateProgressWithReference:(NSValue *)reference
-                            message:(nullable NSString *)message
+- (void)updateProgressWithReference:(NSValue * _Nonnull)reference
+                            message:(NSString * _Nullable)message
                             position:(float)position;
 
 /** VLC decided to destroy a dialog
  * \param reference to the dialog to destroy
  */
-- (void)cancelDialogWithReference:(NSValue *)reference;
+- (void)cancelDialogWithReference:(NSValue * _Nonnull)reference;
 
 @end
 
@@ -124,7 +122,7 @@ typedef NS_ENUM(NSUInteger, VLCDialogQuestionType) {
  * \note if library param is NULL, [VLCLibrary sharedLibrary] will be used
  * \return the dialog provider instance, can be NULL on malloc failures
  */
-- (nullable instancetype)initWithLibrary:(nullable VLCLibrary *)library
+- (instancetype _Nullable)initWithLibrary:(VLCLibrary * _Nullable)library
                                  customUI:(BOOL)customUI;
 
 /**
@@ -141,9 +139,9 @@ typedef NS_ENUM(NSUInteger, VLCDialogQuestionType) {
  * \param dialogReference reference to the dialog you respond to
  * \param store shall VLC store the login securely?
  * \note This method does not have any effect if you don't use custom UI mode */
-- (void)postUsername:(NSString *)username
-         andPassword:(NSString *)password
-  forDialogReference:(NSValue *)dialogReference
+- (void)postUsername:(NSString * _Nonnull)username
+         andPassword:(NSString * _Nonnull)password
+  forDialogReference:(NSValue * _Nonnull)dialogReference
                store:(BOOL)store;
 
 /**
@@ -152,14 +150,12 @@ typedef NS_ENUM(NSUInteger, VLCDialogQuestionType) {
  * \param dialogReference reference to the dialog you respond to
  * \note This method does not have any effect if you don't use custom UI mode */
 - (void)postAction:(int)buttonNumber
-forDialogReference:(NSValue *)dialogReference;
+forDialogReference:(NSValue * _Nonnull)dialogReference;
 
 /**
  * if you requested custom UI mode for dialogs, use this method to cancel a progress dialog
  * \param dialogReference reference to the dialog you want to cancel
  * \note This method does not have any effect if you don't use custom UI mode */
-- (void)dismissDialogWithReference:(NSValue *)dialogReference;
+- (void)dismissDialogWithReference:(NSValue * _Nonnull)dialogReference;
 
 @end
-
-NS_ASSUME_NONNULL_END

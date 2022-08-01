@@ -25,10 +25,11 @@
  *****************************************************************************/
 
 #import <Foundation/Foundation.h>
+#import "VLCMediaList.h"
 
-@class VLCLibrary, VLCMediaList;
-
-NS_ASSUME_NONNULL_BEGIN
+@class VLCLibrary;
+@class VLCMediaList;
+@class VLCMediaDiscoverer;
 
 
 typedef NS_ENUM(unsigned, VLCMediaDiscovererCategoryType)
@@ -98,7 +99,7 @@ extern NSString *const VLCMediaDiscovererCategory;
 /**
  * a read-only property to retrieve the list of discovered media items
  */
-@property (weak, readonly, nullable) VLCMediaList *discoveredMedia;
+@property (weak, readonly) VLCMediaList *discoveredMedia;
 
 /**
  * localized name of the discovery module if available, otherwise in US English
@@ -112,5 +113,3 @@ extern NSString *const VLCMediaDiscovererCategory;
  */
 @property (readonly) BOOL isRunning;
 @end
-
-NS_ASSUME_NONNULL_END
