@@ -231,10 +231,10 @@
 	}
 
 	developerInfoLabel = [[UILabel alloc] init];
-	developerInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width, 60);
+	developerInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width, 40);
 	developerInfoLabel.text = @"";
 	developerInfoLabel.textColor = [UIColor whiteColor];
-	developerInfoLabel.numberOfLines = 3;
+	developerInfoLabel.numberOfLines = 2;
 	developerInfoLabel.adjustsFontSizeToFitWidth = true;
 	developerInfoLabel.adjustsFontForContentSizeCategory = false;
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {

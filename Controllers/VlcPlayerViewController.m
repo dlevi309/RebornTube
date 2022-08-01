@@ -206,10 +206,10 @@
 	}
 
 	developerInfoLabel = [[UILabel alloc] init];
-	developerInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width, 60);
+	developerInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width, 80);
 	developerInfoLabel.text = @"";
 	developerInfoLabel.textColor = [UIColor whiteColor];
-	developerInfoLabel.numberOfLines = 3;
+	developerInfoLabel.numberOfLines = 4;
 	developerInfoLabel.adjustsFontSizeToFitWidth = true;
 	developerInfoLabel.adjustsFontForContentSizeCategory = false;
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {
@@ -365,9 +365,10 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	progressSlider.value = mediaPlayer.position * 200;
 	// Developer
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {
-		developerInfoLabel.text = [NSString stringWithFormat:@"Current Time: %f\nLength: %@", mediaPlayer.position, [mediaPlayer.media.length stringValue]];
+		developerInfoLabel.text = [NSString stringWithFormat:@"Current Time: %f\nLength: %@\nRemaining Time: %@\nTime: %@", mediaPlayer.position * 200, [mediaPlayer.media.length stringValue], [mediaPlayer.remainingTime stringValue], [mediaPlayer.time stringValue]];
 	}
 }
 
