@@ -330,40 +330,42 @@
 
     UIAlertController *alertQualitySelector = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    if (video240p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"240p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video240p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
-    if (video360p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"360p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video360p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
-    if (video480p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"480p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video480p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
-    if (video720p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"720p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video720p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
-    if (video1080p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"1080p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video1080p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
-    if (video1440p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"1440p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video1440p:audioURL:nil:sponsorBlockValues];
-        }]];
-    }
-    if (video2160p != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"2160p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video2160p:audioURL:nil:sponsorBlockValues];
-        }]];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {
+        if (video240p != nil) {
+            [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"240p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video240p:audioURL:nil:sponsorBlockValues];
+            }]];
+        }
+        if (video360p != nil) {
+            [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"360p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video360p:audioURL:nil:sponsorBlockValues];
+            }]];
+        }
+        if (video480p != nil) {
+            [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"480p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video480p:audioURL:nil:sponsorBlockValues];
+            }]];
+        }
+        if (video720p != nil) {
+            [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"720p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video720p:audioURL:nil:sponsorBlockValues];
+            }]];
+        }
+        if (video1080p != nil) {
+            [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"1080p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video1080p:audioURL:nil:sponsorBlockValues];
+            }]];
+        }
+        if (video1440p != nil) {
+            [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"1440p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video1440p:audioURL:nil:sponsorBlockValues];
+            }]];
+        }
+        if (video2160p != nil) {
+            [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"2160p" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                [self player:videoTitle:videoLength:videoArtwork:videoViewCount:videoLikes:videoDislikes:video2160p:audioURL:nil:sponsorBlockValues];
+            }]];
+        }
     }
     if (videoStream != nil) {
         [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Stream" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {

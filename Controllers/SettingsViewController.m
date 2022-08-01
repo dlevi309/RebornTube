@@ -27,7 +27,7 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -36,6 +36,9 @@
     }
     if (section == 1) {
         return 2;
+    }
+    if (section == 2) {
+        return 1;
     }
     return 0;
 }
@@ -80,6 +83,17 @@
             }
             if (indexPath.row == 1) {
                 cell.textLabel.text = @"Clear Playlists";
+            }
+        }
+
+        if (indexPath.section == 1) {
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            if (indexPath.row == 0) {
+                cell.textLabel.text = @"Enable Developer Options";
+                UISwitch *enableDeveloperOptions = [[UISwitch alloc] initWithFrame:CGRectZero];
+                [enableDeveloperOptions addTarget:self action:@selector(toggleEnableDeveloperOptions:) forControlEvents:UIControlEventValueChanged];
+                enableDeveloperOptions.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"];
+                cell.accessoryView = enableDeveloperOptions;
             }
         }
     }
@@ -152,6 +166,16 @@
 
 - (void)apply {
     exit(0); 
+}
+
+- (void)toggleEnableDeveloperOptions:(UISwitch *)sender {
+    if ([sender isOn]) {
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kEnableDeveloperOptions"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    } else {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kEnableDeveloperOptions"];
+        [[NSUserDefaults standardUserDefaults] synchronize];
+    }
 }
 
 @end
