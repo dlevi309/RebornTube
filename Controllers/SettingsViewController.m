@@ -86,7 +86,7 @@
             }
         }
 
-        if (indexPath.section == 1) {
+        if (indexPath.section == 2) {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             if (indexPath.row == 0) {
                 cell.textLabel.text = @"Enable Developer Options";
