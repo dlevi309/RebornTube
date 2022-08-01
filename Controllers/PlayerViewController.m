@@ -460,7 +460,7 @@
 
 - (void)shareButtonClicked:(UIButton *)sender {
 	UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
-	pasteBoard.text = [NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", self.videoID];
+	pasteBoard.string = [NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", self.videoID];
 }
 
 @end
