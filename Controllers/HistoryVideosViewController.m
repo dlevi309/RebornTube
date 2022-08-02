@@ -360,6 +360,7 @@
         playerViewController.videoDislikes = videoDislikes;
         playerViewController.videoURL = videoURL;
         playerViewController.audioURL = audioURL;
+        playerViewController.videoStream = videoStream;
         playerViewController.sponsorBlockValues = sponsorBlockValues;
 
         UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
