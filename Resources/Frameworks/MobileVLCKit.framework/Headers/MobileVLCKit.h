@@ -34,11 +34,13 @@
 #import <MobileVLCKit/VLCTranscoder.h>
 #import <MobileVLCKit/VLCRendererDiscoverer.h>
 #import <MobileVLCKit/VLCRendererItem.h>
-#import <MobileVLCKit/VLCFilter.h>
-#import <MobileVLCKit/VLCAdjustFilter.h>
+#import <MobileVLCKit/VLCMediaMetaData.h>
+#import <MobileVLCKit/VLCLogging.h>
+#import <MobileVLCKit/VLCConsoleLogger.h>
+#import <MobileVLCKit/VLCFileLogger.h>
+#import <MobileVLCKit/VLCLogMessageFormatter.h>
 
 @class VLCMedia;
-@class VLCMediaLibrary;
 @class VLCMediaList;
 @class VLCTime;
 @class VLCVideoView;
@@ -50,5 +52,7 @@
 @class VLCRendererDiscoverer;
 @class VLCRendererDiscovererDescription;
 @class VLCRendererItem;
-@class VLCFilterParameter;
-@class VLCAdjustFilter;
+@class VLCMediaMetaData;
+@class VLCConsoleLogger;
+@class VLCFileLogger;
+@class VLCLogMessageFormatter;

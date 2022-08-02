@@ -28,6 +28,8 @@
 
 @class VLCMedia, VLCMediaPlayer, VLCMediaList, VLCMediaListPlayer;
 
+NS_ASSUME_NONNULL_BEGIN
+
 /**
  * VLCRepeatMode
  * (don't repeat anything, repeat one, repeat all)
@@ -62,20 +64,21 @@ typedef NS_ENUM(NSInteger, VLCRepeatMode) {
 /**
  * A media list player, which eases the use of playlists
  */
+OBJC_VISIBLE
 @interface VLCMediaListPlayer : NSObject
 
 /**
  * setter/getter for mediaList to play within the player
  * \note This list is erased when setting a rootMedia on the list player instance
  */
-@property (readwrite) VLCMediaList *mediaList;
+@property (readwrite, nullable) VLCMediaList *mediaList;
 
 /**
  * rootMedia - Use this method to play a media and its subitems.
  * This will erase mediaList.
  * Setting mediaList will erase rootMedia.
  */
-@property (readwrite) VLCMedia *rootMedia;
+@property (readwrite, nullable) VLCMedia *rootMedia;
 
 /**
  * the media player instance used for playback by the list player
@@ -85,7 +88,7 @@ typedef NS_ENUM(NSInteger, VLCRepeatMode) {
 /**
  * Receiver's delegate
  */
-@property (nonatomic, weak) id <VLCMediaListPlayerDelegate> delegate;
+@property (nonatomic, weak, nullable) id <VLCMediaListPlayerDelegate> delegate;
 
 /**
  * initializer with a certain drawable
@@ -102,7 +105,7 @@ typedef NS_ENUM(NSInteger, VLCRepeatMode) {
  * \see initWithDrawable
  * \see initWithOptions
  */
-- (instancetype)initWithOptions:(NSArray *)options andDrawable:(id)drawable;
+- (instancetype)initWithOptions:(nullable NSArray *)options andDrawable:(nullable id)drawable;
 
 /**
  * start playback
@@ -129,12 +132,6 @@ typedef NS_ENUM(NSInteger, VLCRepeatMode) {
 @property (NS_NONATOMIC_IOSONLY, readonly) BOOL previous;
 
 /**
- * play an item at at a given index in the media list attached to the player
- * \deprecated This method is not thread safe. Use playItemAtNumber: instead
- */
-- (BOOL)playItemAtIndex:(int)index  __attribute__((deprecated));
-
-/**
  * play an item at a given index in the media list attached to the player
  */
 - (void)playItemAtNumber:(NSNumber *)index;
@@ -151,3 +148,5 @@ typedef NS_ENUM(NSInteger, VLCRepeatMode) {
 - (void)playMedia:(VLCMedia *)media;
 
 @end
+
+NS_ASSUME_NONNULL_END

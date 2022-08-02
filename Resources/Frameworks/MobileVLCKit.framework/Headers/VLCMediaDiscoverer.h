@@ -25,12 +25,10 @@
  *****************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "VLCMediaList.h"
 
-@class VLCLibrary;
-@class VLCMediaList;
-@class VLCMediaDiscoverer;
+@class VLCLibrary, VLCMediaList;
 
+NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(unsigned, VLCMediaDiscovererCategoryType)
 {
@@ -41,14 +39,17 @@ typedef NS_ENUM(unsigned, VLCMediaDiscovererCategoryType)
 };
 
 /* discoverer keys */
-extern NSString *const VLCMediaDiscovererName;
-extern NSString *const VLCMediaDiscovererLongName;
-extern NSString *const VLCMediaDiscovererCategory;
+OBJC_VISIBLE OBJC_EXTERN
+NSString *const VLCMediaDiscovererName;
+OBJC_VISIBLE OBJC_EXTERN
+NSString *const VLCMediaDiscovererLongName;
+OBJC_VISIBLE OBJC_EXTERN
+NSString *const VLCMediaDiscovererCategory;
 
 /**
  * VLCMediaDiscoverer
  */
-
+OBJC_VISIBLE
 @interface VLCMediaDiscoverer : NSObject
 
 /**
@@ -56,13 +57,6 @@ extern NSString *const VLCMediaDiscovererCategory;
  * \note unless for debug, you are wrong if you want to use this selector
  */
 @property (nonatomic, readonly) VLCLibrary *libraryInstance;
-
-/**
- * The full list of available media discoverers
- * \return returns an empty array for binary compatibility, will be removed in subsequent releases
- * \deprecated use availableMediaDiscovererForCategoryType instead
- */
-+ (NSArray *)availableMediaDiscoverer __attribute__((deprecated));
 
 /**
  * \param categoryType VLCMediaDiscovererCategory you are looking for
@@ -83,7 +77,7 @@ extern NSString *const VLCMediaDiscovererCategory;
  * same as above but with a custom VLCLibrary instance
  * \note Using this mode can lead to a significant performance impact - use only if you know what you are doing
  */
-- (instancetype)initWithName:(NSString *)aServiceName libraryInstance:(VLCLibrary *)libraryInstance;
+- (instancetype)initWithName:(NSString *)aServiceName libraryInstance:(nullable VLCLibrary *)libraryInstance;
 
 /**
  * start media discovery
@@ -99,13 +93,7 @@ extern NSString *const VLCMediaDiscovererCategory;
 /**
  * a read-only property to retrieve the list of discovered media items
  */
-@property (weak, readonly) VLCMediaList *discoveredMedia;
-
-/**
- * localized name of the discovery module if available, otherwise in US English
- * \deprecated Will be removed in the next major release, may return an empty string for binary compatibility
- */
-@property (readonly, copy) NSString *localizedName __attribute__((deprecated));
+@property (weak, readonly, nullable) VLCMediaList *discoveredMedia;
 
 /**
  * read-only property to check if the discovery service is active
@@ -113,3 +101,5 @@ extern NSString *const VLCMediaDiscovererCategory;
  */
 @property (readonly) BOOL isRunning;
 @end
+
+NS_ASSUME_NONNULL_END

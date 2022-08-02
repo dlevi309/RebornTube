@@ -24,15 +24,10 @@
  *****************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "VLCAudio.h"
-#import "VLCMediaList.h"
-#import "VLCMedia.h"
 
-@class VLCAudio;
+@protocol VLCLogging;
 
 NS_ASSUME_NONNULL_BEGIN
-
-@protocol VLCLibraryLogReceiverProtocol;
 
 /**
  * The VLCLibrary is the base library of VLCKit.framework. This object provides a shared instance that exposes the
@@ -43,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
  * Currently, the framework does not support multiple instances of VLCLibrary.
  * Furthermore, you cannot destroy any instance of VLCLibrary; this is done automatically by the dynamic link loader.
  */
+OBJC_VISIBLE
 @interface VLCLibrary : NSObject
 
 /**
@@ -59,39 +55,10 @@ NS_ASSUME_NONNULL_BEGIN
  - (instancetype)initWithOptions:(NSArray *)options;
 
 /**
- * Enables/disables debug logging to console
- * \note NSLog is used to log messages
+ * \brief The loggers array
+ * \note Defaults to nil
  */
-@property (readwrite, nonatomic) BOOL debugLogging;
-
-/**
- * Gets/sets the debug logging level
- * \note Logging level
- * 0: info/notice
- * 1: error
- * 2: warning
- * 3-4: debug
- * \note values set here will be consired only when logging to console
- * \warning If an invalid level is provided, level defaults to 0
- */
-@property (readwrite, nonatomic) int debugLoggingLevel;
-
-/**
- * Activates debug logging to a file stream
- * If the file already exists, the log will be appended by the end. If it does not exist, will be created.
- * The file will continously updated with new messages from this library instance.
- * \note It is the client app's obligation to ensure that the target file path is writable and all subfolders exist
- * \warning when enabling this feature, logging to the console or an object target will be stopped automatically
- * \return Returns NO on failure
- */
-- (BOOL)setDebugLoggingToFile:(NSString *)filePath;
-
-/**
- * Activates debug logging to an object target following the VLCLibraryLogReceiverProtocol protocol
- * The target will be continously called as new messages arrive from this library instance.
- * \warning when enabling this feature, logging to the console or a file will be stopped automatically
- */
-@property (readwrite, nonatomic) id<VLCLibraryLogReceiverProtocol> debugLoggingTarget;
+@property (readwrite, nonatomic, nullable) NSArray< id<VLCLogging> > *loggers;
 
 /**
  * Returns the library's version
@@ -133,17 +100,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) void *instance;
 
-@end
-
-@protocol VLCLibraryLogReceiverProtocol <NSObject>
-@required
-/**
- * called when VLC wants to print a debug message
- * \param message the debug message
- * \param level the debug level
- */
-- (void)handleMessage:(NSString *)message
-           debugLevel:(int)level;
 @end
 
 NS_ASSUME_NONNULL_END

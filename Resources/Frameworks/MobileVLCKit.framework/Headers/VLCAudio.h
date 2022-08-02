@@ -24,15 +24,17 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 /* Notification Messages */
 /**
  * Standard notification messages that are emitted by VLCAudio object.
  */
-extern NSString *const VLCMediaPlayerVolumeChanged;
-
+FOUNDATION_EXPORT NSNotificationName const VLCMediaPlayerVolumeChangedNotification NS_SWIFT_NAME(VLCMediaPlayer.volumeChangedNotification);
 /**
  * basic class to control audio output
  */
+OBJC_VISIBLE
 @interface VLCAudio : NSObject
 
 /**
@@ -51,11 +53,6 @@ extern NSString *const VLCMediaPlayerVolumeChanged;
 @property (readwrite) BOOL passthrough;
 
 /**
- * Mute the current audio output.
- * \deprecated This selector will be removed in the next release */
-- (void)setMute:(BOOL)value __attribute__((deprecated));
-
-/**
  * lower the current audio output volume */
 - (void)volumeDown;
 
@@ -64,3 +61,5 @@ extern NSString *const VLCMediaPlayerVolumeChanged;
 - (void)volumeUp;
 
 @end
+
+NS_ASSUME_NONNULL_END

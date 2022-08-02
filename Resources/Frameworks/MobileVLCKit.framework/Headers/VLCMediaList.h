@@ -24,16 +24,17 @@
  *****************************************************************************/
 
 #import <Foundation/Foundation.h>
-#import "VLCMedia.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  * notification name if a list item was added
  */
-extern NSString *const VLCMediaListItemAdded;
+FOUNDATION_EXPORT NSNotificationName const VLCMediaListItemAddedNotification NS_SWIFT_NAME(VLCMediaList.itemAddedNotification);
 /**
  * notification name if a list item was deleted
  */
-extern NSString *const VLCMediaListItemDeleted;
+FOUNDATION_EXPORT NSNotificationName const VLCMediaListItemDeletedNotification NS_SWIFT_NAME(VLCMediaList.itemDeletedNotification);
 
 @class VLCMedia;
 @class VLCMediaList;
@@ -41,7 +42,7 @@ extern NSString *const VLCMediaListItemDeleted;
 /**
  * VLCMediaListDelegate
  */
-@protocol VLCMediaListDelegate
+@protocol VLCMediaListDelegate <NSObject>
 @optional
 /**
  * delegate method triggered when a media was added to the list
@@ -64,6 +65,7 @@ extern NSString *const VLCMediaListItemDeleted;
 /**
  * VLCMediaList
  */
+OBJC_VISIBLE
 @interface VLCMediaList : NSObject
 
 /**
@@ -72,7 +74,7 @@ extern NSString *const VLCMediaListItemDeleted;
  * \return instance of VLCMediaList equipped with the VLCMedia instances
  * \see VLCMedia
  */
-- (instancetype)initWithArray:(NSArray *)array;
+- (instancetype)initWithArray:(NSArray<VLCMedia *> *)array;
 
 /* Operations */
 /**
@@ -119,7 +121,7 @@ extern NSString *const VLCMediaListItemDeleted;
  * \param index the index of the media you want
  * \return the media object
  */
-- (VLCMedia *)mediaAtIndex:(NSUInteger)index;
+- (nullable VLCMedia *)mediaAtIndex:(NSUInteger)index;
 
 /**
  * retrieve the position of a media item
@@ -140,7 +142,7 @@ extern NSString *const VLCMediaListItemDeleted;
 /**
  * delegate property to listen to addition/removal events
  */
-@property (weak, nonatomic) id delegate;
+@property (weak, nonatomic, nullable) id<VLCMediaListDelegate> delegate;
 
 /**
  * read-only property to check if the media list is writable or not
@@ -148,4 +150,12 @@ extern NSString *const VLCMediaListItemDeleted;
  */
 @property (readonly) BOOL isReadOnly;
 
+/**
+ * read-only property to check if the media list is empty or not
+ * \return boolean value if the list is empty or not.
+ */
+@property (readonly) BOOL isEmpty;
+
 @end
+
+NS_ASSUME_NONNULL_END

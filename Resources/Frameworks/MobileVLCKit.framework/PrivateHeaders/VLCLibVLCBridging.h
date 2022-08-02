@@ -22,12 +22,18 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
  *****************************************************************************/
 
-#import "VLCLibrary.h"
+#import <VLCLibrary.h>
 #if !TARGET_OS_IPHONE
-#import "VLCStreamOutput.h"
-#endif
-#import "VLCMediaPlayer.h"
-#import "VLCRendererItem.h"
+#import <VLCStreamOutput.h>
+#endif // !TARGET_OS_IPHONE
+#import <VLCMediaPlayer.h>
+#import <VLCMediaList.h>
+#import <VLCMedia.h>
+#import <VLCAudio.h>
+#import <VLCMediaMetaData.h>
+#if !TARGET_OS_TV
+#import <VLCRendererItem.h>
+#endif // !TARGET_OS_TV
 
 /**
  * Bridges functionality between libvlc and VLCMediaList implementation.
@@ -147,6 +153,7 @@
 - (id)initWithMediaPlayer:(VLCMediaPlayer *)mediaPlayer;
 @end
 
+#if !TARGET_OS_TV
 /**
  * Bridges functionality between libvlc and VLCRendererItem implementation.
  */
@@ -167,7 +174,7 @@
 - (void *)libVLCRendererItem;
 
 @end
-
+#endif // !TARGET_OS_TV
 /**
  * TODO: Documentation
  */
@@ -176,3 +183,62 @@
 - (NSString *)representedLibVLCOptions;
 @end
 #endif
+
+
+/**
+ * Bridges functionality between libvlc and VLCMediaTrack implementation.
+ */
+@interface VLCMediaTrack (LibVLCBridging)
+
+- (instancetype)initWithMediaTrack:(libvlc_media_track_t *)track;
+
+@end
+
+/**
+ * Bridges functionality between libvlc and VLCMediaAudioTrack implementation.
+ */
+@interface VLCMediaAudioTrack (LibVLCBridging)
+
+- (instancetype)initWithAudioTrack:(libvlc_audio_track_t *)audio;
+
+@end
+
+/**
+ * Bridges functionality between libvlc and VLCMediaVideoTrack implementation.
+ */
+@interface VLCMediaVideoTrack (LibVLCBridging)
+
+- (instancetype)initWithVideoTrack:(libvlc_video_track_t *)video;
+
+@end
+
+/**
+ * Bridges functionality between libvlc and VLCMediaTextTrack implementation.
+ */
+@interface VLCMediaTextTrack (LibVLCBridging)
+
+- (instancetype)initWithSubtitleTrack:(libvlc_subtitle_track_t *)subtitle;
+
+@end
+
+/**
+ * Bridges functionality between libvlc and VLCMediaMetaData implementation.
+ */
+@interface VLCMediaMetaData (LibVLCBridging)
+
+- (instancetype)initWithMedia:(VLCMedia *)media;
+
+- (void)handleMediaMetaChanged:(const libvlc_meta_t)type;
+
+@end
+
+/**
+ * Bridges functionality between libvlc and VLCMediaPlayerTrack implementation.
+ */
+@interface VLCMediaPlayerTrack (LibVLCBridging)
+
+- (instancetype)initWithMediaTrack:(libvlc_media_track_t *)track mediaPlayer:(VLCMediaPlayer *)mediaPlayer;
+
+- (instancetype)initWithMediaTrack:(libvlc_media_track_t *)track NS_UNAVAILABLE;
+
+@end
