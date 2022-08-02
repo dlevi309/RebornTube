@@ -83,7 +83,14 @@
 	} else if (self.audioURL != nil) {
 		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
 
-		playerItem = [[AVPlayerItem alloc] initWithAsset:audioAsset];
+		CMTime length = CMTimeMakeWithSeconds([self.videoLength intValue], NSEC_PER_SEC);
+
+		AVMutableComposition *mixComposition = [AVMutableComposition composition];
+
+		AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
+		[compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, length) ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:kCMTimeZero error:nil];
+
+		playerItem = [[AVPlayerItem alloc] initWithAsset:mixComposition];
 		AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
 		[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
 
