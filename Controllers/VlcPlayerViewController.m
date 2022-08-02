@@ -302,6 +302,8 @@
 
 	MPMediaItemArtwork *albumArt = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]]];
 	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoTitle] forKey:MPMediaItemPropertyTitle];
+	[songInfo setObject:[NSNumber numberWithInteger:([mediaPlayer.time intValue] / 1000)] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
+	[songInfo setObject:[NSNumber numberWithInteger:([mediaPlayer.media.length intValue] / 1000)] forKey:MPMediaItemPropertyPlaybackDuration];
 	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
 
 	[playingInfoCenter setNowPlayingInfo:songInfo];
