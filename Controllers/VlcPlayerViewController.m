@@ -172,7 +172,6 @@
 	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateHighlighted];
 	progressSlider.minimumTrackTintColor = [UIColor redColor];
 	progressSlider.minimumValue = 0.0f;
-	progressSlider.maximumValue = [self.videoLength floatValue];
 	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 	[self.view addSubview:progressSlider];
 
@@ -365,7 +364,8 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	progressSlider.value = mediaPlayer.position * 200;
+	progressSlider.maximumValue = [mediaPlayer.media.length intValue];
+	progressSlider.value = [mediaPlayer.time intValue];
 	// Developer
 	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {
 		developerInfoLabel.text = [NSString stringWithFormat:@"Current Time: %f\nLength: %@\nRemaining Time: %@\nTime: %@", mediaPlayer.position * 200, [mediaPlayer.media.length stringValue], [mediaPlayer.remainingTime stringValue], [mediaPlayer.time stringValue]];
