@@ -51,6 +51,8 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
         cell.textLabel.adjustsFontSizeToFitWidth = true;
         cell.textLabel.adjustsFontForContentSizeCategory = false;
+        cell.detailTextLabel.adjustsFontSizeToFitWidth = true;
+        cell.detailTextLabel.adjustsFontForContentSizeCategory = false;
         cell.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
         cell.textLabel.textColor = [UIColor whiteColor];
         if (indexPath.section == 0) {
@@ -90,6 +92,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             if (indexPath.row == 0) {
                 cell.textLabel.text = @"Enable Developer Options";
+                cell.detailTextLabel.text = @"Not Recommended";
                 UISwitch *enableDeveloperOptions = [[UISwitch alloc] initWithFrame:CGRectZero];
                 [enableDeveloperOptions addTarget:self action:@selector(toggleEnableDeveloperOptions:) forControlEvents:UIControlEventValueChanged];
                 enableDeveloperOptions.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"];
