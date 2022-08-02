@@ -376,38 +376,66 @@
 	progressSlider.maximumValue = [mediaPlayer.media.length intValue];
 	progressSlider.value = [mediaPlayer.time intValue];
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] == 1) {
-		if ([mediaPlayer.time intValue] >= [[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:0] floatValue] && [mediaPlayer.time intValue] <= [[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue]) {
-			// [player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
+		if (([mediaPlayer.time intValue] / 1000) >= [[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:0] floatValue] && ([mediaPlayer.time intValue] / 1000) <= [[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue]) {
+			[mediaPlayer removeObserver:self forKeyPath:@"time"];
+            [mediaPlayer removeObserver:self forKeyPath:@"remainingTime"];
+			[mediaPlayer setTime:[VLCTime timeWithNumber:[NSNumber numberWithFloat:(([[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue] + 3) * 1000)]]];
+			[mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    		[mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
 		}
 	}
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSelfPromoSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSelfPromoSegmentedInt"] == 1) {
-		if ([mediaPlayer.time intValue] >= [[[self.sponsorBlockValues objectForKey:@"selfpromo"] objectAtIndex:0] floatValue] && [mediaPlayer.time intValue] <= [[[self.sponsorBlockValues objectForKey:@"selfpromo"] objectAtIndex:1] floatValue]) {
-			// [player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"selfpromo"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
+		if (([mediaPlayer.time intValue] / 1000) >= [[[self.sponsorBlockValues objectForKey:@"selfpromo"] objectAtIndex:0] floatValue] && ([mediaPlayer.time intValue] / 1000) <= [[[self.sponsorBlockValues objectForKey:@"selfpromo"] objectAtIndex:1] floatValue]) {
+			[mediaPlayer removeObserver:self forKeyPath:@"time"];
+            [mediaPlayer removeObserver:self forKeyPath:@"remainingTime"];
+			// [mediaPlayer setTime:[VLCTime timeWithNumber:[NSNumber numberWithFloat:(([[[self.sponsorBlockValues objectForKey:@"selfpromo"] objectAtIndex:1] floatValue] + 3) * 1000)]]];
+			[mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    		[mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
 		}
 	}
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockInteractionSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockInteractionSegmentedInt"] == 1) {
-		if ([mediaPlayer.time intValue] >= [[[self.sponsorBlockValues objectForKey:@"interaction"] objectAtIndex:0] floatValue] && [mediaPlayer.time intValue] <= [[[self.sponsorBlockValues objectForKey:@"interaction"] objectAtIndex:1] floatValue]) {
-			// [player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"interaction"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
+		if (([mediaPlayer.time intValue] / 1000) >= [[[self.sponsorBlockValues objectForKey:@"interaction"] objectAtIndex:0] floatValue] && ([mediaPlayer.time intValue] / 1000) <= [[[self.sponsorBlockValues objectForKey:@"interaction"] objectAtIndex:1] floatValue]) {
+			[mediaPlayer removeObserver:self forKeyPath:@"time"];
+            [mediaPlayer removeObserver:self forKeyPath:@"remainingTime"];
+			// [mediaPlayer setTime:[VLCTime timeWithNumber:[NSNumber numberWithFloat:(([[[self.sponsorBlockValues objectForKey:@"interaction"] objectAtIndex:1] floatValue] + 3) * 1000)]]];
+			[mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    		[mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
 		}
 	}
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockIntroSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockIntroSegmentedInt"] == 1) {
-		if ([mediaPlayer.time intValue] >= [[[self.sponsorBlockValues objectForKey:@"intro"] objectAtIndex:0] floatValue] && [mediaPlayer.time intValue] <= [[[self.sponsorBlockValues objectForKey:@"intro"] objectAtIndex:1] floatValue]) {
-			// [player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"intro"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
+		if (([mediaPlayer.time intValue] / 1000) >= [[[self.sponsorBlockValues objectForKey:@"intro"] objectAtIndex:0] floatValue] && ([mediaPlayer.time intValue] / 1000) <= [[[self.sponsorBlockValues objectForKey:@"intro"] objectAtIndex:1] floatValue]) {
+			[mediaPlayer removeObserver:self forKeyPath:@"time"];
+            [mediaPlayer removeObserver:self forKeyPath:@"remainingTime"];
+			// [mediaPlayer setTime:[VLCTime timeWithNumber:[NSNumber numberWithFloat:(([[[self.sponsorBlockValues objectForKey:@"intro"] objectAtIndex:1] floatValue] + 3) * 1000)]]];
+			[mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    		[mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
 		}
 	}
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockOutroSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockOutroSegmentedInt"] == 1) {
-		if ([mediaPlayer.time intValue] >= [[[self.sponsorBlockValues objectForKey:@"outro"] objectAtIndex:0] floatValue] && [mediaPlayer.time intValue] <= [[[self.sponsorBlockValues objectForKey:@"outro"] objectAtIndex:1] floatValue]) {
-			// [player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"outro"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
+		if (([mediaPlayer.time intValue] / 1000) >= [[[self.sponsorBlockValues objectForKey:@"outro"] objectAtIndex:0] floatValue] && ([mediaPlayer.time intValue] / 1000) <= [[[self.sponsorBlockValues objectForKey:@"outro"] objectAtIndex:1] floatValue]) {
+			[mediaPlayer removeObserver:self forKeyPath:@"time"];
+            [mediaPlayer removeObserver:self forKeyPath:@"remainingTime"];
+			// [mediaPlayer setTime:[VLCTime timeWithNumber:[NSNumber numberWithFloat:(([[[self.sponsorBlockValues objectForKey:@"outro"] objectAtIndex:1] floatValue] + 3) * 1000)]]];
+			[mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    		[mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
 		}
 	}
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockPreviewSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockPreviewSegmentedInt"] == 1) {
-		if ([mediaPlayer.time intValue] >= [[[self.sponsorBlockValues objectForKey:@"preview"] objectAtIndex:0] floatValue] && [mediaPlayer.time intValue] <= [[[self.sponsorBlockValues objectForKey:@"preview"] objectAtIndex:1] floatValue]) {
-			// [player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"preview"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
+		if (([mediaPlayer.time intValue] / 1000) >= [[[self.sponsorBlockValues objectForKey:@"preview"] objectAtIndex:0] floatValue] && ([mediaPlayer.time intValue] / 1000) <= [[[self.sponsorBlockValues objectForKey:@"preview"] objectAtIndex:1] floatValue]) {
+			[mediaPlayer removeObserver:self forKeyPath:@"time"];
+            [mediaPlayer removeObserver:self forKeyPath:@"remainingTime"];
+			// [mediaPlayer setTime:[VLCTime timeWithNumber:[NSNumber numberWithFloat:(([[[self.sponsorBlockValues objectForKey:@"preview"] objectAtIndex:1] floatValue] + 3) * 1000)]]];
+			[mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    		[mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
 		}
 	}
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockMusicOffTopicSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockMusicOffTopicSegmentedInt"] == 1) {
-		if ([mediaPlayer.time intValue] >= [[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:0] floatValue] && [mediaPlayer.time intValue] <= [[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:1] floatValue]) {
-			// [player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
+		if (([mediaPlayer.time intValue] / 1000) >= [[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:0] floatValue] && ([mediaPlayer.time intValue] / 1000) <= [[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:1] floatValue]) {
+			[mediaPlayer removeObserver:self forKeyPath:@"time"];
+            [mediaPlayer removeObserver:self forKeyPath:@"remainingTime"];
+			// [mediaPlayer setTime:[VLCTime timeWithNumber:[NSNumber numberWithFloat:(([[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:1] floatValue] + 3) * 1000)]]];
+			[mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    		[mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
 		}
 	}
 	// Developer
