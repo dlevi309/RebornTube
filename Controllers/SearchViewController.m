@@ -7,7 +7,9 @@
 {
 	UITextField *searchTextField;
 	NSMutableDictionary *searchVideoIDDictionary;
+    UIScrollView *scrollView;
 }
+- (void)keysSetup;
 @end
 
 @implementation SearchViewController
@@ -23,6 +25,8 @@
 	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
     self.navigationItem.rightBarButtonItem = doneButton;
 
+    [self keysSetup];
+
 	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
 
 	searchTextField = [[UITextField alloc] init];
@@ -31,6 +35,10 @@
 	searchTextField.placeholder = @"Search Here";
 	[searchTextField addTarget:self action:@selector(searchRequest) forControlEvents:UIControlEventEditingDidEndOnExit];
 	[self.view addSubview:searchTextField];
+}
+
+- (void)keysSetup {
+    scrollView = [[UIScrollView alloc] init];
 }
 
 @end
@@ -45,11 +53,11 @@
 	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
 	searchVideoIDDictionary = [NSMutableDictionary new];
 
-	NSMutableDictionary *youtubeiAndroidSearchRequest = [YouTubeExtractor youtubeiAndroidSearchRequest:[searchTextField text]];
+    NSMutableDictionary *youtubeiAndroidSearchRequest = [YouTubeExtractor youtubeiAndroidSearchRequest:[searchTextField text]];
     NSArray *searchContents = youtubeiAndroidSearchRequest[@"contents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
 	
-	UIScrollView *scrollView = [[UIScrollView alloc] init];
-	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + searchTextField.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - searchTextField.frame.size.height);
+	[scrollView removeFromSuperview];
+    scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + searchTextField.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - searchTextField.frame.size.height);
 	
 	int viewBounds = 0;
 	for (int i = 1 ; i <= 50 ; i++) {
