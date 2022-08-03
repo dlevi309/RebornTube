@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
 
-@interface HistoryViewController : UIViewController <UITabBarDelegate>
+@interface HistoryViewController : UIViewController
 
 @end
