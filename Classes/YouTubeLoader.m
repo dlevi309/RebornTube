@@ -1,11 +1,25 @@
 #import "YouTubeLoader.h"
-#import "AppDelegate.h"
 #import "YouTubeExtractor.h"
 #import "../Controllers/PlayerViewController.h"
 
 @implementation YouTubeLoader
 
 + (void)init :(NSString *)videoID {
+    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (true) {
+        if (topViewController.presentedViewController) {
+            topViewController = topViewController.presentedViewController;
+        } else if ([topViewController isKindOfClass:[UINavigationController class]]) {
+            UINavigationController *nav = (UINavigationController *)topViewController;
+            topViewController = nav.topViewController;
+        } else if ([topViewController isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tab = (UITabBarController *)topViewController;
+            topViewController = tab.selectedViewController;
+        } else {
+            break;
+        }
+    }
+
     NSMutableDictionary *sponsorBlockValues = [YouTubeExtractor sponsorBlockRequest:videoID];
 
 	NSMutableDictionary *returnYouTubeDislikeRequest = [YouTubeExtractor returnYouTubeDislikeRequest:videoID];
@@ -71,9 +85,7 @@
             UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
             playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
-            UIWindow *window = [(AppDelegate *)[[UIApplication sharedApplication] delegate] window];
-            UIViewController *vc = [window rootViewController];
-            [vc presentViewController:playerViewControllerView animated:YES completion:nil];
+            [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
         }]];
     }
     if (audioURL != nil) {
@@ -93,18 +105,14 @@
             UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
             playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
-            UIWindow *window = [(AppDelegate *)[[UIApplication sharedApplication] delegate] window];
-            UIViewController *vc = [window rootViewController];
-            [vc presentViewController:playerViewControllerView animated:YES completion:nil];
+            [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
         }]];
     }
 
     [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
     }]];
 
-    UIWindow *window = [(AppDelegate *)[[UIApplication sharedApplication] delegate] window];
-    UIViewController *vc = [window rootViewController];
-    [vc presentViewController:alertQualitySelector animated:YES completion:nil];
+    [topViewController presentViewController:alertQualitySelector animated:YES completion:nil];
 }
 
 @end
