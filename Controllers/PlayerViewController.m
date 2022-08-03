@@ -1,4 +1,5 @@
 #import "PlayerViewController.h"
+#import "AddToPlaylistsViewController.h"
 
 @interface PlayerViewController ()
 {
@@ -28,6 +29,7 @@
 	UILabel *videoTitleLabel;
 	UILabel *videoInfoLabel;
 	UIButton *shareButton;
+	UIButton *addToPlaylistsButton;
 }
 - (void)keysSetup;
 - (void)playerSetup;
@@ -231,6 +233,15 @@
 	shareButton.tintColor = [UIColor whiteColor];
 	shareButton.layer.cornerRadius = 5;
 	[self.view addSubview:shareButton];
+
+	addToPlaylistsButton = [[UIButton alloc] init];
+	addToPlaylistsButton.frame = CGRectMake(20, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 30 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + shareButton.frame.size.height, self.view.bounds.size.width - 40, 60);
+	[addToPlaylistsButton addTarget:self action:@selector(addToPlaylistsButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+ 	[addToPlaylistsButton setTitle:@"Add To Playlist" forState:UIControlStateNormal];
+	addToPlaylistsButton.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+	addToPlaylistsButton.tintColor = [UIColor whiteColor];
+	addToPlaylistsButton.layer.cornerRadius = 5;
+	[self.view addSubview:addToPlaylistsButton];
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
@@ -469,6 +480,13 @@
 - (void)shareButtonClicked:(UIButton *)sender {
 	UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
 	pasteBoard.string = [NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", self.videoID];
+}
+
+- (void)addToPlaylistsButtonClicked:(UIButton *)sender {
+	AddToPlaylistsViewController *addToPlaylistsViewController = [[AddToPlaylistsViewController alloc] init];
+	addToPlaylistsViewController.videoID = self.videoID;
+
+    [self presentViewController:addToPlaylistsViewController animated:YES completion:nil];
 }
 
 @end
