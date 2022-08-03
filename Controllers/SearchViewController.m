@@ -1,6 +1,7 @@
 #import "SearchViewController.h"
 #import "PlayerViewController.h"
 #import "../Classes/YouTubeExtractor.h"
+#import "../Classes/AppColours.h"
 
 @interface SearchViewController ()
 {
@@ -17,7 +18,7 @@
 	[super loadView];
 
 	self.title = @"";
-	self.view.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
+	self.view.backgroundColor = [AppColours mainBackgroundColour];
 	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 

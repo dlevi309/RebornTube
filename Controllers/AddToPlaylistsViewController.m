@@ -1,4 +1,5 @@
 #import "AddToPlaylistsViewController.h"
+#import "../Classes/AppColours.h"
 
 @interface AddToPlaylistsViewController ()
 {

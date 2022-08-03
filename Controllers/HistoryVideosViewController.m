@@ -4,6 +4,7 @@
 #import "SettingsViewController.h"
 #import "PlayerViewController.h"
 #import "../Classes/YouTubeExtractor.h"
+#import "../Classes/AppColours.h"
 
 @interface HistoryVideosViewController ()
 {
@@ -24,7 +25,7 @@
 	[super loadView];
 
 	self.title = @"";
-    self.view.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
+    self.view.backgroundColor = [AppColours mainBackgroundColour];
 	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 
@@ -92,7 +93,7 @@
         @try {
             UIView *historyView = [[UIView alloc] init];
             historyView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 100);
-            historyView.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+            historyView.backgroundColor = [AppColours viewBackgroundColour];
             historyView.tag = videoCount;
             UITapGestureRecognizer *historyViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(historyTap:)];
             historyViewTap.numberOfTapsRequired = 1;
@@ -108,7 +109,7 @@
             UILabel *videoTitleLabel = [[UILabel alloc] init];
             videoTitleLabel.frame = CGRectMake(85, 0, historyView.frame.size.width - 85, 80);
             videoTitleLabel.text = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"title"]];
-            videoTitleLabel.textColor = [UIColor whiteColor];
+            videoTitleLabel.textColor = [AppColours textColour];
             videoTitleLabel.numberOfLines = 2;
             videoTitleLabel.adjustsFontSizeToFitWidth = true;
             videoTitleLabel.adjustsFontForContentSizeCategory = false;
@@ -117,7 +118,7 @@
             UILabel *videoAuthorLabel = [[UILabel alloc] init];
             videoAuthorLabel.frame = CGRectMake(5, 80, historyView.frame.size.width - 5, 20);
             videoAuthorLabel.text = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"author"]];
-            videoAuthorLabel.textColor = [UIColor whiteColor];
+            videoAuthorLabel.textColor = [AppColours textColour];
             videoAuthorLabel.numberOfLines = 1;
             [videoAuthorLabel setFont:[UIFont systemFontOfSize:12]];
             videoAuthorLabel.adjustsFontSizeToFitWidth = true;

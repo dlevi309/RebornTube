@@ -4,6 +4,7 @@
 #import "SearchViewController.h"
 #import "SettingsViewController.h"
 #import "HistoryVideosViewController.h"
+#import "../Classes/AppColours.h"
 
 @interface HistoryViewController ()
 {
@@ -22,7 +23,7 @@
 	[super loadView];
 
 	self.title = @"";
-    self.view.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
+    self.view.backgroundColor = [AppColours mainBackgroundColour];
 	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
 	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 
@@ -30,7 +31,7 @@
 
     UILabel *titleLabel = [[UILabel alloc] init];
 	titleLabel.text = @"RebornTube";
-	titleLabel.textColor = [UIColor whiteColor];
+	titleLabel.textColor = [AppColours textColour];
 	titleLabel.numberOfLines = 1;
 	titleLabel.adjustsFontSizeToFitWidth = true;
 	titleLabel.adjustsFontForContentSizeCategory = false;
@@ -104,7 +105,7 @@
     for (NSString *key in historyDictionary) {
         UIView *historyView = [[UIView alloc] init];
         historyView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 40);
-        historyView.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+        historyView.backgroundColor = [AppColours viewBackgroundColour];
         historyView.tag = dateCount;
         UITapGestureRecognizer *historyViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(historyTap:)];
         historyViewTap.numberOfTapsRequired = 1;
@@ -117,7 +118,7 @@
         NSDate *date = [dateFormatter dateFromString:key];
         [dateFormatter setDateFormat:@"MMMM dd, yyyy"];
         historyDateLabel.text = [dateFormatter stringFromDate:date];
-        historyDateLabel.textColor = [UIColor whiteColor];
+        historyDateLabel.textColor = [AppColours textColour];
         historyDateLabel.numberOfLines = 1;
         historyDateLabel.adjustsFontSizeToFitWidth = true;
         historyDateLabel.adjustsFontForContentSizeCategory = false;

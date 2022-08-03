@@ -1,4 +1,5 @@
 #import "CreatePlaylistsViewController.h"
+#import "../Classes/AppColours.h"
 
 @interface CreatePlaylistsViewController ()
 {
@@ -16,7 +17,9 @@
 - (void)loadView {
 	[super loadView];
 
-	[self keysSetup];
+	self.view.backgroundColor = [AppColours mainBackgroundColour];
+    
+    [self keysSetup];
 
 	playlistsTextField = [[UITextField alloc] init];
 	playlistsTextField.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, 60);

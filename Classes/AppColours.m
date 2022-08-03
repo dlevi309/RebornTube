@@ -2,7 +2,7 @@
 
 @implementation AppColours
 
-+ (UIColor *)mainBackgroundColor {
++ (UIColor *)mainBackgroundColour {
     if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kAppTheme"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kAppTheme"] == 2) {
         return [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
     } else {
@@ -10,7 +10,7 @@
     }
 }
 
-+ (UIColor *)viewBackgroundColor {
++ (UIColor *)viewBackgroundColour {
     if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kAppTheme"] == 1) {
         return [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
     } else if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kAppTheme"] == 2) {
@@ -20,7 +20,7 @@
     }
 }
 
-+ (UIColor *)textColor {
++ (UIColor *)textColour {
     if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kAppTheme"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kAppTheme"] == 2) {
         return [UIColor whiteColor];
     } else {
@@ -28,7 +28,7 @@
     }
 }
 
-+ (UIColor *)tintColor {
++ (UIColor *)tintColour {
     if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kAppTheme"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kAppTheme"] == 2) {
         return [UIColor whiteColor];
     } else {

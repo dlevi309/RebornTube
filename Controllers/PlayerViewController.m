@@ -1,5 +1,6 @@
 #import "PlayerViewController.h"
 #import "AddToPlaylistsViewController.h"
+#import "../Classes/AppColours.h"
 
 @interface PlayerViewController ()
 {
@@ -43,7 +44,7 @@
 - (void)loadView {
 	[super loadView];
 
-	self.view.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
+	self.view.backgroundColor = [AppColours mainBackgroundColour];
 	[self.navigationController setNavigationBarHidden:YES animated:NO];
 
 	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
@@ -210,7 +211,7 @@
 	videoTitleLabel = [[UILabel alloc] init];
 	videoTitleLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 15, self.view.bounds.size.width, 40);
 	videoTitleLabel.text = self.videoTitle;
-	videoTitleLabel.textColor = [UIColor whiteColor];
+	videoTitleLabel.textColor = [AppColours textColour];
 	videoTitleLabel.numberOfLines = 2;
 	videoTitleLabel.adjustsFontSizeToFitWidth = true;
 	videoTitleLabel.adjustsFontForContentSizeCategory = false;
@@ -219,7 +220,7 @@
 	videoInfoLabel = [[UILabel alloc] init];
 	videoInfoLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 20 + videoTitleLabel.frame.size.height, self.view.bounds.size.width, 60);
 	videoInfoLabel.text = [NSString stringWithFormat:@"View Count: %@\nLikes: %@\nDislikes: %@", self.videoViewCount, self.videoLikes, self.videoDislikes];
-	videoInfoLabel.textColor = [UIColor whiteColor];
+	videoInfoLabel.textColor = [AppColours textColour];
 	videoInfoLabel.numberOfLines = 3;
 	videoInfoLabel.adjustsFontSizeToFitWidth = true;
 	videoInfoLabel.adjustsFontForContentSizeCategory = false;
@@ -229,8 +230,8 @@
 	shareButton.frame = CGRectMake(20, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width - 40, 60);
 	[shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[shareButton setTitle:@"Share" forState:UIControlStateNormal];
-	shareButton.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
-	shareButton.tintColor = [UIColor whiteColor];
+	shareButton.backgroundColor = [AppColours viewBackgroundColour];
+	shareButton.tintColor = [AppColours tintColour];
 	shareButton.layer.cornerRadius = 5;
 	[self.view addSubview:shareButton];
 
@@ -238,8 +239,8 @@
 	addToPlaylistsButton.frame = CGRectMake(20, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 30 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + shareButton.frame.size.height, self.view.bounds.size.width - 40, 60);
 	[addToPlaylistsButton addTarget:self action:@selector(addToPlaylistsButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[addToPlaylistsButton setTitle:@"Add To Playlist" forState:UIControlStateNormal];
-	addToPlaylistsButton.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
-	addToPlaylistsButton.tintColor = [UIColor whiteColor];
+	addToPlaylistsButton.backgroundColor = [AppColours viewBackgroundColour];
+	addToPlaylistsButton.tintColor = [AppColours tintColour];
 	addToPlaylistsButton.layer.cornerRadius = 5;
 	[self.view addSubview:addToPlaylistsButton];
 }
