@@ -43,8 +43,8 @@
         cell.textLabel.adjustsFontForContentSizeCategory = false;
         cell.detailTextLabel.adjustsFontSizeToFitWidth = true;
         cell.detailTextLabel.adjustsFontForContentSizeCategory = false;
-        cell.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
-        cell.textLabel.textColor = [UIColor whiteColor];
+        cell.backgroundColor = [AppColours viewBackgroundColour];
+        cell.textLabel.textColor = [AppColours textColour];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         if (indexPath.section == 0) {
             if (indexPath.row == 0) {
@@ -181,7 +181,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
-    view.tintColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
+    view.tintColor = [UIColor clearColor];
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
     [header.textLabel setTextColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"tableSection"]]];
     [header.textLabel setFont:[UIFont systemFontOfSize:14]];
