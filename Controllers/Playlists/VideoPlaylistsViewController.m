@@ -1,12 +1,17 @@
-#import "PlaylistsVideosViewController.h"
-#import "PlaylistsViewController.h"
-#import "SearchViewController.h"
-#import "SettingsViewController.h"
-#import "../Classes/YouTubeExtractor.h"
-#import "../Classes/YouTubeLoader.h"
-#import "../Classes/AppColours.h"
+// Main
 
-@interface PlaylistsVideosViewController ()
+#import "VideoPlaylistsViewController.h"
+#import "PlaylistsViewController.h"
+
+// Classes
+
+#import "../../Classes/YouTubeExtractor.h"
+#import "../../Classes/YouTubeLoader.h"
+#import "../../Classes/AppColours.h"
+
+// Interface
+
+@interface VideoPlaylistsViewController ()
 {
     // Keys
 	UIWindow *boundsWindow;
@@ -19,7 +24,7 @@
 - (void)keysSetup;
 @end
 
-@implementation PlaylistsVideosViewController
+@implementation VideoPlaylistsViewController
 
 - (void)loadView {
 	[super loadView];
@@ -42,33 +47,6 @@
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:backImage];
 
     self.navigationItem.leftBarButtonItem = backButton;
-
-	UILabel *searchLabel = [[UILabel alloc] init];
-	searchLabel.text = @"Search";
-	searchLabel.textColor = [UIColor systemBlueColor];
-	searchLabel.numberOfLines = 1;
-	searchLabel.adjustsFontSizeToFitWidth = true;
-	searchLabel.adjustsFontForContentSizeCategory = false;
-    searchLabel.userInteractionEnabled = true;
-    UITapGestureRecognizer *searchLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(search:)];
-	searchLabelTap.numberOfTapsRequired = 1;
-	[searchLabel addGestureRecognizer:searchLabelTap];
-
-    UILabel *settingsLabel = [[UILabel alloc] init];
-	settingsLabel.text = @"Settings";
-	settingsLabel.textColor = [UIColor systemBlueColor];
-	settingsLabel.numberOfLines = 1;
-	settingsLabel.adjustsFontSizeToFitWidth = true;
-	settingsLabel.adjustsFontForContentSizeCategory = false;
-    settingsLabel.userInteractionEnabled = true;
-    UITapGestureRecognizer *settingsLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(settings:)];
-	settingsLabelTap.numberOfTapsRequired = 1;
-	[settingsLabel addGestureRecognizer:settingsLabelTap];
-
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithCustomView:searchLabel];
-    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithCustomView:settingsLabel];
-    
-    self.navigationItem.rightBarButtonItems = @[settingsButton, searchButton];
 }
 
 - (void)viewDidLoad {
@@ -147,7 +125,7 @@
 
 @end
 
-@implementation PlaylistsVideosViewController (Privates)
+@implementation VideoPlaylistsViewController (Privates)
 
 - (void)back:(UITapGestureRecognizer *)recognizer {
     PlaylistsViewController *playlistsViewController = [[PlaylistsViewController alloc] init];
@@ -156,23 +134,6 @@
     playlistsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
     [self presentViewController:playlistsViewControllerView animated:NO completion:nil];
-}
-
-- (void)search:(UITapGestureRecognizer *)recognizer {
-    SearchViewController *searchViewController = [[SearchViewController alloc] init];
-
-    UINavigationController *searchViewControllerView = [[UINavigationController alloc] initWithRootViewController:searchViewController];
-    searchViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:searchViewControllerView animated:YES completion:nil];
-}
-
-- (void)settings:(UITapGestureRecognizer *)recognizer {
-    SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    UINavigationController *settingsViewControllerView = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
-    settingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:settingsViewControllerView animated:YES completion:nil];
 }
 
 - (void)historyTap:(UITapGestureRecognizer *)recognizer {

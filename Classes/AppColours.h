@@ -4,5 +4,4 @@
 + (UIColor *)mainBackgroundColour;
 + (UIColor *)viewBackgroundColour;
 + (UIColor *)textColour;
-+ (UIColor *)tintColour;
 @end

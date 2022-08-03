@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface PlaylistsVideosViewController : UIViewController
+@interface VideoPlaylistsViewController : UIViewController
 
 @property (nonatomic, strong) NSString *playlistsViewID;
 

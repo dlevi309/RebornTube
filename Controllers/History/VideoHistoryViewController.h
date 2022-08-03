@@ -1,6 +1,6 @@
 #import <UIKit/UIKit.h>
 
-@interface HistoryVideosViewController : UIViewController
+@interface VideoHistoryViewController : UIViewController
 
 @property (nonatomic, strong) NSString *historyViewID;
 

@@ -1,7 +1,14 @@
+// Main
+
 #import "SearchViewController.h"
+
+// Classes
+
 #import "../Classes/YouTubeExtractor.h"
 #import "../Classes/YouTubeLoader.h"
 #import "../Classes/AppColours.h"
+
+// Interface
 
 @interface SearchViewController ()
 {

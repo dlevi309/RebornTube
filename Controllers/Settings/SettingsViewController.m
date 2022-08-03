@@ -1,7 +1,14 @@
+// Main
+
 #import "SettingsViewController.h"
 #import "BackgroundModeSettingsViewController.h"
 #import "SponsorBlockSettingsViewController.h"
-#import "../Classes/AppColours.h"
+
+// Classes
+
+#import "../../Classes/AppColours.h"
+
+// Interface
 
 @interface SettingsViewController ()
 @end

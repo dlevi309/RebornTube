@@ -1,5 +1,12 @@
+// Main
+
 #import "CreatePlaylistsViewController.h"
-#import "../Classes/AppColours.h"
+
+// Classes
+
+#import "../../Classes/AppColours.h"
+
+// Interface
 
 @interface CreatePlaylistsViewController ()
 {

@@ -1,6 +1,12 @@
+// Main
+
 #import "PlayerViewController.h"
-#import "AddToPlaylistsViewController.h"
+
+// Classes
+
 #import "../Classes/AppColours.h"
+
+// Interface
 
 @interface PlayerViewController ()
 {
@@ -230,8 +236,8 @@
 	shareButton.frame = CGRectMake(20, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 25 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height, self.view.bounds.size.width - 40, 60);
 	[shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[shareButton setTitle:@"Share" forState:UIControlStateNormal];
+	[shareButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
 	shareButton.backgroundColor = [AppColours viewBackgroundColour];
-	shareButton.tintColor = [AppColours tintColour];
 	shareButton.layer.cornerRadius = 5;
 	[self.view addSubview:shareButton];
 
@@ -239,8 +245,8 @@
 	addToPlaylistsButton.frame = CGRectMake(20, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height + 30 + videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + shareButton.frame.size.height, self.view.bounds.size.width - 40, 60);
 	[addToPlaylistsButton addTarget:self action:@selector(addToPlaylistsButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[addToPlaylistsButton setTitle:@"Add To Playlist" forState:UIControlStateNormal];
+	[addToPlaylistsButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
 	addToPlaylistsButton.backgroundColor = [AppColours viewBackgroundColour];
-	addToPlaylistsButton.tintColor = [AppColours tintColour];
 	addToPlaylistsButton.layer.cornerRadius = 5;
 	[self.view addSubview:addToPlaylistsButton];
 }
@@ -484,10 +490,6 @@
 }
 
 - (void)addToPlaylistsButtonClicked:(UIButton *)sender {
-	AddToPlaylistsViewController *addToPlaylistsViewController = [[AddToPlaylistsViewController alloc] init];
-	addToPlaylistsViewController.videoID = self.videoID;
-
-    [self presentViewController:addToPlaylistsViewController animated:YES completion:nil];
 }
 
 @end

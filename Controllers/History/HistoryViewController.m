@@ -1,10 +1,23 @@
+// Main
+
 #import "HistoryViewController.h"
-#import "HomeViewController.h"
-#import "PlaylistsViewController.h"
-#import "SearchViewController.h"
-#import "SettingsViewController.h"
-#import "HistoryVideosViewController.h"
-#import "../Classes/AppColours.h"
+#import "VideoHistoryViewController.h"
+
+// Nav Bar
+
+#import "../SearchViewController.h"
+#import "../Settings/SettingsViewController.h"
+
+// Tab Bar
+
+#import "../HomeViewController.h"
+#import "../Playlists/PlaylistsViewController.h"
+
+// Classes
+
+#import "../../Classes/AppColours.h"
+
+// Interface
 
 @interface HistoryViewController ()
 {
@@ -184,7 +197,7 @@
     NSString *historyViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
 	NSString *historyViewID = [historyIDDictionary valueForKey:historyViewTag];
 
-    HistoryVideosViewController *historyVideosViewController = [[HistoryVideosViewController alloc] init];
+    VideoHistoryViewController *historyVideosViewController = [[VideoHistoryViewController alloc] init];
     historyVideosViewController.historyViewID = historyViewID;
     
     UINavigationController *historyVideosViewControllerView = [[UINavigationController alloc] initWithRootViewController:historyVideosViewController];

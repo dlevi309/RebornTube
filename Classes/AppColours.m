@@ -28,12 +28,4 @@
     }
 }
 
-+ (UIColor *)tintColour {
-    if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kAppTheme"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kAppTheme"] == 2) {
-        return [UIColor whiteColor];
-    } else {
-        return [UIColor blackColor];
-    }
-}
-
 @end

@@ -1,11 +1,24 @@
+// Main
+
 #import "HomeViewController.h"
-#import "HistoryViewController.h"
-#import "PlaylistsViewController.h"
+
+// Nav Bar
+
 #import "SearchViewController.h"
-#import "SettingsViewController.h"
+#import "Settings/SettingsViewController.h"
+
+// Tab Bar
+
+#import "History/HistoryViewController.h"
+#import "Playlists/PlaylistsViewController.h"
+
+// Classes
+
 #import "../Classes/YouTubeExtractor.h"
 #import "../Classes/YouTubeLoader.h"
 #import "../Classes/AppColours.h"
+
+// Interface
 
 @interface HomeViewController ()
 {

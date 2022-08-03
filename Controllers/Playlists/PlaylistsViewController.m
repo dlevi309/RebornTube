@@ -1,11 +1,24 @@
+// Main
+
 #import "PlaylistsViewController.h"
 #import "CreatePlaylistsViewController.h"
-#import "PlaylistsVideosViewController.h"
-#import "HomeViewController.h"
-#import "HistoryViewController.h"
-#import "SearchViewController.h"
-#import "SettingsViewController.h"
-#import "../Classes/AppColours.h"
+#import "VideoPlaylistsViewController.h"
+
+// Nav Bar
+
+#import "../SearchViewController.h"
+#import "../Settings/SettingsViewController.h"
+
+// Tab Bar
+
+#import "../HomeViewController.h"
+#import "../History/HistoryViewController.h"
+
+// Classes
+
+#import "../../Classes/AppColours.h"
+
+// Interface
 
 @interface PlaylistsViewController ()
 {
@@ -198,7 +211,7 @@
     NSString *playlistsViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
 	NSString *playlistsViewID = [playlistsIDDictionary valueForKey:playlistsViewTag];
 
-    PlaylistsVideosViewController *playlistsVideosViewController = [[PlaylistsVideosViewController alloc] init];
+    VideoPlaylistsViewController *playlistsVideosViewController = [[VideoPlaylistsViewController alloc] init];
     playlistsVideosViewController.playlistsViewID = playlistsViewID;
     
     UINavigationController *playlistsVideosViewControllerView = [[UINavigationController alloc] initWithRootViewController:playlistsVideosViewController];
