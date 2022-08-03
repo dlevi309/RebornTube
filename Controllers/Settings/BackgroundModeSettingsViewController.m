@@ -28,11 +28,6 @@ int selectedIndex;
 
 	self.title = @"";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
-	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-
-	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
-    self.navigationItem.rightBarButtonItem = doneButton;
 
     if (@available(iOS 15.0, *)) {
     	[self.tableView setSectionHeaderTopPadding:0.0f];
@@ -102,14 +97,6 @@ int selectedIndex;
     [[NSUserDefaults standardUserDefaults] setInteger:selectedIndex forKey:@"kBackgroundMode"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [self.tableView reloadData];
-}
-
-@end
-
-@implementation BackgroundModeSettingsViewController (Privates)
-
-- (void)done {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

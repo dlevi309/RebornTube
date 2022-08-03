@@ -18,11 +18,6 @@
 
 	self.title = @"";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
-	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-
-	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
-    self.navigationItem.rightBarButtonItem = doneButton;
 
     if (@available(iOS 15.0, *)) {
     	[self.tableView setSectionHeaderTopPadding:0.0f];
@@ -197,10 +192,6 @@
 @end
 
 @implementation SponsorBlockSettingsViewController (Privates)
-
-- (void)done {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
 
 - (void)actionSponsorSegmentedControl:(UISegmentedControl *)sender {
     [[NSUserDefaults standardUserDefaults] setInteger:sender.selectedSegmentIndex forKey:@"kSponsorBlockSponsorSegmentedInt"];

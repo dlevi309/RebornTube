@@ -26,11 +26,6 @@
 
 	self.title = @"";
 	self.view.backgroundColor = [AppColours mainBackgroundColour];
-	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-
-	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
-    self.navigationItem.rightBarButtonItem = doneButton;
 
     [self keysSetup];
 
@@ -51,10 +46,6 @@
 @end
 
 @implementation SearchViewController (Privates)
-
-- (void)done {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
 
 - (void)searchRequest {
 	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];

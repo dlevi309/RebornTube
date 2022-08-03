@@ -38,8 +38,6 @@
 
 	self.title = @"";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
-	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
 
     [self keysSetup];
 
@@ -186,19 +184,12 @@
 
 - (void)search:(UITapGestureRecognizer *)recognizer {
     SearchViewController *searchViewController = [[SearchViewController alloc] init];
-
-    UINavigationController *searchViewControllerView = [[UINavigationController alloc] initWithRootViewController:searchViewController];
-    searchViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:searchViewControllerView animated:YES completion:nil];
+    [self.navigationController pushViewController:searchViewController animated:YES];
 }
 
 - (void)settings:(UITapGestureRecognizer *)recognizer {
     SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    UINavigationController *settingsViewControllerView = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
-    settingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:settingsViewControllerView animated:YES completion:nil];
+    [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
 - (void)createPlaylistsTap:(UITapGestureRecognizer *)recognizer {

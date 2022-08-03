@@ -20,11 +20,6 @@
 
 	self.title = @"";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
-	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-
-	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
-    self.navigationItem.leftBarButtonItem = doneButton;
 
     UIBarButtonItem *applyButton = [[UIBarButtonItem alloc] initWithTitle:@"Apply" style:UIBarButtonItemStylePlain target:self action:@selector(apply)];
     self.navigationItem.rightBarButtonItem = applyButton;
@@ -116,17 +111,11 @@
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
             BackgroundModeSettingsViewController *backgroundModeSettingsViewController = [[BackgroundModeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            UINavigationController *backgroundModeSettingsViewControllerView = [[UINavigationController alloc] initWithRootViewController:backgroundModeSettingsViewController];
-            backgroundModeSettingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-            [self presentViewController:backgroundModeSettingsViewControllerView animated:YES completion:nil];
+            [self.navigationController pushViewController:backgroundModeSettingsViewController animated:YES];
         }
         if (indexPath.row == 1) {
             SponsorBlockSettingsViewController *sponsorBlockSettingsViewController = [[SponsorBlockSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            UINavigationController *sponsorBlockSettingsViewControllerView = [[UINavigationController alloc] initWithRootViewController:sponsorBlockSettingsViewController];
-            sponsorBlockSettingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-            [self presentViewController:sponsorBlockSettingsViewControllerView animated:YES completion:nil];
+            [self.navigationController pushViewController:sponsorBlockSettingsViewController animated:YES];
         }
     }
     if (indexPath.section == 1) {
@@ -170,10 +159,6 @@
 @end
 
 @implementation SettingsViewController (Privates)
-
-- (void)done {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-}
 
 - (void)apply {
     exit(0); 
