@@ -388,6 +388,7 @@
 	switch (orientation) {
 		case UIInterfaceOrientationPortrait:
 		deviceOrientation = 0;
+		self.view.backgroundColor = [AppColours mainBackgroundColour];
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		overlayView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
@@ -405,6 +406,7 @@
 
 		case UIInterfaceOrientationLandscapeLeft:
 		deviceOrientation = 1;
+		self.view.backgroundColor = [UIColor blackColor];
 		playerLayer.frame = self.view.bounds;
 		videoImage.frame = self.view.bounds;
 		overlayView.frame = self.view.bounds;
@@ -424,6 +426,7 @@
 
 		case UIInterfaceOrientationLandscapeRight:
 		deviceOrientation = 1;
+		self.view.backgroundColor = [UIColor blackColor];
 		playerLayer.frame = self.view.bounds;
 		videoImage.frame = self.view.bounds;
 		overlayView.frame = self.view.bounds;
