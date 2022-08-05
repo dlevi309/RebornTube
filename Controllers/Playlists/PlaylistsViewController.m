@@ -25,10 +25,6 @@
 
 - (void)loadView {
 	[super loadView];
-
-	self.title = @"";
-    self.view.backgroundColor = [AppColours mainBackgroundColour];
-
     [self keysSetup];
 }
 
