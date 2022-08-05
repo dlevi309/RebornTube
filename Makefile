@@ -1,4 +1,4 @@
-TARGET := iphone:clang:15.0:12.0
+TARGET := iphone:clang:15.0:13.0
 INSTALL_TARGET_PROCESSES = RebornTube
 GO_EASY_ON_ME = 1
 
