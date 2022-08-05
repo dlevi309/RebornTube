@@ -143,7 +143,9 @@
         historyArray = [[NSMutableArray alloc] init];
     }
     
-    [historyArray addObject:videoID];
+    if (![historyArray containsObject:videoID]) {
+		[historyArray addObject:videoID];
+	}
 
     [historyDictionary setValue:historyArray forKey:date];
 
