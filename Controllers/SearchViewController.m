@@ -52,73 +52,130 @@
 	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
 	searchVideoIDDictionary = [NSMutableDictionary new];
 
-    NSMutableDictionary *youtubeiAndroidSearchRequest = [YouTubeExtractor youtubeiAndroidSearchRequest:[searchTextField text]];
-    NSArray *searchContents = youtubeiAndroidSearchRequest[@"contents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
-	
-	[scrollView removeFromSuperview];
-    scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + searchTextField.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - searchTextField.frame.size.height);
-	
-	int viewBounds = 0;
-	for (int i = 1 ; i <= 50 ; i++) {
-		@try {
+    NSString *regexString = @"((?<=(v|V)/)|(?<=be/)|(?<=(\\?|\\&)v=)|(?<=embed/))([\\w-]++)";
+    NSRegularExpression *regExp = [NSRegularExpression regularExpressionWithPattern:regexString options:NSRegularExpressionCaseInsensitive error:nil];
+	NSArray *array = [regExp matchesInString:[searchTextField text] options:0 range:NSMakeRange(0, [searchTextField text].length)];
+    if (array.count > 0) {
+        @try {
+			NSTextCheckingResult *result = array.firstObject;
+			NSString *videoID = [[searchTextField text] substringWithRange:result.range];
+			NSMutableDictionary *youtubeiAndroidPlayerRequest = [YouTubeExtractor youtubeiAndroidPlayerRequest:videoID];
+			
+			[scrollView removeFromSuperview];
+			scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + searchTextField.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - searchTextField.frame.size.height);
+
 			UIView *searchView = [[UIView alloc] init];
-			searchView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 100);
+			searchView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 100);
 			searchView.backgroundColor = [AppColours viewBackgroundColour];
-			searchView.tag = i;
+			searchView.tag = 1;
 			UITapGestureRecognizer *searchViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchTap:)];
 			searchViewTap.numberOfTapsRequired = 1;
 			[searchView addGestureRecognizer:searchViewTap];
 
 			UIImageView *videoImage = [[UIImageView alloc] init];
 			videoImage.frame = CGRectMake(0, 0, 80, 80);
-            NSArray *videoArtworkArray = searchContents[i][@"compactVideoRenderer"][@"thumbnail"][@"thumbnails"];
-            NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
+			NSArray *videoArtworkArray = youtubeiAndroidPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
+			NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
 			videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:videoArtwork]];
 			[searchView addSubview:videoImage];
 
-            UILabel *videoTimeLabel = [[UILabel alloc] init];
-			videoTimeLabel.frame = CGRectMake(40, 65, 40, 15);
-			videoTimeLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"lengthText"][@"runs"][0][@"text"]];
-            videoTimeLabel.textAlignment = NSTextAlignmentCenter;
-			videoTimeLabel.textColor = [UIColor whiteColor];
-			videoTimeLabel.numberOfLines = 1;
-            videoTimeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
-            videoTimeLabel.layer.cornerRadius = 5;
-            videoTimeLabel.clipsToBounds = YES;
-			videoTimeLabel.adjustsFontSizeToFitWidth = true;
-			videoTimeLabel.adjustsFontForContentSizeCategory = false;
-			[searchView addSubview:videoTimeLabel];
-
 			UILabel *videoTitleLabel = [[UILabel alloc] init];
 			videoTitleLabel.frame = CGRectMake(85, 0, searchView.frame.size.width - 85, 80);
-			videoTitleLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"title"][@"runs"][0][@"text"]];
+			videoTitleLabel.text = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"title"]];
 			videoTitleLabel.textColor = [AppColours textColour];
 			videoTitleLabel.numberOfLines = 2;
 			videoTitleLabel.adjustsFontSizeToFitWidth = true;
 			videoTitleLabel.adjustsFontForContentSizeCategory = false;
 			[searchView addSubview:videoTitleLabel];
 
-            UILabel *videoCountAndAuthorLabel = [[UILabel alloc] init];
-			videoCountAndAuthorLabel.frame = CGRectMake(5, 80, searchView.frame.size.width - 5, 20);
-			videoCountAndAuthorLabel.text = [NSString stringWithFormat:@"%@ - %@", searchContents[i][@"compactVideoRenderer"][@"viewCountText"][@"runs"][0][@"text"], searchContents[i][@"compactVideoRenderer"][@"longBylineText"][@"runs"][0][@"text"]];
-			videoCountAndAuthorLabel.textColor = [AppColours textColour];
-			videoCountAndAuthorLabel.numberOfLines = 1;
-            [videoCountAndAuthorLabel setFont:[UIFont systemFontOfSize:12]];
-			videoCountAndAuthorLabel.adjustsFontSizeToFitWidth = true;
-			videoCountAndAuthorLabel.adjustsFontForContentSizeCategory = false;
-			[searchView addSubview:videoCountAndAuthorLabel];
+			UILabel *videoAuthorLabel = [[UILabel alloc] init];
+			videoAuthorLabel.frame = CGRectMake(5, 80, searchView.frame.size.width - 5, 20);
+			videoAuthorLabel.text = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"author"]];
+			videoAuthorLabel.textColor = [AppColours textColour];
+			videoAuthorLabel.numberOfLines = 1;
+			[videoAuthorLabel setFont:[UIFont systemFontOfSize:12]];
+			videoAuthorLabel.adjustsFontSizeToFitWidth = true;
+			videoAuthorLabel.adjustsFontForContentSizeCategory = false;
+			[searchView addSubview:videoAuthorLabel];
 			
-			[searchVideoIDDictionary setValue:[NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"videoId"]] forKey:[NSString stringWithFormat:@"%d", i]];
-			viewBounds += 102;
+			[searchVideoIDDictionary setValue:videoID forKey:[NSString stringWithFormat:@"%d", 1]];
 
 			[scrollView addSubview:searchView];
-		}
-        @catch (NSException *exception) {
-        }
-	}
 
-	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, viewBounds);
-	[self.view addSubview:scrollView];
+			scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 100);
+			[self.view addSubview:scrollView];
+		}
+		@catch (NSException *exception) {
+		}
+    } else {	
+		NSMutableDictionary *youtubeiAndroidSearchRequest = [YouTubeExtractor youtubeiAndroidSearchRequest:[searchTextField text]];
+		NSArray *searchContents = youtubeiAndroidSearchRequest[@"contents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
+		
+		[scrollView removeFromSuperview];
+		scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + searchTextField.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - searchTextField.frame.size.height);
+		
+		int viewBounds = 0;
+		for (int i = 1 ; i <= 50 ; i++) {
+			@try {
+				UIView *searchView = [[UIView alloc] init];
+				searchView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 100);
+				searchView.backgroundColor = [AppColours viewBackgroundColour];
+				searchView.tag = i;
+				UITapGestureRecognizer *searchViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchTap:)];
+				searchViewTap.numberOfTapsRequired = 1;
+				[searchView addGestureRecognizer:searchViewTap];
+
+				UIImageView *videoImage = [[UIImageView alloc] init];
+				videoImage.frame = CGRectMake(0, 0, 80, 80);
+				NSArray *videoArtworkArray = searchContents[i][@"compactVideoRenderer"][@"thumbnail"][@"thumbnails"];
+				NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
+				videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:videoArtwork]];
+				[searchView addSubview:videoImage];
+
+				UILabel *videoTimeLabel = [[UILabel alloc] init];
+				videoTimeLabel.frame = CGRectMake(40, 65, 40, 15);
+				videoTimeLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"lengthText"][@"runs"][0][@"text"]];
+				videoTimeLabel.textAlignment = NSTextAlignmentCenter;
+				videoTimeLabel.textColor = [UIColor whiteColor];
+				videoTimeLabel.numberOfLines = 1;
+				videoTimeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+				videoTimeLabel.layer.cornerRadius = 5;
+				videoTimeLabel.clipsToBounds = YES;
+				videoTimeLabel.adjustsFontSizeToFitWidth = true;
+				videoTimeLabel.adjustsFontForContentSizeCategory = false;
+				[searchView addSubview:videoTimeLabel];
+
+				UILabel *videoTitleLabel = [[UILabel alloc] init];
+				videoTitleLabel.frame = CGRectMake(85, 0, searchView.frame.size.width - 85, 80);
+				videoTitleLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"title"][@"runs"][0][@"text"]];
+				videoTitleLabel.textColor = [AppColours textColour];
+				videoTitleLabel.numberOfLines = 2;
+				videoTitleLabel.adjustsFontSizeToFitWidth = true;
+				videoTitleLabel.adjustsFontForContentSizeCategory = false;
+				[searchView addSubview:videoTitleLabel];
+
+				UILabel *videoCountAndAuthorLabel = [[UILabel alloc] init];
+				videoCountAndAuthorLabel.frame = CGRectMake(5, 80, searchView.frame.size.width - 5, 20);
+				videoCountAndAuthorLabel.text = [NSString stringWithFormat:@"%@ - %@", searchContents[i][@"compactVideoRenderer"][@"viewCountText"][@"runs"][0][@"text"], searchContents[i][@"compactVideoRenderer"][@"longBylineText"][@"runs"][0][@"text"]];
+				videoCountAndAuthorLabel.textColor = [AppColours textColour];
+				videoCountAndAuthorLabel.numberOfLines = 1;
+				[videoCountAndAuthorLabel setFont:[UIFont systemFontOfSize:12]];
+				videoCountAndAuthorLabel.adjustsFontSizeToFitWidth = true;
+				videoCountAndAuthorLabel.adjustsFontForContentSizeCategory = false;
+				[searchView addSubview:videoCountAndAuthorLabel];
+				
+				[searchVideoIDDictionary setValue:[NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"videoId"]] forKey:[NSString stringWithFormat:@"%d", i]];
+				viewBounds += 102;
+
+				[scrollView addSubview:searchView];
+			}
+			@catch (NSException *exception) {
+			}
+		}
+
+		scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, viewBounds);
+		[self.view addSubview:scrollView];
+	}
 }
 
 - (void)searchTap:(UITapGestureRecognizer *)recognizer {
