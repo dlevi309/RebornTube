@@ -65,8 +65,8 @@ int selectedIndex;
         cell.textLabel.adjustsFontForContentSizeCategory = false;
         cell.detailTextLabel.adjustsFontSizeToFitWidth = true;
         cell.detailTextLabel.adjustsFontForContentSizeCategory = false;
-        cell.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
-        cell.textLabel.textColor = [UIColor whiteColor];
+        cell.backgroundColor = [AppColours viewBackgroundColour];
+        cell.textLabel.textColor = [AppColours textColour];
         if (indexPath.section == 0) {
             if (indexPath.row == 0) {
                 cell.textLabel.text = @"None";

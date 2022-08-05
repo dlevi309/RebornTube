@@ -81,7 +81,11 @@
     playlistsViewController.title = @"Playlists";
     UINavigationController *playlistsNavViewController = [[UINavigationController alloc] initWithRootViewController:playlistsViewController];
 
-    self.tabBar.viewControllers = [NSArray arrayWithObjects:homeNavViewController, historyNavViewController, playlistsNavViewController, nil];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {
+        self.tabBar.viewControllers = [NSArray arrayWithObjects:homeNavViewController, historyNavViewController, playlistsNavViewController, nil];
+    } else {
+        self.tabBar.viewControllers = [NSArray arrayWithObjects:homeNavViewController, historyNavViewController, nil];
+    }
 
     [self.view addSubview:self.tabBar.view];
 }

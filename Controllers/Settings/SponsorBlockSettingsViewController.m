@@ -53,6 +53,8 @@
                 NSArray *sponsorItemArray = [NSArray arrayWithObjects:@"Disable", @"Auto Skip", nil];
                 UISegmentedControl *sponsorSegmentedControl = [[UISegmentedControl alloc] initWithItems:sponsorItemArray];
                 sponsorSegmentedControl.frame = CGRectMake(0, 5, self.view.bounds.size.width, cell.bounds.size.height - 10);
+                [sponsorSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateNormal];
+                [sponsorSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateSelected];
                 [sponsorSegmentedControl addTarget:self action:@selector(actionSponsorSegmentedControl:) forControlEvents:UIControlEventValueChanged];
                 if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"]) {
                     sponsorSegmentedControl.selectedSegmentIndex = 0;
@@ -67,6 +69,8 @@
                 NSArray *selfpromoItemArray = [NSArray arrayWithObjects:@"Disable", @"Auto Skip", nil];
                 UISegmentedControl *selfpromoSegmentedControl = [[UISegmentedControl alloc] initWithItems:selfpromoItemArray];
                 selfpromoSegmentedControl.frame = CGRectMake(0, 5, self.view.bounds.size.width, cell.bounds.size.height - 10);
+                [selfpromoSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateNormal];
+                [selfpromoSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateSelected];
                 [selfpromoSegmentedControl addTarget:self action:@selector(actionSelfPromoSegmentedControl:) forControlEvents:UIControlEventValueChanged];
                 if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSelfPromoSegmentedInt"]) {
                     selfpromoSegmentedControl.selectedSegmentIndex = 0;
@@ -81,6 +85,8 @@
                 NSArray *interactionItemArray = [NSArray arrayWithObjects:@"Disable", @"Auto Skip", nil];
                 UISegmentedControl *interactionSegmentedControl = [[UISegmentedControl alloc] initWithItems:interactionItemArray];
                 interactionSegmentedControl.frame = CGRectMake(0, 5, self.view.bounds.size.width, cell.bounds.size.height - 10);
+                [interactionSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateNormal];
+                [interactionSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateSelected];
                 [interactionSegmentedControl addTarget:self action:@selector(actionInteractionSegmentedControl:) forControlEvents:UIControlEventValueChanged];
                 if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockInteractionSegmentedInt"]) {
                     interactionSegmentedControl.selectedSegmentIndex = 0;
@@ -95,6 +101,8 @@
                 NSArray *introItemArray = [NSArray arrayWithObjects:@"Disable", @"Auto Skip", nil];
                 UISegmentedControl *introSegmentedControl = [[UISegmentedControl alloc] initWithItems:introItemArray];
                 introSegmentedControl.frame = CGRectMake(0, 5, self.view.bounds.size.width, cell.bounds.size.height - 10);
+                [introSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateNormal];
+                [introSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateSelected];
                 [introSegmentedControl addTarget:self action:@selector(actionIntroSegmentedControl:) forControlEvents:UIControlEventValueChanged];
                 if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockIntroSegmentedInt"]) {
                     introSegmentedControl.selectedSegmentIndex = 0;
@@ -109,6 +117,8 @@
                 NSArray *outroItemArray = [NSArray arrayWithObjects:@"Disable", @"Auto Skip", nil];
                 UISegmentedControl *outroSegmentedControl = [[UISegmentedControl alloc] initWithItems:outroItemArray];
                 outroSegmentedControl.frame = CGRectMake(0, 5, self.view.bounds.size.width, cell.bounds.size.height - 10);
+                [outroSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateNormal];
+                [outroSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateSelected];
                 [outroSegmentedControl addTarget:self action:@selector(actionOutroSegmentedControl:) forControlEvents:UIControlEventValueChanged];
                 if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockOutroSegmentedInt"]) {
                     outroSegmentedControl.selectedSegmentIndex = 0;
@@ -123,6 +133,8 @@
                 NSArray *previewItemArray = [NSArray arrayWithObjects:@"Disable", @"Auto Skip", nil];
                 UISegmentedControl *previewSegmentedControl = [[UISegmentedControl alloc] initWithItems:previewItemArray];
                 previewSegmentedControl.frame = CGRectMake(0, 5, self.view.bounds.size.width, cell.bounds.size.height - 10);
+                [previewSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateNormal];
+                [previewSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateSelected];
                 [previewSegmentedControl addTarget:self action:@selector(actionPreviewSegmentedControl:) forControlEvents:UIControlEventValueChanged];
                 if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockPreviewSegmentedInt"]) {
                     previewSegmentedControl.selectedSegmentIndex = 0;
@@ -137,6 +149,8 @@
                 NSArray *musicofftopicItemArray = [NSArray arrayWithObjects:@"Disable", @"Auto Skip", nil];
                 UISegmentedControl *musicofftopicSegmentedControl = [[UISegmentedControl alloc] initWithItems:musicofftopicItemArray];
                 musicofftopicSegmentedControl.frame = CGRectMake(0, 5, self.view.bounds.size.width, cell.bounds.size.height - 10);
+                [musicofftopicSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateNormal];
+                [musicofftopicSegmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName:[AppColours textColour]} forState:UIControlStateSelected];
                 [musicofftopicSegmentedControl addTarget:self action:@selector(actionMusicOffTopicSegmentedControl:) forControlEvents:UIControlEventValueChanged];
                 if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockMusicOffTopicSegmentedInt"]) {
                     musicofftopicSegmentedControl.selectedSegmentIndex = 0;
@@ -185,7 +199,7 @@
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     view.tintColor = [UIColor clearColor];
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"tableSection"]]];
+    [header.textLabel setTextColor:[AppColours textColour]];
     [header.textLabel setFont:[UIFont systemFontOfSize:14]];
 }
 

@@ -33,8 +33,9 @@
 
 	searchTextField = [[UITextField alloc] init];
 	searchTextField.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, 60);
-	searchTextField.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
-	searchTextField.placeholder = @"Search Here";
+	searchTextField.backgroundColor = [AppColours viewBackgroundColour];
+	searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Search Here" attributes:@{NSForegroundColorAttributeName:[AppColours textColour]}];
+	searchTextField.textColor = [AppColours textColour];
 	[searchTextField addTarget:self action:@selector(searchRequest) forControlEvents:UIControlEventEditingDidEndOnExit];
 	[self.view addSubview:searchTextField];
 }
@@ -62,7 +63,7 @@
 		@try {
 			UIView *searchView = [[UIView alloc] init];
 			searchView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 100);
-			searchView.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+			searchView.backgroundColor = [AppColours viewBackgroundColour];
 			searchView.tag = i;
 			UITapGestureRecognizer *searchViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchTap:)];
 			searchViewTap.numberOfTapsRequired = 1;
@@ -91,7 +92,7 @@
 			UILabel *videoTitleLabel = [[UILabel alloc] init];
 			videoTitleLabel.frame = CGRectMake(85, 0, searchView.frame.size.width - 85, 80);
 			videoTitleLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"title"][@"runs"][0][@"text"]];
-			videoTitleLabel.textColor = [UIColor whiteColor];
+			videoTitleLabel.textColor = [AppColours textColour];
 			videoTitleLabel.numberOfLines = 2;
 			videoTitleLabel.adjustsFontSizeToFitWidth = true;
 			videoTitleLabel.adjustsFontForContentSizeCategory = false;
@@ -100,7 +101,7 @@
             UILabel *videoCountAndAuthorLabel = [[UILabel alloc] init];
 			videoCountAndAuthorLabel.frame = CGRectMake(5, 80, searchView.frame.size.width - 5, 20);
 			videoCountAndAuthorLabel.text = [NSString stringWithFormat:@"%@ - %@", searchContents[i][@"compactVideoRenderer"][@"viewCountText"][@"runs"][0][@"text"], searchContents[i][@"compactVideoRenderer"][@"longBylineText"][@"runs"][0][@"text"]];
-			videoCountAndAuthorLabel.textColor = [UIColor whiteColor];
+			videoCountAndAuthorLabel.textColor = [AppColours textColour];
 			videoCountAndAuthorLabel.numberOfLines = 1;
             [videoCountAndAuthorLabel setFont:[UIFont systemFontOfSize:12]];
 			videoCountAndAuthorLabel.adjustsFontSizeToFitWidth = true;

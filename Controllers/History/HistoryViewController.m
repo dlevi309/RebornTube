@@ -90,11 +90,8 @@
 
     VideoHistoryViewController *historyVideosViewController = [[VideoHistoryViewController alloc] init];
     historyVideosViewController.historyViewID = historyViewID;
-    
-    UINavigationController *historyVideosViewControllerView = [[UINavigationController alloc] initWithRootViewController:historyVideosViewController];
-    historyVideosViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
-    [self presentViewController:historyVideosViewControllerView animated:NO completion:nil];
+    [self.navigationController pushViewController:historyVideosViewController animated:YES];
 }
 
 @end

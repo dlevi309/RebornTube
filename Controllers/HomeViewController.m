@@ -67,7 +67,7 @@
 			videoTimeLabel.frame = CGRectMake(40, 65, 40, 15);
 			videoTimeLabel.text = [NSString stringWithFormat:@"%@", trendingContents[i][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"lengthText"][@"runs"][0][@"text"]];
             videoTimeLabel.textAlignment = NSTextAlignmentCenter;
-			videoTimeLabel.textColor = [AppColours textColour];
+			videoTimeLabel.textColor = [UIColor whiteColor];
 			videoTimeLabel.numberOfLines = 1;
             videoTimeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
             videoTimeLabel.layer.cornerRadius = 5;

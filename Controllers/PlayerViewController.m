@@ -248,7 +248,9 @@
 	[addToPlaylistsButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
 	addToPlaylistsButton.backgroundColor = [AppColours viewBackgroundColour];
 	addToPlaylistsButton.layer.cornerRadius = 5;
-	[self.view addSubview:addToPlaylistsButton];
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {
+		[self.view addSubview:addToPlaylistsButton];
+	}
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
