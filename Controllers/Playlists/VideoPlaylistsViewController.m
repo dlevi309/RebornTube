@@ -15,8 +15,6 @@
 {
     // Keys
 	UIWindow *boundsWindow;
-    NSString *playlistsAssetsBundlePath;
-	NSBundle *playlistsAssetsBundle;
 
     // Other
     NSMutableDictionary *videoIDDictionary;
@@ -28,25 +26,7 @@
 
 - (void)loadView {
 	[super loadView];
-
-	self.title = @"";
-    self.view.backgroundColor = [AppColours mainBackgroundColour];
-	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-
     [self keysSetup];
-
-    UIImageView *backImage = [[UIImageView alloc] init];
-	NSString *backImagePath = [playlistsAssetsBundle pathForResource:@"back" ofType:@"png"];
-	backImage.image = [[UIImage imageWithContentsOfFile:backImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-	backImage.tintColor = [UIColor whiteColor];
-    backImage.userInteractionEnabled = YES;
-	UITapGestureRecognizer *backViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(back:)];
-	backViewTap.numberOfTapsRequired = 1;
-	[backImage addGestureRecognizer:backViewTap];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:backImage];
-
-    self.navigationItem.leftBarButtonItem = backButton;
 }
 
 - (void)viewDidLoad {
@@ -119,22 +99,11 @@
 
 - (void)keysSetup {
 	boundsWindow = [[UIApplication sharedApplication] keyWindow];
-    playlistsAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"PlaylistsAssets" ofType:@"bundle"];
-	playlistsAssetsBundle = [NSBundle bundleWithPath:playlistsAssetsBundlePath];
 }
 
 @end
 
 @implementation VideoPlaylistsViewController (Privates)
-
-- (void)back:(UITapGestureRecognizer *)recognizer {
-    PlaylistsViewController *playlistsViewController = [[PlaylistsViewController alloc] init];
-    
-    UINavigationController *playlistsViewControllerView = [[UINavigationController alloc] initWithRootViewController:playlistsViewController];
-    playlistsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:playlistsViewControllerView animated:NO completion:nil];
-}
 
 - (void)historyTap:(UITapGestureRecognizer *)recognizer {
     NSString *historyViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];

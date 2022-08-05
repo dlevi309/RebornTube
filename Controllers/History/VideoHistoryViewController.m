@@ -15,8 +15,6 @@
 {
     // Keys
 	UIWindow *boundsWindow;
-    NSString *historyAssetsBundlePath;
-	NSBundle *historyAssetsBundle;
 
     // Other
     NSMutableDictionary *videoIDDictionary;
@@ -28,25 +26,7 @@
 
 - (void)loadView {
 	[super loadView];
-
-	self.title = @"";
-    self.view.backgroundColor = [AppColours mainBackgroundColour];
-	[self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor whiteColor]}];
-	self.navigationController.navigationBar.barStyle = UIBarStyleBlack;
-
     [self keysSetup];
-
-    UIImageView *backImage = [[UIImageView alloc] init];
-	NSString *backImagePath = [historyAssetsBundle pathForResource:@"back" ofType:@"png"];
-	backImage.image = [[UIImage imageWithContentsOfFile:backImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-	backImage.tintColor = [UIColor whiteColor];
-    backImage.userInteractionEnabled = YES;
-	UITapGestureRecognizer *backViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(back:)];
-	backViewTap.numberOfTapsRequired = 1;
-	[backImage addGestureRecognizer:backViewTap];
-    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithCustomView:backImage];
-
-    self.navigationItem.leftBarButtonItem = backButton;
 }
 
 - (void)viewDidLoad {
@@ -119,22 +99,11 @@
 
 - (void)keysSetup {
 	boundsWindow = [[UIApplication sharedApplication] keyWindow];
-    historyAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"HistoryAssets" ofType:@"bundle"];
-	historyAssetsBundle = [NSBundle bundleWithPath:historyAssetsBundlePath];
 }
 
 @end
 
 @implementation VideoHistoryViewController (Privates)
-
-- (void)back:(UITapGestureRecognizer *)recognizer {
-    HistoryViewController *historyViewController = [[HistoryViewController alloc] init];
-    
-    UINavigationController *historyViewControllerView = [[UINavigationController alloc] initWithRootViewController:historyViewController];
-    historyViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:historyViewControllerView animated:NO completion:nil];
-}
 
 - (void)historyTap:(UITapGestureRecognizer *)recognizer {
     NSString *historyViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
