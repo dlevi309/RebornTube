@@ -60,5 +60,9 @@
     <true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>CFBundleName</key>
+	<string>RebornTube</string>
+	<key>MinimumOSVersion</key>
+	<string>12.0</string>
 </dict>
 </plist>
