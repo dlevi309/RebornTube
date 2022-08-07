@@ -1,6 +1,7 @@
 // Main
 
 #import "SettingsViewController.h"
+#import "ThemeSettingsViewController.h"
 #import "BackgroundModeSettingsViewController.h"
 #import "SponsorBlockSettingsViewController.h"
 
@@ -102,7 +103,7 @@
                     }
                 }
             }
-            if (indexPath.row == 1) {
+            if (indexPath.row == 2) {
                 cell.textLabel.text = @"SponsorBlock";
             }
         }
@@ -135,10 +136,14 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
+            ThemeSettingsViewController *themeSettingsViewController = [[ThemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            [self.navigationController pushViewController:themeSettingsViewController animated:YES];
+        }
+        if (indexPath.row == 1) {
             BackgroundModeSettingsViewController *backgroundModeSettingsViewController = [[BackgroundModeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:backgroundModeSettingsViewController animated:YES];
         }
-        if (indexPath.row == 1) {
+        if (indexPath.row == 2) {
             SponsorBlockSettingsViewController *sponsorBlockSettingsViewController = [[SponsorBlockSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:sponsorBlockSettingsViewController animated:YES];
         }
