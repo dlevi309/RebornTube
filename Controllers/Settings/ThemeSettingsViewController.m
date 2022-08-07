@@ -9,11 +9,12 @@
 // Interface
 
 @interface ThemeSettingsViewController ()
+{
+    int selectedIndex;
+}
 @end
 
 @implementation ThemeSettingsViewController
-
-int selectedIndex;
 
 - (void)loadView {
 	[super loadView];

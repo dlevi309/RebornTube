@@ -17,11 +17,12 @@
 // Interface
 
 @interface BackgroundModeSettingsViewController ()
+{
+    int selectedIndex;
+}
 @end
 
 @implementation BackgroundModeSettingsViewController
-
-int selectedIndex;
 
 - (void)loadView {
 	[super loadView];
