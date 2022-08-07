@@ -35,7 +35,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 2;
+        return 3;
     }
     if (section == 1) {
         if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {
@@ -66,6 +66,26 @@
         if (indexPath.section == 0) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             if (indexPath.row == 0) {
+                cell.textLabel.text = @"Theme";
+                if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kAppTheme"]) {
+                    cell.detailTextLabel.text = @"Auto (Device)";
+                } else {
+                    int selectedTab = [[NSUserDefaults standardUserDefaults] integerForKey:@"kAppTheme"];
+                    if (selectedTab == 0) {
+                        cell.detailTextLabel.text = @"Auto (Device)";
+                    }
+                    if (selectedTab == 1) {
+                        cell.detailTextLabel.text = @"Light";
+                    }
+                    if (selectedTab == 2) {
+                        cell.detailTextLabel.text = @"Dark";
+                    }
+                    if (selectedTab == 3) {
+                        cell.detailTextLabel.text = @"Pure Dark";
+                    }
+                }
+            }
+            if (indexPath.row == 1) {
                 cell.textLabel.text = @"Background Mode";
                 if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"]) {
                     cell.detailTextLabel.text = @"None";
