@@ -452,39 +452,57 @@
 
 - (void)playerTimeChanged {
 	progressSlider.value = (float)CMTimeGetSeconds(player.currentTime);
-	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] == 1) {
-		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue]) {
-			[player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"sponsor"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
-		}
-	}
-	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSelfPromoSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSelfPromoSegmentedInt"] == 1) {
-		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"selfpromo"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"selfpromo"] objectAtIndex:1] floatValue]) {
-			[player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"selfpromo"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
-		}
-	}
-	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockInteractionSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockInteractionSegmentedInt"] == 1) {
-		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"interaction"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"interaction"] objectAtIndex:1] floatValue]) {
-			[player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"interaction"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
-		}
-	}
-	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockIntroSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockIntroSegmentedInt"] == 1) {
-		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"intro"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"intro"] objectAtIndex:1] floatValue]) {
-			[player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"intro"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
-		}
-	}
-	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockOutroSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockOutroSegmentedInt"] == 1) {
-		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"outro"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"outro"] objectAtIndex:1] floatValue]) {
-			[player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"outro"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
-		}
-	}
-	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockPreviewSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockPreviewSegmentedInt"] == 1) {
-		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"preview"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"preview"] objectAtIndex:1] floatValue]) {
-			[player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"preview"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
-		}
-	}
-	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockMusicOffTopicSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockMusicOffTopicSegmentedInt"] == 1) {
-		if (CMTimeGetSeconds(player.currentTime) >= [[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:1] floatValue]) {
-			[player seekToTime:CMTimeMakeWithSeconds([[[self.sponsorBlockValues objectForKey:@"music_offtopic"] objectAtIndex:1] floatValue] + 1, NSEC_PER_SEC)];
+	if ([NSJSONSerialization isValidJSONObject:self.sponsorBlockValues]) {
+		for (NSMutableDictionary *jsonDictionary in self.sponsorBlockValues) {
+            if ([[jsonDictionary objectForKey:@"category"] isEqual:@"sponsor"]) {
+				if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] == 1) {
+					if (CMTimeGetSeconds(player.currentTime) >= [[jsonDictionary objectForKey:@"segment"][0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[jsonDictionary objectForKey:@"segment"][1] floatValue]) {
+						[player seekToTime:CMTimeMakeWithSeconds([[jsonDictionary objectForKey:@"segment"][1] floatValue] + 1, NSEC_PER_SEC)];
+					}
+				}
+			}
+			if ([[jsonDictionary objectForKey:@"category"] isEqual:@"selfpromo"]) {
+				if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSelfPromoSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSelfPromoSegmentedInt"] == 1) {
+					if (CMTimeGetSeconds(player.currentTime) >= [[jsonDictionary objectForKey:@"segment"][0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[jsonDictionary objectForKey:@"segment"][1] floatValue]) {
+						[player seekToTime:CMTimeMakeWithSeconds([[jsonDictionary objectForKey:@"segment"][1] floatValue] + 1, NSEC_PER_SEC)];
+					}
+				}
+			}
+			if ([[jsonDictionary objectForKey:@"category"] isEqual:@"interaction"]) {
+				if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockInteractionSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockInteractionSegmentedInt"] == 1) {
+					if (CMTimeGetSeconds(player.currentTime) >= [[jsonDictionary objectForKey:@"segment"][0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[jsonDictionary objectForKey:@"segment"][1] floatValue]) {
+						[player seekToTime:CMTimeMakeWithSeconds([[jsonDictionary objectForKey:@"segment"][1] floatValue] + 1, NSEC_PER_SEC)];
+					}
+				}
+			}
+			if ([[jsonDictionary objectForKey:@"category"] isEqual:@"intro"]) {
+				if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockIntroSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockIntroSegmentedInt"] == 1) {
+					if (CMTimeGetSeconds(player.currentTime) >= [[jsonDictionary objectForKey:@"segment"][0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[jsonDictionary objectForKey:@"segment"][1] floatValue]) {
+						[player seekToTime:CMTimeMakeWithSeconds([[jsonDictionary objectForKey:@"segment"][1] floatValue] + 1, NSEC_PER_SEC)];
+					}
+				}
+			}
+			if ([[jsonDictionary objectForKey:@"category"] isEqual:@"outro"]) {
+				if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockOutroSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockOutroSegmentedInt"] == 1) {
+					if (CMTimeGetSeconds(player.currentTime) >= [[jsonDictionary objectForKey:@"segment"][0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[jsonDictionary objectForKey:@"segment"][1] floatValue]) {
+						[player seekToTime:CMTimeMakeWithSeconds([[jsonDictionary objectForKey:@"segment"][1] floatValue] + 1, NSEC_PER_SEC)];
+					}
+				}
+			}
+			if ([[jsonDictionary objectForKey:@"category"] isEqual:@"preview"]) {
+				if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockPreviewSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockPreviewSegmentedInt"] == 1) {
+					if (CMTimeGetSeconds(player.currentTime) >= [[jsonDictionary objectForKey:@"segment"][0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[jsonDictionary objectForKey:@"segment"][1] floatValue]) {
+						[player seekToTime:CMTimeMakeWithSeconds([[jsonDictionary objectForKey:@"segment"][1] floatValue] + 1, NSEC_PER_SEC)];
+					}
+				}
+			}
+			if ([[jsonDictionary objectForKey:@"category"] isEqual:@"music_offtopic"]) {
+				if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockMusicOffTopicSegmentedInt"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockMusicOffTopicSegmentedInt"] == 1) {
+					if (CMTimeGetSeconds(player.currentTime) >= [[jsonDictionary objectForKey:@"segment"][0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[jsonDictionary objectForKey:@"segment"][1] floatValue]) {
+						[player seekToTime:CMTimeMakeWithSeconds([[jsonDictionary objectForKey:@"segment"][1] floatValue] + 1, NSEC_PER_SEC)];
+					}
+				}
+			}
 		}
 	}
 }
