@@ -2,29 +2,33 @@
 	"manifest_version": 2,
 	"default_locale": "en",
 
-	"name": "RebornTubeSafariExt",
-	"description": "An awesome safari extension!",
+	"name": "RebornTube",
+	"description": "Allows you to open YouTube links in RebornTube",
 	"version": "1.0",
 
 	"icons": {
-		"48": "images/icon-48.png",
-		"96": "images/icon-96.png",
-		"128": "images/icon-128.png",
-		"256": "images/icon-256.png",
-		"512": "images/icon-512.png"
+		"48": "images/reborntube.png",
+		"96": "images/reborntube.png",
+		"128": "images/reborntube.png",
+		"256": "images/reborntube.png",
+		"512": "images/reborntube.png"
 	},
 
+	"background": {
+        "scripts": [ "background.js" ],
+        "persistent": false
+    },
+
 	"browser_action": {
-		"default_popup": "popup.html",
 		"default_icon": {
-			"16": "images/toolbar-icon-16.png",
-			"19": "images/toolbar-icon-19.png",
-			"32": "images/toolbar-icon-32.png",
-			"38": "images/toolbar-icon-38.png",
-			"48": "images/toolbar-icon-48.png",
-			"72": "images/toolbar-icon-72.png"
+			"16": "images/reborntube.png",
+			"19": "images/reborntube.png",
+			"32": "images/reborntube.png",
+			"38": "images/reborntube.png",
+			"48": "images/reborntube.png",
+			"72": "images/reborntube.png"
 		}
 	},
 
-	"permissions": [ ]
+	"permissions": [ "https://m.youtube.com/*" ]
 }
