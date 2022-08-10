@@ -30,8 +30,9 @@
 
 	playlistsTextField = [[UITextField alloc] init];
 	playlistsTextField.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, 60);
-	playlistsTextField.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:1.0];
-	playlistsTextField.placeholder = @"Enter Playlist Name Here";
+	playlistsTextField.backgroundColor = [AppColours viewBackgroundColour];
+	playlistsTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Enter Playlist Name Here" attributes:@{NSForegroundColorAttributeName:[AppColours textColour]}];
+	playlistsTextField.textColor = [AppColours textColour];
 	[self.view addSubview:playlistsTextField];
 }
 
@@ -69,11 +70,11 @@
 
 @implementation CreatePlaylistsViewController (Privates)
 
-- (void)cancelTap:(UITapGestureRecognizer *)recognizer {
+- (void)cancelTap:(UIButton *)sender {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)createTap:(UITapGestureRecognizer *)recognizer {
+- (void)createTap:(UIButton *)sender {
     NSFileManager *fm = [[NSFileManager alloc] init];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];

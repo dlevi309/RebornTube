@@ -2,6 +2,10 @@
 
 #import "PlayerViewController.h"
 
+// Other
+
+#import "Playlists/AddToPlaylistsViewController.h"
+
 // Classes
 
 #import "../Classes/AppColours.h"
@@ -62,9 +66,11 @@
 	[self overlaySetup];
 	[self infoSetup];
 
-	AppDelegate *shared = [UIApplication sharedApplication].delegate;
-	shared.allowRotation = YES;
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+	if (self.videoStream != nil && self.audioURL == nil) {
+		AppDelegate *shared = [UIApplication sharedApplication].delegate;
+		shared.allowRotation = YES;
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+	}
 }
 
 - (void)keysSetup {
@@ -92,7 +98,7 @@
 		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		[self.view.layer addSublayer:playerLayer];
-	} else if (self.audioURL != nil) {
+	} else if (self.videoStream == nil && self.audioURL != nil) {
 		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
 
 		CMTime length = CMTimeMakeWithSeconds([self.videoLength intValue], NSEC_PER_SEC);
@@ -354,6 +360,16 @@
 	if (![pictureInPictureController isPictureInPictureActive]) {
 		playerLayer.player = nil;
 	}
+	collapseImage.hidden = YES;
+	rewindImage.hidden = YES;
+	playImage.hidden = YES;
+	pauseImage.hidden = YES;
+	forwardImage.hidden = YES;
+	if (deviceOrientation == 1) {
+		progressSlider.hidden = YES;
+	} else {
+		progressSlider.hidden = NO;
+	}
 	MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
     [commandCenter.togglePlayPauseCommand setEnabled:YES];
     [commandCenter.playCommand setEnabled:YES];
@@ -395,7 +411,6 @@
 		deviceOrientation = 0;
 		self.view.backgroundColor = [AppColours mainBackgroundColour];
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
-		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		overlayView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		collapseImage.alpha = 1.0;
 		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
@@ -413,7 +428,6 @@
 		deviceOrientation = 1;
 		self.view.backgroundColor = [UIColor blackColor];
 		playerLayer.frame = self.view.bounds;
-		videoImage.frame = self.view.bounds;
 		overlayView.frame = self.view.bounds;
 		collapseImage.alpha = 0.0;
 		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
@@ -433,7 +447,6 @@
 		deviceOrientation = 1;
 		self.view.backgroundColor = [UIColor blackColor];
 		playerLayer.frame = self.view.bounds;
-		videoImage.frame = self.view.bounds;
 		overlayView.frame = self.view.bounds;
 		collapseImage.alpha = 0.0;
 		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, boundsWindow.safeAreaInsets.top + (overlayView.bounds.size.height / 2) - 24, 48, 48);
@@ -518,6 +531,21 @@
 }
 
 - (void)addToPlaylistsButtonClicked:(UIButton *)sender {
+	[player pause];
+	collapseImage.hidden = YES;
+	rewindImage.hidden = YES;
+	playImage.hidden = YES;
+	pauseImage.hidden = YES;
+	forwardImage.hidden = YES;
+	if (deviceOrientation == 1) {
+		progressSlider.hidden = YES;
+	} else {
+		progressSlider.hidden = NO;
+	}
+
+	AddToPlaylistsViewController *addToPlaylistsViewController = [[AddToPlaylistsViewController alloc] init];
+
+    [self presentViewController:addToPlaylistsViewController animated:YES completion:nil];
 }
 
 @end
