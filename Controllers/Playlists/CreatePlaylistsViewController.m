@@ -42,7 +42,7 @@
     }
 
     UIButton *cancelButton = [[UIButton alloc] init];
-    cancelButton.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playlistsTextField.bounds.size.height, self.view.bounds.size.width + 10, 40);
+    cancelButton.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playlistsTextField.bounds.size.height + 10, self.view.bounds.size.width, 40);
     [cancelButton addTarget:self action:@selector(cancelTap:) forControlEvents:UIControlEventTouchUpInside];
     [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
 	[cancelButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
