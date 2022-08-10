@@ -31,7 +31,7 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -39,11 +39,7 @@
         return 3;
     }
     if (section == 1) {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES) {
-            return 2;
-        } else {
-            return 1;
-        }
+        return 2;
     }
     if (section == 2) {
         return 1;
