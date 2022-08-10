@@ -40,35 +40,25 @@
         self.modalInPresentation = YES;
     }
 
-    UILabel *cancelLabel = [[UILabel alloc] init];
-    cancelLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playlistsTextField.bounds.size.height, self.view.bounds.size.width, 40);
-    cancelLabel.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
-    cancelLabel.text = @"Cancel";
-    cancelLabel.textColor = [UIColor whiteColor];
-    cancelLabel.numberOfLines = 1;
-    cancelLabel.adjustsFontSizeToFitWidth = true;
-    cancelLabel.adjustsFontForContentSizeCategory = false;
-    cancelLabel.userInteractionEnabled = true;
-    UITapGestureRecognizer *cancelLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(cancelTap:)];
-    cancelLabelTap.numberOfTapsRequired = 1;
-    [cancelLabel addGestureRecognizer:cancelLabelTap];
+    UIButton *cancelButton = [[UIButton alloc] init];
+    cancelButton.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playlistsTextField.bounds.size.height, self.view.bounds.size.width, 40);
+    [cancelButton addTarget:self action:@selector(cancelTap:) forControlEvents:UIControlEventTouchUpInside];
+    [cancelButton setTitle:@"Cancel" forState:UIControlStateNormal];
+	[cancelButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
+    cancelButton.backgroundColor = [AppColours viewBackgroundColour];
+	cancelButton.layer.cornerRadius = 5;
 
-    [self.view addSubview:cancelLabel];
+    [self.view addSubview:cancelButton];
 
-    UILabel *createLabel = [[UILabel alloc] init];
-    createLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playlistsTextField.bounds.size.height + cancelLabel.bounds.size.height, self.view.bounds.size.width, 40);
-    createLabel.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
-    createLabel.text = @"Create";
-    createLabel.textColor = [UIColor whiteColor];
-    createLabel.numberOfLines = 1;
-    createLabel.adjustsFontSizeToFitWidth = true;
-    createLabel.adjustsFontForContentSizeCategory = false;
-    createLabel.userInteractionEnabled = true;
-    UITapGestureRecognizer *createLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(createTap:)];
-    createLabelTap.numberOfTapsRequired = 1;
-    [createLabel addGestureRecognizer:createLabelTap];
+    UIButton *createButton = [[UIButton alloc] init];
+    createButton.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playlistsTextField.bounds.size.height + cancelButton.bounds.size.height + 10, self.view.bounds.size.width, 40);
+    [createButton addTarget:self action:@selector(createTap:) forControlEvents:UIControlEventTouchUpInside];
+    [createButton setTitle:@"Create" forState:UIControlStateNormal];
+	[createButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
+    createButton.backgroundColor = [AppColours viewBackgroundColour];
+	createButton.layer.cornerRadius = 5;
 
-    [self.view addSubview:createLabel];
+    [self.view addSubview:createButton];
 }
 
 - (void)keysSetup {

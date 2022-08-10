@@ -33,9 +33,9 @@
 
     UILabel *createPlaylistsLabel = [[UILabel alloc] init];
     createPlaylistsLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, 40);
-    createPlaylistsLabel.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+    createPlaylistsLabel.backgroundColor = [AppColours viewBackgroundColour];
     createPlaylistsLabel.text = @"Create Playlist";
-    createPlaylistsLabel.textColor = [UIColor whiteColor];
+    createPlaylistsLabel.textColor = [AppColours textColour];
     createPlaylistsLabel.numberOfLines = 1;
     createPlaylistsLabel.adjustsFontSizeToFitWidth = true;
     createPlaylistsLabel.adjustsFontForContentSizeCategory = false;
@@ -60,7 +60,7 @@
     for (NSString *key in playlistsDictionary) {
         UIView *playlistsView = [[UIView alloc] init];
         playlistsView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 40);
-        playlistsView.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
+        playlistsView.backgroundColor = [AppColours viewBackgroundColour];
         playlistsView.tag = nameCount;
         UITapGestureRecognizer *playlistsViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playlistsTap:)];
         playlistsViewTap.numberOfTapsRequired = 1;
@@ -69,7 +69,7 @@
         UILabel *playlistsNameLabel = [[UILabel alloc] init];
         playlistsNameLabel.frame = CGRectMake(10, 0, playlistsView.frame.size.width - 10, playlistsView.frame.size.height);
         playlistsNameLabel.text = key;
-        playlistsNameLabel.textColor = [UIColor whiteColor];
+        playlistsNameLabel.textColor = [AppColours textColour];
         playlistsNameLabel.numberOfLines = 1;
         playlistsNameLabel.adjustsFontSizeToFitWidth = true;
         playlistsNameLabel.adjustsFontForContentSizeCategory = false;
@@ -107,10 +107,7 @@
     VideoPlaylistsViewController *playlistsVideosViewController = [[VideoPlaylistsViewController alloc] init];
     playlistsVideosViewController.playlistsViewID = playlistsViewID;
     
-    UINavigationController *playlistsVideosViewControllerView = [[UINavigationController alloc] initWithRootViewController:playlistsVideosViewController];
-    playlistsVideosViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:playlistsVideosViewControllerView animated:NO completion:nil];
+    [self.navigationController pushViewController:playlistsVideosViewController animated:YES];
 }
 
 @end

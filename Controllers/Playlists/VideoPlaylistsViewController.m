@@ -105,9 +105,9 @@
 
 @implementation VideoPlaylistsViewController (Privates)
 
-- (void)historyTap:(UITapGestureRecognizer *)recognizer {
-    NSString *historyViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
-	NSString *videoID = [videoIDDictionary valueForKey:historyViewTag];
+- (void)playlistsTap:(UITapGestureRecognizer *)recognizer {
+    NSString *playlistsViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
+	NSString *videoID = [videoIDDictionary valueForKey:playlistsViewTag];
     [YouTubeLoader init:videoID];
 }
 
