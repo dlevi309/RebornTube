@@ -5,6 +5,7 @@
 // Classes
 
 #import "../Classes/AppColours.h"
+#import "../Classes/AppDelegate.h"
 
 // Interface
 
@@ -61,6 +62,8 @@
 	[self overlaySetup];
 	[self infoSetup];
 
+	AppDelegate *shared = [UIApplication sharedApplication].delegate;
+	shared.allowRotation = YES;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
@@ -309,6 +312,8 @@
 }
 
 - (void)collapseTap:(UITapGestureRecognizer *)recognizer {
+	AppDelegate *shared = [UIApplication sharedApplication].delegate;
+	shared.allowRotation = NO;
 	if ([pictureInPictureController isPictureInPictureActive]) {
         [pictureInPictureController stopPictureInPicture];
     }
