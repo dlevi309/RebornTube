@@ -100,7 +100,7 @@
 
 @implementation AddToPlaylistsViewController (Privates)
 
-- (void)cancelTap:(UIButton *)sender {
+- (void)closeTap:(UIButton *)sender {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
