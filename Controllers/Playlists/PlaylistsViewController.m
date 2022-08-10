@@ -17,6 +17,7 @@
 
     // Other
     NSMutableDictionary *playlistsIDDictionary;
+    UILabel *createPlaylistsLabel;
 }
 - (void)keysSetup;
 - (void)loadPlaylists;
@@ -32,7 +33,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    UILabel *createPlaylistsLabel = [[UILabel alloc] init];
+    createPlaylistsLabel = [[UILabel alloc] init];
     createPlaylistsLabel.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, 40);
     createPlaylistsLabel.backgroundColor = [AppColours viewBackgroundColour];
     createPlaylistsLabel.text = @"Create Playlist";

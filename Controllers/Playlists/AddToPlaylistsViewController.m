@@ -15,6 +15,7 @@
 
     // Other
     NSMutableDictionary *playlistsIDDictionary;
+    UIButton *closeButton;
 }
 - (void)keysSetup;
 - (void)loadPlaylists;
@@ -35,7 +36,7 @@
         self.modalInPresentation = YES;
     }
 
-    UIButton *closeButton = [[UIButton alloc] init];
+    closeButton = [[UIButton alloc] init];
     closeButton.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, 40);
     [closeButton addTarget:self action:@selector(closeTap:) forControlEvents:UIControlEventTouchUpInside];
     [closeButton setTitle:@"Close" forState:UIControlStateNormal];
