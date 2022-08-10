@@ -90,16 +90,16 @@
 
     NSMutableArray *playlistsArray;
     if ([playlistsDictionary objectForKey:[playlistsTextField text]]) {
-        playlistsArray = [playlistsDictionary objectForKey:[playlistsTextField text]];
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     } else {
         playlistsArray = [[NSMutableArray alloc] init];
-    }
     
-    [playlistsDictionary setValue:playlistsArray forKey:[playlistsTextField text]];
+        [playlistsDictionary setValue:playlistsArray forKey:[playlistsTextField text]];
 
-    [playlistsDictionary writeToFile:playlistsPlistFilePath atomically:YES];
+        [playlistsDictionary writeToFile:playlistsPlistFilePath atomically:YES];
 
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 @end

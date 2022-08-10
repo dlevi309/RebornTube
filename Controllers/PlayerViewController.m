@@ -544,6 +544,7 @@
 	}
 
 	AddToPlaylistsViewController *addToPlaylistsViewController = [[AddToPlaylistsViewController alloc] init];
+	addToPlaylistsViewController.videoID = self.videoID;
 
     [self presentViewController:addToPlaylistsViewController animated:YES completion:nil];
 }

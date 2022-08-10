@@ -19,6 +19,7 @@
     NSMutableDictionary *playlistsIDDictionary;
 }
 - (void)keysSetup;
+- (void)loadPlaylists;
 @end
 
 @implementation PlaylistsViewController
@@ -46,6 +47,13 @@
 
     [self.view addSubview:createPlaylistsLabel];
 
+    [self loadPlaylists];
+    
+}
+
+- (void)loadPlaylists {
+    playlistsIDDictionary = [NSMutableDictionary new];
+    
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
 
