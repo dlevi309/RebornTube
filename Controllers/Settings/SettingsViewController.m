@@ -31,17 +31,20 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 3;
+        return 1;
     }
     if (section == 1) {
-        return 2;
+        return 3;
     }
     if (section == 2) {
+        return 2;
+    }
+    if (section == 3) {
         return 1;
     }
     return 0;
@@ -61,6 +64,12 @@
         cell.textLabel.textColor = [AppColours textColour];
         cell.detailTextLabel.textColor = [AppColours textColour];
         if (indexPath.section == 0) {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            if (indexPath.row == 0) {
+                cell.textLabel.text = @"Patreon";
+            }
+        }
+        if (indexPath.section == 1) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             if (indexPath.row == 0) {
                 cell.textLabel.text = @"Theme";
@@ -103,7 +112,7 @@
                 cell.textLabel.text = @"SponsorBlock";
             }
         }
-        if (indexPath.section == 1) {
+        if (indexPath.section == 2) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             if (indexPath.row == 0) {
                 cell.textLabel.text = @"Clear History";
@@ -113,7 +122,7 @@
             }
         }
 
-        if (indexPath.section == 2) {
+        if (indexPath.section == 3) {
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             if (indexPath.row == 0) {
                 cell.textLabel.text = @"Enable Developer Options";
@@ -132,6 +141,11 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.patreon.com/lillieweeb"] options:@{} completionHandler:nil];
+        }
+    }
+    if (indexPath.section == 1) {
+        if (indexPath.row == 0) {
             ThemeSettingsViewController *themeSettingsViewController = [[ThemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:themeSettingsViewController animated:YES];
         }
@@ -144,7 +158,7 @@
             [self.navigationController pushViewController:sponsorBlockSettingsViewController animated:YES];
         }
     }
-    if (indexPath.section == 1) {
+    if (indexPath.section == 2) {
         if (indexPath.row == 0) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:@"Are you sure you want to delete your history?" preferredStyle:UIAlertControllerStyleAlert];
 
