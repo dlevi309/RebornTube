@@ -104,7 +104,7 @@
 - (void)createPlaylistsTap:(UITapGestureRecognizer *)recognizer {
     CreatePlaylistsViewController *createPlaylistsViewController = [[CreatePlaylistsViewController alloc] init];
 
-    [self presentViewController:createPlaylistsViewController animated:YES completion:nil];
+    [self.navigationController pushViewController:createPlaylistsViewController animated:YES];
 }
 
 - (void)playlistsTap:(UITapGestureRecognizer *)recognizer {
