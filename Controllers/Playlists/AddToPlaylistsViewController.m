@@ -16,9 +16,9 @@
     // Other
     NSMutableDictionary *playlistsIDDictionary;
     UIButton *closeButton;
+    UIScrollView *scrollView;
 }
 - (void)keysSetup;
-- (void)loadPlaylists;
 @end
 
 @implementation AddToPlaylistsViewController
@@ -45,16 +45,16 @@
 	closeButton.layer.cornerRadius = 5;
 
     [self.view addSubview:closeButton];
-
-    [self loadPlaylists];
 }
 
 - (void)keysSetup {
 	boundsWindow = [[UIApplication sharedApplication] keyWindow];
+    scrollView = [[UIScrollView alloc] init];
 }
 
-- (void)loadPlaylists {
+- (void)viewWillAppear:(BOOL)animated {
     playlistsIDDictionary = [NSMutableDictionary new];
+    [scrollView removeFromSuperview];
 
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -62,8 +62,7 @@
     NSString *playlistsPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"playlists.plist"];
     NSMutableDictionary *playlistsDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:playlistsPlistFilePath];
 
-    UIScrollView *scrollView = [[UIScrollView alloc] init];
-	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + closeButton.frame.size.height + 10, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - closeButton.frame.size.height - 10);
+    scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + closeButton.frame.size.height + 10, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - closeButton.frame.size.height - 10);
     
     int viewBounds = 0;
     int nameCount = 1;

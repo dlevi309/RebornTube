@@ -18,9 +18,9 @@
     // Other
     NSMutableDictionary *playlistsIDDictionary;
     UILabel *createPlaylistsLabel;
+    UIScrollView *scrollView;
 }
 - (void)keysSetup;
-- (void)loadPlaylists;
 @end
 
 @implementation PlaylistsViewController
@@ -46,14 +46,12 @@
     createPlaylistsLabelTap.numberOfTapsRequired = 1;
     [createPlaylistsLabel addGestureRecognizer:createPlaylistsLabelTap];
 
-    [self.view addSubview:createPlaylistsLabel];
-
-    [self loadPlaylists];
-    
+    [self.view addSubview:createPlaylistsLabel];    
 }
 
-- (void)loadPlaylists {
+- (void)viewWillAppear:(BOOL)animated {
     playlistsIDDictionary = [NSMutableDictionary new];
+    [scrollView removeFromSuperview];
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -61,8 +59,7 @@
     NSString *playlistsPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"playlists.plist"];
     NSMutableDictionary *playlistsDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:playlistsPlistFilePath];
 
-    UIScrollView *scrollView = [[UIScrollView alloc] init];
-	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + createPlaylistsLabel.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - createPlaylistsLabel.frame.size.height - 50);
+    scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + createPlaylistsLabel.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - createPlaylistsLabel.frame.size.height - 50);
     
     int viewBounds = 0;
     int nameCount = 1;
@@ -97,6 +94,7 @@
 
 - (void)keysSetup {
 	boundsWindow = [[UIApplication sharedApplication] keyWindow];
+    scrollView = [[UIScrollView alloc] init];
 }
 
 @end
