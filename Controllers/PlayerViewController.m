@@ -424,6 +424,7 @@
 		videoTitleLabel.hidden = NO;
 		videoInfoLabel.hidden = NO;
 		shareButton.hidden = NO;
+		addToPlaylistsButton.hidden = NO;
 		break;
 
 		case UIInterfaceOrientationLandscapeLeft:
@@ -443,6 +444,7 @@
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		shareButton.hidden = YES;
+		addToPlaylistsButton.hidden = YES;
 		break;
 
 		case UIInterfaceOrientationLandscapeRight:
@@ -462,6 +464,7 @@
 		videoTitleLabel.hidden = YES;
 		videoInfoLabel.hidden = YES;
 		shareButton.hidden = YES;
+		addToPlaylistsButton.hidden = YES;
 		break;
 	}
 }
