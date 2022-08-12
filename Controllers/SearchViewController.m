@@ -108,15 +108,15 @@
 		@catch (NSException *exception) {
 		}
     } else {	
-		NSMutableDictionary *youtubeiAndroidSearchRequest = [YouTubeExtractor youtubeiAndroidSearchRequest:[searchTextField text]];
-		NSArray *searchContents = youtubeiAndroidSearchRequest[@"contents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
+		NSMutableDictionary *youtubeiWebSearchRequest = [YouTubeExtractor youtubeiWebSearchRequest:[searchTextField text]];
+		NSArray *searchContents = youtubeiWebSearchRequest[@"contents"][@"twoColumnSearchResultsRenderer"][@"primaryContents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
 		
 		scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + searchTextField.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - searchTextField.frame.size.height);
 		
 		int viewBounds = 0;
-		for (int i = 1 ; i <= 50 ; i++) {
+		for (int i = 0 ; i <= 50 ; i++) {
 			@try {
-				if (searchContents[i][@"compactVideoRenderer"][@"lengthText"][@"runs"][0][@"text"]) {
+				if (searchContents[i][@"videoRenderer"][@"videoId"]) {
 					UIView *searchView = [[UIView alloc] init];
 					searchView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 100);
 					searchView.backgroundColor = [AppColours viewBackgroundColour];
@@ -127,14 +127,14 @@
 
 					UIImageView *videoImage = [[UIImageView alloc] init];
 					videoImage.frame = CGRectMake(0, 0, 80, 80);
-					NSArray *videoArtworkArray = searchContents[i][@"compactVideoRenderer"][@"thumbnail"][@"thumbnails"];
+					NSArray *videoArtworkArray = searchContents[i][@"videoRenderer"][@"thumbnail"][@"thumbnails"];
 					NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
 					videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:videoArtwork]];
 					[searchView addSubview:videoImage];
 
 					UILabel *videoTimeLabel = [[UILabel alloc] init];
 					videoTimeLabel.frame = CGRectMake(40, 65, 40, 15);
-					videoTimeLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"lengthText"][@"runs"][0][@"text"]];
+					videoTimeLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"videoRenderer"][@"lengthText"][@"simpleText"]];
 					videoTimeLabel.textAlignment = NSTextAlignmentCenter;
 					videoTimeLabel.textColor = [UIColor whiteColor];
 					videoTimeLabel.numberOfLines = 1;
@@ -147,7 +147,7 @@
 
 					UILabel *videoTitleLabel = [[UILabel alloc] init];
 					videoTitleLabel.frame = CGRectMake(85, 0, searchView.frame.size.width - 85, 80);
-					videoTitleLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"title"][@"runs"][0][@"text"]];
+					videoTitleLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"videoRenderer"][@"title"][@"runs"][0][@"text"]];
 					videoTitleLabel.textColor = [AppColours textColour];
 					videoTitleLabel.numberOfLines = 2;
 					videoTitleLabel.adjustsFontSizeToFitWidth = true;
@@ -156,7 +156,7 @@
 
 					UILabel *videoCountAndAuthorLabel = [[UILabel alloc] init];
 					videoCountAndAuthorLabel.frame = CGRectMake(5, 80, searchView.frame.size.width - 5, 20);
-					videoCountAndAuthorLabel.text = [NSString stringWithFormat:@"%@ - %@", searchContents[i][@"compactVideoRenderer"][@"viewCountText"][@"runs"][0][@"text"], searchContents[i][@"compactVideoRenderer"][@"longBylineText"][@"runs"][0][@"text"]];
+					videoCountAndAuthorLabel.text = [NSString stringWithFormat:@"%@ - %@", searchContents[i][@"videoRenderer"][@"viewCountText"][@"simpleText"], searchContents[i][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]];
 					videoCountAndAuthorLabel.textColor = [AppColours textColour];
 					videoCountAndAuthorLabel.numberOfLines = 1;
 					[videoCountAndAuthorLabel setFont:[UIFont systemFontOfSize:12]];
@@ -164,7 +164,7 @@
 					videoCountAndAuthorLabel.adjustsFontForContentSizeCategory = false;
 					[searchView addSubview:videoCountAndAuthorLabel];
 					
-					[searchVideoIDDictionary setValue:[NSString stringWithFormat:@"%@", searchContents[i][@"compactVideoRenderer"][@"videoId"]] forKey:[NSString stringWithFormat:@"%d", i]];
+					[searchVideoIDDictionary setValue:[NSString stringWithFormat:@"%@", searchContents[i][@"videoRenderer"][@"videoId"]] forKey:[NSString stringWithFormat:@"%d", i]];
 					viewBounds += 102;
 
 					[scrollView addSubview:searchView];
