@@ -276,6 +276,8 @@
     [commandCenter.pauseCommand setEnabled:YES];
     [commandCenter.nextTrackCommand setEnabled:YES];
     [commandCenter.previousTrackCommand setEnabled:YES];
+	[commandCenter.changePlaybackPositionCommand setEnabled:YES];
+    [commandCenter.changePlaybackPositionCommand addTarget:self action:@selector(changedLockscreenPlaybackSlider:)];
 
 	[commandCenter.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         [player play];
@@ -492,6 +494,11 @@
 
 - (void)sliderValueChanged:(UISlider *)sender {
 	[player seekToTime:CMTimeMakeWithSeconds(sender.value, NSEC_PER_SEC)];
+}
+
+- (MPRemoteCommandHandlerStatus)changedLockscreenPlaybackSlider:(MPChangePlaybackPositionCommandEvent *)event {
+    [player seekToTime:CMTimeMakeWithSeconds(event.positionTime, NSEC_PER_SEC)];
+    return MPRemoteCommandHandlerStatusSuccess;
 }
 
 - (void)playerTimeChanged {
