@@ -47,6 +47,7 @@
 - (void)playerSetup;
 - (void)overlaySetup;
 - (void)infoSetup;
+- (void)mediaSetup;
 - (void)playerTimeChanged;
 @end
 
@@ -65,6 +66,10 @@
 	[self playerSetup];
 	[self overlaySetup];
 	[self infoSetup];
+	
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
+		[self mediaSetup];
+	}
 
 	if (self.videoStream != nil && self.audioURL == nil) {
 		AppDelegate *shared = [UIApplication sharedApplication].delegate;
@@ -264,6 +269,23 @@
 	[self.view addSubview:addToPlaylistsButton];
 }
 
+- (void)mediaSetup {
+	MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
+    [commandCenter.togglePlayPauseCommand setEnabled:YES];
+    [commandCenter.playCommand setEnabled:YES];
+    [commandCenter.pauseCommand setEnabled:YES];
+    [commandCenter.nextTrackCommand setEnabled:NO];
+    [commandCenter.previousTrackCommand setEnabled:NO];
+	[commandCenter.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        [player play];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
+    [commandCenter.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        [player pause];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
+}
+
 - (BOOL)prefersHomeIndicatorAutoHidden {
 	return YES;
 }
@@ -372,20 +394,6 @@
 	} else {
 		progressSlider.hidden = NO;
 	}
-	MPRemoteCommandCenter *commandCenter = [MPRemoteCommandCenter sharedCommandCenter];
-    [commandCenter.togglePlayPauseCommand setEnabled:YES];
-    [commandCenter.playCommand setEnabled:YES];
-    [commandCenter.pauseCommand setEnabled:YES];
-    [commandCenter.nextTrackCommand setEnabled:NO];
-    [commandCenter.previousTrackCommand setEnabled:NO];
-	[commandCenter.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        [player play];
-        return MPRemoteCommandHandlerStatusSuccess;
-    }];
-    [commandCenter.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        [player pause];
-        return MPRemoteCommandHandlerStatusSuccess;
-    }];
 
 	MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
 	
