@@ -274,14 +274,29 @@
     [commandCenter.togglePlayPauseCommand setEnabled:YES];
     [commandCenter.playCommand setEnabled:YES];
     [commandCenter.pauseCommand setEnabled:YES];
-    [commandCenter.nextTrackCommand setEnabled:NO];
-    [commandCenter.previousTrackCommand setEnabled:NO];
+    [commandCenter.nextTrackCommand setEnabled:YES];
+    [commandCenter.previousTrackCommand setEnabled:YES];
+
 	[commandCenter.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         [player play];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     [commandCenter.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         [player pause];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
+	[commandCenter.nextTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        NSTimeInterval currentTime = CMTimeGetSeconds(player.currentTime);
+		NSTimeInterval newTime = currentTime + 15.0f;
+		CMTime time = CMTimeMakeWithSeconds(newTime, NSEC_PER_SEC);
+		[player seekToTime:time];
+        return MPRemoteCommandHandlerStatusSuccess;
+    }];
+	[commandCenter.previousTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
+        NSTimeInterval currentTime = CMTimeGetSeconds(player.currentTime);
+		NSTimeInterval newTime = currentTime - 15.0f;
+		CMTime time = CMTimeMakeWithSeconds(newTime, NSEC_PER_SEC);
+		[player seekToTime:time];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
 }
@@ -395,16 +410,14 @@
 		progressSlider.hidden = NO;
 	}
 
-	MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
-	
+	MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];	
 	NSMutableDictionary *songInfo = [[NSMutableDictionary alloc] init];
-
 	MPMediaItemArtwork *albumArt = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]]];
 	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoTitle] forKey:MPMediaItemPropertyTitle];
+	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoAuthor] forKey:MPMediaItemPropertyArtist];
 	[songInfo setObject:[NSNumber numberWithDouble:CMTimeGetSeconds(player.currentTime)] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
 	[songInfo setObject:[NSNumber numberWithDouble:CMTimeGetSeconds(playerItem.duration)] forKey:MPMediaItemPropertyPlaybackDuration];
 	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
-
 	[playingInfoCenter setNowPlayingInfo:songInfo];
 }
 
@@ -483,6 +496,19 @@
 
 - (void)playerTimeChanged {
 	progressSlider.value = (float)CMTimeGetSeconds(player.currentTime);
+
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
+		MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];	
+		NSMutableDictionary *songInfo = [[NSMutableDictionary alloc] init];
+		MPMediaItemArtwork *albumArt = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]]];
+		[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoTitle] forKey:MPMediaItemPropertyTitle];
+		[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoAuthor] forKey:MPMediaItemPropertyArtist];
+		[songInfo setObject:[NSNumber numberWithDouble:CMTimeGetSeconds(player.currentTime)] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
+		[songInfo setObject:[NSNumber numberWithDouble:CMTimeGetSeconds(playerItem.duration)] forKey:MPMediaItemPropertyPlaybackDuration];
+		[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
+		[playingInfoCenter setNowPlayingInfo:songInfo];
+	}
+
 	if ([NSJSONSerialization isValidJSONObject:self.sponsorBlockValues]) {
 		for (NSMutableDictionary *jsonDictionary in self.sponsorBlockValues) {
             if ([[jsonDictionary objectForKey:@"category"] isEqual:@"sponsor"]) {

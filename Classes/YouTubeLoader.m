@@ -35,9 +35,11 @@
 
     NSMutableDictionary *youtubeiAndroidPlayerRequest = [YouTubeExtractor youtubeiAndroidPlayerRequest:videoID];
     NSString *videoTitle = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"title"]];
+    NSString *videoAuthor = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"author"]];
     NSString *videoLength = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"lengthSeconds"]];
     NSArray *videoArtworkArray = youtubeiAndroidPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
     NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
+    BOOL isLive = youtubeiAndroidPlayerRequest[@"videoDetails"][@"isLive"];
     NSDictionary *innertubeAdaptiveFormats = youtubeiAndroidPlayerRequest[@"streamingData"][@"adaptiveFormats"];
     NSURL *audioHigh;
     NSURL *audioMedium;
@@ -80,6 +82,7 @@
             PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
             playerViewController.videoID = videoID;
             playerViewController.videoTitle = videoTitle;
+            playerViewController.videoAuthor = videoAuthor;
             playerViewController.videoLength = videoLength;
             playerViewController.videoArtwork = videoArtwork;
             playerViewController.videoViewCount = videoViewCount;
@@ -97,24 +100,27 @@
     }
 
     if (audioURL != nil) {
-        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Audio Only" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
-            playerViewController.videoID = videoID;
-            playerViewController.videoTitle = videoTitle;
-            playerViewController.videoLength = videoLength;
-            playerViewController.videoArtwork = videoArtwork;
-            playerViewController.videoViewCount = videoViewCount;
-            playerViewController.videoLikes = videoLikes;
-            playerViewController.videoDislikes = videoDislikes;
-            playerViewController.audioURL = audioURL;
-            playerViewController.videoStream = nil;
-            playerViewController.sponsorBlockValues = sponsorBlockValues;
+        if (isLive != true) {
+            [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Audio Only" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+                playerViewController.videoID = videoID;
+                playerViewController.videoTitle = videoTitle;
+                playerViewController.videoAuthor = videoAuthor;
+                playerViewController.videoLength = videoLength;
+                playerViewController.videoArtwork = videoArtwork;
+                playerViewController.videoViewCount = videoViewCount;
+                playerViewController.videoLikes = videoLikes;
+                playerViewController.videoDislikes = videoDislikes;
+                playerViewController.audioURL = audioURL;
+                playerViewController.videoStream = nil;
+                playerViewController.sponsorBlockValues = sponsorBlockValues;
 
-            UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
-            playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+                UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
+                playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
-            [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
-        }]];
+                [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
+            }]];
+        }
     }
 
     [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Add To Playlist" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
