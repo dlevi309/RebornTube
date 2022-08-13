@@ -12,7 +12,10 @@
 
 @interface SearchViewController ()
 {
+	// View
 	UITextField *searchTextField;
+
+	// Keys
 	NSMutableDictionary *searchVideoIDDictionary;
     UIScrollView *scrollView;
 }

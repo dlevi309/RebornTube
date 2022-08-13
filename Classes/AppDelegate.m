@@ -1,9 +1,7 @@
 #import "AppDelegate.h"
 #import "AppColours.h"
-#import "Reachability.h"
 #import "YouTubeLoader.h"
 #import "../Controllers/RootViewController.h"
-#import "../Controllers/NoInternetViewController.h"
 
 @implementation AppDelegate
 
@@ -33,19 +31,10 @@
         tabBarAppearance.backgroundColor = [AppColours mainBackgroundColour];
 		[UITabBar appearance].standardAppearance = tabBarAppearance;
 	}
-    Reachability *reachability = [Reachability reachabilityForInternetConnection];
-    NetworkStatus networkStatus = [reachability currentReachabilityStatus];
-    if (networkStatus != NotReachable) {
-        self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        self.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[RootViewController alloc] init]];
-        self.window.rootViewController = self.rootViewController;
-        [self.window makeKeyAndVisible];
-    } else {
-        self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        self.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[NoInternetViewController alloc] init]];
-        self.window.rootViewController = self.rootViewController;
-        [self.window makeKeyAndVisible];
-    }
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    self.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[RootViewController alloc] init]];
+    self.window.rootViewController = self.rootViewController;
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
