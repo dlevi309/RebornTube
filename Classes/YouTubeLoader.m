@@ -1,5 +1,6 @@
 #import "YouTubeLoader.h"
 #import "YouTubeExtractor.h"
+#import "../Controllers/OldPlayerViewController.h"
 #import "../Controllers/PlayerViewController.h"
 #import "../Controllers/Playlists/AddToPlaylistsViewController.h"
 
@@ -79,7 +80,7 @@
     
     if (videoStream != nil) {
         [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Stream" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+            OldPlayerViewController *playerViewController = [[OldPlayerViewController alloc] init];
             playerViewController.videoID = videoID;
             playerViewController.videoTitle = videoTitle;
             playerViewController.videoAuthor = videoAuthor;
@@ -97,12 +98,33 @@
 
             [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
         }]];
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES && [UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+            [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Stream (Dev)" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+                playerViewController.videoID = videoID;
+                playerViewController.videoTitle = videoTitle;
+                playerViewController.videoAuthor = videoAuthor;
+                playerViewController.videoLength = videoLength;
+                playerViewController.videoArtwork = videoArtwork;
+                playerViewController.videoViewCount = videoViewCount;
+                playerViewController.videoLikes = videoLikes;
+                playerViewController.videoDislikes = videoDislikes;
+                playerViewController.audioURL = nil;
+                playerViewController.videoStream = videoStream;
+                playerViewController.sponsorBlockValues = sponsorBlockValues;
+
+                UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
+                playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+                [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
+            }]];
+        }
     }
 
     if (audioURL != nil) {
         if (isLive != true) {
             [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Audio Only" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+                OldPlayerViewController *playerViewController = [[OldPlayerViewController alloc] init];
                 playerViewController.videoID = videoID;
                 playerViewController.videoTitle = videoTitle;
                 playerViewController.videoAuthor = videoAuthor;
@@ -120,6 +142,27 @@
 
                 [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
             }]];
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES && [UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+                [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Audio Only (Dev)" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+                    playerViewController.videoID = videoID;
+                    playerViewController.videoTitle = videoTitle;
+                    playerViewController.videoAuthor = videoAuthor;
+                    playerViewController.videoLength = videoLength;
+                    playerViewController.videoArtwork = videoArtwork;
+                    playerViewController.videoViewCount = videoViewCount;
+                    playerViewController.videoLikes = videoLikes;
+                    playerViewController.videoDislikes = videoDislikes;
+                    playerViewController.audioURL = audioURL;
+                    playerViewController.videoStream = nil;
+                    playerViewController.sponsorBlockValues = sponsorBlockValues;
+
+                    UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
+                    playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+                    [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
+                }]];
+            }
         }
     }
 
