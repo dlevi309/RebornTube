@@ -368,7 +368,7 @@
 	playerLayer.player = nil;
 	player = nil;
     [playerLayer removeFromSuperlayer];
-	[self.navigationController popViewControllerAnimated:YES];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)rewindTap:(UITapGestureRecognizer *)recognizer {

@@ -92,7 +92,10 @@
             playerViewController.videoStream = videoStream;
             playerViewController.sponsorBlockValues = sponsorBlockValues;
 
-            [topViewController.navigationController pushViewController:playerViewController animated:YES];
+            UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
+            playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+            [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
         }]];
     }
 
@@ -112,7 +115,10 @@
                 playerViewController.videoStream = nil;
                 playerViewController.sponsorBlockValues = sponsorBlockValues;
 
-                [topViewController.navigationController pushViewController:playerViewController animated:YES];
+                UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
+                playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+                [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
             }]];
         }
     }
