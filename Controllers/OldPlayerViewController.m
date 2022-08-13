@@ -51,7 +51,7 @@
 - (void)playerTimeChanged;
 @end
 
-@implementation PlayerViewController
+@implementation OldPlayerViewController
 
 - (void)loadView {
 	[super loadView];
