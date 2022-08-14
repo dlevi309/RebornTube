@@ -30,6 +30,12 @@
     NSString *videoLikes = [formatter stringFromNumber:returnYouTubeDislikeRequest[@"likes"]];
     NSString *videoDislikes = [formatter stringFromNumber:returnYouTubeDislikeRequest[@"dislikes"]];
 
+    NSMutableDictionary *youtubeiOSNextRequest = [YouTubeExtractor youtubeiOSNextRequest:videoID];
+    NSMutableDictionary *slimVideoInformationRenderer = youtubeiOSNextRequest[@"contents"][@"singleColumnWatchNextResults"][@"results"][@"results"][@"contents"][0][@"slimVideoMetadataSectionRenderer"][@"contents"][0][@"slimVideoInformationRenderer"];
+    // NSString *videoTitle = slimVideoInformationRenderer[@"title"][@"runs"][@"text"];
+    NSString *videoViewsShort = slimVideoInformationRenderer[@"collapsedSubtitle"][@"runs"][@"text"];
+    NSString *videoViewsLong = slimVideoInformationRenderer[@"expandedSubtitle"][@"runs"][@"text"];
+
     NSMutableDictionary *youtubeiOSPlayerRequest = [YouTubeExtractor youtubeiOSPlayerRequest:videoID];
     NSURL *videoStream = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
     NSString *videoTitle = [NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"videoDetails"][@"title"]];
@@ -78,18 +84,27 @@
     if (videoStream != nil) {
         [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Stream" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+            // Main Info
             playerViewController.videoID = videoID;
+            playerViewController.playbackMode = 1;
+
+            // Player Info
+            playerViewController.videoStream = videoStream;
+            playerViewController.audioURL = nil;
+
+            // Next Info
             playerViewController.videoTitle = videoTitle;
+            playerViewController.videoViewsShort = videoViewsShort;
+            playerViewController.videoViewsLong = videoViewsLong;
+            
+            // Other Info
             playerViewController.videoAuthor = videoAuthor;
             playerViewController.videoLength = videoLength;
             playerViewController.videoArtwork = videoArtwork;
             playerViewController.videoViewCount = videoViewCount;
             playerViewController.videoLikes = videoLikes;
             playerViewController.videoDislikes = videoDislikes;
-            playerViewController.videoStream = videoStream;
-            playerViewController.audioURL = nil;
             playerViewController.sponsorBlockValues = sponsorBlockValues;
-            playerViewController.playbackMode = 1;
 
             UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
             playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -102,18 +117,27 @@
         if (isLive != true) {
             [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Audio Only" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+                // Main Info
                 playerViewController.videoID = videoID;
+                playerViewController.playbackMode = 1;
+
+                // Player Info
+                playerViewController.videoStream = nil;
+                playerViewController.audioURL = audioURL;
+
+                // Next Info
                 playerViewController.videoTitle = videoTitle;
+                playerViewController.videoViewsShort = videoViewsShort;
+                playerViewController.videoViewsLong = videoViewsLong;
+                
+                // Other Info
                 playerViewController.videoAuthor = videoAuthor;
                 playerViewController.videoLength = videoLength;
                 playerViewController.videoArtwork = videoArtwork;
                 playerViewController.videoViewCount = videoViewCount;
                 playerViewController.videoLikes = videoLikes;
                 playerViewController.videoDislikes = videoDislikes;
-                playerViewController.videoStream = nil;
-                playerViewController.audioURL = audioURL;
                 playerViewController.sponsorBlockValues = sponsorBlockValues;
-                playerViewController.playbackMode = 2;
 
                 UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
                 playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
