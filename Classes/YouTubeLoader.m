@@ -32,15 +32,13 @@
 
     NSMutableDictionary *youtubeiOSPlayerRequest = [YouTubeExtractor youtubeiOSPlayerRequest:videoID];
     NSURL *videoStream = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
-    
-    NSMutableDictionary *youtubeAndroidPlayerRequest = [YouTubeExtractor youtubeAndroidPlayerRequest:videoID];
-    NSString *videoTitle = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"title"]];
-    NSString *videoAuthor = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"author"]];
-    NSString *videoLength = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"lengthSeconds"]];
-    NSArray *videoArtworkArray = youtubeAndroidPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
+    NSString *videoTitle = [NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"videoDetails"][@"title"]];
+    NSString *videoAuthor = [NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"videoDetails"][@"author"]];
+    NSString *videoLength = [NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"videoDetails"][@"lengthSeconds"]];
+    NSArray *videoArtworkArray = youtubeiOSPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
     NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
-    BOOL isLive = youtubeAndroidPlayerRequest[@"videoDetails"][@"isLive"];
-    NSDictionary *innertubeAdaptiveFormats = youtubeAndroidPlayerRequest[@"streamingData"][@"adaptiveFormats"];
+    BOOL isLive = youtubeiOSPlayerRequest[@"videoDetails"][@"isLive"];
+    NSDictionary *innertubeAdaptiveFormats = youtubeiOSPlayerRequest[@"streamingData"][@"adaptiveFormats"];
     NSURL *audioHigh;
     NSURL *audioMedium;
     NSURL *audioLow;
