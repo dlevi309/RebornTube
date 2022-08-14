@@ -190,7 +190,7 @@
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
     view.tintColor = [UIColor clearColor];
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
     [footer.textLabel setTextColor:[AppColours textColour]];
     [footer.textLabel setFont:[UIFont systemFontOfSize:14]];
     footer.textLabel.textAlignment = NSTextAlignmentCenter;
