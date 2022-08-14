@@ -174,6 +174,28 @@
     [self.tableView reloadData];
 }
 
+- (CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger)section {
+    if (section == 2) {
+        return 50;
+    }
+    return 0;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (section == 2) {
+        return @"Version: 1.0.0 (Alpha 25)";
+    }
+    return nil;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
+    view.tintColor = [UIColor clearColor];
+    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
+    [footer.textLabel setTextColor:[AppColours textColour]];
+    [footer.textLabel setFont:[UIFont systemFontOfSize:14]];
+    footer.textLabel.textAlignment = NSTextAlignmentCenter;
+}
+
 @end
 
 @implementation SettingsViewController (Privates)
