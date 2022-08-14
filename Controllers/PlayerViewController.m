@@ -71,7 +71,7 @@
 		[self mediaSetup];
 	}
 
-	if (self.playbackMode == 1) {
+	if (self.playbackMode == 1 || self.playbackMode == 2) {
 		AppDelegate *shared = [UIApplication sharedApplication].delegate;
 		shared.allowRotation = YES;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
