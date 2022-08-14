@@ -63,7 +63,7 @@
         @try {
 			NSTextCheckingResult *result = array.firstObject;
 			NSString *videoID = [[searchTextField text] substringWithRange:result.range];
-			NSMutableDictionary *youtubeiAndroidPlayerRequest = [YouTubeExtractor youtubeiAndroidPlayerRequest:videoID];
+			NSMutableDictionary *youtubeiOSPlayerRequest = [YouTubeExtractor youtubeiOSPlayerRequest:videoID];
 			
 			scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + searchTextField.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - searchTextField.frame.size.height);
 
@@ -77,14 +77,14 @@
 
 			UIImageView *videoImage = [[UIImageView alloc] init];
 			videoImage.frame = CGRectMake(0, 0, 80, 80);
-			NSArray *videoArtworkArray = youtubeiAndroidPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
+			NSArray *videoArtworkArray = youtubeiOSPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
 			NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
 			videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:videoArtwork]];
 			[searchView addSubview:videoImage];
 
 			UILabel *videoTitleLabel = [[UILabel alloc] init];
 			videoTitleLabel.frame = CGRectMake(85, 0, searchView.frame.size.width - 85, 80);
-			videoTitleLabel.text = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"title"]];
+			videoTitleLabel.text = [NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"videoDetails"][@"title"]];
 			videoTitleLabel.textColor = [AppColours textColour];
 			videoTitleLabel.numberOfLines = 2;
 			videoTitleLabel.adjustsFontSizeToFitWidth = true;
@@ -93,7 +93,7 @@
 
 			UILabel *videoAuthorLabel = [[UILabel alloc] init];
 			videoAuthorLabel.frame = CGRectMake(5, 80, searchView.frame.size.width - 5, 20);
-			videoAuthorLabel.text = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"author"]];
+			videoAuthorLabel.text = [NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"videoDetails"][@"author"]];
 			videoAuthorLabel.textColor = [AppColours textColour];
 			videoAuthorLabel.numberOfLines = 1;
 			[videoAuthorLabel setFont:[UIFont systemFontOfSize:12]];
@@ -111,8 +111,8 @@
 		@catch (NSException *exception) {
 		}
     } else {	
-		NSMutableDictionary *youtubeiWebSearchRequest = [YouTubeExtractor youtubeiWebSearchRequest:[searchTextField text]];
-		NSArray *searchContents = youtubeiWebSearchRequest[@"contents"][@"twoColumnSearchResultsRenderer"][@"primaryContents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
+		NSMutableDictionary *youtubeWebSearchRequest = [YouTubeExtractor youtubeWebSearchRequest:[searchTextField text]];
+		NSArray *searchContents = youtubeWebSearchRequest[@"contents"][@"twoColumnSearchResultsRenderer"][@"primaryContents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
 		
 		scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + searchTextField.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - searchTextField.frame.size.height);
 		

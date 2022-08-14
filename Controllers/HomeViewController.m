@@ -39,8 +39,8 @@
         [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     }
 
-    NSMutableDictionary *youtubeiAndroidTrendingRequest = [YouTubeExtractor youtubeiAndroidTrendingRequest];
-    NSArray *trendingContents = youtubeiAndroidTrendingRequest[@"contents"][@"singleColumnBrowseResultsRenderer"][@"tabs"][0][@"tabRenderer"][@"content"][@"sectionListRenderer"][@"contents"];
+    NSMutableDictionary *youtubeiOSTrendingRequest = [YouTubeExtractor youtubeiOSTrendingRequest];
+    NSArray *trendingContents = youtubeiOSTrendingRequest[@"contents"][@"singleColumnBrowseResultsRenderer"][@"tabs"][0][@"tabRenderer"][@"content"][@"sectionListRenderer"][@"contents"];
 	
 	UIScrollView *scrollView = [[UIScrollView alloc] init];
 	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - 50);

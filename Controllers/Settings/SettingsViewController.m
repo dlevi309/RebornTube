@@ -31,7 +31,7 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 4;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -42,9 +42,6 @@
         return 4;
     }
     if (section == 2) {
-        return 2;
-    }
-    if (section == 3) {
         return 1;
     }
     return 0;
@@ -128,21 +125,6 @@
             if (indexPath.row == 0) {
                 cell.textLabel.text = @"Clear History";
             }
-            if (indexPath.row == 1) {
-                cell.textLabel.text = @"Clear Playlists";
-            }
-        }
-
-        if (indexPath.section == 3) {
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            if (indexPath.row == 0) {
-                cell.textLabel.text = @"Enable Developer Options";
-                cell.detailTextLabel.text = @"Not Recommended";
-                UISwitch *enableDeveloperOptions = [[UISwitch alloc] initWithFrame:CGRectZero];
-                [enableDeveloperOptions addTarget:self action:@selector(toggleEnableDeveloperOptions:) forControlEvents:UIControlEventValueChanged];
-                enableDeveloperOptions.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"];
-                cell.accessoryView = enableDeveloperOptions;
-            }
         }
     }
     return cell;
@@ -185,21 +167,6 @@
 
             [self presentViewController:alert animated:YES completion:nil];
         }
-        if (indexPath.row == 1) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:@"Are you sure you want to delete your playlists?" preferredStyle:UIAlertControllerStyleAlert];
-
-            [alert addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-            }]];
-
-            [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                NSFileManager *fm = [[NSFileManager alloc] init];
-                NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-                NSString *documentsDirectory = [paths objectAtIndex:0];
-                [fm removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:@"playlists.plist"] error:nil];
-            }]];
-
-            [self presentViewController:alert animated:YES completion:nil];
-        }
     }
 }
 
@@ -221,16 +188,6 @@
         [[NSUserDefaults standardUserDefaults] synchronize];
     } else {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kEnableCaptions"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
-}
-
-- (void)toggleEnableDeveloperOptions:(UISwitch *)sender {
-    if ([sender isOn]) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kEnableDeveloperOptions"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    } else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kEnableDeveloperOptions"];
         [[NSUserDefaults standardUserDefaults] synchronize];
     }
 }

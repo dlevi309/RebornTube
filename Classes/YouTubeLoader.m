@@ -1,6 +1,5 @@
 #import "YouTubeLoader.h"
 #import "YouTubeExtractor.h"
-#import "../Controllers/OldPlayerViewController.h"
 #import "../Controllers/PlayerViewController.h"
 #import "../Controllers/Playlists/AddToPlaylistsViewController.h"
 
@@ -31,17 +30,15 @@
     NSString *videoLikes = [formatter stringFromNumber:returnYouTubeDislikeRequest[@"likes"]];
     NSString *videoDislikes = [formatter stringFromNumber:returnYouTubeDislikeRequest[@"dislikes"]];
 
-    NSMutableDictionary *youtubeiiOSPlayerRequest = [YouTubeExtractor youtubeiiOSPlayerRequest:videoID];
-    NSURL *videoStream = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubeiiOSPlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
-
-    NSMutableDictionary *youtubeiAndroidPlayerRequest = [YouTubeExtractor youtubeiAndroidPlayerRequest:videoID];
-    NSString *videoTitle = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"title"]];
-    NSString *videoAuthor = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"author"]];
-    NSString *videoLength = [NSString stringWithFormat:@"%@", youtubeiAndroidPlayerRequest[@"videoDetails"][@"lengthSeconds"]];
-    NSArray *videoArtworkArray = youtubeiAndroidPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
+    NSMutableDictionary *youtubeiOSPlayerRequest = [YouTubeExtractor youtubeiOSPlayerRequest:videoID];
+    NSURL *videoStream = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
+    NSString *videoTitle = [NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"videoDetails"][@"title"]];
+    NSString *videoAuthor = [NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"videoDetails"][@"author"]];
+    NSString *videoLength = [NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"videoDetails"][@"lengthSeconds"]];
+    NSArray *videoArtworkArray = youtubeiOSPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
     NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
-    BOOL isLive = youtubeiAndroidPlayerRequest[@"videoDetails"][@"isLive"];
-    NSDictionary *innertubeAdaptiveFormats = youtubeiAndroidPlayerRequest[@"streamingData"][@"adaptiveFormats"];
+    BOOL isLive = youtubeiOSPlayerRequest[@"videoDetails"][@"isLive"];
+    NSDictionary *innertubeAdaptiveFormats = youtubeiOSPlayerRequest[@"streamingData"][@"adaptiveFormats"];
     NSURL *audioHigh;
     NSURL *audioMedium;
     NSURL *audioLow;
@@ -78,9 +75,32 @@
         alertQualitySelector = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
     }
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableDeveloperOptions"] == YES && [UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad) {
-        if (videoStream != nil) {
-            [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Stream" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    if (videoStream != nil) {
+        [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Stream" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+            playerViewController.videoID = videoID;
+            playerViewController.videoTitle = videoTitle;
+            playerViewController.videoAuthor = videoAuthor;
+            playerViewController.videoLength = videoLength;
+            playerViewController.videoArtwork = videoArtwork;
+            playerViewController.videoViewCount = videoViewCount;
+            playerViewController.videoLikes = videoLikes;
+            playerViewController.videoDislikes = videoDislikes;
+            playerViewController.videoStream = videoStream;
+            playerViewController.audioURL = nil;
+            playerViewController.sponsorBlockValues = sponsorBlockValues;
+            playerViewController.playbackMode = 1;
+
+            UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
+            playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+            [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
+        }]];
+    }
+
+    if (audioURL != nil) {
+        if (isLive != true) {
+            [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Audio Only" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
                 PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
                 playerViewController.videoID = videoID;
                 playerViewController.videoTitle = videoTitle;
@@ -90,87 +110,16 @@
                 playerViewController.videoViewCount = videoViewCount;
                 playerViewController.videoLikes = videoLikes;
                 playerViewController.videoDislikes = videoDislikes;
-                playerViewController.videoStream = videoStream;
-                playerViewController.audioURL = nil;
+                playerViewController.videoStream = nil;
+                playerViewController.audioURL = audioURL;
                 playerViewController.sponsorBlockValues = sponsorBlockValues;
-                playerViewController.playbackMode = 1;
+                playerViewController.playbackMode = 2;
 
                 UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
                 playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
                 [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
             }]];
-        }
-
-        if (audioURL != nil) {
-            if (isLive != true) {
-                [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Audio Only" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                    PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
-                    playerViewController.videoID = videoID;
-                    playerViewController.videoTitle = videoTitle;
-                    playerViewController.videoAuthor = videoAuthor;
-                    playerViewController.videoLength = videoLength;
-                    playerViewController.videoArtwork = videoArtwork;
-                    playerViewController.videoViewCount = videoViewCount;
-                    playerViewController.videoLikes = videoLikes;
-                    playerViewController.videoDislikes = videoDislikes;
-                    playerViewController.videoStream = nil;
-                    playerViewController.audioURL = audioURL;
-                    playerViewController.sponsorBlockValues = sponsorBlockValues;
-                    playerViewController.playbackMode = 2;
-
-                    UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
-                    playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-                    [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
-                }]];
-            }
-        }
-    } else {
-        if (videoStream != nil) {
-            [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Stream" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                OldPlayerViewController *playerViewController = [[OldPlayerViewController alloc] init];
-                playerViewController.videoID = videoID;
-                playerViewController.videoTitle = videoTitle;
-                playerViewController.videoAuthor = videoAuthor;
-                playerViewController.videoLength = videoLength;
-                playerViewController.videoArtwork = videoArtwork;
-                playerViewController.videoViewCount = videoViewCount;
-                playerViewController.videoLikes = videoLikes;
-                playerViewController.videoDislikes = videoDislikes;
-                playerViewController.audioURL = nil;
-                playerViewController.videoStream = videoStream;
-                playerViewController.sponsorBlockValues = sponsorBlockValues;
-
-                UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
-                playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-                [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
-            }]];
-        }
-
-        if (audioURL != nil) {
-            if (isLive != true) {
-                [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Audio Only" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-                    OldPlayerViewController *playerViewController = [[OldPlayerViewController alloc] init];
-                    playerViewController.videoID = videoID;
-                    playerViewController.videoTitle = videoTitle;
-                    playerViewController.videoAuthor = videoAuthor;
-                    playerViewController.videoLength = videoLength;
-                    playerViewController.videoArtwork = videoArtwork;
-                    playerViewController.videoViewCount = videoViewCount;
-                    playerViewController.videoLikes = videoLikes;
-                    playerViewController.videoDislikes = videoDislikes;
-                    playerViewController.audioURL = audioURL;
-                    playerViewController.videoStream = nil;
-                    playerViewController.sponsorBlockValues = sponsorBlockValues;
-
-                    UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
-                    playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-                    [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
-                }]];
-            }
         }
     }
 

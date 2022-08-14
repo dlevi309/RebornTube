@@ -16,6 +16,6 @@
 @property (nonatomic, strong) NSURL *videoStream;
 @property (nonatomic, strong) NSURL *audioURL;
 @property (nonatomic, strong) NSMutableDictionary *sponsorBlockValues;
-@property (nonatomic, assign) int *playbackMode;
+@property (nonatomic, assign) int playbackMode;
 
 @end

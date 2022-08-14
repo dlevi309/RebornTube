@@ -39,11 +39,13 @@
 
 	// Info
 	UISlider *progressSlider;
+	UIScrollView *scrollView;
 }
 - (void)keysSetup;
 - (void)playerSetup;
 - (void)overlaySetup;
-- (void)infoSetup;
+- (void)sliderSetup;
+- (void)scrollSetup;
 - (void)mediaSetup;
 - (void)playerTimeChanged;
 @end
@@ -62,13 +64,14 @@
 	[self keysSetup];
 	[self playerSetup];
 	[self overlaySetup];
-	[self infoSetup];
+	[self sliderSetup];
+	[self scrollSetup];
 	
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 		[self mediaSetup];
 	}
 
-	if (self.videoStream != nil && self.audioURL == nil) {
+	if (self.playbackMode == 1) {
 		AppDelegate *shared = [UIApplication sharedApplication].delegate;
 		shared.allowRotation = YES;
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
@@ -221,7 +224,7 @@
 	[self.view addSubview:overlayView];
 }
 
-- (void)infoSetup {
+- (void)sliderSetup {
 	progressSlider = [[UISlider alloc] init];
 	progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height, self.view.bounds.size.width, 15);
 	NSString *sliderThumbPath = [playerAssetsBundle pathForResource:@"sliderthumb" ofType:@"png"];
@@ -232,6 +235,13 @@
 	progressSlider.maximumValue = [self.videoLength floatValue];
 	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 	[self.view addSubview:progressSlider];
+}
+
+- (void)scrollSetup {
+	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - boundsWindow.safeAreaInsets.bottom - overlayView.frame.size.height - progressSlider.frame.size.height);
+	
+	// scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 100);
+	[self.view addSubview:scrollView];
 }
 
 - (void)mediaSetup {
@@ -397,6 +407,7 @@
 		forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height, self.view.bounds.size.width, 15);
 		progressSlider.hidden = NO;
+		scrollView.hidden = NO;
 		break;
 
 		case UIInterfaceOrientationLandscapeLeft:
@@ -413,6 +424,7 @@
 		if (overlayHidden == 1) {
 			progressSlider.hidden = YES;
 		}
+		scrollView.hidden = YES;
 		break;
 
 		case UIInterfaceOrientationLandscapeRight:
@@ -429,6 +441,7 @@
 		if (overlayHidden == 1) {
 			progressSlider.hidden = YES;
 		}
+		scrollView.hidden = YES;
 		break;
 	}
 }

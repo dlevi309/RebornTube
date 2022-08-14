@@ -1,10 +1,10 @@
 #import <Foundation/Foundation.h>
 
 @interface YouTubeExtractor : NSObject
-+ (NSMutableDictionary *)youtubeiAndroidPlayerRequest :(NSString *)videoID;
-+ (NSMutableDictionary *)youtubeiWebSearchRequest :(NSString *)searchQuery;
-+ (NSMutableDictionary *)youtubeiAndroidTrendingRequest;
-+ (NSMutableDictionary *)youtubeiiOSPlayerRequest :(NSString *)videoID;
++ (NSMutableDictionary *)youtubeiOSPlayerRequest :(NSString *)videoID;
++ (NSMutableDictionary *)youtubeiOSNextRequest :(NSString *)videoID;
++ (NSMutableDictionary *)youtubeiOSTrendingRequest;
++ (NSMutableDictionary *)youtubeWebSearchRequest :(NSString *)searchQuery;
 + (NSMutableDictionary *)returnYouTubeDislikeRequest :(NSString *)videoID;
 + (NSMutableDictionary *)sponsorBlockRequest :(NSString *)videoID;
 @end
