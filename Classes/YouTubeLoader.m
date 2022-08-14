@@ -30,12 +30,6 @@
     NSString *videoLikes = [formatter stringFromNumber:returnYouTubeDislikeRequest[@"likes"]];
     NSString *videoDislikes = [formatter stringFromNumber:returnYouTubeDislikeRequest[@"dislikes"]];
 
-    NSMutableDictionary *youtubeiOSNextRequest = [YouTubeExtractor youtubeiOSNextRequest:videoID];
-    NSMutableDictionary *slimVideoInformationRenderer = youtubeiOSNextRequest[@"contents"][@"singleColumnWatchNextResults"][@"results"][@"results"][@"contents"][0][@"slimVideoMetadataSectionRenderer"][@"contents"][0][@"slimVideoInformationRenderer"];
-    // NSString *videoTitle = slimVideoInformationRenderer[@"title"][@"runs"][@"text"];
-    NSString *videoViewsShort = slimVideoInformationRenderer[@"collapsedSubtitle"][@"runs"][@"text"];
-    NSString *videoViewsLong = slimVideoInformationRenderer[@"expandedSubtitle"][@"runs"][@"text"];
-
     NSMutableDictionary *youtubeiOSPlayerRequest = [YouTubeExtractor youtubeiOSPlayerRequest:videoID];
     NSURL *videoStream = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
     NSString *videoTitle = [NSString stringWithFormat:@"%@", youtubeiOSPlayerRequest[@"videoDetails"][@"title"]];
@@ -92,12 +86,8 @@
             playerViewController.videoStream = videoStream;
             playerViewController.audioURL = nil;
 
-            // Next Info
-            playerViewController.videoTitle = videoTitle;
-            playerViewController.videoViewsShort = videoViewsShort;
-            playerViewController.videoViewsLong = videoViewsLong;
-            
             // Other Info
+            playerViewController.videoTitle = videoTitle;
             playerViewController.videoAuthor = videoAuthor;
             playerViewController.videoLength = videoLength;
             playerViewController.videoArtwork = videoArtwork;
@@ -125,12 +115,8 @@
                 playerViewController.videoStream = nil;
                 playerViewController.audioURL = audioURL;
 
-                // Next Info
-                playerViewController.videoTitle = videoTitle;
-                playerViewController.videoViewsShort = videoViewsShort;
-                playerViewController.videoViewsLong = videoViewsLong;
-                
                 // Other Info
+                playerViewController.videoTitle = videoTitle;
                 playerViewController.videoAuthor = videoAuthor;
                 playerViewController.videoLength = videoLength;
                 playerViewController.videoArtwork = videoArtwork;

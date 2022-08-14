@@ -250,16 +250,7 @@
 	videoTitleLabel.adjustsFontForContentSizeCategory = false;
 	[scrollView addSubview:videoTitleLabel];
 
-	UILabel *videoViewsShortLabel = [[UILabel alloc] init];
-	videoViewsShortLabel.frame = CGRectMake(0, videoTitleLabel.frame.size.height, self.view.bounds.size.width, 10);
-	videoViewsShortLabel.text = self.videoViewsShort;
-	videoViewsShortLabel.textColor = [AppColours textColour];
-	videoViewsShortLabel.numberOfLines = 1;
-	videoViewsShortLabel.adjustsFontSizeToFitWidth = true;
-	videoViewsShortLabel.adjustsFontForContentSizeCategory = false;
-	[scrollView addSubview:videoViewsShortLabel];
-	
-	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 50);
+	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 40);
 	[self.view addSubview:scrollView];
 }
 

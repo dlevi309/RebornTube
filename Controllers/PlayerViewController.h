@@ -13,12 +13,8 @@
 @property (nonatomic, strong) NSURL *videoStream;
 @property (nonatomic, strong) NSURL *audioURL;
 
-// Next Info
-@property (nonatomic, strong) NSString *videoTitle;
-@property (nonatomic, strong) NSString *videoViewsShort;
-@property (nonatomic, strong) NSString *videoViewsLong;
-
 // Other Info
+@property (nonatomic, strong) NSString *videoTitle;
 @property (nonatomic, strong) NSString *videoAuthor;
 @property (nonatomic, strong) NSString *videoLength;
 @property (nonatomic, strong) NSURL *videoArtwork;
