@@ -13,8 +13,9 @@
 @property (nonatomic, strong) NSString *videoViewCount;
 @property (nonatomic, strong) NSString *videoLikes;
 @property (nonatomic, strong) NSString *videoDislikes;
-@property (nonatomic, strong) NSURL *audioURL;
 @property (nonatomic, strong) NSURL *videoStream;
+@property (nonatomic, strong) NSURL *audioURL;
 @property (nonatomic, strong) NSMutableDictionary *sponsorBlockValues;
+@property (nonatomic, assign) int *playbackMode;
 
 @end
