@@ -11,6 +11,7 @@
 
 // Player Info
 @property (nonatomic, strong) NSURL *videoStream;
+@property (nonatomic, strong) NSURL *videoURL;
 @property (nonatomic, strong) NSURL *audioURL;
 
 // Other Info

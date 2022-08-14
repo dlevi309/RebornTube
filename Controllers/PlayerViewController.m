@@ -110,6 +110,28 @@
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		[self.view.layer addSublayer:playerLayer];
 	} else if (self.playbackMode == 2) {
+		AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
+
+		playerItem = [[AVPlayerItem alloc] initWithAsset:videoAsset];
+		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableCaptions"] != YES) {
+			AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
+			[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
+		}
+		playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmLowQualityZeroLatency;
+
+		player = [AVPlayer playerWithPlayerItem:playerItem];
+		player.allowsExternalPlayback = YES;
+		player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
+		[player addObserver:self forKeyPath:@"status" options:0 context:nil];
+		[player addObserver:self forKeyPath:@"timeControlStatus" options:0 context:nil];
+		[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
+			[self playerTimeChanged];
+		}];
+
+		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		[self.view.layer addSublayer:playerLayer];
+	} else if (self.playbackMode == 3) {
 		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
 
 		CMTime length = CMTimeMakeWithSeconds([self.videoLength intValue], NSEC_PER_SEC);
