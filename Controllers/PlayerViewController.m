@@ -18,6 +18,7 @@
 	// Keys
 	UIWindow *boundsWindow;
 	BOOL deviceOrientation;
+	BOOL playbackMode;
 	BOOL overlayHidden;
 	BOOL loopEnabled;
 	NSString *playerAssetsBundlePath;
@@ -32,6 +33,7 @@
 
 	// Overlay
 	UIView *overlayView;
+	UISwitch *playbackModeSwitch;
 	UIImageView *collapseImage;
 	UIImageView *rewindImage;
 	UIImageView *playImage;
@@ -80,6 +82,7 @@
 - (void)keysSetup {
 	boundsWindow = [[UIApplication sharedApplication] keyWindow];
 	deviceOrientation = 0;
+	playbackMode = 0;
 	overlayHidden = 0;
 	loopEnabled = 0;
 	playerAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"PlayerAssets" ofType:@"bundle"];
@@ -154,8 +157,8 @@
 	overlayViewTap.numberOfTapsRequired = 1;
 	[overlayView addGestureRecognizer:overlayViewTap];
 
-	UISwitch *playbackModeSwitch = [[UISwitch alloc] init];
-	playbackModeSwitch.frame = CGRectMake(overlayView.bounds.size.width - 50, 10, 15, 15);
+	playbackModeSwitch = [[UISwitch alloc] init];
+	playbackModeSwitch.frame = CGRectMake(overlayView.bounds.size.width - 61, 10, 0, 0);
 	[playbackModeSwitch addTarget:self action:@selector(togglePlaybackMode:) forControlEvents:UIControlEventValueChanged];
 	[overlayView addSubview:playbackModeSwitch];
 	
@@ -503,7 +506,9 @@
 
 - (void)enteredBackground:(NSNotification *)notification {
 	if (![pictureInPictureController isPictureInPictureActive]) {
-		playerLayer.player = nil;
+		if (playbackMode == 0) {
+			playerLayer.player = nil;
+		}
 	}
 	overlayHidden = 1;
 	[overlayView.subviews setValue:@YES forKeyPath:@"hidden"];
@@ -526,7 +531,9 @@
 
 - (void)enteredForeground:(NSNotification *)notification {
 	if (![pictureInPictureController isPictureInPictureActive]) {
-		playerLayer.player = player;
+		if (playbackMode == 0) {
+			playerLayer.player = player;
+		}
 	}
 }
 
@@ -539,6 +546,7 @@
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		overlayView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		playbackModeSwitch.frame = CGRectMake(overlayView.bounds.size.width - 61, 10, 0, 0);
 		collapseImage.alpha = 1.0;
 		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, (overlayView.bounds.size.height / 2) - 24, 48, 48);
@@ -555,6 +563,7 @@
 		playerLayer.frame = self.view.bounds;
 		videoImage.frame = self.view.bounds;
 		overlayView.frame = self.view.bounds;
+		playbackModeSwitch.frame = CGRectMake(overlayView.bounds.size.width - 61, 10, 0, 0);
 		collapseImage.alpha = 0.0;
 		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, (overlayView.bounds.size.height / 2) - 24, 48, 48);
@@ -573,6 +582,7 @@
 		playerLayer.frame = self.view.bounds;
 		videoImage.frame = self.view.bounds;
 		overlayView.frame = self.view.bounds;
+		playbackModeSwitch.frame = CGRectMake(overlayView.bounds.size.width - 61, 10, 0, 0);
 		collapseImage.alpha = 0.0;
 		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, (overlayView.bounds.size.height / 2) - 24, 48, 48);
@@ -662,9 +672,13 @@
 
 - (void)togglePlaybackMode:(UISwitch *)sender {
     if ([sender isOn]) {
+		playbackMode = 1;
+		playerLayer.player = nil;
 		playerLayer.hidden = YES;
 		videoImage.hidden = NO;
     } else {
+		playbackMode = 0;
+		playerLayer.player = player;
 		playerLayer.hidden = NO;
 		videoImage.hidden = YES;
     }
