@@ -7,12 +7,10 @@
 
 // Main Info
 @property (nonatomic, strong) NSString *videoID;
-@property (nonatomic, assign) int playbackMode;
 
 // Player Info
 @property (nonatomic, strong) NSURL *videoStream;
 @property (nonatomic, strong) NSURL *videoURL;
-@property (nonatomic, strong) NSURL *audioURL;
 
 // Other Info
 @property (nonatomic, strong) NSString *videoTitle;

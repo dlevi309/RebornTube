@@ -72,11 +72,9 @@
 		[self mediaSetup];
 	}
 
-	if (self.playbackMode == 1 || self.playbackMode == 2) {
-		AppDelegate *shared = [UIApplication sharedApplication].delegate;
-		shared.allowRotation = YES;
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-	}
+	AppDelegate *shared = [UIApplication sharedApplication].delegate;
+	shared.allowRotation = YES;
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)keysSetup {
@@ -89,7 +87,7 @@
 }
 
 - (void)playerSetup {
-	if (self.playbackMode == 1) {
+	if (self.videoStream != nil & self.videoURL == nil) {
 		AVURLAsset *streamAsset = [[AVURLAsset alloc] initWithURL:self.videoStream options:nil];
 
 		playerItem = [[AVPlayerItem alloc] initWithAsset:streamAsset];
@@ -108,10 +106,16 @@
 			[self playerTimeChanged];
 		}];
 
+		videoImage = [[UIImageView alloc] init];
+		videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
+		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		videoImage.hidden = YES;
+		[self.view addSubview:videoImage];
+
 		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		[self.view.layer addSublayer:playerLayer];
-	} else if (self.playbackMode == 2) {
+	} else if (self.videoStream == nil & self.videoURL != nil) {
 		AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
 
 		playerItem = [[AVPlayerItem alloc] initWithAsset:videoAsset];
@@ -130,38 +134,15 @@
 			[self playerTimeChanged];
 		}];
 
-		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
-		[self.view.layer addSublayer:playerLayer];
-	} else if (self.playbackMode == 3) {
-		AVURLAsset *audioAsset = [[AVURLAsset alloc] initWithURL:self.audioURL options:nil];
-
-		CMTime length = CMTimeMakeWithSeconds([self.videoLength intValue], NSEC_PER_SEC);
-
-		AVMutableComposition *mixComposition = [AVMutableComposition composition];
-
-		AVMutableCompositionTrack *compositionAudioTrack = [mixComposition addMutableTrackWithMediaType:AVMediaTypeAudio preferredTrackID:kCMPersistentTrackID_Invalid];
-		[compositionAudioTrack insertTimeRange:CMTimeRangeMake(kCMTimeZero, length) ofTrack:[[audioAsset tracksWithMediaType:AVMediaTypeAudio] objectAtIndex:0] atTime:kCMTimeZero error:nil];
-
-		playerItem = [[AVPlayerItem alloc] initWithAsset:mixComposition];
-		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableCaptions"] != YES) {
-			AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
-			[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
-		}
-		playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmLowQualityZeroLatency;
-
-		player = [AVPlayer playerWithPlayerItem:playerItem];
-		player.allowsExternalPlayback = YES;
-		[player addObserver:self forKeyPath:@"status" options:0 context:nil];
-		[player addObserver:self forKeyPath:@"timeControlStatus" options:0 context:nil];
-		[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
-			[self playerTimeChanged];
-		}];
-
 		videoImage = [[UIImageView alloc] init];
 		videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
 		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		videoImage.hidden = YES;
 		[self.view addSubview:videoImage];
+
+		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		[self.view.layer addSublayer:playerLayer];
 	}
 }
 
@@ -172,6 +153,11 @@
 	UITapGestureRecognizer *overlayViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTap:)];
 	overlayViewTap.numberOfTapsRequired = 1;
 	[overlayView addGestureRecognizer:overlayViewTap];
+
+	UISwitch *playbackModeSwitch = [[UISwitch alloc] init];
+	playbackModeSwitch.frame = CGRectMake(overlayView.bounds.size.width - 50, 10, 15, 15);
+	[playbackModeSwitch addTarget:self action:@selector(togglePlaybackMode:) forControlEvents:UIControlEventValueChanged];
+	[overlayView addSubview:playbackModeSwitch];
 	
 	collapseImage = [[UIImageView alloc] init];
 	NSString *collapseImagePath = [playerAssetsBundle pathForResource:@"collapse" ofType:@"png"];
@@ -551,6 +537,7 @@
 		deviceOrientation = 0;
 		self.view.backgroundColor = [AppColours mainBackgroundColour];
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		overlayView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		collapseImage.alpha = 1.0;
 		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, (overlayView.bounds.size.height / 2) - 24, 48, 48);
@@ -566,6 +553,7 @@
 		deviceOrientation = 1;
 		self.view.backgroundColor = [UIColor blackColor];
 		playerLayer.frame = self.view.bounds;
+		videoImage.frame = self.view.bounds;
 		overlayView.frame = self.view.bounds;
 		collapseImage.alpha = 0.0;
 		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, (overlayView.bounds.size.height / 2) - 24, 48, 48);
@@ -583,6 +571,7 @@
 		deviceOrientation = 1;
 		self.view.backgroundColor = [UIColor blackColor];
 		playerLayer.frame = self.view.bounds;
+		videoImage.frame = self.view.bounds;
 		overlayView.frame = self.view.bounds;
 		collapseImage.alpha = 0.0;
 		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, (overlayView.bounds.size.height / 2) - 24, 48, 48);
@@ -669,6 +658,16 @@
 	addToPlaylistsViewController.videoID = self.videoID;
 
     [self presentViewController:addToPlaylistsViewController animated:YES completion:nil];
+}
+
+- (void)togglePlaybackMode:(UISwitch *)sender {
+    if ([sender isOn]) {
+		playerLayer.hidden = YES;
+		videoImage.hidden = NO;
+    } else {
+		playerLayer.hidden = NO;
+		videoImage.hidden = YES;
+    }
 }
 
 @end
