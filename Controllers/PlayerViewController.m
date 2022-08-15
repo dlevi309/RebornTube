@@ -265,17 +265,17 @@
 	videoTitleLabel.adjustsFontForContentSizeCategory = false;
 	[scrollView addSubview:videoTitleLabel];
 
-	UILabel *videoViewsAndAuthorLabel = [[UILabel alloc] init];
-	videoViewsAndAuthorLabel.frame = CGRectMake(0, videoTitleLabel.frame.size.height + 5, self.view.bounds.size.width, 12);
-	videoViewsAndAuthorLabel.text = [NSString stringWithFormat:@"%@ - %@", self.videoViewCount, self.videoAuthor];
-	videoViewsAndAuthorLabel.textColor = [AppColours textColour];
-	videoViewsAndAuthorLabel.numberOfLines = 1;
-	videoViewsAndAuthorLabel.adjustsFontSizeToFitWidth = true;
-	videoViewsAndAuthorLabel.adjustsFontForContentSizeCategory = false;
-	[scrollView addSubview:videoViewsAndAuthorLabel];
+	UILabel *videoInfoLabel = [[UILabel alloc] init];
+	videoInfoLabel.frame = CGRectMake(0, videoTitleLabel.frame.size.height + 5, self.view.bounds.size.width, 24);
+	videoInfoLabel.text = [NSString stringWithFormat:@"%@ Views - %@\n%@ Likes - %@ Dislikes", self.videoViewCount, self.videoAuthor, self.videoLikes, self.videoDislikes];
+	videoInfoLabel.textColor = [AppColours textColour];
+	videoInfoLabel.numberOfLines = 2;
+	videoInfoLabel.adjustsFontSizeToFitWidth = true;
+	videoInfoLabel.adjustsFontForContentSizeCategory = false;
+	[scrollView addSubview:videoInfoLabel];
 
 	UIScrollView *buttonScrollView = [[UIScrollView alloc] init];
-	buttonScrollView.frame = CGRectMake(10, videoTitleLabel.frame.size.height + videoViewsAndAuthorLabel.frame.size.height + 25, self.view.bounds.size.width - 20, 30);
+	buttonScrollView.frame = CGRectMake(10, videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + 25, self.view.bounds.size.width - 20, 30);
 	[buttonScrollView setShowsHorizontalScrollIndicator:NO];
 	[buttonScrollView setShowsVerticalScrollIndicator:NO];
 
@@ -318,7 +318,7 @@
 	buttonScrollView.contentSize = CGSizeMake(600, 30);
 	[scrollView addSubview:buttonScrollView];
 
-	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 112);
+	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 124);
 	[self.view addSubview:scrollView];
 }
 
