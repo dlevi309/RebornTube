@@ -19,6 +19,7 @@
 	UIWindow *boundsWindow;
 	BOOL deviceOrientation;
 	BOOL overlayHidden;
+	BOOL loopEnabled;
 	NSString *playerAssetsBundlePath;
 	NSBundle *playerAssetsBundle;
 
@@ -82,6 +83,7 @@
 	boundsWindow = [[UIApplication sharedApplication] keyWindow];
 	deviceOrientation = 0;
 	overlayHidden = 0;
+	loopEnabled = 0;
 	playerAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"PlayerAssets" ofType:@"bundle"];
 	playerAssetsBundle = [NSBundle bundleWithPath:playerAssetsBundlePath];
 }
@@ -262,7 +264,9 @@
 - (void)scrollSetup {
 	scrollView = [[UIScrollView alloc] init];
 	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height + progressSlider.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - boundsWindow.safeAreaInsets.bottom - overlayView.frame.size.height - progressSlider.frame.size.height);
-	
+	[scrollView setShowsHorizontalScrollIndicator:NO];
+	[scrollView setShowsVerticalScrollIndicator:NO];
+
 	UILabel *videoTitleLabel = [[UILabel alloc] init];
 	videoTitleLabel.frame = CGRectMake(0, 0, self.view.bounds.size.width, 40);
 	videoTitleLabel.text = self.videoTitle;
@@ -272,7 +276,60 @@
 	videoTitleLabel.adjustsFontForContentSizeCategory = false;
 	[scrollView addSubview:videoTitleLabel];
 
-	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 40);
+	UILabel *videoViewsAndAuthorLabel = [[UILabel alloc] init];
+	videoViewsAndAuthorLabel.frame = CGRectMake(0, videoTitleLabel.frame.size.height + 5, self.view.bounds.size.width, 12);
+	videoViewsAndAuthorLabel.text = [NSString stringWithFormat:@"%@ - %@", self.videoViewCount, self.videoAuthor];
+	videoViewsAndAuthorLabel.textColor = [AppColours textColour];
+	videoViewsAndAuthorLabel.numberOfLines = 1;
+	videoViewsAndAuthorLabel.adjustsFontSizeToFitWidth = true;
+	videoViewsAndAuthorLabel.adjustsFontForContentSizeCategory = false;
+	[scrollView addSubview:videoViewsAndAuthorLabel];
+
+	UIScrollView *buttonScrollView = [[UIScrollView alloc] init];
+	buttonScrollView.frame = CGRectMake(10, videoTitleLabel.frame.size.height + videoViewsAndAuthorLabel.frame.size.height + 25, self.view.bounds.size.width - 20, 30);
+	[buttonScrollView setShowsHorizontalScrollIndicator:NO];
+	[buttonScrollView setShowsVerticalScrollIndicator:NO];
+
+	UIButton *loopButton = [[UIButton alloc] init];
+	loopButton.frame = CGRectMake(0, 0, 120, 30);
+	[loopButton addTarget:self action:@selector(loopButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+ 	[loopButton setTitle:@"Loop" forState:UIControlStateNormal];
+	[loopButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
+	loopButton.backgroundColor = [AppColours viewBackgroundColour];
+	loopButton.layer.cornerRadius = 5;
+	[buttonScrollView addSubview:loopButton];
+	
+	UIButton *shareButton = [[UIButton alloc] init];
+	shareButton.frame = CGRectMake(loopButton.frame.size.width + 10, 0, 120, 30);
+	[shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+ 	[shareButton setTitle:@"Share" forState:UIControlStateNormal];
+	[shareButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
+	shareButton.backgroundColor = [AppColours viewBackgroundColour];
+	shareButton.layer.cornerRadius = 5;
+	[buttonScrollView addSubview:shareButton];
+
+	UIButton *downloadButton = [[UIButton alloc] init];
+	downloadButton.frame = CGRectMake(loopButton.frame.size.width + shareButton.frame.size.width + 20, 0, 150, 30);
+	[downloadButton addTarget:self action:@selector(downloadButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+ 	[downloadButton setTitle:@"Download" forState:UIControlStateNormal];
+	[downloadButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
+	downloadButton.backgroundColor = [AppColours viewBackgroundColour];
+	downloadButton.layer.cornerRadius = 5;
+	[buttonScrollView addSubview:downloadButton];
+
+	UIButton *addToPlaylistsButton = [[UIButton alloc] init];
+	addToPlaylistsButton.frame = CGRectMake(loopButton.frame.size.width + shareButton.frame.size.width + downloadButton.frame.size.width + 30, 0, 150, 30);
+	[addToPlaylistsButton addTarget:self action:@selector(addToPlaylistsButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+ 	[addToPlaylistsButton setTitle:@"Add To Playlist" forState:UIControlStateNormal];
+	[addToPlaylistsButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
+	addToPlaylistsButton.backgroundColor = [AppColours viewBackgroundColour];
+	addToPlaylistsButton.layer.cornerRadius = 5;
+	[buttonScrollView addSubview:addToPlaylistsButton];
+    
+	buttonScrollView.contentSize = CGSizeMake(600, 30);
+	[scrollView addSubview:buttonScrollView];
+
+	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 112);
 	[self.view addSubview:scrollView];
 }
 
@@ -403,6 +460,7 @@
 					}
 				}
 			}
+			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerReachedEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
             [player play];
         }
     } else if (object == player && [keyPath isEqualToString:@"timeControlStatus"]) {
@@ -555,6 +613,69 @@
 - (MPRemoteCommandHandlerStatus)changedLockscreenPlaybackSlider:(MPChangePlaybackPositionCommandEvent *)event {
     [player seekToTime:CMTimeMakeWithSeconds(event.positionTime, NSEC_PER_SEC)];
     return MPRemoteCommandHandlerStatusSuccess;
+}
+
+- (void)playerReachedEnd:(NSNotification *)notification {
+	if (loopEnabled == 1) {
+		[player seekToTime:CMTimeMakeWithSeconds(0, NSEC_PER_SEC)];
+		[player play];
+	}
+}
+
+- (void)loopButtonClicked:(UIButton *)sender {
+	if (loopEnabled == 0) {
+		loopEnabled = 1;
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:@"Loop Enabled" preferredStyle:UIAlertControllerStyleAlert];
+
+		[alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+		}]];
+
+		[self presentViewController:alert animated:YES completion:nil];
+	} else {
+		loopEnabled = 0;
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:@"Loop Disabled" preferredStyle:UIAlertControllerStyleAlert];
+
+		[alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+		}]];
+
+		[self presentViewController:alert animated:YES completion:nil];
+	}
+}
+
+- (void)shareButtonClicked:(UIButton *)sender {
+	UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
+	pasteBoard.string = [NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", self.videoID];
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:@"YouTube video url copied to clipboard" preferredStyle:UIAlertControllerStyleAlert];
+
+	[alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+	}]];
+
+	[self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)downloadButtonClicked:(UIButton *)sender {
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:@"Feature not yet complete" preferredStyle:UIAlertControllerStyleAlert];
+
+	[alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+	}]];
+
+	[self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)addToPlaylistsButtonClicked:(UIButton *)sender {
+	[player pause];
+	overlayHidden = 1;
+	[overlayView.subviews setValue:@YES forKeyPath:@"hidden"];
+	if (deviceOrientation == 1) {
+		progressSlider.hidden = YES;
+	} else {
+		progressSlider.hidden = NO;
+	}
+
+	AddToPlaylistsViewController *addToPlaylistsViewController = [[AddToPlaylistsViewController alloc] init];
+	addToPlaylistsViewController.videoID = self.videoID;
+
+    [self presentViewController:addToPlaylistsViewController animated:YES completion:nil];
 }
 
 @end
