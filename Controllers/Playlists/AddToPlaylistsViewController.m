@@ -61,12 +61,14 @@
 
     NSString *playlistsPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"playlists.plist"];
     NSMutableDictionary *playlistsDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:playlistsPlistFilePath];
+    NSArray *playlistsDictionaryKeys = [playlistsDictionary allKeys];
+    NSArray *playlistsDictionarySortedKeys = [playlistsDictionaryKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
 
     scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + closeButton.frame.size.height + 10, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - closeButton.frame.size.height - 10);
     
     int viewBounds = 0;
     int nameCount = 1;
-    for (NSString *key in playlistsDictionary) {
+    for (NSString *key in playlistsDictionarySortedKeys) {
         UIView *playlistsView = [[UIView alloc] init];
         playlistsView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 40);
         playlistsView.backgroundColor = [AppColours viewBackgroundColour];
@@ -134,6 +136,13 @@
     [playlistsDictionary setValue:playlistsArray forKey:playlistsViewID];
 
     [playlistsDictionary writeToFile:playlistsPlistFilePath atomically:YES];
+
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:[NSString stringWithFormat:@"Successfully added video to %@", playlistsViewID] preferredStyle:UIAlertControllerStyleAlert];
+
+    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    }]];
+
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end
