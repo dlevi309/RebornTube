@@ -74,7 +74,9 @@
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 		[self mediaSetup];
 	}
+}
 
+- (void)viewWillAppear:(BOOL)animated {
 	AppDelegate *shared = [UIApplication sharedApplication].delegate;
 	shared.allowRotation = YES;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];

@@ -2,6 +2,6 @@
 
 @interface YouTubeDownloader : NSObject
 + (void)init :(NSString *)videoID;
-+ (void)videoDownloader :(NSString *)videoURL :(NSString *)audioURL;
-+ (void)audioDownloader :(NSString *)audioURL;
++ (void)videoDownloader :(NSURL *)videoURL :(NSURL *)audioURL;
++ (void)audioDownloader :(NSURL *)audioURL;
 @end

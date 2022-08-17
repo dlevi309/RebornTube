@@ -141,7 +141,7 @@
     }
 }
 
-+ (void)videoDownloader :(NSString *)videoURL :(NSString *)audioURL {
++ (void)videoDownloader :(NSURL *)videoURL :(NSURL *)audioURL {
     UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     while (true) {
         if (topViewController.presentedViewController) {
@@ -184,7 +184,7 @@
     }];
 }
 
-+ (void)audioDownloader :(NSString *)audioURL {
++ (void)audioDownloader :(NSURL *)audioURL {
     UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     while (true) {
         if (topViewController.presentedViewController) {
@@ -221,8 +221,6 @@
             [alertDownloading dismissViewControllerAnimated:YES completion:^{
                 UIAlertController *alertConverting = [UIAlertController alertControllerWithTitle:@"Notice" message:@"Converting And Cleaning Up\nPlease Wait" preferredStyle:UIAlertControllerStyleAlert];
                 [topViewController presentViewController:alertConverting animated:YES completion:^{
-                    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-                    NSString *documentsDirectory = [paths objectAtIndex:0];
                     [FFmpegKit execute:[NSString stringWithFormat:@"-i %@ -c:a libmp3lame -q:a 8 %@/audio.mp3", filePath, documentsDirectory]];
                     [FFmpegKit execute:[NSString stringWithFormat:@"-i %@/video.mp4 -i %@/audio.mp3 -c:v copy -c:a aac %@/output.mp4", documentsDirectory, documentsDirectory, documentsDirectory]];
                     [[NSFileManager defaultManager] removeItemAtPath:[filePath path] error:nil];
