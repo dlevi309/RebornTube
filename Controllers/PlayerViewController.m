@@ -10,6 +10,7 @@
 
 #import "../Classes/AppColours.h"
 #import "../Classes/AppDelegate.h"
+#import "../Classes/YouTubeDownloader.h"
 
 // Interface
 
@@ -646,15 +647,26 @@
 }
 
 - (void)downloadButtonClicked:(UIButton *)sender {
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:@"Feature not yet complete" preferredStyle:UIAlertControllerStyleAlert];
+	if ([UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+		if ([pictureInPictureController isPictureInPictureActive]) {
+			[pictureInPictureController stopPictureInPicture];
+		}
+		[player pause];
+		[YouTubeDownloader init:self.videoID];
+	} else {
+		UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:@"Downloading is not available on iPadOS currently" preferredStyle:UIAlertControllerStyleAlert];
 
-	[alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-	}]];
+		[alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+		}]];
 
-	[self presentViewController:alert animated:YES completion:nil];
+		[self presentViewController:alert animated:YES completion:nil];
+	}
 }
 
 - (void)addToPlaylistsButtonClicked:(UIButton *)sender {
+	if ([pictureInPictureController isPictureInPictureActive]) {
+        [pictureInPictureController stopPictureInPicture];
+    }
 	[player pause];
 	overlayHidden = 1;
 	[overlayView.subviews setValue:@YES forKeyPath:@"hidden"];
