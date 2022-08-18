@@ -93,7 +93,7 @@
 }
 
 - (void)playerSetup {
-	if (self.videoStream != nil & self.videoURL == nil) {
+	if (self.videoStream != nil && self.videoURL == nil) {
 		AVURLAsset *streamAsset = [[AVURLAsset alloc] initWithURL:self.videoStream options:nil];
 
 		playerItem = [[AVPlayerItem alloc] initWithAsset:streamAsset];
@@ -119,7 +119,7 @@
 		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
 		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
 		[self.view.layer addSublayer:playerLayer];
-	} else if (self.videoStream == nil & self.videoURL != nil) {
+	} else if (self.videoStream == nil && self.videoURL != nil) {
 		AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
 
 		playerItem = [[AVPlayerItem alloc] initWithAsset:videoAsset];
@@ -303,7 +303,9 @@
 	[downloadButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
 	downloadButton.backgroundColor = [AppColours viewBackgroundColour];
 	downloadButton.layer.cornerRadius = 5;
-	[buttonScrollView addSubview:downloadButton];
+	if (self.videoStream == nil && self.videoURL != nil) {
+		[buttonScrollView addSubview:downloadButton];
+	}
 
 	UIButton *addToPlaylistsButton = [[UIButton alloc] init];
 	addToPlaylistsButton.frame = CGRectMake(loopButton.frame.size.width + shareButton.frame.size.width + downloadButton.frame.size.width + 30, 0, 150, 30);
@@ -314,7 +316,11 @@
 	addToPlaylistsButton.layer.cornerRadius = 5;
 	[buttonScrollView addSubview:addToPlaylistsButton];
     
-	buttonScrollView.contentSize = CGSizeMake(600, 30);
+	if (self.videoStream == nil && self.videoURL != nil) {
+		buttonScrollView.contentSize = CGSizeMake(600, 30);
+	} else {
+		buttonScrollView.contentSize = CGSizeMake(430, 30);
+	}
 	[scrollView addSubview:buttonScrollView];
 
 	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 124);
