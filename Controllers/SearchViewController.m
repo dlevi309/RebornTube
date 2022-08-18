@@ -137,7 +137,11 @@
 
 					UILabel *videoTimeLabel = [[UILabel alloc] init];
 					videoTimeLabel.frame = CGRectMake(40, 65, 40, 15);
-					videoTimeLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"videoRenderer"][@"lengthText"][@"simpleText"]];
+					if (searchContents[i][@"videoRenderer"][@"lengthText"][@"simpleText"]) {
+						videoTimeLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"videoRenderer"][@"lengthText"][@"simpleText"]];
+					} else {
+						videoTimeLabel.text = @"Live";
+					}
 					videoTimeLabel.textAlignment = NSTextAlignmentCenter;
 					videoTimeLabel.textColor = [UIColor whiteColor];
 					videoTimeLabel.numberOfLines = 1;
@@ -159,7 +163,11 @@
 
 					UILabel *videoCountAndAuthorLabel = [[UILabel alloc] init];
 					videoCountAndAuthorLabel.frame = CGRectMake(5, 80, searchView.frame.size.width - 5, 20);
-					videoCountAndAuthorLabel.text = [NSString stringWithFormat:@"%@ - %@", searchContents[i][@"videoRenderer"][@"viewCountText"][@"simpleText"], searchContents[i][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]];
+					if (searchContents[i][@"videoRenderer"][@"viewCountText"][@"simpleText"] && searchContents[i][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]) {
+						videoCountAndAuthorLabel.text = [NSString stringWithFormat:@"%@ - %@", searchContents[i][@"videoRenderer"][@"viewCountText"][@"simpleText"], searchContents[i][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]];
+					} else if ([searchContents[i][@"videoRenderer"][@"viewCountText"][@"runs"] count] >= 1 && searchContents[i][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]) {
+						videoCountAndAuthorLabel.text = [NSString stringWithFormat:@"%@%@ - %@", searchContents[i][@"videoRenderer"][@"viewCountText"][@"runs"][0][@"text"], searchContents[i][@"videoRenderer"][@"viewCountText"][@"runs"][1][@"text"], searchContents[i][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]];
+					}
 					videoCountAndAuthorLabel.textColor = [AppColours textColour];
 					videoCountAndAuthorLabel.numberOfLines = 1;
 					[videoCountAndAuthorLabel setFont:[UIFont systemFontOfSize:12]];
