@@ -37,13 +37,15 @@
 
     NSString *historyPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"history.plist"];
     NSMutableDictionary *historyDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:historyPlistFilePath];
+    NSArray *historyDictionaryKeys = [historyDictionary allKeys];
+    NSArray *historyDictionarySortedKeys = [[historyDictionaryKeys sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] reverseObjectEnumerator];
 
     UIScrollView *scrollView = [[UIScrollView alloc] init];
 	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - 50);
     
     int viewBounds = 0;
     int dateCount = 1;
-    for (NSString *key in historyDictionary) {
+    for (NSString *key in historyDictionarySortedKeys) {
         UIView *historyView = [[UIView alloc] init];
         historyView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 40);
         historyView.backgroundColor = [AppColours viewBackgroundColour];
