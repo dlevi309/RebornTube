@@ -308,7 +308,11 @@
 	}
 
 	UIButton *addToPlaylistsButton = [[UIButton alloc] init];
-	addToPlaylistsButton.frame = CGRectMake(loopButton.frame.size.width + shareButton.frame.size.width + downloadButton.frame.size.width + 30, 0, 150, 30);
+	if (self.videoStream == nil && self.videoURL != nil) {
+		addToPlaylistsButton.frame = CGRectMake(loopButton.frame.size.width + shareButton.frame.size.width + downloadButton.frame.size.width + 30, 0, 150, 30);
+	} else {
+		addToPlaylistsButton.frame = CGRectMake(loopButton.frame.size.width + shareButton.frame.size.width + 20, 0, 150, 30);
+	}
 	[addToPlaylistsButton addTarget:self action:@selector(addToPlaylistsButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[addToPlaylistsButton setTitle:@"Add To Playlist" forState:UIControlStateNormal];
 	[addToPlaylistsButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
@@ -319,7 +323,7 @@
 	if (self.videoStream == nil && self.videoURL != nil) {
 		buttonScrollView.contentSize = CGSizeMake(600, 30);
 	} else {
-		buttonScrollView.contentSize = CGSizeMake(430, 30);
+		buttonScrollView.contentSize = CGSizeMake(420, 30);
 	}
 	[scrollView addSubview:buttonScrollView];
 
