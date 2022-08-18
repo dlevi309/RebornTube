@@ -25,7 +25,7 @@
     NSMutableDictionary *youtubeAndroidPlayerRequest = [YouTubeExtractor youtubeAndroidPlayerRequest:videoID];
     BOOL isLive = youtubeAndroidPlayerRequest[@"videoDetails"][@"isLive"];
     if (isLive == true) {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:@"Feature not yet complete" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:@"Live streams can't be downloaded" preferredStyle:UIAlertControllerStyleAlert];
 
         [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         }]];
