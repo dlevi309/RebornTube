@@ -97,10 +97,8 @@
 		AVURLAsset *streamAsset = [[AVURLAsset alloc] initWithURL:self.videoStream options:nil];
 
 		playerItem = [[AVPlayerItem alloc] initWithAsset:streamAsset];
-		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableCaptions"] != YES) {
-			AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
-			[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
-		}
+		AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
+		[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
 		playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmLowQualityZeroLatency;
 
 		player = [AVPlayer playerWithPlayerItem:playerItem];
@@ -125,10 +123,8 @@
 		AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
 
 		playerItem = [[AVPlayerItem alloc] initWithAsset:videoAsset];
-		if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableCaptions"] != YES) {
-			AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
-			[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
-		}
+		AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
+		[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
 		playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmLowQualityZeroLatency;
 
 		player = [AVPlayer playerWithPlayerItem:playerItem];

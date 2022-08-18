@@ -39,7 +39,7 @@
         return 1;
     }
     if (section == 1) {
-        return 4;
+        return 3;
     }
     if (section == 2) {
         return 1;
@@ -110,15 +110,6 @@
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cell.textLabel.text = @"SponsorBlock";
             }
-            if (indexPath.row == 3) {
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                cell.textLabel.text = @"Enable Captions";
-                cell.detailTextLabel.text = @"Make sure captions is on in iOS settings";
-                UISwitch *enableCaptions = [[UISwitch alloc] initWithFrame:CGRectZero];
-                [enableCaptions addTarget:self action:@selector(toggleEnableCaptions:) forControlEvents:UIControlEventValueChanged];
-                enableCaptions.on = [[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableCaptions"];
-                cell.accessoryView = enableCaptions;
-            }
         }
         if (indexPath.section == 2) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -183,7 +174,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
     if (section == 2) {
-        return @"Version: 1.0.0 (Alpha 27)";
+        return @"Version: 1.0.0 (Alpha 28)";
     }
     return nil;
 }
@@ -202,16 +193,6 @@
 
 - (void)apply {
     exit(0); 
-}
-
-- (void)toggleEnableCaptions:(UISwitch *)sender {
-    if ([sender isOn]) {
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"kEnableCaptions"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    } else {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"kEnableCaptions"];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-    }
 }
 
 @end
