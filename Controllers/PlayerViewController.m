@@ -570,8 +570,8 @@
 		deviceOrientation = 1;
 		self.view.backgroundColor = [UIColor blackColor];
 		playerLayer.frame = self.view.bounds;
-		videoImage.frame = self.view.bounds;
-		overlayView.frame = self.view.bounds;
+		videoImage.frame = self.view.safeAreaLayoutGuide.layoutFrame;
+		overlayView.frame = self.view.safeAreaLayoutGuide.layoutFrame;
 		playbackModeSwitch.frame = CGRectMake(overlayView.bounds.size.width - 61, 10, 0, 0);
 		collapseImage.alpha = 0.0;
 		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, (overlayView.bounds.size.height / 2) - 24, 48, 48);
@@ -589,8 +589,8 @@
 		deviceOrientation = 1;
 		self.view.backgroundColor = [UIColor blackColor];
 		playerLayer.frame = self.view.bounds;
-		videoImage.frame = self.view.bounds;
-		overlayView.frame = self.view.bounds;
+		videoImage.frame = self.view.safeAreaLayoutGuide.layoutFrame;
+		overlayView.frame = self.view.safeAreaLayoutGuide.layoutFrame;
 		playbackModeSwitch.frame = CGRectMake(overlayView.bounds.size.width - 61, 10, 0, 0);
 		collapseImage.alpha = 0.0;
 		rewindImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 96, (overlayView.bounds.size.height / 2) - 24, 48, 48);
