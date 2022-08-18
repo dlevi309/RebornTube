@@ -644,22 +644,10 @@
 }
 
 - (void)shareButtonClicked:(UIButton *)sender {
-
     NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", self.videoID]];
-    NSURL items [url];
-
-    UIActivityViewController *ac = [[UIActivityViewController alloc] initWithActivityItems:items applicationActivities:nil];
-
-    /// Old share code archived
-	// UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
-	// pasteBoard.string = [NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", self.videoID];
-	// UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:@"YouTube video url copied to clipboard" preferredStyle:UIAlertControllerStyleAlert];
-
-	// [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-	// }]];
-	// [self presentViewController:alert animated:YES completion:nil];
-
-	[self presentViewController:ac animated:YES completion:nil];
+	
+    UIActivityViewController *shareSheet = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
+	[self presentViewController:shareSheet animated:YES completion:nil];
 }
 
 - (void)downloadButtonClicked:(UIButton *)sender {
