@@ -40,6 +40,7 @@
 	UIImageView *playImage;
 	UIImageView *pauseImage;
 	UIImageView *forwardImage;
+	UILabel *videoTimeLabel;
 
 	// Info
 	UISlider *progressSlider;
@@ -231,6 +232,20 @@
 	[forwardImage addGestureRecognizer:forwardViewTap];
 	[overlayView addSubview:forwardImage];
 
+	videoTimeLabel = [[UILabel alloc] init];
+	videoTimeLabel.frame = CGRectMake(10, overlayView.bounds.size.height - 25, 80, 15);
+	videoTimeLabel.textAlignment = NSTextAlignmentCenter;
+	videoTimeLabel.textColor = [UIColor whiteColor];
+	videoTimeLabel.numberOfLines = 1;
+	videoTimeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+	videoTimeLabel.layer.cornerRadius = 5;
+	videoTimeLabel.clipsToBounds = YES;
+	videoTimeLabel.adjustsFontSizeToFitWidth = true;
+	videoTimeLabel.adjustsFontForContentSizeCategory = false;
+	if (self.videoStream == nil && self.videoURL != nil) {
+		[overlayView addSubview:videoTimeLabel];
+	}
+
 	overlayHidden = 1;
 	[overlayView.subviews setValue:@YES forKeyPath:@"hidden"];
 	[self.view addSubview:overlayView];
@@ -365,6 +380,7 @@
 
 - (void)playerTimeChanged {
 	progressSlider.value = (float)CMTimeGetSeconds(player.currentTime);
+	videoTimeLabel.text = [NSString stringWithFormat:@"%.2f / %.2f", (float)CMTimeGetSeconds(player.currentTime), [self.videoLength floatValue]];
 
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 		MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];	
@@ -561,6 +577,7 @@
 		playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		videoTimeLabel.frame = CGRectMake(10, overlayView.bounds.size.height - 25, 80, 15);
 		progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + overlayView.frame.size.height, self.view.bounds.size.width, 15);
 		progressSlider.hidden = NO;
 		scrollView.hidden = NO;
@@ -578,6 +595,7 @@
 		playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		videoTimeLabel.frame = CGRectMake(10, overlayView.bounds.size.height - 25, 80, 15);
 		progressSlider.frame = CGRectMake(60, (overlayView.bounds.size.height / 2) + 60, self.view.bounds.size.width - 120, 15);
 		if (overlayHidden == 1) {
 			progressSlider.hidden = YES;
@@ -597,6 +615,7 @@
 		playImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayView.bounds.size.width / 2) - 24, (overlayView.bounds.size.height / 2) - 24, 48, 48);
 		forwardImage.frame = CGRectMake((overlayView.bounds.size.width / 2) + 48, (overlayView.bounds.size.height / 2) - 24, 48, 48);
+		videoTimeLabel.frame = CGRectMake(10, overlayView.bounds.size.height - 25, 80, 15);
 		progressSlider.frame = CGRectMake(60, (overlayView.bounds.size.height / 2) + 60, self.view.bounds.size.width - 120, 15);
 		if (overlayHidden == 1) {
 			progressSlider.hidden = YES;
