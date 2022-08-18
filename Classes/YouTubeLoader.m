@@ -36,8 +36,9 @@
     NSString *videoLength = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"lengthSeconds"]];
     NSArray *videoArtworkArray = youtubeAndroidPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
     NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
+    NSString *playabilityStatus = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"playabilityStatus"][@"status"]];
     BOOL isLive = youtubeAndroidPlayerRequest[@"videoDetails"][@"isLive"];
-    if (isLive == true) {
+    if (isLive == true && playabilityStatus == @"OK") {
         NSURL *videoStream = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
 
         PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
@@ -62,7 +63,7 @@
         playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
         [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
-    } else {
+    } else if (isLive != true && playabilityStatus == @"OK") {
         NSDictionary *innertubeFormats = youtubeAndroidPlayerRequest[@"streamingData"][@"formats"];
         NSURL *video2160p;
         NSURL *video1440p;
