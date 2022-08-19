@@ -4,13 +4,13 @@
 
 // Other
 
-#import "Playlists/AddToPlaylistsViewController.h"
+#import "../Playlists/AddToPlaylistsViewController.h"
 
 // Classes
 
-#import "../Classes/AppColours.h"
-#import "../Classes/AppDelegate.h"
-#import "../Classes/YouTubeDownloader.h"
+#import "../../Classes/AppColours.h"
+#import "../../Classes/AppDelegate.h"
+#import "../../Classes/YouTubeDownloader.h"
 
 // Interface
 

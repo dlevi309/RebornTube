@@ -1,6 +1,6 @@
 #import "YouTubeLoader.h"
 #import "YouTubeExtractor.h"
-#import "../Controllers/PlayerViewController.h"
+#import "../Controllers/Player/PlayerViewController.h"
 #import "../Controllers/Playlists/AddToPlaylistsViewController.h"
 
 @implementation YouTubeLoader

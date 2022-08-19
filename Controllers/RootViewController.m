@@ -4,12 +4,12 @@
 
 // Nav Bar
 
-#import "SearchViewController.h"
+#import "Search/SearchViewController.h"
 #import "Settings/SettingsViewController.h"
 
 // Tab Bar
 
-#import "HomeViewController.h"
+#import "Home/HomeViewController.h"
 #import "History/HistoryViewController.h"
 #import "Playlists/PlaylistsViewController.h"
 
