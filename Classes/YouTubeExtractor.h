@@ -2,7 +2,7 @@
 
 @interface YouTubeExtractor : NSObject
 + (NSMutableDictionary *)youtubeAndroidPlayerRequest :(NSString *)videoID;
-+ (NSMutableDictionary *)youtubeAndroidTrendingRequest;
++ (NSMutableDictionary *)youtubeAndroidBrowseRequest :(NSString *)browseId :(NSString *)browseParams;
 + (NSMutableDictionary *)youtubeWebSearchRequest :(NSString *)searchQuery;
 + (NSMutableDictionary *)returnYouTubeDislikeRequest :(NSString *)videoID;
 + (NSMutableDictionary *)sponsorBlockRequest :(NSString *)videoID;

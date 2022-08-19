@@ -467,6 +467,10 @@
     if (object == player && [keyPath isEqualToString:@"status"]) {
         if (player.status == AVPlayerStatusReadyToPlay) {
 			if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
+				[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
+				[[AVAudioSession sharedInstance] setActive:YES error:nil];
+				[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+		
 				[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 				[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 
