@@ -340,7 +340,7 @@
 
     [stackView addArrangedSubview:loopButton];
     [stackView addArrangedSubview:shareButton];
-	if (self.videoStream == nil && self.videoURL != nil && [UIDevice currentDevice].userInterfaceIdiom != UIUserInterfaceIdiomPad) {
+	if (self.videoStream == nil && self.videoURL != nil) {
     	[stackView addArrangedSubview:downloadButton];
 	}
 	[stackView addArrangedSubview:addToPlaylistsButton];
