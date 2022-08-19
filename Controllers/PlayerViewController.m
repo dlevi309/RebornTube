@@ -288,59 +288,71 @@
 	videoInfoLabel.adjustsFontForContentSizeCategory = false;
 	[scrollView addSubview:videoInfoLabel];
 
-	UIScrollView *buttonScrollView = [[UIScrollView alloc] init];
-	buttonScrollView.frame = CGRectMake(10, videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + 25, self.view.bounds.size.width - 20, 30);
-	[buttonScrollView setShowsHorizontalScrollIndicator:NO];
-	[buttonScrollView setShowsVerticalScrollIndicator:NO];
-
 	UIButton *loopButton = [[UIButton alloc] init];
-	loopButton.frame = CGRectMake(0, 0, 120, 30);
+	// loopButton.frame = CGRectMake(0, 0, 120, 30);
+	// NSLayoutConstraint *loopButtonWidth = [NSLayoutConstraint constraintWithItem:loopButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1.0 constant:120];
+	// NSLayoutConstraint *loopButtonHeight = [NSLayoutConstraint constraintWithItem:loopButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1.0 constant:30];
 	[loopButton addTarget:self action:@selector(loopButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[loopButton setTitle:@"Loop" forState:UIControlStateNormal];
 	[loopButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
 	loopButton.backgroundColor = [AppColours viewBackgroundColour];
 	loopButton.layer.cornerRadius = 5;
-	[buttonScrollView addSubview:loopButton];
+	// [loopButton addConstraints:@[loopButtonWidth, loopButtonHeight]];
 	
 	UIButton *shareButton = [[UIButton alloc] init];
-	shareButton.frame = CGRectMake(loopButton.frame.size.width + 10, 0, 120, 30);
+	// shareButton.frame = CGRectMake(0, 0, 120, 30);
+	// NSLayoutConstraint *shareButtonWidth = [NSLayoutConstraint constraintWithItem:shareButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1.0 constant:120];
+	// NSLayoutConstraint *shareButtonHeight = [NSLayoutConstraint constraintWithItem:shareButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1.0 constant:30];
 	[shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[shareButton setTitle:@"Share" forState:UIControlStateNormal];
 	[shareButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
 	shareButton.backgroundColor = [AppColours viewBackgroundColour];
 	shareButton.layer.cornerRadius = 5;
-	[buttonScrollView addSubview:shareButton];
+	// [shareButton addConstraints:@[shareButtonWidth, shareButtonHeight]];
 
 	UIButton *downloadButton = [[UIButton alloc] init];
-	downloadButton.frame = CGRectMake(loopButton.frame.size.width + shareButton.frame.size.width + 20, 0, 150, 30);
+	// downloadButton.frame = CGRectMake(0, 0, 150, 30);
+	// NSLayoutConstraint *downloadButtonWidth = [NSLayoutConstraint constraintWithItem:downloadButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1.0 constant:150];
+	// NSLayoutConstraint *downloadButtonHeight = [NSLayoutConstraint constraintWithItem:downloadButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1.0 constant:30];
 	[downloadButton addTarget:self action:@selector(downloadButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[downloadButton setTitle:@"Download" forState:UIControlStateNormal];
 	[downloadButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
 	downloadButton.backgroundColor = [AppColours viewBackgroundColour];
 	downloadButton.layer.cornerRadius = 5;
-	if (self.videoStream == nil && self.videoURL != nil) {
-		[buttonScrollView addSubview:downloadButton];
-	}
+	// [downloadButton addConstraints:@[downloadButtonWidth, downloadButtonHeight]];
 
 	UIButton *addToPlaylistsButton = [[UIButton alloc] init];
-	if (self.videoStream == nil && self.videoURL != nil) {
-		addToPlaylistsButton.frame = CGRectMake(loopButton.frame.size.width + shareButton.frame.size.width + downloadButton.frame.size.width + 30, 0, 150, 30);
-	} else {
-		addToPlaylistsButton.frame = CGRectMake(loopButton.frame.size.width + shareButton.frame.size.width + 20, 0, 150, 30);
-	}
+	// addToPlaylistsButton.frame = CGRectMake(0, 0, 150, 30);
+	// NSLayoutConstraint *addToPlaylistsButtonWidth = [NSLayoutConstraint constraintWithItem:addToPlaylistsButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1.0 constant:150];
+	// NSLayoutConstraint *addToPlaylistsButtonHeight = [NSLayoutConstraint constraintWithItem:addToPlaylistsButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1.0 constant:30];
 	[addToPlaylistsButton addTarget:self action:@selector(addToPlaylistsButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[addToPlaylistsButton setTitle:@"Add To Playlist" forState:UIControlStateNormal];
 	[addToPlaylistsButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
 	addToPlaylistsButton.backgroundColor = [AppColours viewBackgroundColour];
 	addToPlaylistsButton.layer.cornerRadius = 5;
-	[buttonScrollView addSubview:addToPlaylistsButton];
-    
-	if (self.videoStream == nil && self.videoURL != nil) {
-		buttonScrollView.contentSize = CGSizeMake(600, 30);
-	} else {
-		buttonScrollView.contentSize = CGSizeMake(420, 30);
-	}
-	[scrollView addSubview:buttonScrollView];
+	// [addToPlaylistsButton addConstraints:@[addToPlaylistsButtonWidth, addToPlaylistsButtonHeight]];
+
+	UIScrollView *stackScrollView = [[UIScrollView alloc] init];
+	stackScrollView.frame = CGRectMake(10, videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + 25, self.view.bounds.size.width - 20, 30);
+	[stackScrollView setShowsHorizontalScrollIndicator:NO];
+	[stackScrollView setShowsVerticalScrollIndicator:NO];
+	
+	UIStackView *stackView = [[UIStackView alloc] init];
+	stackView.frame = stackScrollView.frame;
+    stackView.axis = UILayoutConstraintAxisHorizontal;
+    // stackView.distribution = UIStackViewDistributionEqualSpacing;
+    stackView.spacing = 10;
+
+    [stackView addArrangedSubview:loopButton];
+    [stackView addArrangedSubview:shareButton];
+    [stackView addArrangedSubview:downloadButton];
+	[stackView addArrangedSubview:addToPlaylistsButton];
+
+	[scrollView addSubview:stackView];
+
+	/* [stackScrollView addSubview:stackView];
+	stackScrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 30);
+	[scrollView addSubview:stackScrollView]; */
 
 	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 124);
 	[self.view addSubview:scrollView];
