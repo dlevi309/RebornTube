@@ -4,20 +4,21 @@
 
 // Classes
 
+#import "../../Classes/AppColours.h"
+#import "../../Classes/AppHistory.h"
 #import "../../Classes/YouTubeExtractor.h"
 #import "../../Classes/YouTubeLoader.h"
-#import "../../Classes/AppColours.h"
 
 // Interface
 
 @interface SearchViewController ()
 {
-	// View
-	UITextField *searchTextField;
-
 	// Keys
 	NSMutableDictionary *searchVideoIDDictionary;
     UIScrollView *scrollView;
+
+	// Other
+	UITextField *searchTextField;
 }
 - (void)keysSetup;
 @end
@@ -194,37 +195,7 @@
 	NSString *searchViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
 	NSString *videoID = [searchVideoIDDictionary valueForKey:searchViewTag];
 
-    NSFileManager *fm = [[NSFileManager alloc] init];
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsDirectory = [paths objectAtIndex:0];
-
-    NSString *historyPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"history.plist"];
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
-    NSString *date = [dateFormatter stringFromDate:[NSDate date]];
-
-    NSMutableDictionary *historyDictionary;
-    if (![fm fileExistsAtPath:historyPlistFilePath]) {
-        historyDictionary = [[NSMutableDictionary alloc] init];
-    } else {
-        historyDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:historyPlistFilePath];
-    }
-
-    NSMutableArray *historyArray;
-    if ([historyDictionary objectForKey:date]) {
-        historyArray = [historyDictionary objectForKey:date];
-    } else {
-        historyArray = [[NSMutableArray alloc] init];
-    }
-    
-    if (![historyArray containsObject:videoID]) {
-		[historyArray addObject:videoID];
-	}
-
-    [historyDictionary setValue:historyArray forKey:date];
-
-    [historyDictionary writeToFile:historyPlistFilePath atomically:YES];
-
+    [AppHistory init:videoID];
     [YouTubeLoader init:videoID];
 }
 
