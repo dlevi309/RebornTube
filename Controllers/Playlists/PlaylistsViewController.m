@@ -4,6 +4,11 @@
 #import "CreatePlaylistsViewController.h"
 #import "VideoPlaylistsViewController.h"
 
+// Nav Bar
+
+#import "../Search/SearchViewController.h"
+#import "../Settings/SettingsViewController.h"
+
 // Classes
 
 #import "../../Classes/AppColours.h"

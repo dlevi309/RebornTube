@@ -2,6 +2,11 @@
 
 #import "HomeViewController.h"
 
+// Nav Bar
+
+#import "../Search/SearchViewController.h"
+#import "../Settings/SettingsViewController.h"
+
 // Classes
 
 #import "../../Classes/YouTubeExtractor.h"

@@ -2,11 +2,6 @@
 
 #import "RootViewController.h"
 
-// Nav Bar
-
-#import "Search/SearchViewController.h"
-#import "Settings/SettingsViewController.h"
-
 // Tab Bar
 
 #import "Home/HomeViewController.h"

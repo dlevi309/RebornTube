@@ -3,6 +3,11 @@
 #import "VideoPlaylistsViewController.h"
 #import "PlaylistsViewController.h"
 
+// Nav Bar
+
+#import "../Search/SearchViewController.h"
+#import "../Settings/SettingsViewController.h"
+
 // Classes
 
 #import "../../Classes/YouTubeExtractor.h"
