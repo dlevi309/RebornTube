@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
 
-@interface SubscriptionsViewController : UIViewController <UITabBarDelegate>
+@interface SubscriptionsViewController : UIViewController
 
 @end

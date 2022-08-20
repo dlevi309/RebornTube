@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
 
-@interface PlaylistsViewController : UIViewController <UITabBarDelegate>
+@interface PlaylistsViewController : UIViewController
 
 @end

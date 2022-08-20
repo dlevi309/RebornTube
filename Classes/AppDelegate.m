@@ -2,7 +2,7 @@
 #import "AppColours.h"
 #import "AppHistory.h"
 #import "YouTubeLoader.h"
-#import "../Controllers/Home/HomeViewController.h"
+#import "../Controllers/RootViewController.h"
 
 @implementation AppDelegate
 
@@ -33,7 +33,7 @@
 		[UITabBar appearance].standardAppearance = tabBarAppearance;
 	}
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[HomeViewController alloc] init]];
+    self.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[RootViewController alloc] init]];
     self.window.rootViewController = self.rootViewController;
     [self.window makeKeyAndVisible];
     return YES;
