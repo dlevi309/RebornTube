@@ -38,6 +38,8 @@
 }
 
 - (void)navBarSetup {
+	self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+	
 	UILabel *titleLabel = [[UILabel alloc] init];
 	titleLabel.text = @"RebornTube";
 	titleLabel.textColor = [AppColours textColour];
