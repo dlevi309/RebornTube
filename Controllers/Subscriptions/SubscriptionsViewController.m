@@ -2,25 +2,22 @@
 
 #import "SubscriptionsViewController.h"
 
+// Classes
+
+#import "../../Classes/AppColours.h"
+
 // Interface
 
 @interface SubscriptionsViewController ()
-{
-    // Keys
-	UIWindow *boundsWindow;
-}
-- (void)keysSetup;
 @end
 
 @implementation SubscriptionsViewController
 
 - (void)loadView {
 	[super loadView];
-    [self keysSetup];
-}
 
-- (void)keysSetup {
-	boundsWindow = [[UIApplication sharedApplication] keyWindow];
+	self.title = @"";
+	self.view.backgroundColor = [AppColours mainBackgroundColour];
 }
 
 @end

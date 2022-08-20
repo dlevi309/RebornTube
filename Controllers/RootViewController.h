@@ -2,6 +2,6 @@
 
 @interface RootViewController : UIViewController <UITabBarControllerDelegate>
 
-@property (nonatomic, retain) UITabBarController *tabBar;
+@property (nonatomic, retain) UITabBarController *tabBarController;
 
 @end
