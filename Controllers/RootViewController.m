@@ -10,6 +10,7 @@
 // Tab Bar
 
 #import "Home/HomeViewController.h"
+#import "Subscriptions/SubscriptionsViewController.h"
 #import "History/HistoryViewController.h"
 #import "Playlists/PlaylistsViewController.h"
 
@@ -73,6 +74,10 @@
     homeViewController.title = @"Home";
     UINavigationController *homeNavViewController = [[UINavigationController alloc] initWithRootViewController:homeViewController];
 
+    SubscriptionsViewController *subscriptionsViewController = [[SubscriptionsViewController alloc] init];
+    subscriptionsViewController.title = @"Subscriptions";
+    UINavigationController *subscriptionsNavViewController = [[UINavigationController alloc] initWithRootViewController:subscriptionsViewController];
+
     HistoryViewController *historyViewController = [[HistoryViewController alloc] init];
     historyViewController.title = @"History";
     UINavigationController *historyNavViewController = [[UINavigationController alloc] initWithRootViewController:historyViewController];
@@ -81,7 +86,7 @@
     playlistsViewController.title = @"Playlists";
     UINavigationController *playlistsNavViewController = [[UINavigationController alloc] initWithRootViewController:playlistsViewController];
 
-    self.tabBar.viewControllers = [NSArray arrayWithObjects:homeNavViewController, historyNavViewController, playlistsNavViewController, nil];
+    self.tabBar.viewControllers = [NSArray arrayWithObjects:homeNavViewController, subscriptionsNavViewController, historyNavViewController, playlistsNavViewController, nil];
 
     [self.view addSubview:self.tabBar.view];
 }
