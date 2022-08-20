@@ -200,10 +200,10 @@
     NSString *historyViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
 	NSString *historyViewID = [historyIDDictionary valueForKey:historyViewTag];
 
-    VideoHistoryViewController *historyVideosViewController = [[VideoHistoryViewController alloc] init];
-    historyVideosViewController.historyViewID = historyViewID;
+    VideoHistoryViewController *videoHistoryViewController = [[VideoHistoryViewController alloc] init];
+    videoHistoryViewController.historyViewID = historyViewID;
 
-    [self.navigationController pushViewController:historyVideosViewController animated:YES];
+    [self.navigationController pushViewController:videoHistoryViewController animated:YES];
 }
 
 @end
