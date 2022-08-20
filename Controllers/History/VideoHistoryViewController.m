@@ -9,9 +9,9 @@
 
 // Classes
 
+#import "../../Classes/AppColours.h"
 #import "../../Classes/YouTubeExtractor.h"
 #import "../../Classes/YouTubeLoader.h"
-#import "../../Classes/AppColours.h"
 
 // Interface
 

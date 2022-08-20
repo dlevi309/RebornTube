@@ -1,7 +1,6 @@
 // Main
 
 #import "VideoPlaylistsViewController.h"
-#import "PlaylistsViewController.h"
 
 // Nav Bar
 
@@ -10,9 +9,9 @@
 
 // Classes
 
+#import "../../Classes/AppColours.h"
 #import "../../Classes/YouTubeExtractor.h"
 #import "../../Classes/YouTubeLoader.h"
-#import "../../Classes/AppColours.h"
 
 // Interface
 
@@ -20,11 +19,13 @@
 {
     // Keys
 	UIWindow *boundsWindow;
+    UIScrollView *scrollView;
 
     // Other
     NSMutableDictionary *videoIDDictionary;
 }
 - (void)keysSetup;
+- (void)navBarSetup;
 @end
 
 @implementation VideoPlaylistsViewController
@@ -35,40 +36,26 @@
     self.title = @"";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
 
-    UILabel *searchLabel = [[UILabel alloc] init];
-	searchLabel.text = @"Search";
-	searchLabel.textColor = [UIColor systemBlueColor];
-	searchLabel.numberOfLines = 1;
-	searchLabel.adjustsFontSizeToFitWidth = true;
-	searchLabel.adjustsFontForContentSizeCategory = false;
-    searchLabel.userInteractionEnabled = true;
-    UITapGestureRecognizer *searchLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(search:)];
-	searchLabelTap.numberOfTapsRequired = 1;
-	[searchLabel addGestureRecognizer:searchLabelTap];
+    [self keysSetup];
+}
 
-    UILabel *settingsLabel = [[UILabel alloc] init];
-	settingsLabel.text = @"Settings";
-	settingsLabel.textColor = [UIColor systemBlueColor];
-	settingsLabel.numberOfLines = 1;
-	settingsLabel.adjustsFontSizeToFitWidth = true;
-	settingsLabel.adjustsFontForContentSizeCategory = false;
-    settingsLabel.userInteractionEnabled = true;
-    UITapGestureRecognizer *settingsLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(settings:)];
-	settingsLabelTap.numberOfTapsRequired = 1;
-	[settingsLabel addGestureRecognizer:settingsLabelTap];
+- (void)keysSetup {
+	boundsWindow = [[UIApplication sharedApplication] keyWindow];
+    scrollView = [[UIScrollView alloc] init];
+}
 
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithCustomView:searchLabel];
-    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithCustomView:settingsLabel];
+- (void)navBarSetup {
+	UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStylePlain target:self action:@selector(search)];
+    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(settings)];
     
     self.navigationItem.rightBarButtonItems = @[settingsButton, searchButton];
-
-    [self keysSetup];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     videoIDDictionary = [NSMutableDictionary new];
+    [scrollView removeFromSuperview];
 
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -77,8 +64,7 @@
     NSMutableDictionary *playlistsDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:playlistsPlistFilePath];
     NSMutableArray *playlistsArray = [playlistsDictionary objectForKey:self.playlistsViewID];
 
-    UIScrollView *scrollView = [[UIScrollView alloc] init];
-	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - 50);
+    scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom);
     
     int viewBounds = 0;
     int videoCount = 1;
@@ -105,8 +91,7 @@
             videoTitleLabel.text = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"title"]];
             videoTitleLabel.textColor = [UIColor whiteColor];
             videoTitleLabel.numberOfLines = 2;
-            videoTitleLabel.adjustsFontSizeToFitWidth = true;
-            videoTitleLabel.adjustsFontForContentSizeCategory = false;
+            videoTitleLabel.adjustsFontSizeToFitWidth = YES;
             [playlistsView addSubview:videoTitleLabel];
 
             UILabel *videoAuthorLabel = [[UILabel alloc] init];
@@ -115,8 +100,7 @@
             videoAuthorLabel.textColor = [UIColor whiteColor];
             videoAuthorLabel.numberOfLines = 1;
             [videoAuthorLabel setFont:[UIFont systemFontOfSize:12]];
-            videoAuthorLabel.adjustsFontSizeToFitWidth = true;
-            videoAuthorLabel.adjustsFontForContentSizeCategory = false;
+            videoAuthorLabel.adjustsFontSizeToFitWidth = YES;
             [playlistsView addSubview:videoAuthorLabel];
             
             [videoIDDictionary setValue:videoID forKey:[NSString stringWithFormat:@"%d", videoCount]];
@@ -133,28 +117,28 @@
 	[self.view addSubview:scrollView];
 }
 
-- (void)keysSetup {
-	boundsWindow = [[UIApplication sharedApplication] keyWindow];
-}
-
 @end
 
 @implementation VideoPlaylistsViewController (Privates)
+
+// Nav Bar
+
+- (void)search {
+    SearchViewController *searchViewController = [[SearchViewController alloc] init];
+    [self.navigationController pushViewController:searchViewController animated:YES];
+}
+
+- (void)settings {
+    SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    [self.navigationController pushViewController:settingsViewController animated:YES];
+}
+
+// Other
 
 - (void)playlistsTap:(UITapGestureRecognizer *)recognizer {
     NSString *playlistsViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
 	NSString *videoID = [videoIDDictionary valueForKey:playlistsViewTag];
     [YouTubeLoader init:videoID];
-}
-
-- (void)search:(UITapGestureRecognizer *)recognizer {
-    SearchViewController *searchViewController = [[SearchViewController alloc] init];
-    [self.navigationController pushViewController:searchViewController animated:YES];
-}
-
-- (void)settings:(UITapGestureRecognizer *)recognizer {
-    SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
 @end
