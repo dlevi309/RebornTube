@@ -14,11 +14,12 @@
 @interface SearchViewController ()
 {
 	// Keys
-	NSMutableDictionary *searchVideoIDDictionary;
-    UIScrollView *scrollView;
+    UIWindow *boundsWindow;
+	UIScrollView *scrollView;
 
 	// Other
 	UITextField *searchTextField;
+	NSMutableDictionary *searchVideoIDDictionary;
 }
 - (void)keysSetup;
 @end
@@ -32,9 +33,14 @@
 	self.view.backgroundColor = [AppColours mainBackgroundColour];
 
     [self keysSetup];
+}
 
-	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
+- (void)keysSetup {
+    boundsWindow = [[UIApplication sharedApplication] keyWindow];
+	scrollView = [[UIScrollView alloc] init];
+}
 
+- (void)viewDidLoad {
 	searchTextField = [[UITextField alloc] init];
 	searchTextField.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, 60);
 	searchTextField.backgroundColor = [AppColours viewBackgroundColour];
@@ -44,16 +50,11 @@
 	[self.view addSubview:searchTextField];
 }
 
-- (void)keysSetup {
-    scrollView = [[UIScrollView alloc] init];
-}
-
 @end
 
 @implementation SearchViewController (Privates)
 
 - (void)searchRequest {
-	UIWindow *boundsWindow = [[UIApplication sharedApplication] keyWindow];
 	searchVideoIDDictionary = [NSMutableDictionary new];
 	[scrollView removeFromSuperview];
 
@@ -88,8 +89,7 @@
 			videoTitleLabel.text = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"title"]];
 			videoTitleLabel.textColor = [AppColours textColour];
 			videoTitleLabel.numberOfLines = 2;
-			videoTitleLabel.adjustsFontSizeToFitWidth = true;
-			videoTitleLabel.adjustsFontForContentSizeCategory = false;
+			videoTitleLabel.adjustsFontSizeToFitWidth = YES;
 			[searchView addSubview:videoTitleLabel];
 
 			UILabel *videoAuthorLabel = [[UILabel alloc] init];
@@ -98,8 +98,7 @@
 			videoAuthorLabel.textColor = [AppColours textColour];
 			videoAuthorLabel.numberOfLines = 1;
 			[videoAuthorLabel setFont:[UIFont systemFontOfSize:12]];
-			videoAuthorLabel.adjustsFontSizeToFitWidth = true;
-			videoAuthorLabel.adjustsFontForContentSizeCategory = false;
+			videoAuthorLabel.adjustsFontSizeToFitWidth = YES;
 			[searchView addSubview:videoAuthorLabel];
 			
 			[searchVideoIDDictionary setValue:videoID forKey:[NSString stringWithFormat:@"%d", 1]];
@@ -149,8 +148,7 @@
 					videoTimeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
 					videoTimeLabel.layer.cornerRadius = 5;
 					videoTimeLabel.clipsToBounds = YES;
-					videoTimeLabel.adjustsFontSizeToFitWidth = true;
-					videoTimeLabel.adjustsFontForContentSizeCategory = false;
+					videoTimeLabel.adjustsFontSizeToFitWidth = YES;
 					[searchView addSubview:videoTimeLabel];
 
 					UILabel *videoTitleLabel = [[UILabel alloc] init];
@@ -158,8 +156,7 @@
 					videoTitleLabel.text = [NSString stringWithFormat:@"%@", searchContents[i][@"videoRenderer"][@"title"][@"runs"][0][@"text"]];
 					videoTitleLabel.textColor = [AppColours textColour];
 					videoTitleLabel.numberOfLines = 2;
-					videoTitleLabel.adjustsFontSizeToFitWidth = true;
-					videoTitleLabel.adjustsFontForContentSizeCategory = false;
+					videoTitleLabel.adjustsFontSizeToFitWidth = YES;
 					[searchView addSubview:videoTitleLabel];
 
 					UILabel *videoCountAndAuthorLabel = [[UILabel alloc] init];
@@ -172,8 +169,7 @@
 					videoCountAndAuthorLabel.textColor = [AppColours textColour];
 					videoCountAndAuthorLabel.numberOfLines = 1;
 					[videoCountAndAuthorLabel setFont:[UIFont systemFontOfSize:12]];
-					videoCountAndAuthorLabel.adjustsFontSizeToFitWidth = true;
-					videoCountAndAuthorLabel.adjustsFontForContentSizeCategory = false;
+					videoCountAndAuthorLabel.adjustsFontSizeToFitWidth = YES;
 					[searchView addSubview:videoCountAndAuthorLabel];
 					
 					[searchVideoIDDictionary setValue:[NSString stringWithFormat:@"%@", searchContents[i][@"videoRenderer"][@"videoId"]] forKey:[NSString stringWithFormat:@"%d", i]];
