@@ -57,36 +57,13 @@
 	titleLabel.text = @"RebornTube";
 	titleLabel.textColor = [AppColours textColour];
 	titleLabel.numberOfLines = 1;
-	titleLabel.adjustsFontSizeToFitWidth = true;
-	titleLabel.adjustsFontForContentSizeCategory = false;
+	titleLabel.adjustsFontSizeToFitWidth = YES;
     UIBarButtonItem *titleButton = [[UIBarButtonItem alloc] initWithCustomView:titleLabel];
 
     self.navigationItem.leftBarButtonItem = titleButton;
 
-	UILabel *searchLabel = [[UILabel alloc] init];
-	searchLabel.text = @"Search";
-	searchLabel.textColor = [UIColor systemBlueColor];
-	searchLabel.numberOfLines = 1;
-	searchLabel.adjustsFontSizeToFitWidth = true;
-	searchLabel.adjustsFontForContentSizeCategory = false;
-    searchLabel.userInteractionEnabled = true;
-    UITapGestureRecognizer *searchLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(search:)];
-	searchLabelTap.numberOfTapsRequired = 1;
-	[searchLabel addGestureRecognizer:searchLabelTap];
-
-    UILabel *settingsLabel = [[UILabel alloc] init];
-	settingsLabel.text = @"Settings";
-	settingsLabel.textColor = [UIColor systemBlueColor];
-	settingsLabel.numberOfLines = 1;
-	settingsLabel.adjustsFontSizeToFitWidth = true;
-	settingsLabel.adjustsFontForContentSizeCategory = false;
-    settingsLabel.userInteractionEnabled = true;
-    UITapGestureRecognizer *settingsLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(settings:)];
-	settingsLabelTap.numberOfTapsRequired = 1;
-	[settingsLabel addGestureRecognizer:settingsLabelTap];
-
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithCustomView:searchLabel];
-    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithCustomView:settingsLabel];
+	UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithTitle:@"Search" style:UIBarButtonItemStylePlain target:self action:@selector(search)];
+    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStylePlain target:self action:@selector(settings)];
     
     self.navigationItem.rightBarButtonItems = @[settingsButton, searchButton];
 }
@@ -162,12 +139,12 @@
 
 // Nav Bar
 
-- (void)search:(UITapGestureRecognizer *)recognizer {
+- (void)search {
     SearchViewController *searchViewController = [[SearchViewController alloc] init];
     [self.navigationController pushViewController:searchViewController animated:YES];
 }
 
-- (void)settings:(UITapGestureRecognizer *)recognizer {
+- (void)settings {
     SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     [self.navigationController pushViewController:settingsViewController animated:YES];
 }
