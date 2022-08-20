@@ -9,6 +9,12 @@
 #import "../Search/SearchViewController.h"
 #import "../Settings/SettingsViewController.h"
 
+// Tab Bar
+
+#import "../Home/HomeViewController.h"
+#import "../Subscriptions/SubscriptionsViewController.h"
+#import "../History/HistoryViewController.h"
+
 // Classes
 
 #import "../../Classes/AppColours.h"
@@ -19,13 +25,15 @@
 {
     // Keys
 	UIWindow *boundsWindow;
+    UIScrollView *scrollView;
 
     // Other
     NSMutableDictionary *playlistsIDDictionary;
     UILabel *createPlaylistsLabel;
-    UIScrollView *scrollView;
 }
 - (void)keysSetup;
+- (void)navBarSetup;
+- (void)tabBarSetup;
 @end
 
 @implementation PlaylistsViewController
@@ -34,10 +42,20 @@
 	[super loadView];
 
     self.title = @"";
-    // self.navigationItem.titleView = [[UIView alloc] init];
-	self.view.backgroundColor = [AppColours mainBackgroundColour];
+    self.view.backgroundColor = [AppColours mainBackgroundColour];
 
-    UILabel *titleLabel = [[UILabel alloc] init];
+    [self keysSetup];
+	[self navBarSetup];
+	[self tabBarSetup];
+}
+
+- (void)keysSetup {
+	boundsWindow = [[UIApplication sharedApplication] keyWindow];
+    scrollView = [[UIScrollView alloc] init];
+}
+
+- (void)navBarSetup {
+	UILabel *titleLabel = [[UILabel alloc] init];
 	titleLabel.text = @"RebornTube";
 	titleLabel.textColor = [AppColours textColour];
 	titleLabel.numberOfLines = 1;
@@ -73,8 +91,21 @@
     UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithCustomView:settingsLabel];
     
     self.navigationItem.rightBarButtonItems = @[settingsButton, searchButton];
+}
 
-    [self keysSetup];
+- (void)tabBarSetup {
+	UITabBar *tabBar = [[UITabBar alloc] init];
+    tabBar.frame = CGRectMake(0, self.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 50, self.view.bounds.size.width, 50);
+    tabBar.delegate = self;
+
+    UITabBarItem *tabBarItem1 = [[UITabBarItem alloc] initWithTitle:@"Home" image:nil tag:0];
+	UITabBarItem *tabBarItem2 = [[UITabBarItem alloc] initWithTitle:@"Subscriptions" image:nil tag:1];
+    UITabBarItem *tabBarItem3 = [[UITabBarItem alloc] initWithTitle:@"History" image:nil tag:2];
+    UITabBarItem *tabBarItem4 = [[UITabBarItem alloc] initWithTitle:@"Playlists" image:nil tag:3];
+    
+	tabBar.items = @[tabBarItem1, tabBarItem2, tabBarItem3, tabBarItem4];
+    tabBar.selectedItem = [tabBar.items objectAtIndex:3];
+    [self.view addSubview:tabBar];
 }
 
 - (void)viewDidLoad {
@@ -97,6 +128,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+
     playlistsIDDictionary = [NSMutableDictionary new];
     [scrollView removeFromSuperview];
     
@@ -140,14 +173,45 @@
 	[self.view addSubview:scrollView];
 }
 
-- (void)keysSetup {
-	boundsWindow = [[UIApplication sharedApplication] keyWindow];
-    scrollView = [[UIScrollView alloc] init];
-}
-
 @end
 
 @implementation PlaylistsViewController (Privates)
+
+// Nav Bar
+
+- (void)search:(UITapGestureRecognizer *)recognizer {
+    SearchViewController *searchViewController = [[SearchViewController alloc] init];
+    [self.navigationController pushViewController:searchViewController animated:YES];
+}
+
+- (void)settings:(UITapGestureRecognizer *)recognizer {
+    SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    [self.navigationController pushViewController:settingsViewController animated:YES];
+}
+
+// Tab Bar
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    int selectedTag = tabBar.selectedItem.tag;
+	if (selectedTag == 0) {
+        HomeViewController *homeViewController = [[HomeViewController alloc] init];
+		[self.navigationController pushViewController:homeViewController animated:NO];
+    }
+	if (selectedTag == 1) {
+        SubscriptionsViewController *subscriptionsViewController = [[SubscriptionsViewController alloc] init];
+		[self.navigationController pushViewController:subscriptionsViewController animated:NO];
+    }
+    if (selectedTag == 2) {
+        HistoryViewController *historyViewController = [[HistoryViewController alloc] init];
+		[self.navigationController pushViewController:historyViewController animated:NO];
+    }
+    if (selectedTag == 3) {
+        PlaylistsViewController *playlistsViewController = [[PlaylistsViewController alloc] init];
+		[self.navigationController pushViewController:playlistsViewController animated:NO];
+    }
+}
+
+// Other
 
 - (void)createPlaylistsTap:(UITapGestureRecognizer *)recognizer {
     CreatePlaylistsViewController *createPlaylistsViewController = [[CreatePlaylistsViewController alloc] init];
@@ -163,16 +227,6 @@
     playlistsVideosViewController.playlistsViewID = playlistsViewID;
     
     [self.navigationController pushViewController:playlistsVideosViewController animated:YES];
-}
-
-- (void)search:(UITapGestureRecognizer *)recognizer {
-    SearchViewController *searchViewController = [[SearchViewController alloc] init];
-    [self.navigationController pushViewController:searchViewController animated:YES];
-}
-
-- (void)settings:(UITapGestureRecognizer *)recognizer {
-    SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
 @end

@@ -8,6 +8,12 @@
 #import "../Search/SearchViewController.h"
 #import "../Settings/SettingsViewController.h"
 
+// Tab Bar
+
+#import "../Home/HomeViewController.h"
+#import "../Subscriptions/SubscriptionsViewController.h"
+#import "../Playlists/PlaylistsViewController.h"
+
 // Classes
 
 #import "../../Classes/AppColours.h"
@@ -18,11 +24,14 @@
 {
     // Keys
 	UIWindow *boundsWindow;
+    UIScrollView *scrollView;
     
     // Other
     NSMutableDictionary *historyIDDictionary;
 }
 - (void)keysSetup;
+- (void)navBarSetup;
+- (void)tabBarSetup;
 @end
 
 @implementation HistoryViewController
@@ -31,10 +40,20 @@
 	[super loadView];
 
     self.title = @"";
-    // self.navigationItem.titleView = [[UIView alloc] init];
-	self.view.backgroundColor = [AppColours mainBackgroundColour];
+    self.view.backgroundColor = [AppColours mainBackgroundColour];
 
-    UILabel *titleLabel = [[UILabel alloc] init];
+    [self keysSetup];
+	[self navBarSetup];
+	[self tabBarSetup];
+}
+
+- (void)keysSetup {
+	boundsWindow = [[UIApplication sharedApplication] keyWindow];
+    scrollView = [[UIScrollView alloc] init];
+}
+
+- (void)navBarSetup {
+	UILabel *titleLabel = [[UILabel alloc] init];
 	titleLabel.text = @"RebornTube";
 	titleLabel.textColor = [AppColours textColour];
 	titleLabel.numberOfLines = 1;
@@ -70,14 +89,28 @@
     UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithCustomView:settingsLabel];
     
     self.navigationItem.rightBarButtonItems = @[settingsButton, searchButton];
+}
 
-    [self keysSetup];
+- (void)tabBarSetup {
+	UITabBar *tabBar = [[UITabBar alloc] init];
+    tabBar.frame = CGRectMake(0, self.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 50, self.view.bounds.size.width, 50);
+    tabBar.delegate = self;
+
+    UITabBarItem *tabBarItem1 = [[UITabBarItem alloc] initWithTitle:@"Home" image:nil tag:0];
+	UITabBarItem *tabBarItem2 = [[UITabBarItem alloc] initWithTitle:@"Subscriptions" image:nil tag:1];
+    UITabBarItem *tabBarItem3 = [[UITabBarItem alloc] initWithTitle:@"History" image:nil tag:2];
+    UITabBarItem *tabBarItem4 = [[UITabBarItem alloc] initWithTitle:@"Playlists" image:nil tag:3];
+    
+	tabBar.items = @[tabBarItem1, tabBarItem2, tabBarItem3, tabBarItem4];
+    tabBar.selectedItem = [tabBar.items objectAtIndex:2];
+    [self.view addSubview:tabBar];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     historyIDDictionary = [NSMutableDictionary new];
+    [scrollView removeFromSuperview];
 
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
@@ -86,8 +119,7 @@
     NSMutableDictionary *historyDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:historyPlistFilePath];
     NSArray *historyDictionarySorted = [[[historyDictionary allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] reverseObjectEnumerator];
 
-    UIScrollView *scrollView = [[UIScrollView alloc] init];
-	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - 50);
+    scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - 50);
     
     int viewBounds = 0;
     int dateCount = 1;
@@ -124,23 +156,11 @@
 	[self.view addSubview:scrollView];
 }
 
-- (void)keysSetup {
-	boundsWindow = [[UIApplication sharedApplication] keyWindow];
-}
-
 @end
 
 @implementation HistoryViewController (Privates)
 
-- (void)historyTap:(UITapGestureRecognizer *)recognizer {
-    NSString *historyViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
-	NSString *historyViewID = [historyIDDictionary valueForKey:historyViewTag];
-
-    VideoHistoryViewController *historyVideosViewController = [[VideoHistoryViewController alloc] init];
-    historyVideosViewController.historyViewID = historyViewID;
-
-    [self.navigationController pushViewController:historyVideosViewController animated:YES];
-}
+// Nav Bar
 
 - (void)search:(UITapGestureRecognizer *)recognizer {
     SearchViewController *searchViewController = [[SearchViewController alloc] init];
@@ -150,6 +170,40 @@
 - (void)settings:(UITapGestureRecognizer *)recognizer {
     SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     [self.navigationController pushViewController:settingsViewController animated:YES];
+}
+
+// Tab Bar
+
+- (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item {
+    int selectedTag = tabBar.selectedItem.tag;
+	if (selectedTag == 0) {
+        HomeViewController *homeViewController = [[HomeViewController alloc] init];
+		[self.navigationController pushViewController:homeViewController animated:NO];
+    }
+	if (selectedTag == 1) {
+        SubscriptionsViewController *subscriptionsViewController = [[SubscriptionsViewController alloc] init];
+		[self.navigationController pushViewController:subscriptionsViewController animated:NO];
+    }
+    if (selectedTag == 2) {
+        HistoryViewController *historyViewController = [[HistoryViewController alloc] init];
+		[self.navigationController pushViewController:historyViewController animated:NO];
+    }
+    if (selectedTag == 3) {
+        PlaylistsViewController *playlistsViewController = [[PlaylistsViewController alloc] init];
+		[self.navigationController pushViewController:playlistsViewController animated:NO];
+    }
+}
+
+// Other
+
+- (void)historyTap:(UITapGestureRecognizer *)recognizer {
+    NSString *historyViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
+	NSString *historyViewID = [historyIDDictionary valueForKey:historyViewTag];
+
+    VideoHistoryViewController *historyVideosViewController = [[VideoHistoryViewController alloc] init];
+    historyVideosViewController.historyViewID = historyViewID;
+
+    [self.navigationController pushViewController:historyVideosViewController animated:YES];
 }
 
 @end

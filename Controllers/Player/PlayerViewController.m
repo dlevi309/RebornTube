@@ -77,12 +77,6 @@
 	}
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	AppDelegate *shared = [UIApplication sharedApplication].delegate;
-	shared.allowRotation = YES;
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-}
-
 - (void)keysSetup {
 	boundsWindow = [[UIApplication sharedApplication] keyWindow];
 	deviceOrientation = 0;
@@ -382,6 +376,14 @@
         [player seekToTime:CMTimeMakeWithSeconds(CMTimeGetSeconds(player.currentTime) - 10.0f, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	AppDelegate *shared = [UIApplication sharedApplication].delegate;
+	shared.allowRotation = YES;
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
