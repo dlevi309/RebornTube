@@ -24,6 +24,7 @@
 	BOOL loopEnabled;
 	NSString *playerAssetsBundlePath;
 	NSBundle *playerAssetsBundle;
+	NSMutableDictionary *songInfo;
 
 	// Player
 	AVPlayerItem *playerItem;
@@ -85,6 +86,7 @@
 	loopEnabled = 0;
 	playerAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"PlayerAssets" ofType:@"bundle"];
 	playerAssetsBundle = [NSBundle bundleWithPath:playerAssetsBundlePath];
+	songInfo = [NSMutableDictionary new];
 }
 
 - (void)playerSetup {
@@ -234,8 +236,7 @@
 	videoTimeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
 	videoTimeLabel.layer.cornerRadius = 5;
 	videoTimeLabel.clipsToBounds = YES;
-	videoTimeLabel.adjustsFontSizeToFitWidth = true;
-	videoTimeLabel.adjustsFontForContentSizeCategory = false;
+	videoTimeLabel.adjustsFontSizeToFitWidth = YES;
 	if (self.videoStream == nil && self.videoURL != nil) {
 		[overlayView addSubview:videoTimeLabel];
 	}
@@ -269,8 +270,7 @@
 	videoTitleLabel.text = self.videoTitle;
 	videoTitleLabel.textColor = [AppColours textColour];
 	videoTitleLabel.numberOfLines = 2;
-	videoTitleLabel.adjustsFontSizeToFitWidth = true;
-	videoTitleLabel.adjustsFontForContentSizeCategory = false;
+	videoTitleLabel.adjustsFontSizeToFitWidth = YES;
 	[scrollView addSubview:videoTitleLabel];
 
 	UILabel *videoInfoLabel = [[UILabel alloc] init];
@@ -278,8 +278,7 @@
 	videoInfoLabel.text = [NSString stringWithFormat:@"%@ Views - %@\n%@ Likes - %@ Dislikes", self.videoViewCount, self.videoAuthor, self.videoLikes, self.videoDislikes];
 	videoInfoLabel.textColor = [AppColours textColour];
 	videoInfoLabel.numberOfLines = 2;
-	videoInfoLabel.adjustsFontSizeToFitWidth = true;
-	videoInfoLabel.adjustsFontForContentSizeCategory = false;
+	videoInfoLabel.adjustsFontSizeToFitWidth = YES;
 	[scrollView addSubview:videoInfoLabel];
 
 	UIButton *loopButton = [[UIButton alloc] init];
@@ -376,6 +375,14 @@
         [player seekToTime:CMTimeMakeWithSeconds(CMTimeGetSeconds(player.currentTime) - 10.0f, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
         return MPRemoteCommandHandlerStatusSuccess;
     }];
+
+	UIImage *videoArt = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
+	MPMediaItemArtwork *albumArt = [[MPMediaItemArtwork alloc] initWithBoundsSize:videoArt.size requestHandler:^(CGSize size) {
+		return videoArt;
+	}];
+	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoTitle] forKey:MPMediaItemPropertyTitle];
+	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoAuthor] forKey:MPMediaItemPropertyArtist];
+	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -395,14 +402,9 @@
 	videoTimeLabel.text = [NSString stringWithFormat:@"%.2f / %.2f", (float)CMTimeGetSeconds(player.currentTime), [self.videoLength floatValue]];
 
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
-		MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];	
-		NSMutableDictionary *songInfo = [[NSMutableDictionary alloc] init];
-		MPMediaItemArtwork *albumArt = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]]];
-		[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoTitle] forKey:MPMediaItemPropertyTitle];
-		[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoAuthor] forKey:MPMediaItemPropertyArtist];
+		MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
 		[songInfo setObject:[NSNumber numberWithDouble:CMTimeGetSeconds(player.currentTime)] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
 		[songInfo setObject:[NSNumber numberWithDouble:CMTimeGetSeconds(playerItem.duration)] forKey:MPMediaItemPropertyPlaybackDuration];
-		[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
 		[playingInfoCenter setNowPlayingInfo:songInfo];
 	}
 
@@ -497,6 +499,10 @@
 			playImage.alpha = 1.0;
 			pauseImage.alpha = 0.0;
 		}
+		MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
+		[songInfo setObject:[NSNumber numberWithDouble:CMTimeGetSeconds(player.currentTime)] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
+		[songInfo setObject:[NSNumber numberWithDouble:CMTimeGetSeconds(playerItem.duration)] forKey:MPMediaItemPropertyPlaybackDuration];
+		[playingInfoCenter setNowPlayingInfo:songInfo];
     }
 }
 
@@ -559,14 +565,9 @@
 		progressSlider.hidden = NO;
 	}
 
-	MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];	
-	NSMutableDictionary *songInfo = [[NSMutableDictionary alloc] init];
-	MPMediaItemArtwork *albumArt = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]]];
-	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoTitle] forKey:MPMediaItemPropertyTitle];
-	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoAuthor] forKey:MPMediaItemPropertyArtist];
+	MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
 	[songInfo setObject:[NSNumber numberWithDouble:CMTimeGetSeconds(player.currentTime)] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
 	[songInfo setObject:[NSNumber numberWithDouble:CMTimeGetSeconds(playerItem.duration)] forKey:MPMediaItemPropertyPlaybackDuration];
-	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
 	[playingInfoCenter setNowPlayingInfo:songInfo];
 }
 
