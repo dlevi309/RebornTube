@@ -41,6 +41,7 @@
     self.view.backgroundColor = [AppColours mainBackgroundColour];
 
     [self keysSetup];
+    [self navBarSetup];
 }
 
 - (void)keysSetup {

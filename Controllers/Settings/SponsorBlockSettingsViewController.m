@@ -41,10 +41,8 @@
 
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:nil];
-        cell.textLabel.adjustsFontSizeToFitWidth = true;
-        cell.textLabel.adjustsFontForContentSizeCategory = false;
-        cell.detailTextLabel.adjustsFontSizeToFitWidth = true;
-        cell.detailTextLabel.adjustsFontForContentSizeCategory = false;
+        cell.textLabel.adjustsFontSizeToFitWidth = YES;
+        cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
         cell.backgroundColor = [AppColours viewBackgroundColour];
         cell.textLabel.textColor = [AppColours textColour];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
