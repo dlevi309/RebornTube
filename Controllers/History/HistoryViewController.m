@@ -72,7 +72,7 @@
 
     NSString *historyPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"history.plist"];
     NSMutableDictionary *historyDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:historyPlistFilePath];
-    NSArray *historyDictionarySorted = [[[historyDictionary allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] reverseObjectEnumerator];
+    NSEnumerator *historyDictionarySorted = [[[historyDictionary allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] reverseObjectEnumerator];
 
     scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom);
     
@@ -83,6 +83,7 @@
         historyView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 40);
         historyView.backgroundColor = [AppColours viewBackgroundColour];
         historyView.tag = dateCount;
+        historyView.userInteractionEnabled = YES;
         UITapGestureRecognizer *historyViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(historyTap:)];
         historyViewTap.numberOfTapsRequired = 1;
         [historyView addGestureRecognizer:historyViewTap];
@@ -129,7 +130,7 @@
 // Other
 
 - (void)historyTap:(UITapGestureRecognizer *)recognizer {
-    NSString *historyViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
+    NSString *historyViewTag = [NSString stringWithFormat:@"%d", (int)recognizer.view.tag];
 	NSString *historyViewID = [historyIDDictionary valueForKey:historyViewTag];
 
     VideoHistoryViewController *videoHistoryViewController = [[VideoHistoryViewController alloc] init];

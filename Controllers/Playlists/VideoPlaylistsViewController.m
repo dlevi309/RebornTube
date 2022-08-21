@@ -13,6 +13,10 @@
 #import "../../Classes/YouTubeExtractor.h"
 #import "../../Classes/YouTubeLoader.h"
 
+// Other
+
+#import "AddToPlaylistsViewController.h"
+
 // Interface
 
 @interface VideoPlaylistsViewController ()
@@ -75,6 +79,7 @@
             playlistsView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 100);
             playlistsView.backgroundColor = [UIColor colorWithRed:0.110 green:0.110 blue:0.118 alpha:1.0];
             playlistsView.tag = videoCount;
+            playlistsView.userInteractionEnabled = YES;
             UITapGestureRecognizer *playlistsViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playlistsTap:)];
             playlistsViewTap.numberOfTapsRequired = 1;
             [playlistsView addGestureRecognizer:playlistsViewTap];
@@ -95,13 +100,28 @@
             [playlistsView addSubview:videoTitleLabel];
 
             UILabel *videoAuthorLabel = [[UILabel alloc] init];
-            videoAuthorLabel.frame = CGRectMake(5, 80, playlistsView.frame.size.width - 5, 20);
+            videoAuthorLabel.frame = CGRectMake(5, 80, playlistsView.frame.size.width - 45, 20);
             videoAuthorLabel.text = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"author"]];
             videoAuthorLabel.textColor = [UIColor whiteColor];
             videoAuthorLabel.numberOfLines = 1;
             [videoAuthorLabel setFont:[UIFont systemFontOfSize:12]];
             videoAuthorLabel.adjustsFontSizeToFitWidth = YES;
             [playlistsView addSubview:videoAuthorLabel];
+
+            UILabel *videoActionLabel = [[UILabel alloc] init];
+            videoActionLabel.frame = CGRectMake(playlistsView.frame.size.width - 30, 80, 20, 20);
+            videoActionLabel.tag = videoCount;
+            videoActionLabel.text = @"•••";
+            videoActionLabel.textAlignment = NSTextAlignmentCenter;
+            videoActionLabel.textColor = [AppColours textColour];
+            videoActionLabel.numberOfLines = 1;
+            [videoActionLabel setFont:[UIFont systemFontOfSize:12]];
+            videoActionLabel.adjustsFontSizeToFitWidth = YES;
+            videoActionLabel.userInteractionEnabled = YES;
+            UITapGestureRecognizer *videoActionLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playlistsActionTap:)];
+            videoActionLabelTap.numberOfTapsRequired = 1;
+            [videoActionLabel addGestureRecognizer:videoActionLabelTap];
+            [playlistsView addSubview:videoActionLabel];
             
             [videoIDDictionary setValue:videoID forKey:[NSString stringWithFormat:@"%d", videoCount]];
             viewBounds += 102;
@@ -136,9 +156,41 @@
 // Other
 
 - (void)playlistsTap:(UITapGestureRecognizer *)recognizer {
-    NSString *playlistsViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
+    NSString *playlistsViewTag = [NSString stringWithFormat:@"%d", (int)recognizer.view.tag];
 	NSString *videoID = [videoIDDictionary valueForKey:playlistsViewTag];
     [YouTubeLoader init:videoID];
+}
+
+- (void)playlistsActionTap:(UITapGestureRecognizer *)recognizer {
+    NSString *playlistsViewTag = [NSString stringWithFormat:@"%d", (int)recognizer.view.tag];
+	NSString *videoID = [videoIDDictionary valueForKey:playlistsViewTag];
+
+    UIAlertController *alertSelector = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+	[alertSelector addAction:[UIAlertAction actionWithTitle:@"Share" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+		NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", videoID]];
+	
+		UIActivityViewController *shareSheet = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
+		[self presentViewController:shareSheet animated:YES completion:nil];
+    }]];
+
+	[alertSelector addAction:[UIAlertAction actionWithTitle:@"Add To Playlist" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+		AddToPlaylistsViewController *addToPlaylistsViewController = [[AddToPlaylistsViewController alloc] init];
+		addToPlaylistsViewController.videoID = videoID;
+
+		[self presentViewController:addToPlaylistsViewController animated:YES completion:nil];
+    }]];
+
+	[alertSelector addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    }]];
+
+    [alertSelector setModalPresentationStyle:UIModalPresentationPopover];
+    UIPopoverPresentationController *popPresenter = [alertSelector popoverPresentationController];
+    popPresenter.sourceView = self.view;
+    popPresenter.sourceRect = self.view.bounds;
+    popPresenter.permittedArrowDirections = 0;
+
+    [self presentViewController:alertSelector animated:YES completion:nil];
 }
 
 @end

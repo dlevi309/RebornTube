@@ -103,6 +103,7 @@
         playlistsView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 40);
         playlistsView.backgroundColor = [AppColours viewBackgroundColour];
         playlistsView.tag = nameCount;
+        playlistsView.userInteractionEnabled = YES;
         UITapGestureRecognizer *playlistsViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playlistsTap:)];
         playlistsViewTap.numberOfTapsRequired = 1;
         [playlistsView addGestureRecognizer:playlistsViewTap];
@@ -151,7 +152,7 @@
 }
 
 - (void)playlistsTap:(UITapGestureRecognizer *)recognizer {
-    NSString *playlistsViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
+    NSString *playlistsViewTag = [NSString stringWithFormat:@"%d", (int)recognizer.view.tag];
 	NSString *playlistsViewID = [playlistsIDDictionary valueForKey:playlistsViewTag];
 
     VideoPlaylistsViewController *playlistsVideosViewController = [[VideoPlaylistsViewController alloc] init];

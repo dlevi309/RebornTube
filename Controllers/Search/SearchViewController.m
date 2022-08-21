@@ -9,6 +9,10 @@
 #import "../../Classes/YouTubeExtractor.h"
 #import "../../Classes/YouTubeLoader.h"
 
+// Other
+
+#import "../Playlists/AddToPlaylistsViewController.h"
+
 // Interface
 
 @interface SearchViewController ()
@@ -73,6 +77,7 @@
 			searchView.frame = CGRectMake(0, 0, self.view.bounds.size.width, 100);
 			searchView.backgroundColor = [AppColours viewBackgroundColour];
 			searchView.tag = 1;
+			searchView.userInteractionEnabled = YES;
 			UITapGestureRecognizer *searchViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchTap:)];
 			searchViewTap.numberOfTapsRequired = 1;
 			[searchView addGestureRecognizer:searchViewTap];
@@ -93,13 +98,28 @@
 			[searchView addSubview:videoTitleLabel];
 
 			UILabel *videoAuthorLabel = [[UILabel alloc] init];
-			videoAuthorLabel.frame = CGRectMake(5, 80, searchView.frame.size.width - 5, 20);
+			videoAuthorLabel.frame = CGRectMake(5, 80, searchView.frame.size.width - 45, 20);
 			videoAuthorLabel.text = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"author"]];
 			videoAuthorLabel.textColor = [AppColours textColour];
 			videoAuthorLabel.numberOfLines = 1;
 			[videoAuthorLabel setFont:[UIFont systemFontOfSize:12]];
 			videoAuthorLabel.adjustsFontSizeToFitWidth = YES;
 			[searchView addSubview:videoAuthorLabel];
+
+			UILabel *videoActionLabel = [[UILabel alloc] init];
+			videoActionLabel.frame = CGRectMake(searchView.frame.size.width - 30, 80, 20, 20);
+			videoActionLabel.tag = 1;
+			videoActionLabel.text = @"•••";
+			videoActionLabel.textAlignment = NSTextAlignmentCenter;
+			videoActionLabel.textColor = [AppColours textColour];
+			videoActionLabel.numberOfLines = 1;
+			[videoActionLabel setFont:[UIFont systemFontOfSize:12]];
+			videoActionLabel.adjustsFontSizeToFitWidth = YES;
+			videoActionLabel.userInteractionEnabled = YES;
+			UITapGestureRecognizer *videoActionLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchActionTap:)];
+			videoActionLabelTap.numberOfTapsRequired = 1;
+			[videoActionLabel addGestureRecognizer:videoActionLabelTap];
+			[searchView addSubview:videoActionLabel];
 			
 			[searchVideoIDDictionary setValue:videoID forKey:[NSString stringWithFormat:@"%d", 1]];
 
@@ -124,6 +144,7 @@
 					searchView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 100);
 					searchView.backgroundColor = [AppColours viewBackgroundColour];
 					searchView.tag = i;
+					searchView.userInteractionEnabled = YES;
 					UITapGestureRecognizer *searchViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchTap:)];
 					searchViewTap.numberOfTapsRequired = 1;
 					[searchView addGestureRecognizer:searchViewTap];
@@ -160,7 +181,7 @@
 					[searchView addSubview:videoTitleLabel];
 
 					UILabel *videoCountAndAuthorLabel = [[UILabel alloc] init];
-					videoCountAndAuthorLabel.frame = CGRectMake(5, 80, searchView.frame.size.width - 5, 20);
+					videoCountAndAuthorLabel.frame = CGRectMake(5, 80, searchView.frame.size.width - 45, 20);
 					if (searchContents[i][@"videoRenderer"][@"viewCountText"][@"simpleText"] && searchContents[i][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]) {
 						videoCountAndAuthorLabel.text = [NSString stringWithFormat:@"%@ - %@", searchContents[i][@"videoRenderer"][@"viewCountText"][@"simpleText"], searchContents[i][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]];
 					} else if ([searchContents[i][@"videoRenderer"][@"viewCountText"][@"runs"] count] >= 1 && searchContents[i][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]) {
@@ -171,6 +192,21 @@
 					[videoCountAndAuthorLabel setFont:[UIFont systemFontOfSize:12]];
 					videoCountAndAuthorLabel.adjustsFontSizeToFitWidth = YES;
 					[searchView addSubview:videoCountAndAuthorLabel];
+
+					UILabel *videoActionLabel = [[UILabel alloc] init];
+					videoActionLabel.frame = CGRectMake(searchView.frame.size.width - 30, 80, 20, 20);
+					videoActionLabel.tag = i;
+					videoActionLabel.text = @"•••";
+					videoActionLabel.textAlignment = NSTextAlignmentCenter;
+					videoActionLabel.textColor = [AppColours textColour];
+					videoActionLabel.numberOfLines = 1;
+					[videoActionLabel setFont:[UIFont systemFontOfSize:12]];
+					videoActionLabel.adjustsFontSizeToFitWidth = YES;
+					videoActionLabel.userInteractionEnabled = YES;
+					UITapGestureRecognizer *videoActionLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(searchActionTap:)];
+					videoActionLabelTap.numberOfTapsRequired = 1;
+					[videoActionLabel addGestureRecognizer:videoActionLabelTap];
+					[searchView addSubview:videoActionLabel];
 					
 					[searchVideoIDDictionary setValue:[NSString stringWithFormat:@"%@", searchContents[i][@"videoRenderer"][@"videoId"]] forKey:[NSString stringWithFormat:@"%d", i]];
 					viewBounds += 102;
@@ -188,11 +224,43 @@
 }
 
 - (void)searchTap:(UITapGestureRecognizer *)recognizer {
-	NSString *searchViewTag = [NSString stringWithFormat:@"%d", recognizer.view.tag];
+	NSString *searchViewTag = [NSString stringWithFormat:@"%d", (int)recognizer.view.tag];
 	NSString *videoID = [searchVideoIDDictionary valueForKey:searchViewTag];
 
     [AppHistory init:videoID];
     [YouTubeLoader init:videoID];
+}
+
+- (void)searchActionTap:(UITapGestureRecognizer *)recognizer {
+    NSString *searchViewTag = [NSString stringWithFormat:@"%d", (int)recognizer.view.tag];
+	NSString *videoID = [searchVideoIDDictionary valueForKey:searchViewTag];
+
+    UIAlertController *alertSelector = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+	[alertSelector addAction:[UIAlertAction actionWithTitle:@"Share" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+		NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", videoID]];
+	
+		UIActivityViewController *shareSheet = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
+		[self presentViewController:shareSheet animated:YES completion:nil];
+    }]];
+
+	[alertSelector addAction:[UIAlertAction actionWithTitle:@"Add To Playlist" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+		AddToPlaylistsViewController *addToPlaylistsViewController = [[AddToPlaylistsViewController alloc] init];
+		addToPlaylistsViewController.videoID = videoID;
+
+		[self presentViewController:addToPlaylistsViewController animated:YES completion:nil];
+    }]];
+
+	[alertSelector addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    }]];
+
+    [alertSelector setModalPresentationStyle:UIModalPresentationPopover];
+    UIPopoverPresentationController *popPresenter = [alertSelector popoverPresentationController];
+    popPresenter.sourceView = self.view;
+    popPresenter.sourceRect = self.view.bounds;
+    popPresenter.permittedArrowDirections = 0;
+
+    [self presentViewController:alertSelector animated:YES completion:nil];
 }
 
 @end
