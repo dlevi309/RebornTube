@@ -423,7 +423,7 @@
 
 - (void)playerTimeChanged {
 	progressSlider.value = (float)CMTimeGetSeconds(player.currentTime);
-	videoTimeLabel.text = [NSString stringWithFormat:@"%.2f / %.2f", (float)CMTimeGetSeconds(player.currentTime), [self.videoLength floatValue]];
+	videoTimeLabel.text = [NSString stringWithFormat:@"%d:%02d / %d:%02d", ((int)CMTimeGetSeconds(player.currentTime)) / 60, ((int)CMTimeGetSeconds(player.currentTime)) % 60, [self.videoLength intValue] / 60, [self.videoLength intValue] % 60];
 
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 		MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
