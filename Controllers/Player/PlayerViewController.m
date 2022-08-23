@@ -35,18 +35,23 @@
 
 	// Overlay Left
 	UIView *overlayLeftView;
+	UIView *overlayLeftViewShadow;
 	UIImageView *collapseImage;
-	UILabel *videoOverlayTitleLabel;
 	UILabel *videoTimeLabel;
 
 	// Overlay Middle
 	UIView *overlayMiddleView;
+	UIView *overlayMiddleViewShadow;
 	UIImageView *playImage;
 	UIImageView *pauseImage;
 
 	// Overlay Right
 	UIView *overlayRightView;
+	UIView *overlayRightViewShadow;
 	UISwitch *playbackModeSwitch;
+
+	// Overlay Other
+	UILabel *videoOverlayTitleLabel;
 
 	// Info
 	UISlider *progressSlider;
@@ -163,36 +168,28 @@
 	overlayLeftViewDoubleTap.numberOfTapsRequired = 2;
 	[overlayLeftView addGestureRecognizer:overlayLeftViewDoubleTap];
 
+	overlayLeftViewShadow = [[UIView alloc] init];
+	overlayLeftViewShadow.frame = CGRectMake(0, 0, overlayLeftView.bounds.size.width, overlayLeftView.bounds.size.height);
+	overlayLeftViewShadow.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
+	[overlayLeftView addSubview:overlayLeftViewShadow];
+
 	collapseImage = [[UIImageView alloc] init];
 	NSString *collapseImagePath = [playerAssetsBundle pathForResource:@"collapse" ofType:@"png"];
 	collapseImage.image = [[UIImage imageWithContentsOfFile:collapseImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	collapseImage.frame = CGRectMake(10, 10, 24, 24);
 	collapseImage.tintColor = [UIColor whiteColor];
-	collapseImage.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
-	collapseImage.layer.cornerRadius = collapseImage.bounds.size.width / 2;
-	collapseImage.clipsToBounds = YES;
 	collapseImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *collapseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(collapseTap:)];
 	collapseViewTap.numberOfTapsRequired = 1;
 	[collapseImage addGestureRecognizer:collapseViewTap];
 	[overlayLeftView addSubview:collapseImage];
 
-	videoOverlayTitleLabel = [[UILabel alloc] init];
-	videoOverlayTitleLabel.text = self.videoTitle;
-	videoOverlayTitleLabel.textColor = [AppColours textColour];
-	videoOverlayTitleLabel.numberOfLines = 2;
-	videoOverlayTitleLabel.adjustsFontSizeToFitWidth = YES;
-	videoOverlayTitleLabel.alpha = 0.0;
-	[overlayLeftView addSubview:videoOverlayTitleLabel];
-
 	videoTimeLabel = [[UILabel alloc] init];
 	videoTimeLabel.frame = CGRectMake(10, overlayLeftView.bounds.size.height - 25, 80, 15);
 	videoTimeLabel.textAlignment = NSTextAlignmentCenter;
 	videoTimeLabel.textColor = [UIColor whiteColor];
 	videoTimeLabel.numberOfLines = 1;
-	videoTimeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
-	videoTimeLabel.layer.cornerRadius = 5;
-	videoTimeLabel.clipsToBounds = YES;
+	[videoTimeLabel setFont:[UIFont boldSystemFontOfSize:videoTimeLabel.font.pointSize]];
 	videoTimeLabel.adjustsFontSizeToFitWidth = YES;
 	if (self.videoStream == nil && self.videoURL != nil) {
 		[overlayLeftView addSubview:videoTimeLabel];
@@ -206,14 +203,16 @@
 	overlayMiddleViewSingleTap.numberOfTapsRequired = 1;
 	[overlayMiddleView addGestureRecognizer:overlayMiddleViewSingleTap];
 
+	overlayMiddleViewShadow = [[UIView alloc] init];
+	overlayMiddleViewShadow.frame = CGRectMake(0, 0, overlayMiddleView.bounds.size.width, overlayMiddleView.bounds.size.height);
+	overlayMiddleViewShadow.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
+	[overlayMiddleView addSubview:overlayMiddleViewShadow];
+
 	playImage = [[UIImageView alloc] init];
 	NSString *playImagePath = [playerAssetsBundle pathForResource:@"play" ofType:@"png"];
 	playImage.image = [[UIImage imageWithContentsOfFile:playImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	playImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 	playImage.tintColor = [UIColor whiteColor];
-	playImage.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
-	playImage.layer.cornerRadius = playImage.bounds.size.width / 2;
-	playImage.clipsToBounds = YES;
 	playImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *playViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
 	playViewTap.numberOfTapsRequired = 1;
@@ -225,9 +224,6 @@
 	pauseImage.image = [[UIImage imageWithContentsOfFile:pauseImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	pauseImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 	pauseImage.tintColor = [UIColor whiteColor];
-	pauseImage.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.2];
-	pauseImage.layer.cornerRadius = pauseImage.bounds.size.width / 2;
-	pauseImage.clipsToBounds = YES;
 	pauseImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *pauseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
 	pauseViewTap.numberOfTapsRequired = 1;
@@ -245,19 +241,33 @@
 	overlayRightViewDoubleTap.numberOfTapsRequired = 2;
 	[overlayRightView addGestureRecognizer:overlayRightViewDoubleTap];
 
+	overlayRightViewShadow = [[UIView alloc] init];
+	overlayRightViewShadow.frame = CGRectMake(0, 0, overlayRightView.bounds.size.width, overlayRightView.bounds.size.height);
+	overlayRightViewShadow.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
+	[overlayRightView addSubview:overlayRightViewShadow];
+
 	playbackModeSwitch = [[UISwitch alloc] init];
 	playbackModeSwitch.frame = CGRectMake(overlayRightView.bounds.size.width - 61, 10, 0, 0);
 	[playbackModeSwitch addTarget:self action:@selector(togglePlaybackMode:) forControlEvents:UIControlEventValueChanged];
 	[overlayRightView addSubview:playbackModeSwitch];
+
+	// Overlay Other
+	videoOverlayTitleLabel = [[UILabel alloc] init];
+	videoOverlayTitleLabel.text = self.videoTitle;
+	videoOverlayTitleLabel.textColor = [AppColours textColour];
+	videoOverlayTitleLabel.numberOfLines = 1;
+	videoOverlayTitleLabel.alpha = 0.0;
 	
 	// Overlays
 	overlayHidden = 1;
 	[overlayLeftView.subviews setValue:@YES forKeyPath:@"hidden"];
 	[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
 	[overlayRightView.subviews setValue:@YES forKeyPath:@"hidden"];
+	videoOverlayTitleLabel.hidden = YES;
 	[self.view addSubview:overlayLeftView];
 	[self.view addSubview:overlayMiddleView];
 	[self.view addSubview:overlayRightView];
+	[self.view addSubview:videoOverlayTitleLabel];
 }
 
 - (void)sliderSetup {
@@ -488,18 +498,23 @@
 
 		// Overlay Left
 		overlayLeftView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+		overlayLeftViewShadow.frame = CGRectMake(0, 0, overlayLeftView.bounds.size.width, overlayLeftView.bounds.size.height);
 		collapseImage.alpha = 1.0;
-		videoOverlayTitleLabel.alpha = 0.0;
 		videoTimeLabel.frame = CGRectMake(10, overlayLeftView.bounds.size.height - 25, 80, 15);
 
 		// Overlay Middle
 		overlayMiddleView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+		overlayMiddleViewShadow.frame = CGRectMake(0, 0, overlayMiddleView.bounds.size.width, overlayMiddleView.bounds.size.height);
 		playImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 
 		// Overlay Right
 		overlayRightView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+		overlayRightViewShadow.frame = CGRectMake(0, 0, overlayRightView.bounds.size.width, overlayRightView.bounds.size.height);
 		playbackModeSwitch.frame = CGRectMake(overlayRightView.bounds.size.width - 61, 10, 0, 0);
+
+		// Overlay Other
+		videoOverlayTitleLabel.alpha = 0.0;
 
 		// Info
 		progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + (self.view.bounds.size.width * 9 / 16), self.view.bounds.size.width, 15);
@@ -516,19 +531,24 @@
 
 		// Overlay Left
 		overlayLeftView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
+		overlayLeftViewShadow.frame = CGRectMake(0, 0, overlayLeftView.bounds.size.width, overlayLeftView.bounds.size.height);
 		collapseImage.alpha = 0.0;
-		videoOverlayTitleLabel.frame = CGRectMake(boundsWindow.safeAreaInsets.left, 10, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right - (self.view.bounds.size.width / 3), 40);
-		videoOverlayTitleLabel.alpha = 1.0;
 		videoTimeLabel.frame = CGRectMake(boundsWindow.safeAreaInsets.left + 10, (self.view.bounds.size.height / 2) + 75, 80, 15);
 		
 		// Overlay Middle
 		overlayMiddleView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
+		overlayMiddleViewShadow.frame = CGRectMake(0, 0, overlayMiddleView.bounds.size.width, overlayMiddleView.bounds.size.height);
 		playImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 		
 		// Overlay Right
 		overlayRightView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
+		overlayRightViewShadow.frame = CGRectMake(0, 0, overlayRightView.bounds.size.width, overlayRightView.bounds.size.height);
 		playbackModeSwitch.frame = CGRectMake(overlayRightView.bounds.size.width - boundsWindow.safeAreaInsets.right - 61, 10, 0, 0);
+
+		// Overlay Other
+		videoOverlayTitleLabel.frame = CGRectMake(boundsWindow.safeAreaInsets.left, 10, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right - (self.view.bounds.size.width / 3), 31);
+		videoOverlayTitleLabel.alpha = 1.0;
 
 		// Info
 		progressSlider.frame = CGRectMake(boundsWindow.safeAreaInsets.left, (self.view.bounds.size.height / 2) + 100, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right, 15);
@@ -590,12 +610,14 @@
 		[overlayLeftView.subviews setValue:@NO forKeyPath:@"hidden"];
 		[overlayMiddleView.subviews setValue:@NO forKeyPath:@"hidden"];
 		[overlayRightView.subviews setValue:@NO forKeyPath:@"hidden"];
+		videoOverlayTitleLabel.hidden = NO;
 		progressSlider.hidden = NO;
 	} else {
 		overlayHidden = 1;
 		[overlayLeftView.subviews setValue:@YES forKeyPath:@"hidden"];
 		[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
 		[overlayRightView.subviews setValue:@YES forKeyPath:@"hidden"];
+		videoOverlayTitleLabel.hidden = YES;
 		if (deviceOrientation == 1) {
 			progressSlider.hidden = YES;
 		} else {
