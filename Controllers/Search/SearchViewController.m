@@ -89,6 +89,19 @@
 			videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:videoArtwork]];
 			[searchView addSubview:videoImage];
 
+			NSString *videoLength = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"lengthSeconds"]];
+			UILabel *videoTimeLabel = [[UILabel alloc] init];
+			videoTimeLabel.frame = CGRectMake(40, 65, 40, 15);
+			videoTimeLabel.text = [NSString stringWithFormat:@"%d:%02d", [videoLength intValue] / 60, [videoLength intValue] % 60];
+			videoTimeLabel.textAlignment = NSTextAlignmentCenter;
+			videoTimeLabel.textColor = [UIColor whiteColor];
+			videoTimeLabel.numberOfLines = 1;
+			videoTimeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+			videoTimeLabel.layer.cornerRadius = 5;
+			videoTimeLabel.clipsToBounds = YES;
+			videoTimeLabel.adjustsFontSizeToFitWidth = YES;
+			[searchView addSubview:videoTimeLabel];
+
 			UILabel *videoTitleLabel = [[UILabel alloc] init];
 			videoTitleLabel.frame = CGRectMake(85, 0, searchView.frame.size.width - 85, 80);
 			videoTitleLabel.text = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"title"]];
