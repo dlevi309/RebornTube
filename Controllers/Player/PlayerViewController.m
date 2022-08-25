@@ -612,7 +612,23 @@
 		[overlayRightView.subviews setValue:@NO forKeyPath:@"hidden"];
 		videoOverlayTitleLabel.hidden = NO;
 		progressSlider.hidden = NO;
+		[NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(overlayHiddenCheck:) userInfo:nil repeats:NO];
 	} else {
+		overlayHidden = 1;
+		[overlayLeftView.subviews setValue:@YES forKeyPath:@"hidden"];
+		[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
+		[overlayRightView.subviews setValue:@YES forKeyPath:@"hidden"];
+		videoOverlayTitleLabel.hidden = YES;
+		if (deviceOrientation == 1) {
+			progressSlider.hidden = YES;
+		} else {
+			progressSlider.hidden = NO;
+		}
+	}
+}
+
+- (void)overlayHiddenCheck:(NSTimer *)timer {
+	if (overlayHidden == 0) {
 		overlayHidden = 1;
 		[overlayLeftView.subviews setValue:@YES forKeyPath:@"hidden"];
 		[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
