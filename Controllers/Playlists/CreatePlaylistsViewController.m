@@ -117,6 +117,8 @@
 
         [playlistsDictionary writeToFile:playlistsPlistFilePath atomically:YES];
     }
+
+    playlistsTextField.text = @"";
 }
 
 @end
