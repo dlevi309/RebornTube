@@ -52,6 +52,7 @@
 
 	// Overlay Other
 	UILabel *videoOverlayTitleLabel;
+	NSTimer *overlayTimer;
 
 	// Info
 	UISlider *progressSlider;
@@ -607,14 +608,18 @@
 - (void)overlayTap:(UITapGestureRecognizer *)recognizer {
 	if (overlayHidden == 1) {
 		overlayHidden = 0;
+		overlayTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(overlayTimerCheck:) userInfo:nil repeats:NO];
 		[overlayLeftView.subviews setValue:@NO forKeyPath:@"hidden"];
 		[overlayMiddleView.subviews setValue:@NO forKeyPath:@"hidden"];
 		[overlayRightView.subviews setValue:@NO forKeyPath:@"hidden"];
 		videoOverlayTitleLabel.hidden = NO;
 		progressSlider.hidden = NO;
-		[NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(overlayHiddenCheck:) userInfo:nil repeats:NO];
 	} else {
 		overlayHidden = 1;
+		if ([overlayTimer isValid]) {
+			[overlayTimer invalidate];
+		}
+		overlayTimer = nil;
 		[overlayLeftView.subviews setValue:@YES forKeyPath:@"hidden"];
 		[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
 		[overlayRightView.subviews setValue:@YES forKeyPath:@"hidden"];
@@ -627,7 +632,7 @@
 	}
 }
 
-- (void)overlayHiddenCheck:(NSTimer *)timer {
+- (void)overlayTimerCheck:(NSTimer *)timer {
 	if (overlayHidden == 0) {
 		overlayHidden = 1;
 		[overlayLeftView.subviews setValue:@YES forKeyPath:@"hidden"];
@@ -639,6 +644,11 @@
 		} else {
 			progressSlider.hidden = NO;
 		}
+	} else {
+		if ([overlayTimer isValid]) {
+			[overlayTimer invalidate];
+		}
+		overlayTimer = nil;
 	}
 }
 
