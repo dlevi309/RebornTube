@@ -102,59 +102,31 @@
 }
 
 - (void)playerSetup {
-	if (self.videoStream != nil && self.videoURL == nil) {
-		AVURLAsset *streamAsset = [[AVURLAsset alloc] initWithURL:self.videoStream options:nil];
+	AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
 
-		playerItem = [[AVPlayerItem alloc] initWithAsset:streamAsset];
-		AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
-		[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
-		playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmLowQualityZeroLatency;
+	playerItem = [[AVPlayerItem alloc] initWithAsset:videoAsset];
+	AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
+	[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
+	playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmLowQualityZeroLatency;
 
-		player = [AVPlayer playerWithPlayerItem:playerItem];
-		player.allowsExternalPlayback = YES;
-		player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
-		[player addObserver:self forKeyPath:@"status" options:0 context:nil];
-		[player addObserver:self forKeyPath:@"timeControlStatus" options:0 context:nil];
-		[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
-			[self playerTimeChanged];
-		}];
+	player = [AVPlayer playerWithPlayerItem:playerItem];
+	player.allowsExternalPlayback = YES;
+	player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
+	[player addObserver:self forKeyPath:@"status" options:0 context:nil];
+	[player addObserver:self forKeyPath:@"timeControlStatus" options:0 context:nil];
+	[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
+		[self playerTimeChanged];
+	}];
 
-		videoImage = [[UIImageView alloc] init];
-		videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
-		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
-		videoImage.hidden = YES;
-		[self.view addSubview:videoImage];
+	videoImage = [[UIImageView alloc] init];
+	videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
+	videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+	videoImage.hidden = YES;
+	[self.view addSubview:videoImage];
 
-		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
-		[self.view.layer addSublayer:playerLayer];
-	} else if (self.videoStream == nil && self.videoURL != nil) {
-		AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
-
-		playerItem = [[AVPlayerItem alloc] initWithAsset:videoAsset];
-		AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
-		[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
-		playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmLowQualityZeroLatency;
-
-		player = [AVPlayer playerWithPlayerItem:playerItem];
-		player.allowsExternalPlayback = YES;
-		player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
-		[player addObserver:self forKeyPath:@"status" options:0 context:nil];
-		[player addObserver:self forKeyPath:@"timeControlStatus" options:0 context:nil];
-		[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
-			[self playerTimeChanged];
-		}];
-
-		videoImage = [[UIImageView alloc] init];
-		videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
-		videoImage.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
-		videoImage.hidden = YES;
-		[self.view addSubview:videoImage];
-
-		playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
-		playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
-		[self.view.layer addSublayer:playerLayer];
-	}
+	playerLayer = [AVPlayerLayer playerLayerWithPlayer:player];
+	playerLayer.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width, self.view.bounds.size.width * 9 / 16);
+	[self.view.layer addSublayer:playerLayer];
 }
 
 - (void)overlaySetup {
@@ -192,7 +164,7 @@
 	videoTimeLabel.numberOfLines = 1;
 	[videoTimeLabel setFont:[UIFont boldSystemFontOfSize:videoTimeLabel.font.pointSize]];
 	videoTimeLabel.adjustsFontSizeToFitWidth = YES;
-	if (self.videoStream == nil && self.videoURL != nil) {
+	if (self.playbackType == 0 || self.playbackType == 2) {
 		[overlayLeftView addSubview:videoTimeLabel];
 	}
 
@@ -358,7 +330,7 @@
 
     [stackView addArrangedSubview:loopButton];
     [stackView addArrangedSubview:shareButton];
-	if (self.videoStream == nil && self.videoURL != nil) {
+	if (self.playbackType == 0) {
     	[stackView addArrangedSubview:downloadButton];
 	}
 	[stackView addArrangedSubview:addToPlaylistsButton];
