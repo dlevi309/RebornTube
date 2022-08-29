@@ -8,6 +8,7 @@
 #import "Subscriptions/SubscriptionsViewController.h"
 #import "History/HistoryViewController.h"
 #import "Playlists/PlaylistsViewController.h"
+#import "Downloads/DownloadsViewController.h"
 
 // Classes
 
