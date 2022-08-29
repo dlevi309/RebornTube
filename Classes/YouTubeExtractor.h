@@ -1,9 +1,9 @@
 #import <Foundation/Foundation.h>
 
 @interface YouTubeExtractor : NSObject
-+ (NSMutableDictionary *)youtubeAndroidPlayerRequest :(NSString *)videoID;
-+ (NSMutableDictionary *)youtubeAndroidBrowseRequest :(NSString *)browseId :(NSString *)browseParams;
-+ (NSMutableDictionary *)youtubeWebSearchRequest :(NSString *)searchQuery;
-+ (NSMutableDictionary *)returnYouTubeDislikeRequest :(NSString *)videoID;
-+ (NSMutableDictionary *)sponsorBlockRequest :(NSString *)videoID;
++ (NSDictionary *)youtubePlayerRequest :(NSString *)videoID :(NSString *)clientName :(NSString *)clientVersion;
++ (NSDictionary *)youtubeBrowseRequest :(NSString *)clientName :(NSString *)clientVersion :(NSString *)browseId :(NSString *)params;
++ (NSDictionary *)youtubeSearchRequest :(NSString *)clientName :(NSString *)clientVersion :(NSString *)query;
++ (NSDictionary *)returnYouTubeDislikeRequest :(NSString *)videoID;
++ (NSDictionary *)sponsorBlockRequest :(NSString *)videoID;
 @end

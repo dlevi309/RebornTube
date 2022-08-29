@@ -73,8 +73,8 @@
     homeIDDictionary = [NSMutableDictionary new];
 	[scrollView removeFromSuperview];
     
-    NSMutableDictionary *youtubeAndroidBrowseRequest = [YouTubeExtractor youtubeAndroidBrowseRequest:@"FEtrending":nil];
-    NSArray *trendingContents = youtubeAndroidBrowseRequest[@"contents"][@"singleColumnBrowseResultsRenderer"][@"tabs"][0][@"tabRenderer"][@"content"][@"sectionListRenderer"][@"contents"];
+    NSMutableDictionary *youtubeBrowseRequest = [YouTubeExtractor youtubeBrowseRequest:@"ANDROID":@"16.20":@"FEtrending":nil];
+    NSArray *trendingContents = youtubeBrowseRequest[@"contents"][@"singleColumnBrowseResultsRenderer"][@"tabs"][0][@"tabRenderer"][@"content"][@"sectionListRenderer"][@"contents"];
 	
 	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom);
 	

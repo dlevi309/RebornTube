@@ -69,7 +69,7 @@
         @try {
 			NSTextCheckingResult *result = array.firstObject;
 			NSString *videoID = [[searchTextField text] substringWithRange:result.range];
-			NSMutableDictionary *youtubeAndroidPlayerRequest = [YouTubeExtractor youtubeAndroidPlayerRequest:videoID];
+			NSMutableDictionary *youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"ANDROID":@"16.20":videoID];
 			
 			scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + searchTextField.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - searchTextField.frame.size.height);
 
@@ -84,12 +84,12 @@
 
 			UIImageView *videoImage = [[UIImageView alloc] init];
 			videoImage.frame = CGRectMake(0, 0, 80, 80);
-			NSArray *videoArtworkArray = youtubeAndroidPlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
+			NSArray *videoArtworkArray = youtubePlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
 			NSURL *videoArtwork = [NSURL URLWithString:[NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]]];
 			videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:videoArtwork]];
 			[searchView addSubview:videoImage];
 
-			NSString *videoLength = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"lengthSeconds"]];
+			NSString *videoLength = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"lengthSeconds"]];
 			UILabel *videoTimeLabel = [[UILabel alloc] init];
 			videoTimeLabel.frame = CGRectMake(40, 65, 40, 15);
 			videoTimeLabel.text = [NSString stringWithFormat:@"%d:%02d", [videoLength intValue] / 60, [videoLength intValue] % 60];
@@ -104,7 +104,7 @@
 
 			UILabel *videoTitleLabel = [[UILabel alloc] init];
 			videoTitleLabel.frame = CGRectMake(85, 0, searchView.frame.size.width - 85, 80);
-			videoTitleLabel.text = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"title"]];
+			videoTitleLabel.text = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"title"]];
 			videoTitleLabel.textColor = [AppColours textColour];
 			videoTitleLabel.numberOfLines = 2;
 			videoTitleLabel.adjustsFontSizeToFitWidth = YES;
@@ -112,7 +112,7 @@
 
 			UILabel *videoAuthorLabel = [[UILabel alloc] init];
 			videoAuthorLabel.frame = CGRectMake(5, 80, searchView.frame.size.width - 45, 20);
-			videoAuthorLabel.text = [NSString stringWithFormat:@"%@", youtubeAndroidPlayerRequest[@"videoDetails"][@"author"]];
+			videoAuthorLabel.text = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"author"]];
 			videoAuthorLabel.textColor = [AppColours textColour];
 			videoAuthorLabel.numberOfLines = 1;
 			[videoAuthorLabel setFont:[UIFont systemFontOfSize:12]];
@@ -144,8 +144,8 @@
 		@catch (NSException *exception) {
 		}
     } else {	
-		NSMutableDictionary *youtubeWebSearchRequest = [YouTubeExtractor youtubeWebSearchRequest:[searchTextField text]];
-		NSArray *searchContents = youtubeWebSearchRequest[@"contents"][@"twoColumnSearchResultsRenderer"][@"primaryContents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
+		NSMutableDictionary *youtubeSearchRequest = [YouTubeExtractor youtubeSearchRequest:@"WEB":@"2.20210401.08.00":[searchTextField text]];
+		NSArray *searchContents = youtubeSearchRequest[@"contents"][@"twoColumnSearchResultsRenderer"][@"primaryContents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
 		
 		scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + searchTextField.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom - searchTextField.frame.size.height);
 		
