@@ -2,6 +2,7 @@
 
 @interface YouTubeLoader : NSObject
 + (void)init :(NSString *)videoID;
++ (void)resetLoaderKeys;
 + (void)getTopViewController;
 + (void)presentPlayerOptions :(NSString *)videoID;
 + (void)runAVPlayerSteps :(NSString *)videoID;

@@ -27,8 +27,30 @@ NSDictionary *sponsorBlockValues;
 @implementation YouTubeLoader
 
 + (void)init :(NSString *)videoID {
+    [self resetLoaderKeys];
     [self getTopViewController];
     [self presentPlayerOptions:videoID];
+}
+
++ (void)resetLoaderKeys {
+    // Top View Controller
+    topViewController = nil;
+
+    // Request Response
+    youtubePlayerRequest = nil;
+
+    // Video Info
+    videoURL = nil;
+    audioURL = nil;
+    playbackType = nil;
+    videoTitle = nil;
+    videoAuthor = nil;
+    videoLength = nil;
+    videoArtwork = nil;
+    videoViewCount = nil;
+    videoLikes = nil;
+    videoDislikes = nil;
+    sponsorBlockValues = nil;
 }
 
 + (void)getTopViewController {

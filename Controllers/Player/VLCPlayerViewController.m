@@ -109,6 +109,7 @@
 
     [mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
     [mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
+	[mediaPlayer addObserver:self forKeyPath:@"playing" options:0 context:nil];
 
 	mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
 	[mediaPlayer addPlaybackSlave:self.audioURL type:VLCMediaPlaybackSlaveTypeAudio enforce:YES];
@@ -533,6 +534,7 @@
 	AppDelegate *shared = [UIApplication sharedApplication].delegate;
 	shared.allowRotation = NO;
 	[mediaPlayer stop];
+	mediaPlayer = nil;
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -542,12 +544,8 @@
 - (void)playPauseTap:(UITapGestureRecognizer *)recognizer {
 	if (mediaPlayer.isPlaying) {
 		[mediaPlayer pause];
-		playImage.alpha = 1.0;
-		pauseImage.alpha = 0.0;
 	} else {
 		[mediaPlayer play];
-		playImage.alpha = 0.0;
-		pauseImage.alpha = 1.0;
 	}
 }
 
