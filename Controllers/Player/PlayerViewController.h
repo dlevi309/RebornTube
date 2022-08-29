@@ -15,6 +15,6 @@
 @property (nonatomic, strong) NSString *videoViewCount;
 @property (nonatomic, strong) NSString *videoLikes;
 @property (nonatomic, strong) NSString *videoDislikes;
-@property (nonatomic, strong) NSMutableDictionary *sponsorBlockValues;
+@property (nonatomic, strong) NSDictionary *sponsorBlockValues;
 
 @end
