@@ -2,6 +2,7 @@
 #import "EUCheck.h"
 #import "YouTubeExtractor.h"
 #import "../Controllers/Player/PlayerViewController.h"
+#import "../Controllers/Player/VLCPlayerViewController.h"
 #import "../Controllers/Playlists/AddToPlaylistsViewController.h"
 
 // Top View Controller
@@ -37,7 +38,7 @@ NSDictionary *sponsorBlockValues;
         [self getVideoInfo];
         [self getReturnYouTubeDislikesInfo:videoID];
         [self getSponsorBlockInfo:videoID];
-        [self presentAVPlayer:videoID];
+        [self presentPlayerOptions:videoID];
         
     } else if (isLive == true && [playabilityStatus isEqual:@"OK"]) {
         videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubePlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
@@ -45,7 +46,7 @@ NSDictionary *sponsorBlockValues;
         [self getVideoInfo];
         [self getReturnYouTubeDislikesInfo:videoID];
         [self getSponsorBlockInfo:videoID];
-        [self presentAVPlayer:videoID];
+        [self presentPlayerOptions:videoID];
     } else if (isLive != true && ![playabilityStatus isEqual:@"OK"]) {
         BOOL isLocatedInEU = [EUCheck isLocatedInEU];
         if (isLocatedInEU == 1) {
@@ -62,7 +63,7 @@ NSDictionary *sponsorBlockValues;
             [self getVideoInfo];
             [self getReturnYouTubeDislikesInfo:videoID];
             [self getSponsorBlockInfo:videoID];
-            [self presentAVPlayer:videoID];
+            [self presentPlayerOptions:videoID];
         }
     }
 }
@@ -163,6 +164,29 @@ NSDictionary *sponsorBlockValues;
     sponsorBlockValues = [YouTubeExtractor sponsorBlockRequest:videoID];
 }
 
++ (void)presentPlayerOptions :(NSString *)videoID {
+    UIAlertController *alertPlayerOptions = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+    [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"AVPlayer (720p Max)" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self presentAVPlayer:videoID];
+    }]];
+
+    [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"VLC (4K Max, Experimental)" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [self presentVLCPlayer:videoID];
+    }]];
+
+    [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+    }]];
+
+    [alertPlayerOptions setModalPresentationStyle:UIModalPresentationPopover];
+    UIPopoverPresentationController *popPresenter = [alertPlayerOptions popoverPresentationController];
+    popPresenter.sourceView = topViewController.view;
+    popPresenter.sourceRect = topViewController.view.bounds;
+    popPresenter.permittedArrowDirections = 0;
+
+    [topViewController presentViewController:alertPlayerOptions animated:YES completion:nil];
+}
+
 + (void)presentAVPlayer :(NSString *)videoID {
     PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
     playerViewController.videoID = videoID;
@@ -184,6 +208,23 @@ NSDictionary *sponsorBlockValues;
 }
 
 + (void)presentVLCPlayer :(NSString *)videoID {
+    VLCPlayerViewController *playerViewController = [[VLCPlayerViewController alloc] init];
+    playerViewController.videoID = videoID;
+    playerViewController.videoURL = videoURL;
+    playerViewController.playbackType = playbackType;
+    playerViewController.videoTitle = videoTitle;
+    playerViewController.videoAuthor = videoAuthor;
+    playerViewController.videoLength = videoLength;
+    playerViewController.videoArtwork = videoArtwork;
+    playerViewController.videoViewCount = videoViewCount;
+    playerViewController.videoLikes = videoLikes;
+    playerViewController.videoDislikes = videoDislikes;
+    playerViewController.sponsorBlockValues = sponsorBlockValues;
+
+    UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
+    playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+    [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
 }
 
 @end
