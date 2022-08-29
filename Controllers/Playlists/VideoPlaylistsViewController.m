@@ -66,15 +66,15 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
 
     NSString *playlistsPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"playlists.plist"];
-    NSMutableDictionary *playlistsDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:playlistsPlistFilePath];
-    NSMutableArray *playlistsArray = [playlistsDictionary objectForKey:self.playlistsViewID];
+    NSDictionary *playlistsDictionary = [NSDictionary dictionaryWithContentsOfFile:playlistsPlistFilePath];
+    NSArray *playlistsArray = [playlistsDictionary objectForKey:self.playlistsViewID];
 
     scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom);
     
     int viewBounds = 0;
     int videoCount = 1;
     for (NSString *videoID in playlistsArray) {
-        NSMutableDictionary *youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"ANDROID":@"16.20":videoID];
+        NSDictionary *youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"ANDROID":@"16.20":videoID];
         @try {
             UIView *playlistsView = [[UIView alloc] init];
             playlistsView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 100);

@@ -71,7 +71,7 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
 
     NSString *historyPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"history.plist"];
-    NSMutableDictionary *historyDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:historyPlistFilePath];
+    NSDictionary *historyDictionary = [NSDictionary dictionaryWithContentsOfFile:historyPlistFilePath];
     NSEnumerator *historyDictionarySorted = [[[historyDictionary allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)] reverseObjectEnumerator];
 
     scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom);

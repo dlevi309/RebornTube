@@ -66,15 +66,15 @@
     NSString *documentsDirectory = [paths objectAtIndex:0];
 
     NSString *historyPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"history.plist"];
-    NSMutableDictionary *historyDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:historyPlistFilePath];
-    NSMutableArray *historyArray = [historyDictionary objectForKey:self.historyViewID];
+    NSDictionary *historyDictionary = [NSDictionary dictionaryWithContentsOfFile:historyPlistFilePath];
+    NSArray *historyArray = [historyDictionary objectForKey:self.historyViewID];
 
     scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom);
     
     int viewBounds = 0;
     int videoCount = 1;
     for (NSString *videoID in historyArray) {
-        NSMutableDictionary *youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"ANDROID":@"16.20":videoID];
+        NSDictionary *youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"ANDROID":@"16.20":videoID];
         @try {
             UIView *historyView = [[UIView alloc] init];
             historyView.frame = CGRectMake(0, viewBounds, self.view.bounds.size.width, 100);
