@@ -107,10 +107,11 @@
     mediaPlayer.delegate = self;
     mediaPlayer.drawable = vlcView;
 
-    [mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
-    [mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
+    // [mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    // [mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
 
 	mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
+	[mediaPlayer addPlaybackSlave:self.audioURL type:VLCMediaPlaybackSlaveTypeAudio enforce:YES];
 
 	videoImage = [[UIImageView alloc] init];
 	videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
