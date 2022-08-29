@@ -43,9 +43,11 @@
     UINavigationController *playlistsNavViewController = [[UINavigationController alloc] initWithRootViewController:playlistsViewController];
     playlistsNavViewController.tabBarItem.title = @"Playlists";
 
-    // self.tabBarController.viewControllers = [NSArray arrayWithObjects:homeNavViewController, subscriptionsNavViewController, historyNavViewController, playlistsNavViewController, nil];
+    DownloadsViewController *downloadsViewController = [[DownloadsViewController alloc] init];
+    UINavigationController *downloadsNavViewController = [[UINavigationController alloc] initWithRootViewController:downloadsViewController];
+    downloadsNavViewController.tabBarItem.title = @"Downloads";
 
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:homeNavViewController, historyNavViewController, playlistsNavViewController, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:homeNavViewController, subscriptionsNavViewController, historyNavViewController, playlistsNavViewController, downloadsNavViewController, nil];
 
     [self.view addSubview:self.tabBarController.view];
 }
