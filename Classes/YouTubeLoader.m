@@ -42,7 +42,7 @@ NSDictionary *sponsorBlockValues;
     // Video Info
     videoURL = nil;
     audioURL = nil;
-    playbackType = nil;
+    playbackType = 0;
     videoTitle = nil;
     videoAuthor = nil;
     videoLength = nil;
@@ -83,12 +83,6 @@ NSDictionary *sponsorBlockValues;
 
     [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
     }]];
-
-    [alertPlayerOptions setModalPresentationStyle:UIModalPresentationPopover];
-    UIPopoverPresentationController *popPresenter = [alertPlayerOptions popoverPresentationController];
-    popPresenter.sourceView = topViewController.view;
-    popPresenter.sourceRect = topViewController.view.bounds;
-    popPresenter.permittedArrowDirections = 0;
 
     [topViewController presentViewController:alertPlayerOptions animated:YES completion:nil];
 }

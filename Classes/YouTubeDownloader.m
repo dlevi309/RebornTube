@@ -128,12 +128,6 @@
     [alertQualitySelector addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
     }]];
 
-    [alertQualitySelector setModalPresentationStyle:UIModalPresentationPopover];
-    UIPopoverPresentationController *popPresenter = [alertQualitySelector popoverPresentationController];
-    popPresenter.sourceView = topViewController.view;
-    popPresenter.sourceRect = topViewController.view.bounds;
-    popPresenter.permittedArrowDirections = 0;
-
     [topViewController presentViewController:alertQualitySelector animated:YES completion:nil];
 }
 
