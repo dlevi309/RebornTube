@@ -94,7 +94,7 @@ NSDictionary *sponsorBlockValues;
 }
 
 + (void)runAVPlayerSteps :(NSString *)videoID {
-    youtubePlayerRequest = [YouTubeExtractor youtubeAndroidPlayerRequest:videoID];
+    youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"ANDROID":@"16.20":videoID];
     NSString *playabilityStatus = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"playabilityStatus"][@"status"]];
     if ([playabilityStatus isEqual:@"OK"]) {
         [self getAVPlayerVideoUrl];
@@ -107,7 +107,7 @@ NSDictionary *sponsorBlockValues;
 }
 
 + (void)runVLCPlayerSteps :(NSString *)videoID {
-    youtubePlayerRequest = [YouTubeExtractor youtubeAndroidPlayerRequest:videoID];
+    youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"ANDROID":@"16.20":videoID];
     NSString *playabilityStatus = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"playabilityStatus"][@"status"]];
     if ([playabilityStatus isEqual:@"OK"]) {
         [self getVLCPlayerUrls];

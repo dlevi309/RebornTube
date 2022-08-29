@@ -22,8 +22,8 @@
         }
     }
 
-    NSMutableDictionary *youtubeAndroidPlayerRequest = [YouTubeExtractor youtubeAndroidPlayerRequest:videoID];
-    NSDictionary *innertubeAdaptiveFormats = youtubeAndroidPlayerRequest[@"streamingData"][@"adaptiveFormats"];
+    NSMutableDictionary *youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"ANDROID":@"16.20":videoID];
+    NSDictionary *innertubeAdaptiveFormats = youtubePlayerRequest[@"streamingData"][@"adaptiveFormats"];
     NSURL *video2160p;
     NSURL *video1440p;
     NSURL *video1080p;
