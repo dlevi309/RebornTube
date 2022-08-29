@@ -107,8 +107,8 @@
     mediaPlayer.delegate = self;
     mediaPlayer.drawable = vlcView;
 
-    // [mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
-    // [mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
+    [mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
+    [mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
 
 	mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
 	[mediaPlayer addPlaybackSlave:self.audioURL type:VLCMediaPlaybackSlaveTypeAudio enforce:YES];
@@ -119,6 +119,7 @@
 	videoImage.hidden = YES;
 	[self.view addSubview:videoImage];
 
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	[mediaPlayer play];
 }
 
@@ -321,7 +322,7 @@
 	stackView.alignment = UIStackViewAlignmentFill;
     stackView.spacing = 10;
 
-    [stackView addArrangedSubview:loopButton];
+    // [stackView addArrangedSubview:loopButton];
     [stackView addArrangedSubview:shareButton];
 	if (self.playbackType == 0) {
     	[stackView addArrangedSubview:downloadButton];
@@ -344,9 +345,9 @@
     [commandCenter.togglePlayPauseCommand setEnabled:YES];
     [commandCenter.playCommand setEnabled:YES];
     [commandCenter.pauseCommand setEnabled:YES];
-    [commandCenter.nextTrackCommand setEnabled:YES];
-    [commandCenter.previousTrackCommand setEnabled:YES];
-	[commandCenter.changePlaybackPositionCommand setEnabled:YES];
+    [commandCenter.nextTrackCommand setEnabled:NO];
+    [commandCenter.previousTrackCommand setEnabled:NO];
+	[commandCenter.changePlaybackPositionCommand setEnabled:NO];
     [commandCenter.changePlaybackPositionCommand addTarget:self action:@selector(changedLockscreenPlaybackSlider:)];
 
 	[commandCenter.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
@@ -461,6 +462,22 @@
 
 @implementation VLCPlayerViewController (Privates)
 
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+	progressSlider.maximumValue = [mediaPlayer.media.length intValue];
+	progressSlider.value = [mediaPlayer.time intValue];
+	if (mediaPlayer.isPlaying) {
+		playImage.alpha = 0.0;
+		pauseImage.alpha = 1.0;
+	} else {
+		playImage.alpha = 1.0;
+		pauseImage.alpha = 0.0;
+	}
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
+		MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
+		[playingInfoCenter setNowPlayingInfo:songInfo];
+	}
+}
+
 - (void)overlayTap:(UITapGestureRecognizer *)recognizer {
 	if (overlayHidden == 1) {
 		overlayHidden = 0;
@@ -525,8 +542,12 @@
 - (void)playPauseTap:(UITapGestureRecognizer *)recognizer {
 	if (mediaPlayer.isPlaying) {
 		[mediaPlayer pause];
+		playImage.alpha = 1.0;
+		pauseImage.alpha = 0.0;
 	} else {
 		[mediaPlayer play];
+		playImage.alpha = 0.0;
+		pauseImage.alpha = 1.0;
 	}
 }
 
@@ -534,9 +555,8 @@
 }
 
 - (void)enteredBackground:(NSNotification *)notification {
-}
-
-- (void)enteredForeground:(NSNotification *)notification {
+	MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
+	[playingInfoCenter setNowPlayingInfo:songInfo];
 }
 
 - (void)orientationChanged:(NSNotification *)notification {
