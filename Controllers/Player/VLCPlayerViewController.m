@@ -250,7 +250,6 @@
 	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateHighlighted];
 	progressSlider.minimumTrackTintColor = [UIColor redColor];
 	progressSlider.minimumValue = 0.0f;
-	progressSlider.maximumValue = [self.videoLength floatValue];
 	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 	if (self.playbackType == 0) {
 		[self.view addSubview:progressSlider];
@@ -470,8 +469,11 @@
 @implementation VLCPlayerViewController (Privates)
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	progressSlider.maximumValue = [mediaPlayer.media.length intValue];
-	progressSlider.value = [mediaPlayer.time intValue];
+	if (self.playbackType == 0) {
+		progressSlider.maximumValue = [mediaPlayer.media.length intValue];
+		progressSlider.value = [mediaPlayer.time intValue];
+	}
+	videoTimeLabel.text = [NSString stringWithFormat:@"%@ / %@", [mediaPlayer.time stringValue], [mediaPlayer.media.length stringValue]];
 	if (mediaPlayer.isPlaying) {
 		playImage.alpha = 0.0;
 		pauseImage.alpha = 1.0;
