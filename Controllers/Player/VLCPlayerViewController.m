@@ -559,6 +559,27 @@
 }
 
 - (void)rewindTap:(UITapGestureRecognizer *)recognizer {
+	if (overlayHidden == 0) {
+		overlayHidden = 1;
+		if ([overlayTimer isValid]) {
+			[overlayTimer invalidate];
+		}
+		overlayTimer = nil;
+		[overlayLeftView.subviews setValue:@YES forKeyPath:@"hidden"];
+		[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
+		[overlayRightView.subviews setValue:@YES forKeyPath:@"hidden"];
+		videoOverlayTitleLabel.hidden = YES;
+		if (deviceOrientation == 1) {
+			progressSlider.hidden = YES;
+		} else {
+			progressSlider.hidden = NO;
+		}
+	} else {
+		if ([overlayTimer isValid]) {
+			[overlayTimer invalidate];
+		}
+		overlayTimer = nil;
+	}
 }
 
 - (void)playPauseTap:(UITapGestureRecognizer *)recognizer {
@@ -570,6 +591,27 @@
 }
 
 - (void)forwardTap:(UITapGestureRecognizer *)recognizer {
+	if (overlayHidden == 0) {
+		overlayHidden = 1;
+		if ([overlayTimer isValid]) {
+			[overlayTimer invalidate];
+		}
+		overlayTimer = nil;
+		[overlayLeftView.subviews setValue:@YES forKeyPath:@"hidden"];
+		[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
+		[overlayRightView.subviews setValue:@YES forKeyPath:@"hidden"];
+		videoOverlayTitleLabel.hidden = YES;
+		if (deviceOrientation == 1) {
+			progressSlider.hidden = YES;
+		} else {
+			progressSlider.hidden = NO;
+		}
+	} else {
+		if ([overlayTimer isValid]) {
+			[overlayTimer invalidate];
+		}
+		overlayTimer = nil;
+	}
 }
 
 - (void)enteredBackground:(NSNotification *)notification {
