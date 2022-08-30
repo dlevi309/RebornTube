@@ -378,8 +378,8 @@
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
-	AppDelegate *shared = [UIApplication sharedApplication].delegate;
-	shared.allowRotation = YES;
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+	appDelegate.allowRotation = YES;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
