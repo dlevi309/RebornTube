@@ -253,7 +253,9 @@
 	progressSlider.minimumValue = 0.0f;
 	progressSlider.maximumValue = [self.videoLength floatValue];
 	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-	[self.view addSubview:progressSlider];
+	if (self.playbackType == 0) {
+		[self.view addSubview:progressSlider];
+	}
 }
 
 - (void)scrollSetup {

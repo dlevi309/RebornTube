@@ -111,8 +111,12 @@
     [mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
 	[mediaPlayer addObserver:self forKeyPath:@"playing" options:0 context:nil];
 
-	mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
-	[mediaPlayer addPlaybackSlave:self.audioURL type:VLCMediaPlaybackSlaveTypeAudio enforce:YES];
+	if (self.playbackType == 0) {
+		mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
+		[mediaPlayer addPlaybackSlave:self.audioURL type:VLCMediaPlaybackSlaveTypeAudio enforce:YES];
+	} else if (self.playbackType == 1) {
+		mediaPlayer.media = [VLCMedia mediaWithURL:self.streamURL];
+	}
 
 	videoImage = [[UIImageView alloc] init];
 	videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
@@ -248,7 +252,9 @@
 	progressSlider.minimumValue = 0.0f;
 	progressSlider.maximumValue = [self.videoLength floatValue];
 	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-	[self.view addSubview:progressSlider];
+	if (self.playbackType == 0) {
+		[self.view addSubview:progressSlider];
+	}
 }
 
 - (void)scrollSetup {
