@@ -457,20 +457,32 @@
 @implementation VLCPlayerViewController (Privates)
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	if (self.playbackType == 0) {
-		progressSlider.maximumValue = [mediaPlayer.media.length intValue];
-		progressSlider.value = [mediaPlayer.time intValue];
-	}
-	if (mediaPlayer.isPlaying) {
-		playImage.alpha = 0.0;
-		pauseImage.alpha = 1.0;
-	} else {
-		playImage.alpha = 1.0;
-		pauseImage.alpha = 0.0;
-	}
-	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
-		MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
-		[playingInfoCenter setNowPlayingInfo:songInfo];
+	if (object == mediaPlayer) {
+		if ([keyPath isEqual:@"time"]) {
+			if (self.playbackType == 0) {
+				progressSlider.maximumValue = [mediaPlayer.media.length intValue];
+			}
+		} else if ([keyPath isEqual:@"remainingTime"]) {
+			if (self.playbackType == 0) {
+				progressSlider.value = [mediaPlayer.time intValue];
+			}
+			if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
+				MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
+				[playingInfoCenter setNowPlayingInfo:songInfo];
+			}
+		} else if ([keyPath isEqual:@"playing"]) {
+			if (mediaPlayer.isPlaying) {
+				playImage.alpha = 0.0;
+				pauseImage.alpha = 1.0;
+			} else {
+				playImage.alpha = 1.0;
+				pauseImage.alpha = 0.0;
+			}
+			if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
+				MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
+				[playingInfoCenter setNowPlayingInfo:songInfo];
+			}
+		}
 	}
 }
 
@@ -528,8 +540,21 @@
 - (void)collapseTap:(UITapGestureRecognizer *)recognizer {
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	appDelegate.allowRotation = NO;
-	[mediaPlayer stop];
-	mediaPlayer = nil;
+	if (mediaPlayer) {
+		@try {
+			[mediaPlayer removeObserver:self forKeyPath:@"time"];
+			[mediaPlayer removeObserver:self forKeyPath:@"remainingTime"];
+			[mediaPlayer removeObserver:self forKeyPath:@"playing"];
+		}
+        @catch (NSException *exception) {
+        }
+		if (mediaPlayer.media) {
+			[mediaPlayer stop];
+		}
+		if (mediaPlayer) {
+			mediaPlayer = nil;
+		}
+	}
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
