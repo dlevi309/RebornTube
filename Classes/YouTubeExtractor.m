@@ -2,7 +2,7 @@
 
 @implementation YouTubeExtractor
 
-+ (NSDictionary *)youtubePlayerRequest :(NSString *)videoID :(NSString *)clientName :(NSString *)clientVersion {
++ (NSDictionary *)youtubePlayerRequest :(NSString *)clientName :(NSString *)clientVersion :(NSString *)videoID {
     NSLocale *locale = [NSLocale currentLocale];
 	NSString *countryCode = [locale objectForKey:NSLocaleCountryCode];
     
