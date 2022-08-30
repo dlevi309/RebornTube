@@ -635,8 +635,8 @@
 }
 
 - (void)collapseTap:(UITapGestureRecognizer *)recognizer {
-	AppDelegate *shared = [UIApplication sharedApplication].delegate;
-	shared.allowRotation = NO;
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+	appDelegate.allowRotation = NO;
 	if ([pictureInPictureController isPictureInPictureActive]) {
         [pictureInPictureController stopPictureInPicture];
     }
