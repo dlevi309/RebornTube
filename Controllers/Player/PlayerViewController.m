@@ -164,7 +164,7 @@
 	videoTimeLabel.numberOfLines = 1;
 	[videoTimeLabel setFont:[UIFont boldSystemFontOfSize:videoTimeLabel.font.pointSize]];
 	videoTimeLabel.adjustsFontSizeToFitWidth = YES;
-	if (self.playbackType == 0 || self.playbackType == 2) {
+	if (self.playbackType == 0) {
 		[overlayLeftView addSubview:videoTimeLabel];
 	}
 
@@ -330,7 +330,9 @@
 	stackView.alignment = UIStackViewAlignmentFill;
     stackView.spacing = 10;
 
-    [stackView addArrangedSubview:loopButton];
+    if (self.playbackType == 0) {
+		[stackView addArrangedSubview:loopButton];
+	}
     [stackView addArrangedSubview:shareButton];
 	if (self.playbackType == 0) {
     	[stackView addArrangedSubview:downloadButton];

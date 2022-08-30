@@ -35,7 +35,6 @@
 	UIView *overlayLeftView;
 	UIView *overlayLeftViewShadow;
 	UIImageView *collapseImage;
-	UILabel *videoTimeLabel;
 
 	// Overlay Middle
 	UIView *overlayMiddleView;
@@ -155,17 +154,6 @@
 	collapseViewTap.numberOfTapsRequired = 1;
 	[collapseImage addGestureRecognizer:collapseViewTap];
 	[overlayLeftView addSubview:collapseImage];
-
-	videoTimeLabel = [[UILabel alloc] init];
-	videoTimeLabel.frame = CGRectMake(10, overlayLeftView.bounds.size.height - 25, 80, 15);
-	videoTimeLabel.textAlignment = NSTextAlignmentCenter;
-	videoTimeLabel.textColor = [UIColor whiteColor];
-	videoTimeLabel.numberOfLines = 1;
-	[videoTimeLabel setFont:[UIFont boldSystemFontOfSize:videoTimeLabel.font.pointSize]];
-	videoTimeLabel.adjustsFontSizeToFitWidth = YES;
-	if (self.playbackType == 0 || self.playbackType == 2) {
-		[overlayLeftView addSubview:videoTimeLabel];
-	}
 
 	// Overlay Middle
 	overlayMiddleView = [[UIView alloc] init];
@@ -328,7 +316,9 @@
 	stackView.alignment = UIStackViewAlignmentFill;
     stackView.spacing = 10;
 
-    // [stackView addArrangedSubview:loopButton];
+    /* if (self.playbackType == 0) {
+		[stackView addArrangedSubview:loopButton];
+	} */
     [stackView addArrangedSubview:shareButton];
 	if (self.playbackType == 0) {
     	[stackView addArrangedSubview:downloadButton];
@@ -405,7 +395,6 @@
 		overlayLeftView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 		overlayLeftViewShadow.frame = CGRectMake(0, 0, overlayLeftView.bounds.size.width, overlayLeftView.bounds.size.height);
 		collapseImage.alpha = 1.0;
-		videoTimeLabel.frame = CGRectMake(10, overlayLeftView.bounds.size.height - 25, 80, 15);
 
 		// Overlay Middle
 		overlayMiddleView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
@@ -438,7 +427,6 @@
 		overlayLeftView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		overlayLeftViewShadow.frame = CGRectMake(0, 0, overlayLeftView.bounds.size.width, overlayLeftView.bounds.size.height);
 		collapseImage.alpha = 0.0;
-		videoTimeLabel.frame = CGRectMake(boundsWindow.safeAreaInsets.left + 10, (self.view.bounds.size.height / 2) + 75, 80, 15);
 		
 		// Overlay Middle
 		overlayMiddleView.frame = CGRectMake(self.view.bounds.size.width / 3, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
@@ -473,7 +461,6 @@
 		progressSlider.maximumValue = [mediaPlayer.media.length intValue];
 		progressSlider.value = [mediaPlayer.time intValue];
 	}
-	videoTimeLabel.text = [NSString stringWithFormat:@"%@ / %@", [mediaPlayer.time stringValue], [mediaPlayer.media.length stringValue]];
 	if (mediaPlayer.isPlaying) {
 		playImage.alpha = 0.0;
 		pauseImage.alpha = 1.0;
