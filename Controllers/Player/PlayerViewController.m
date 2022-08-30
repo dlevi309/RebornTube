@@ -736,6 +736,12 @@
 		case UIInterfaceOrientationLandscapeRight:
 		[self rotationMode:1];
 		break;
+
+		case UIInterfaceOrientationPortraitUpsideDown:
+		break;
+
+		case UIInterfaceOrientationUnknown:
+		break;
 	}
 }
 
