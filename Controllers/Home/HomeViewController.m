@@ -164,12 +164,20 @@
 
 - (void)search {
     SearchViewController *searchViewController = [[SearchViewController alloc] init];
-    [self.navigationController pushViewController:searchViewController animated:YES];
+
+	UINavigationController *searchViewControllerView = [[UINavigationController alloc] initWithRootViewController:searchViewController];
+    searchViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+    [self presentViewController:searchViewControllerView animated:YES completion:nil];
 }
 
 - (void)settings {
     SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    [self.navigationController pushViewController:settingsViewController animated:YES];
+
+	UINavigationController *settingsViewControllerView = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+    settingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+
+    [self presentViewController:settingsViewControllerView animated:YES completion:nil];
 }
 
 // Other
