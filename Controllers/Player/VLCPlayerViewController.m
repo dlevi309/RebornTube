@@ -72,9 +72,6 @@
 	self.view.backgroundColor = [AppColours mainBackgroundColour];
 	[self.navigationController setNavigationBarHidden:YES animated:NO];
 
-	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
-    self.navigationItem.rightBarButtonItem = doneButton;
-
 	[self keysSetup];
 	[self playerSetup];
 	[self overlaySetup];
@@ -84,6 +81,8 @@
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 		[self mediaSetup];
 	}
+
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)keysSetup {
@@ -383,13 +382,13 @@
 	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
+/* - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 	
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	appDelegate.allowRotation = YES;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-}
+} */
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
 	return YES;
@@ -559,8 +558,8 @@
 }
 
 - (void)collapseTap:(UITapGestureRecognizer *)recognizer {
-	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-	appDelegate.allowRotation = NO;
+	/* AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+	appDelegate.allowRotation = NO; */
 	if (mediaPlayer) {
 		@try {
 			[mediaPlayer removeObserver:self forKeyPath:@"time"];

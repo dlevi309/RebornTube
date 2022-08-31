@@ -22,6 +22,9 @@
 	self.title = @"";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
 
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+    self.navigationItem.leftBarButtonItem = doneButton;
+
     UIBarButtonItem *applyButton = [[UIBarButtonItem alloc] initWithTitle:@"Apply" style:UIBarButtonItemStylePlain target:self action:@selector(apply)];
     self.navigationItem.rightBarButtonItem = applyButton;
 
@@ -188,6 +191,10 @@
 @end
 
 @implementation SettingsViewController (Privates)
+
+- (void)done {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (void)apply {
     exit(0); 

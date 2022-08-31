@@ -36,6 +36,9 @@
 	self.title = @"";
 	self.view.backgroundColor = [AppColours mainBackgroundColour];
 
+	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+    self.navigationItem.leftBarButtonItem = doneButton;
+
     [self keysSetup];
 }
 
@@ -57,6 +60,10 @@
 @end
 
 @implementation SearchViewController (Privates)
+
+- (void)done {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+}
 
 - (void)searchRequest {
 	searchVideoIDDictionary = [NSMutableDictionary new];
