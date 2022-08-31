@@ -10,7 +10,6 @@
 
 #import "../../Classes/AppColours.h"
 #import "../../Classes/AppDelegate.h"
-#import "../../Classes/YouTubeDownloader.h"
 
 // Interface
 
@@ -41,6 +40,7 @@
 	UIView *overlayMiddleViewShadow;
 	UIImageView *playImage;
 	UIImageView *pauseImage;
+	UIImageView *restartImage;
 
 	// Overlay Right
 	UIView *overlayRightView;
@@ -108,7 +108,7 @@
 
     [mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
     [mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
-	[mediaPlayer addObserver:self forKeyPath:@"playing" options:0 context:nil];
+	[mediaPlayer addObserver:self forKeyPath:@"state" options:0 context:nil];
 
 	if (self.playbackType == 0) {
 		mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
@@ -123,7 +123,9 @@
 	videoImage.hidden = YES;
 	[self.view addSubview:videoImage];
 
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+	}
 	[mediaPlayer play];
 }
 
@@ -189,6 +191,17 @@
 	pauseViewTap.numberOfTapsRequired = 1;
 	[pauseImage addGestureRecognizer:pauseViewTap];
 	[overlayMiddleView addSubview:pauseImage];
+
+	restartImage = [[UIImageView alloc] init];
+	NSString *restartImagePath = [playerAssetsBundle pathForResource:@"restart" ofType:@"png"];
+	restartImage.image = [[UIImage imageWithContentsOfFile:restartImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	restartImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
+	restartImage.tintColor = [UIColor whiteColor];
+	restartImage.userInteractionEnabled = YES;
+	UITapGestureRecognizer *restartViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(restartTap:)];
+	restartViewTap.numberOfTapsRequired = 1;
+	[restartImage addGestureRecognizer:restartViewTap];
+	[overlayMiddleView addSubview:restartImage];
 
 	// Overlay Right
 	overlayRightView = [[UIView alloc] init];
@@ -320,9 +333,9 @@
 		[stackView addArrangedSubview:loopButton];
 	} */
     [stackView addArrangedSubview:shareButton];
-	if (self.playbackType == 0) {
+	/* if (self.playbackType == 0) {
     	[stackView addArrangedSubview:downloadButton];
-	}
+	} */
 	[stackView addArrangedSubview:addToPlaylistsButton];
 
 	stackView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -401,6 +414,7 @@
 		overlayMiddleViewShadow.frame = CGRectMake(0, 0, overlayMiddleView.bounds.size.width, overlayMiddleView.bounds.size.height);
 		playImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
+		restartImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 
 		// Overlay Right
 		overlayRightView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
@@ -433,6 +447,7 @@
 		overlayMiddleViewShadow.frame = CGRectMake(0, 0, overlayMiddleView.bounds.size.width, overlayMiddleView.bounds.size.height);
 		playImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
+		restartImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 		
 		// Overlay Right
 		overlayRightView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
@@ -470,13 +485,19 @@
 				MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
 				[playingInfoCenter setNowPlayingInfo:songInfo];
 			}
-		} else if ([keyPath isEqual:@"playing"]) {
-			if (mediaPlayer.isPlaying) {
+		} else if ([keyPath isEqual:@"state"]) {
+			if (mediaPlayer.state == VLCMediaPlayerStatePlaying) {
 				playImage.alpha = 0.0;
 				pauseImage.alpha = 1.0;
-			} else {
+				restartImage.alpha = 0.0;
+			} else if (mediaPlayer.state == VLCMediaPlayerStatePaused) {
 				playImage.alpha = 1.0;
 				pauseImage.alpha = 0.0;
+				restartImage.alpha = 0.0;
+			} else if (mediaPlayer.state == VLCMediaPlayerStateStopped) {
+				playImage.alpha = 0.0;
+				pauseImage.alpha = 0.0;
+				restartImage.alpha = 1.0;
 			}
 			if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 				MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
@@ -544,7 +565,7 @@
 		@try {
 			[mediaPlayer removeObserver:self forKeyPath:@"time"];
 			[mediaPlayer removeObserver:self forKeyPath:@"remainingTime"];
-			[mediaPlayer removeObserver:self forKeyPath:@"playing"];
+			[mediaPlayer removeObserver:self forKeyPath:@"state"];
 		}
         @catch (NSException *exception) {
         }
@@ -559,27 +580,7 @@
 }
 
 - (void)rewindTap:(UITapGestureRecognizer *)recognizer {
-	if (overlayHidden == 0) {
-		overlayHidden = 1;
-		if ([overlayTimer isValid]) {
-			[overlayTimer invalidate];
-		}
-		overlayTimer = nil;
-		[overlayLeftView.subviews setValue:@YES forKeyPath:@"hidden"];
-		[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
-		[overlayRightView.subviews setValue:@YES forKeyPath:@"hidden"];
-		videoOverlayTitleLabel.hidden = YES;
-		if (deviceOrientation == 1) {
-			progressSlider.hidden = YES;
-		} else {
-			progressSlider.hidden = NO;
-		}
-	} else {
-		if ([overlayTimer isValid]) {
-			[overlayTimer invalidate];
-		}
-		overlayTimer = nil;
-	}
+	// [mediaPlayer jumpBackward:10];
 }
 
 - (void)playPauseTap:(UITapGestureRecognizer *)recognizer {
@@ -590,28 +591,11 @@
 	}
 }
 
+- (void)restartTap:(UITapGestureRecognizer *)recognizer {
+}
+
 - (void)forwardTap:(UITapGestureRecognizer *)recognizer {
-	if (overlayHidden == 0) {
-		overlayHidden = 1;
-		if ([overlayTimer isValid]) {
-			[overlayTimer invalidate];
-		}
-		overlayTimer = nil;
-		[overlayLeftView.subviews setValue:@YES forKeyPath:@"hidden"];
-		[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
-		[overlayRightView.subviews setValue:@YES forKeyPath:@"hidden"];
-		videoOverlayTitleLabel.hidden = YES;
-		if (deviceOrientation == 1) {
-			progressSlider.hidden = YES;
-		} else {
-			progressSlider.hidden = NO;
-		}
-	} else {
-		if ([overlayTimer isValid]) {
-			[overlayTimer invalidate];
-		}
-		overlayTimer = nil;
-	}
+	// [mediaPlayer jumpForward:10];
 }
 
 - (void)enteredBackground:(NSNotification *)notification {
@@ -674,7 +658,6 @@
 
 - (void)downloadButtonClicked:(UIButton *)sender {
 	[mediaPlayer pause];
-	[YouTubeDownloader init:self.videoID];
 }
 
 - (void)addToPlaylistsButtonClicked:(UIButton *)sender {

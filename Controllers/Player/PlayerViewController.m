@@ -10,7 +10,6 @@
 
 #import "../../Classes/AppColours.h"
 #import "../../Classes/AppDelegate.h"
-#import "../../Classes/YouTubeDownloader.h"
 
 // Interface
 
@@ -334,9 +333,9 @@
 		[stackView addArrangedSubview:loopButton];
 	}
     [stackView addArrangedSubview:shareButton];
-	if (self.playbackType == 0) {
+	/* if (self.playbackType == 0) {
     	[stackView addArrangedSubview:downloadButton];
-	}
+	} */
 	[stackView addArrangedSubview:addToPlaylistsButton];
 
 	stackView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -796,7 +795,6 @@
 		[pictureInPictureController stopPictureInPicture];
 	}
 	[player pause];
-	[YouTubeDownloader init:self.videoID];
 }
 
 - (void)addToPlaylistsButtonClicked:(UIButton *)sender {
