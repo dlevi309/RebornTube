@@ -19,7 +19,7 @@
 - (void)loadView {
 	[super loadView];
 
-	self.title = @"";
+	self.title = @"Theme";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
 
     if (@available(iOS 15.0, *)) {

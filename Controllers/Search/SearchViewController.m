@@ -33,7 +33,7 @@
 - (void)loadView {
 	[super loadView];
 
-	self.title = @"";
+	self.title = @"Search";
 	self.view.backgroundColor = [AppColours mainBackgroundColour];
 
 	UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];

@@ -16,7 +16,7 @@
 - (void)loadView {
 	[super loadView];
 
-	self.title = @"";
+	self.title = @"SponsorBlock";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
 
     if (@available(iOS 15.0, *)) {

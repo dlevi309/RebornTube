@@ -19,7 +19,7 @@
 - (void)loadView {
 	[super loadView];
 
-	self.title = @"";
+	self.title = @"Settings";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
 
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
@@ -34,7 +34,7 @@
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -46,6 +46,9 @@
     }
     if (section == 2) {
         return 1;
+    }
+    if (section == 3) {
+        return 2;
     }
     return 0;
 }
@@ -118,6 +121,15 @@
                 cell.textLabel.text = @"Clear History";
             }
         }
+        if (indexPath.section == 3) {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            if (indexPath.row == 0) {
+                cell.textLabel.text = @"Credits";
+            }
+            if (indexPath.row == 1) {
+                cell.textLabel.text = @"Open-Source Libraries";
+            }
+        }
     }
     return cell;
 }
@@ -167,15 +179,15 @@
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForFooterInSection:(NSInteger)section {
-    if (section == 2) {
+    if (section == 3) {
         return 50;
     }
     return 0;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-    if (section == 2) {
-        return @"Version: 1.0.0 (Alpha 35)";
+    if (section == 3) {
+        return @"Version: 1.0.0 (Alpha 36 Dev)";
     }
     return nil;
 }
