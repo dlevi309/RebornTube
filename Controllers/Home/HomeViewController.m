@@ -74,27 +74,19 @@
 - (void)mainDictionarySetup {
 	mainDictionary = [NSMutableDictionary new];
 	NSDictionary *youtubeBrowseRequest = [YouTubeExtractor youtubeBrowseRequest:@"ANDROID":@"16.20":@"FEtrending":nil];
-    NSArray *trendingContents = youtubeBrowseRequest[@"contents"][@"singleColumnBrowseResultsRenderer"][@"tabs"][0][@"tabRenderer"][@"content"][@"sectionListRenderer"][@"contents"];
-	for (int i = 0 ; i <= 50 ; i++) {
+    NSArray *youtubeBrowseRequestContents = youtubeBrowseRequest[@"contents"][@"singleColumnBrowseResultsRenderer"][@"tabs"][0][@"tabRenderer"][@"content"][@"sectionListRenderer"][@"contents"];
+	__block int arrayCount = 0;
+	[youtubeBrowseRequestContents enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
 		@try {
-			if (trendingContents[i][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"headline"][@"runs"][0][@"text"]) {
-				NSArray *videoArtworkArray = trendingContents[i][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"thumbnail"][@"thumbnails"];
-				NSString *videoArtwork = [NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]];
-				NSString *videoTime = [NSString stringWithFormat:@"%@", trendingContents[i][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"lengthText"][@"runs"][0][@"text"]];
-				NSString *videoTitle = [NSString stringWithFormat:@"%@", trendingContents[i][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"headline"][@"runs"][0][@"text"]];
-				NSString *videoCount = [NSString stringWithFormat:@"%@", trendingContents[i][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"shortViewCountText"][@"runs"][0][@"text"]];
-				NSString *videoAuthor = [NSString stringWithFormat:@"%@", trendingContents[i][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"shortBylineText"][@"runs"][0][@"text"]];
-				NSString *videoID = [NSString stringWithFormat:@"%@", trendingContents[i][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"navigationEndpoint"][@"watchEndpoint"][@"videoId"]];
-				
-				/* NSMutableArray *mainArray = [[NSMutableArray alloc] init];
-				[mainArray addObject:videoArtwork];
-				[mainArray addObject:videoTime];
-				[mainArray addObject:videoTitle];
-				[mainArray addObject:videoCount];
-				[mainArray addObject:videoAuthor];
-				[mainArray addObject:videoID];
-				[mainDictionary setValue:mainArray forKey:[NSString stringWithFormat:@"%d", i]]; */
-
+			NSArray *videoArtworkArray = youtubeBrowseRequestContents[arrayCount][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"thumbnail"][@"thumbnails"];
+			NSString *videoArtwork = [NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]];
+			NSString *videoTime = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[arrayCount][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"lengthText"][@"runs"][0][@"text"]];
+			NSString *videoTitle = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[arrayCount][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"headline"][@"runs"][0][@"text"]];
+			NSString *videoCount = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[arrayCount][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"shortViewCountText"][@"runs"][0][@"text"]];
+			NSString *videoAuthor = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[arrayCount][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"shortBylineText"][@"runs"][0][@"text"]];
+			NSString *videoID = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[arrayCount][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"navigationEndpoint"][@"watchEndpoint"][@"videoId"]];
+			
+			if (videoArtwork != [NSNull null] && videoTime != [NSNull null] && videoTitle != [NSNull null] && videoCount != [NSNull null] && videoAuthor != [NSNull null] && videoID != [NSNull null]) {
 				NSMutableDictionary *mainInfoDictionary = [NSMutableDictionary new];
 				[mainInfoDictionary setValue:videoArtwork forKey:@"artwork"];
 				[mainInfoDictionary setValue:videoTime forKey:@"time"];
@@ -103,32 +95,34 @@
 				[mainInfoDictionary setValue:videoAuthor forKey:@"author"];
 				[mainInfoDictionary setValue:videoID forKey:@"id"];
 
-				[mainDictionary setValue:mainInfoDictionary forKey:[NSString stringWithFormat:@"%d", i]];
+				[mainDictionary setValue:mainInfoDictionary forKey:[NSString stringWithFormat:@"%d", arrayCount]];
+				arrayCount += 1;
 			}
 		}
         @catch (NSException *exception) {
         }
-	}
+	}];
 }
 
 - (void)mainViewSetup {
 	[scrollView removeFromSuperview];
-	scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom);
+	scrollView.frame = CGRectMake(boundsWindow.safeAreaInsets.left, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom);
+	NSDictionary *infoDictionary = [NSDictionary dictionaryWithDictionary:mainDictionary];
 
-	int viewBounds = 0;
-	for (int i = 0 ; i <= 50 ; i++) {
+	__block int viewBounds = 0;
+	__block int viewCount = 0;
+	[infoDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
 		@try {
-			MainDisplayView *mainDisplayView = [[MainDisplayView alloc] initWithFrame:CGRectMake(0, viewBounds, self.view.bounds.size.width, 100)];
-			/* NSArray *info = [mainDictionary valueForKey:@"0"];
-			mainDisplayView.image = info[0]; */
+			MainDisplayView *mainDisplayView = [[MainDisplayView alloc] initWithFrame:CGRectMake(boundsWindow.safeAreaInsets.left, viewBounds, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right, 100) infoDictionary:infoDictionary infoDictionaryPosition:viewCount];
 			[scrollView addSubview:mainDisplayView];
 			viewBounds += 102;
+			viewCount += 1;
 		}
         @catch (NSException *exception) {
         }
-	}
+	}];
 
-	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, viewBounds);
+	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right, viewBounds);
 	[self.view addSubview:scrollView];
 }
 

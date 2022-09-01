@@ -54,11 +54,4 @@
     return YES;
 }
 
-/* - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    if (self.allowRotation) {
-        return UIInterfaceOrientationMaskAll;
-    }
-    return UIInterfaceOrientationMaskPortrait;
-} */
-
 @end

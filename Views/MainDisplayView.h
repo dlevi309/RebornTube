@@ -2,7 +2,6 @@
 
 @interface MainDisplayView : UIView
 
-// @property (nonatomic, strong) NSString *image;
-// @property (nonatomic, strong) NSString *text;
+- (id)initWithFrame:(CGRect)frame infoDictionary:(NSDictionary *)dictionary infoDictionaryPosition:(int)position;
 
 @end
