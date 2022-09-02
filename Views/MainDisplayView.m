@@ -8,6 +8,10 @@
 #import "../Classes/AppHistory.h"
 #import "../Classes/YouTubeLoader.h"
 
+// Other
+
+#import "../Controllers/Playlists/AddToPlaylistsViewController.h"
+
 // Interface
 
 @interface MainDisplayView ()
