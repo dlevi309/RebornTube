@@ -2,6 +2,6 @@
 
 @interface MainDisplayView : UIView
 
-- (id)initWithFrame:(CGRect)frame infoDictionary:(NSDictionary *)dictionary infoDictionaryPosition:(int)position;
+- (id)initWithFrame:(CGRect)frame array:(NSArray *)array position:(int)position;
 
 @end

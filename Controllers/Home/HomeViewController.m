@@ -24,12 +24,12 @@
 	UIWindow *boundsWindow;
 	UIScrollView *scrollView;
 
-    // Main Dictionary
-    NSMutableDictionary *mainDictionary;
+    // Main Array
+    NSMutableArray *mainArray;
 }
 - (void)keysSetup;
 - (void)navBarSetup;
-- (void)mainDictionarySetup;
+- (void)mainArraySetup;
 - (void)mainViewSetup;
 @end
 
@@ -42,7 +42,7 @@
 
 	[self keysSetup];
 	[self navBarSetup];
-	[self mainDictionarySetup];
+	[self mainArraySetup];
 	[self mainViewSetup];
 
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
@@ -71,8 +71,8 @@
     self.navigationItem.rightBarButtonItems = @[settingsButton, searchButton];
 }
 
-- (void)mainDictionarySetup {
-	mainDictionary = [NSMutableDictionary new];
+- (void)mainArraySetup {
+	mainArray = [NSMutableArray new];
 	NSDictionary *youtubeBrowseRequest = [YouTubeExtractor youtubeBrowseRequest:@"ANDROID":@"16.20":@"FEtrending":nil];
     NSArray *youtubeBrowseRequestContents = youtubeBrowseRequest[@"contents"][@"singleColumnBrowseResultsRenderer"][@"tabs"][0][@"tabRenderer"][@"content"][@"sectionListRenderer"][@"contents"];
 	[youtubeBrowseRequestContents enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
@@ -102,16 +102,16 @@
 			if (youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"navigationEndpoint"][@"watchEndpoint"][@"videoId"]) {
 				videoID = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"navigationEndpoint"][@"watchEndpoint"][@"videoId"]];
 			}
-			NSMutableDictionary *mainInfoDictionary = [NSMutableDictionary new];
-			[mainInfoDictionary setValue:videoArtwork forKey:@"artwork"];
-			[mainInfoDictionary setValue:videoTime forKey:@"time"];
-			[mainInfoDictionary setValue:videoTitle forKey:@"title"];
-			[mainInfoDictionary setValue:videoCount forKey:@"count"];
-			[mainInfoDictionary setValue:videoAuthor forKey:@"author"];
-			[mainInfoDictionary setValue:videoID forKey:@"id"];
+			NSMutableDictionary *mainDictionary = [NSMutableDictionary new];
+			[mainDictionary setValue:videoArtwork forKey:@"artwork"];
+			[mainDictionary setValue:videoTime forKey:@"time"];
+			[mainDictionary setValue:videoTitle forKey:@"title"];
+			[mainDictionary setValue:videoCount forKey:@"count"];
+			[mainDictionary setValue:videoAuthor forKey:@"author"];
+			[mainDictionary setValue:videoID forKey:@"id"];
 
-			if ([mainInfoDictionary count] != 0) {
-				[mainDictionary setValue:mainInfoDictionary forKey:[NSString stringWithFormat:@"%d", value]];
+			if ([mainDictionary count] != 0) {
+				[mainArray addObject:mainDictionary];
 			}
 		}
         @catch (NSException *exception) {
@@ -122,13 +122,13 @@
 - (void)mainViewSetup {
 	[scrollView removeFromSuperview];
 	scrollView.frame = CGRectMake(boundsWindow.safeAreaInsets.left, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom);
-	NSDictionary *infoDictionary = [mainDictionary copy];
+	NSArray *infoArray = [mainArray copy];
 
 	__block int viewBounds = 0;
 	__block int viewCount = 0;
-	[infoDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+	[infoArray enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
 		@try {
-			MainDisplayView *mainDisplayView = [[MainDisplayView alloc] initWithFrame:CGRectMake(0, viewBounds, scrollView.bounds.size.width, 100) infoDictionary:infoDictionary infoDictionaryPosition:viewCount];
+			MainDisplayView *mainDisplayView = [[MainDisplayView alloc] initWithFrame:CGRectMake(0, viewBounds, scrollView.bounds.size.width, 100) array:infoArray position:viewCount];
 			[scrollView addSubview:mainDisplayView];
 			viewBounds += 102;
 			viewCount += 1;
@@ -139,18 +139,6 @@
 
 	scrollView.contentSize = CGSizeMake(scrollView.bounds.size.width, viewBounds);
 	[self.view addSubview:scrollView];
-
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:@"%@", infoDictionary] preferredStyle:UIAlertControllerStyleAlert];
-
-	[alert addAction:[UIAlertAction actionWithTitle:@"Copy To Clipboard" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-		UIPasteboard *pasteBoard = [UIPasteboard generalPasteboard];
-		pasteBoard.string = [NSString stringWithFormat:@"%@", infoDictionary];
-	}]];
-
-    [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-    }]];
-
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 @end
