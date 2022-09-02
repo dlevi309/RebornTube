@@ -122,8 +122,10 @@
 - (void)mainViewSetup {
 	[scrollView removeFromSuperview];
 	scrollView.frame = CGRectMake(boundsWindow.safeAreaInsets.left, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - self.navigationController.navigationBar.frame.size.height - boundsWindow.safeAreaInsets.bottom);
-	NSArray *infoArray = [mainArray copy];
+	scrollView.refreshControl = [UIRefreshControl new];
+    [scrollView.refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
 
+	NSArray *infoArray = [mainArray copy];
 	__block int viewBounds = 0;
 	__block int viewCount = 0;
 	[infoArray enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
@@ -191,6 +193,16 @@
 		case UIInterfaceOrientationUnknown:
 		break;
 	}
+}
+
+// Scroll View
+
+- (void)refresh:(UIRefreshControl *)refreshControl {
+	[self mainArraySetup];
+	[scrollView.refreshControl endRefreshing];
+	[scrollView.refreshControl removeFromSuperview];
+	[scrollView setContentOffset:CGPointZero animated:YES];
+	[self mainViewSetup];
 }
 
 @end
