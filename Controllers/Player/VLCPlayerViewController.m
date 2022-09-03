@@ -332,9 +332,9 @@
 		[stackView addArrangedSubview:loopButton];
 	} */
     [stackView addArrangedSubview:shareButton];
-	/* if (self.playbackType == 0) {
+	if (self.playbackType == 0) {
     	[stackView addArrangedSubview:downloadButton];
-	} */
+	}
 	[stackView addArrangedSubview:addToPlaylistsButton];
 
 	stackView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -381,14 +381,6 @@
 	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoAuthor] forKey:MPMediaItemPropertyArtist];
 	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
 }
-
-/* - (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-	
-	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-	appDelegate.allowRotation = YES;
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
-} */
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
 	return YES;
@@ -558,8 +550,6 @@
 }
 
 - (void)collapseTap:(UITapGestureRecognizer *)recognizer {
-	/* AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-	appDelegate.allowRotation = NO; */
 	if (mediaPlayer) {
 		@try {
 			[mediaPlayer removeObserver:self forKeyPath:@"time"];
