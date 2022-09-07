@@ -10,6 +10,7 @@
 
 #import "../../Classes/AppColours.h"
 #import "../../Classes/AppDelegate.h"
+#import "../../Classes/YouTubeDownloader.h"
 
 // Interface
 
@@ -647,6 +648,7 @@
 
 - (void)downloadButtonClicked:(UIButton *)sender {
 	[mediaPlayer pause];
+	[YouTubeDownloader init:self.videoID];
 }
 
 - (void)addToPlaylistsButtonClicked:(UIButton *)sender {
