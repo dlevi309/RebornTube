@@ -82,8 +82,6 @@
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 		[self mediaSetup];
 	}
-
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)keysSetup {
@@ -252,9 +250,7 @@
 	progressSlider.minimumTrackTintColor = [UIColor redColor];
 	progressSlider.minimumValue = 0.0f;
 	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-	if (self.playbackType == 0) {
-		[self.view addSubview:progressSlider];
-	}
+	[self.view addSubview:progressSlider];
 }
 
 - (void)scrollSetup {
@@ -379,6 +375,14 @@
 	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+	appDelegate.allowRotation = YES;
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+}
+
 - (BOOL)prefersHomeIndicatorAutoHidden {
 	return YES;
 }
@@ -462,13 +466,9 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	if (object == mediaPlayer) {
 		if ([keyPath isEqual:@"time"]) {
-			if (self.playbackType == 0) {
-				progressSlider.maximumValue = [mediaPlayer.media.length intValue];
-			}
+			progressSlider.maximumValue = [mediaPlayer.media.length intValue];
 		} else if ([keyPath isEqual:@"remainingTime"]) {
-			if (self.playbackType == 0) {
-				progressSlider.value = [mediaPlayer.time intValue];
-			}
+			progressSlider.value = [mediaPlayer.time intValue];
 			if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 				MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
 				[playingInfoCenter setNowPlayingInfo:songInfo];
@@ -547,6 +547,8 @@
 }
 
 - (void)collapseTap:(UITapGestureRecognizer *)recognizer {
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+	appDelegate.allowRotation = NO;
 	if (mediaPlayer) {
 		@try {
 			[mediaPlayer removeObserver:self forKeyPath:@"time"];

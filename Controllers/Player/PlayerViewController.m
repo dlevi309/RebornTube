@@ -85,8 +85,6 @@
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 		[self mediaSetup];
 	}
-
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)keysSetup {
@@ -163,9 +161,7 @@
 	videoTimeLabel.numberOfLines = 1;
 	[videoTimeLabel setFont:[UIFont boldSystemFontOfSize:videoTimeLabel.font.pointSize]];
 	videoTimeLabel.adjustsFontSizeToFitWidth = YES;
-	if (self.playbackType == 0) {
-		[overlayLeftView addSubview:videoTimeLabel];
-	}
+	[overlayLeftView addSubview:videoTimeLabel];
 
 	// Overlay Middle
 	overlayMiddleView = [[UIView alloc] init];
@@ -252,9 +248,7 @@
 	progressSlider.minimumValue = 0.0f;
 	progressSlider.maximumValue = [self.videoLength floatValue];
 	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-	if (self.playbackType == 0) {
-		[self.view addSubview:progressSlider];
-	}
+	[self.view addSubview:progressSlider];
 }
 
 - (void)scrollSetup {
@@ -381,14 +375,20 @@
 	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+	appDelegate.allowRotation = YES;
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+}
+
 - (BOOL)prefersHomeIndicatorAutoHidden {
 	return YES;
 }
 
 - (void)playerTimeChanged {
-	if (self.playbackType == 0) {
-		progressSlider.value = (float)CMTimeGetSeconds(player.currentTime);
-	}
+	progressSlider.value = (float)CMTimeGetSeconds(player.currentTime);
 	videoTimeLabel.text = [NSString stringWithFormat:@"%d:%02d / %d:%02d", ((int)CMTimeGetSeconds(player.currentTime)) / 60, ((int)CMTimeGetSeconds(player.currentTime)) % 60, [self.videoLength intValue] / 60, [self.videoLength intValue] % 60];
 
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
@@ -622,6 +622,8 @@
 }
 
 - (void)collapseTap:(UITapGestureRecognizer *)recognizer {
+	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+	appDelegate.allowRotation = NO;
 	if ([pictureInPictureController isPictureInPictureActive]) {
         [pictureInPictureController stopPictureInPicture];
     }
