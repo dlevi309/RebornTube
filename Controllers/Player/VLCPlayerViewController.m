@@ -110,10 +110,10 @@
     [mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
 	[mediaPlayer addObserver:self forKeyPath:@"state" options:0 context:nil];
 
-	if (self.playbackType == 0) {
+	if (self.videoURL != nil && self.audioURL != nil && self.streamURL == nil) {
 		mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
 		[mediaPlayer addPlaybackSlave:self.audioURL type:VLCMediaPlaybackSlaveTypeAudio enforce:YES];
-	} else if (self.playbackType == 1) {
+	} else if (self.videoURL == nil && self.audioURL == nil && self.streamURL != nil) {
 		mediaPlayer.media = [VLCMedia mediaWithURL:self.streamURL];
 	}
 
@@ -329,13 +329,9 @@
 	stackView.alignment = UIStackViewAlignmentFill;
     stackView.spacing = 10;
 
-    /* if (self.playbackType == 0) {
-		[stackView addArrangedSubview:loopButton];
-	} */
+    [stackView addArrangedSubview:loopButton];
     [stackView addArrangedSubview:shareButton];
-	if (self.playbackType == 0) {
-    	[stackView addArrangedSubview:downloadButton];
-	}
+	[stackView addArrangedSubview:downloadButton];
 	[stackView addArrangedSubview:addToPlaylistsButton];
 
 	stackView.translatesAutoresizingMaskIntoConstraints = NO;

@@ -7,7 +7,6 @@
 
 @property (nonatomic, strong) NSString *videoID;
 @property (nonatomic, strong) NSURL *videoURL;
-@property (nonatomic, assign) int playbackType;
 @property (nonatomic, strong) NSString *videoTitle;
 @property (nonatomic, strong) NSString *videoAuthor;
 @property (nonatomic, strong) NSString *videoLength;

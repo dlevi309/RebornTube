@@ -329,13 +329,9 @@
 	stackView.alignment = UIStackViewAlignmentFill;
     stackView.spacing = 10;
 
-    if (self.playbackType == 0) {
-		[stackView addArrangedSubview:loopButton];
-	}
+    [stackView addArrangedSubview:loopButton];
     [stackView addArrangedSubview:shareButton];
-	if (self.playbackType == 0) {
-    	[stackView addArrangedSubview:downloadButton];
-	}
+	[stackView addArrangedSubview:downloadButton];
 	[stackView addArrangedSubview:addToPlaylistsButton];
 
 	stackView.translatesAutoresizingMaskIntoConstraints = NO;
