@@ -104,11 +104,7 @@
     mediaPlayer.delegate = self;
     mediaPlayer.drawable = vlcView;
 
-    [mediaPlayer addObserver:self forKeyPath:@"time" options:0 context:nil];
-    [mediaPlayer addObserver:self forKeyPath:@"remainingTime" options:0 context:nil];
-	[mediaPlayer addObserver:self forKeyPath:@"state" options:0 context:nil];
-
-	if (self.videoURL != nil && self.audioURL != nil && self.streamURL == nil) {
+    if (self.videoURL != nil && self.audioURL != nil && self.streamURL == nil) {
 		mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
 		[mediaPlayer addPlaybackSlave:self.audioURL type:VLCMediaPlaybackSlaveTypeAudio enforce:YES];
 	} else if (self.videoURL == nil && self.audioURL == nil && self.streamURL != nil) {
@@ -463,35 +459,24 @@
 
 @implementation VLCPlayerViewController (Privates)
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	if (object == mediaPlayer) {
-		if ([keyPath isEqual:@"time"]) {
-			progressSlider.maximumValue = [mediaPlayer.media.length intValue];
-		} else if ([keyPath isEqual:@"remainingTime"]) {
-			progressSlider.value = [mediaPlayer.time intValue];
-			if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
-				MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
-				[playingInfoCenter setNowPlayingInfo:songInfo];
-			}
-		} else if ([keyPath isEqual:@"state"]) {
-			if (mediaPlayer.state == VLCMediaPlayerStatePlaying) {
-				playImage.alpha = 0.0;
-				pauseImage.alpha = 1.0;
-				restartImage.alpha = 0.0;
-			} else if (mediaPlayer.state == VLCMediaPlayerStatePaused) {
-				playImage.alpha = 1.0;
-				pauseImage.alpha = 0.0;
-				restartImage.alpha = 0.0;
-			} else if (mediaPlayer.state == VLCMediaPlayerStateStopped) {
-				playImage.alpha = 0.0;
-				pauseImage.alpha = 0.0;
-				restartImage.alpha = 1.0;
-			}
-			if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
-				MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
-				[playingInfoCenter setNowPlayingInfo:songInfo];
-			}
-		}
+- (void)mediaPlayerTimeChanged:(NSNotification *)aNotification {
+	progressSlider.maximumValue = [mediaPlayer.media.length intValue];
+	progressSlider.value = [mediaPlayer.time intValue];
+}
+
+- (void)mediaPlayerStateChanged:(NSNotification *)aNotification {
+	if (mediaPlayer.state == VLCMediaPlayerStatePlaying) {
+		playImage.alpha = 0.0;
+		pauseImage.alpha = 1.0;
+		restartImage.alpha = 0.0;
+	} else if (mediaPlayer.state == VLCMediaPlayerStatePaused) {
+		playImage.alpha = 1.0;
+		pauseImage.alpha = 0.0;
+		restartImage.alpha = 0.0;
+	} else if (mediaPlayer.state == VLCMediaPlayerStateStopped) {
+		playImage.alpha = 0.0;
+		pauseImage.alpha = 0.0;
+		restartImage.alpha = 1.0;
 	}
 }
 
@@ -550,13 +535,6 @@
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	appDelegate.allowRotation = NO;
 	if (mediaPlayer) {
-		@try {
-			[mediaPlayer removeObserver:self forKeyPath:@"time"];
-			[mediaPlayer removeObserver:self forKeyPath:@"remainingTime"];
-			[mediaPlayer removeObserver:self forKeyPath:@"state"];
-		}
-        @catch (NSException *exception) {
-        }
 		if (mediaPlayer.media) {
 			[mediaPlayer stop];
 		}
@@ -568,7 +546,9 @@
 }
 
 - (void)rewindTap:(UITapGestureRecognizer *)recognizer {
-	// [mediaPlayer jumpBackward:10];
+	if (mediaPlayer.seekable) {
+		// [mediaPlayer jumpBackward:10];
+	}
 }
 
 - (void)playPauseTap:(UITapGestureRecognizer *)recognizer {
@@ -583,7 +563,9 @@
 }
 
 - (void)forwardTap:(UITapGestureRecognizer *)recognizer {
-	// [mediaPlayer jumpForward:10];
+	if (mediaPlayer.seekable) {
+		// [mediaPlayer jumpForward:10];
+	}
 }
 
 - (void)enteredBackground:(NSNotification *)notification {
@@ -607,6 +589,9 @@
 		break;
 
 		case UIInterfaceOrientationPortraitUpsideDown:
+		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+			[self rotationMode:0];
+		}
 		break;
 
 		case UIInterfaceOrientationUnknown:
