@@ -41,7 +41,6 @@
 	UIView *overlayMiddleViewShadow;
 	UIImageView *playImage;
 	UIImageView *pauseImage;
-	UIImageView *restartImage;
 
 	// Overlay Right
 	UIView *overlayRightView;
@@ -131,9 +130,6 @@
 	UITapGestureRecognizer *overlayLeftViewSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTap:)];
 	overlayLeftViewSingleTap.numberOfTapsRequired = 1;
 	[overlayLeftView addGestureRecognizer:overlayLeftViewSingleTap];
-	UITapGestureRecognizer *overlayLeftViewDoubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(rewindTap:)];
-	overlayLeftViewDoubleTap.numberOfTapsRequired = 2;
-	[overlayLeftView addGestureRecognizer:overlayLeftViewDoubleTap];
 
 	overlayLeftViewShadow = [[UIView alloc] init];
 	overlayLeftViewShadow.frame = CGRectMake(0, 0, overlayLeftView.bounds.size.width, overlayLeftView.bounds.size.height);
@@ -186,17 +182,6 @@
 	[pauseImage addGestureRecognizer:pauseViewTap];
 	[overlayMiddleView addSubview:pauseImage];
 
-	restartImage = [[UIImageView alloc] init];
-	NSString *restartImagePath = [playerAssetsBundle pathForResource:@"restart" ofType:@"png"];
-	restartImage.image = [[UIImage imageWithContentsOfFile:restartImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-	restartImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
-	restartImage.tintColor = [UIColor whiteColor];
-	restartImage.userInteractionEnabled = YES;
-	UITapGestureRecognizer *restartViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(restartTap:)];
-	restartViewTap.numberOfTapsRequired = 1;
-	[restartImage addGestureRecognizer:restartViewTap];
-	[overlayMiddleView addSubview:restartImage];
-
 	// Overlay Right
 	overlayRightView = [[UIView alloc] init];
 	overlayRightView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
@@ -204,9 +189,6 @@
 	UITapGestureRecognizer *overlayRightViewSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTap:)];
 	overlayRightViewSingleTap.numberOfTapsRequired = 1;
 	[overlayRightView addGestureRecognizer:overlayRightViewSingleTap];
-	UITapGestureRecognizer *overlayRightViewDoubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(forwardTap:)];
-	overlayRightViewDoubleTap.numberOfTapsRequired = 2;
-	[overlayRightView addGestureRecognizer:overlayRightViewDoubleTap];
 
 	overlayRightViewShadow = [[UIView alloc] init];
 	overlayRightViewShadow.frame = CGRectMake(0, 0, overlayRightView.bounds.size.width, overlayRightView.bounds.size.height);
@@ -240,12 +222,10 @@
 - (void)sliderSetup {
 	progressSlider = [[UISlider alloc] init];
 	progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + (self.view.bounds.size.width * 9 / 16), self.view.bounds.size.width, 15);
-	NSString *sliderThumbPath = [playerAssetsBundle pathForResource:@"sliderthumb" ofType:@"png"];
-	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateNormal];
-	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateHighlighted];
+	[progressSlider setThumbImage:[UIImage new] forState:UIControlStateNormal];
+	[progressSlider setThumbImage:[UIImage new] forState:UIControlStateHighlighted];
 	progressSlider.minimumTrackTintColor = [UIColor redColor];
 	progressSlider.minimumValue = 0.0f;
-	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 	[self.view addSubview:progressSlider];
 }
 
@@ -271,16 +251,6 @@
 	videoInfoLabel.adjustsFontSizeToFitWidth = YES;
 	[scrollView addSubview:videoInfoLabel];
 
-	UIButton *loopButton = [[UIButton alloc] init];
-	NSLayoutConstraint *loopButtonWidth = [NSLayoutConstraint constraintWithItem:loopButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1.0 constant:120];
-	NSLayoutConstraint *loopButtonHeight = [NSLayoutConstraint constraintWithItem:loopButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1.0 constant:30];
-	[loopButton addTarget:self action:@selector(loopButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
- 	[loopButton setTitle:@"Loop" forState:UIControlStateNormal];
-	[loopButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
-	loopButton.backgroundColor = [AppColours viewBackgroundColour];
-	loopButton.layer.cornerRadius = 5;
-	[loopButton addConstraints:@[loopButtonWidth, loopButtonHeight]];
-	
 	UIButton *shareButton = [[UIButton alloc] init];
 	NSLayoutConstraint *shareButtonWidth = [NSLayoutConstraint constraintWithItem:shareButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1.0 constant:120];
 	NSLayoutConstraint *shareButtonHeight = [NSLayoutConstraint constraintWithItem:shareButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:0 multiplier:1.0 constant:30];
@@ -321,7 +291,6 @@
 	stackView.alignment = UIStackViewAlignmentFill;
     stackView.spacing = 10;
 
-    [stackView addArrangedSubview:loopButton];
     [stackView addArrangedSubview:shareButton];
 	[stackView addArrangedSubview:downloadButton];
 	[stackView addArrangedSubview:addToPlaylistsButton];
@@ -345,7 +314,6 @@
     [commandCenter.nextTrackCommand setEnabled:NO];
     [commandCenter.previousTrackCommand setEnabled:NO];
 	[commandCenter.changePlaybackPositionCommand setEnabled:NO];
-    [commandCenter.changePlaybackPositionCommand addTarget:self action:@selector(changedLockscreenPlaybackSlider:)];
 
 	[commandCenter.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         [mediaPlayer play];
@@ -353,12 +321,6 @@
     }];
     [commandCenter.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         [mediaPlayer pause];
-        return MPRemoteCommandHandlerStatusSuccess;
-    }];
-	[commandCenter.nextTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        return MPRemoteCommandHandlerStatusSuccess;
-    }];
-	[commandCenter.previousTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         return MPRemoteCommandHandlerStatusSuccess;
     }];
 
@@ -402,7 +364,6 @@
 		overlayMiddleViewShadow.frame = CGRectMake(0, 0, overlayMiddleView.bounds.size.width, overlayMiddleView.bounds.size.height);
 		playImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
-		restartImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 
 		// Overlay Right
 		overlayRightView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
@@ -435,7 +396,6 @@
 		overlayMiddleViewShadow.frame = CGRectMake(0, 0, overlayMiddleView.bounds.size.width, overlayMiddleView.bounds.size.height);
 		playImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
-		restartImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 		
 		// Overlay Right
 		overlayRightView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
@@ -468,15 +428,12 @@
 	if (mediaPlayer.state == VLCMediaPlayerStatePlaying) {
 		playImage.alpha = 0.0;
 		pauseImage.alpha = 1.0;
-		restartImage.alpha = 0.0;
 	} else if (mediaPlayer.state == VLCMediaPlayerStatePaused) {
 		playImage.alpha = 1.0;
 		pauseImage.alpha = 0.0;
-		restartImage.alpha = 0.0;
 	} else if (mediaPlayer.state == VLCMediaPlayerStateStopped) {
 		playImage.alpha = 0.0;
 		pauseImage.alpha = 0.0;
-		restartImage.alpha = 1.0;
 	}
 }
 
@@ -545,26 +502,11 @@
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (void)rewindTap:(UITapGestureRecognizer *)recognizer {
-	if (mediaPlayer.seekable) {
-		// [mediaPlayer jumpBackward:10];
-	}
-}
-
 - (void)playPauseTap:(UITapGestureRecognizer *)recognizer {
 	if (mediaPlayer.isPlaying) {
 		[mediaPlayer pause];
 	} else {
 		[mediaPlayer play];
-	}
-}
-
-- (void)restartTap:(UITapGestureRecognizer *)recognizer {
-}
-
-- (void)forwardTap:(UITapGestureRecognizer *)recognizer {
-	if (mediaPlayer.seekable) {
-		// [mediaPlayer jumpForward:10];
 	}
 }
 
@@ -597,29 +539,6 @@
 		case UIInterfaceOrientationUnknown:
 		break;
 	}
-}
-
-- (void)sliderValueChanged:(UISlider *)sender {
-}
-
-- (MPRemoteCommandHandlerStatus)changedLockscreenPlaybackSlider:(MPChangePlaybackPositionCommandEvent *)event {
-    return MPRemoteCommandHandlerStatusSuccess;
-}
-
-- (void)loopButtonClicked:(UIButton *)sender {
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
-	if (loopEnabled == 0) {
-		loopEnabled = 1;
-		alert.message = @"Loop Enabled";
-	} else {
-		loopEnabled = 0;
-		alert.message = @"Loop Disabled";
-	}
-
-	[alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-	}]];
-
-	[self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)shareButtonClicked:(UIButton *)sender {
