@@ -44,12 +44,10 @@
 	[self navBarSetup];
 	[self mainArraySetup];
 	[self mainViewSetup];
-
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)keysSetup {
-	boundsWindow = [[UIApplication sharedApplication] keyWindow];
+	boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
 	scrollView = [[UIScrollView alloc] init];
 }
 
@@ -143,6 +141,12 @@
 	[self.view addSubview:scrollView];
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+}
+
 @end
 
 @implementation HomeViewController (Privates)
@@ -170,7 +174,7 @@
 // Orientation
 
 - (void)orientationChanged:(NSNotification *)notification {
-	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
 	switch (orientation) {
 		case UIInterfaceOrientationPortrait:
 		[self mainViewSetup];

@@ -88,7 +88,7 @@
 }
 
 - (void)keysSetup {
-	boundsWindow = [[UIApplication sharedApplication] keyWindow];
+	boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
 	deviceOrientation = 0;
 	playbackMode = 0;
 	overlayHidden = 0;
@@ -716,7 +716,7 @@
 }
 
 - (void)orientationChanged:(NSNotification *)notification {
-	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
 	switch (orientation) {
 		case UIInterfaceOrientationPortrait:
 		[self rotationMode:0];

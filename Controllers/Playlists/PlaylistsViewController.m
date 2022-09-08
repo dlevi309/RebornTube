@@ -41,7 +41,7 @@
 }
 
 - (void)keysSetup {
-	boundsWindow = [[UIApplication sharedApplication] keyWindow];
+	boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
     scrollView = [[UIScrollView alloc] init];
 }
 
