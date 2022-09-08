@@ -99,7 +99,7 @@
 }
 
 - (void)actionTap:(UITapGestureRecognizer *)recognizer {
-    UIViewController *topViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    UIViewController *topViewController = [[[[UIApplication sharedApplication] windows] firstObject] rootViewController];
     while (true) {
         if (topViewController.presentedViewController) {
             topViewController = topViewController.presentedViewController;
