@@ -66,6 +66,7 @@
 }
 
 - (void)searchRequest {
+	[searchTextField resignFirstResponder];
 	searchVideoIDDictionary = [NSMutableDictionary new];
 	[scrollView removeFromSuperview];
 
