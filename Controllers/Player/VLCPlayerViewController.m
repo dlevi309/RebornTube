@@ -224,6 +224,7 @@
 	progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + (self.view.bounds.size.width * 9 / 16), self.view.bounds.size.width, 15);
 	[progressSlider setThumbImage:[UIImage new] forState:UIControlStateNormal];
 	[progressSlider setThumbImage:[UIImage new] forState:UIControlStateHighlighted];
+	progressSlider.enabled = NO;
 	progressSlider.minimumTrackTintColor = [UIColor redColor];
 	progressSlider.minimumValue = 0.0f;
 	[self.view addSubview:progressSlider];
@@ -338,11 +339,38 @@
 	
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	appDelegate.allowRotation = YES;
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
 	return YES;
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+
+	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
+	switch (orientation) {
+		case UIInterfaceOrientationPortrait:
+		[self rotationMode:0];
+		break;
+
+		case UIInterfaceOrientationLandscapeLeft:
+		[self rotationMode:1];
+		break;
+
+		case UIInterfaceOrientationLandscapeRight:
+		[self rotationMode:1];
+		break;
+
+		case UIInterfaceOrientationPortraitUpsideDown:
+		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+			[self rotationMode:0];
+		}
+		break;
+
+		case UIInterfaceOrientationUnknown:
+		break;
+	}
 }
 
 - (void)rotationMode:(int)mode {
@@ -513,32 +541,6 @@
 - (void)enteredBackground:(NSNotification *)notification {
 	MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
 	[playingInfoCenter setNowPlayingInfo:songInfo];
-}
-
-- (void)orientationChanged:(NSNotification *)notification {
-	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
-	switch (orientation) {
-		case UIInterfaceOrientationPortrait:
-		[self rotationMode:0];
-		break;
-
-		case UIInterfaceOrientationLandscapeLeft:
-		[self rotationMode:1];
-		break;
-
-		case UIInterfaceOrientationLandscapeRight:
-		[self rotationMode:1];
-		break;
-
-		case UIInterfaceOrientationPortraitUpsideDown:
-		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-			[self rotationMode:0];
-		}
-		break;
-
-		case UIInterfaceOrientationUnknown:
-		break;
-	}
 }
 
 - (void)shareButtonClicked:(UIButton *)sender {

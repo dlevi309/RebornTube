@@ -141,10 +141,32 @@
 	[self.view addSubview:scrollView];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+
+	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
+	switch (orientation) {
+		case UIInterfaceOrientationPortrait:
+		[self mainViewSetup];
+		break;
+
+		case UIInterfaceOrientationLandscapeLeft:
+		[self mainViewSetup];
+		break;
+
+		case UIInterfaceOrientationLandscapeRight:
+		[self mainViewSetup];
+		break;
+
+		case UIInterfaceOrientationPortraitUpsideDown:
+		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+			[self mainViewSetup];
+		}
+		break;
+
+		case UIInterfaceOrientationUnknown:
+		break;
+	}
 }
 
 @end
@@ -169,34 +191,6 @@
     settingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
 
     [self presentViewController:settingsViewControllerView animated:YES completion:nil];
-}
-
-// Orientation
-
-- (void)orientationChanged:(NSNotification *)notification {
-	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
-	switch (orientation) {
-		case UIInterfaceOrientationPortrait:
-		[self mainViewSetup];
-		break;
-
-		case UIInterfaceOrientationLandscapeLeft:
-		[self mainViewSetup];
-		break;
-
-		case UIInterfaceOrientationLandscapeRight:
-		[self mainViewSetup];
-		break;
-
-		case UIInterfaceOrientationPortraitUpsideDown:
-		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-			[self mainViewSetup];
-		}
-		break;
-
-		case UIInterfaceOrientationUnknown:
-		break;
-	}
 }
 
 // Scroll View

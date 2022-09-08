@@ -380,11 +380,38 @@
 	
 	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
 	appDelegate.allowRotation = YES;
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
 	return YES;
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+
+	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
+	switch (orientation) {
+		case UIInterfaceOrientationPortrait:
+		[self rotationMode:0];
+		break;
+
+		case UIInterfaceOrientationLandscapeLeft:
+		[self rotationMode:1];
+		break;
+
+		case UIInterfaceOrientationLandscapeRight:
+		[self rotationMode:1];
+		break;
+
+		case UIInterfaceOrientationPortraitUpsideDown:
+		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+			[self rotationMode:0];
+		}
+		break;
+
+		case UIInterfaceOrientationUnknown:
+		break;
+	}
 }
 
 - (void)playerTimeChanged {
@@ -712,32 +739,6 @@
 		if (playbackMode == 0) {
 			playerLayer.player = player;
 		}
-	}
-}
-
-- (void)orientationChanged:(NSNotification *)notification {
-	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
-	switch (orientation) {
-		case UIInterfaceOrientationPortrait:
-		[self rotationMode:0];
-		break;
-
-		case UIInterfaceOrientationLandscapeLeft:
-		[self rotationMode:1];
-		break;
-
-		case UIInterfaceOrientationLandscapeRight:
-		[self rotationMode:1];
-		break;
-
-		case UIInterfaceOrientationPortraitUpsideDown:
-		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-			[self rotationMode:0];
-		}
-		break;
-
-		case UIInterfaceOrientationUnknown:
-		break;
 	}
 }
 
