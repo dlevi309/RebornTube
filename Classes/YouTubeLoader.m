@@ -54,7 +54,7 @@ NSDictionary *sponsorBlockValues;
 }
 
 + (void)getTopViewController {
-    topViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
+    topViewController = [[[[UIApplication sharedApplication] windows] firstObject] rootViewController];
     while (true) {
         if (topViewController.presentedViewController) {
             topViewController = topViewController.presentedViewController;
