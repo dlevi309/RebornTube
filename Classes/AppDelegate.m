@@ -54,11 +54,11 @@
     return YES;
 }
 
-/* - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    if (self.allowRotation || [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
+    if (self.allowRotation) {
         return UIInterfaceOrientationMaskAll;
     }
     return UIInterfaceOrientationMaskPortrait;
-} */
+}
 
 @end
