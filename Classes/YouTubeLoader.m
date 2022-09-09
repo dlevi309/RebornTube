@@ -73,11 +73,11 @@ NSDictionary *sponsorBlockValues;
 + (void)presentPlayerOptions :(NSString *)videoID {
     UIAlertController *alertPlayerOptions = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
-    [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"AVPlayer (720p Max)" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"AVPlayer" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self runAVPlayerSteps:videoID];
     }]];
 
-    [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"VLC (4K Max, Experimental)" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"VLC Player (Experimental)" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self runVLCPlayerSteps:videoID];
     }]];
 
