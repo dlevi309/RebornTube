@@ -2,15 +2,15 @@
 
 #import "PlayerViewController.h"
 
-// Other
-
-#import "../Playlists/AddToPlaylistsViewController.h"
-
 // Classes
 
 #import "../../Classes/AppColours.h"
 #import "../../Classes/AppDelegate.h"
 #import "../../Classes/YouTubeDownloader.h"
+
+// Other
+
+#import "../Playlists/AddToPlaylistsViewController.h"
 
 // Interface
 
