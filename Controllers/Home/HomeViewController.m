@@ -197,10 +197,9 @@
 
 - (void)refresh:(UIRefreshControl *)refreshControl {
 	[self mainArraySetup];
-	[scrollView.refreshControl endRefreshing];
-	[scrollView.refreshControl removeFromSuperview];
-	[scrollView setContentOffset:CGPointZero animated:YES];
 	[self mainViewSetup];
+	[scrollView.refreshControl endRefreshing];
+	[scrollView setContentOffset:CGPointZero animated:YES];
 }
 
 @end
