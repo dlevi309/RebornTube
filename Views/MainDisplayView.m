@@ -120,6 +120,13 @@
 		NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", videoID]];
 	
 		UIActivityViewController *shareSheet = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
+        
+        [shareSheet setModalPresentationStyle:UIModalPresentationPopover];
+        UIPopoverPresentationController *popPresenter = [shareSheet popoverPresentationController];
+        popPresenter.sourceView = topViewController.view;
+        popPresenter.sourceRect = topViewController.view.bounds;
+        popPresenter.permittedArrowDirections = 0;
+
 		[topViewController presentViewController:shareSheet animated:YES completion:nil];
     }]];
 
