@@ -111,8 +111,9 @@
 	player.usesExternalPlaybackWhileExternalScreenIsActive = YES;
 	[player addObserver:self forKeyPath:@"status" options:0 context:nil];
 	[player addObserver:self forKeyPath:@"timeControlStatus" options:0 context:nil];
-	[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:nil usingBlock:^(CMTime time) {
-		[self playerTimeChanged];
+	__weak PlayerViewController *weakSelf = self;
+	[player addPeriodicTimeObserverForInterval:CMTimeMakeWithSeconds(1.0 / 60.0, NSEC_PER_SEC) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
+		[weakSelf playerTimeChanged];
 	}];
 
 	videoImage = [[UIImageView alloc] init];
