@@ -1,6 +1,7 @@
 #import "YouTubeLoader.h"
 #import "EUCheck.h"
 #import "YouTubeExtractor.h"
+#import "../Views/MainPopupView.h"
 #import "../Controllers/Player/PlayerViewController.h"
 
 // Top View Controller
@@ -27,20 +28,39 @@ NSDictionary *sponsorBlockValues;
     [self getTopViewController];
 
     youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"ANDROID":@"16.20":videoID];
-    BOOL isLive = youtubePlayerRequest[@"videoDetails"][@"isLive"];
     NSString *playabilityStatus = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"playabilityStatus"][@"status"]];
-    if (isLive == true && [playabilityStatus isEqual:@"OK"]) {
-        videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubePlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
+    if ([playabilityStatus isEqual:@"OK"]) {
+        BOOL isLive = youtubePlayerRequest[@"videoDetails"][@"isLive"];
+        if (isLive) {
+            videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubePlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
+        } else if (!isLive) {
+            [self getVideoUrl];
+        }
         [self getVideoInfo];
         [self getReturnYouTubeDislikesInfo:videoID];
         [self getSponsorBlockInfo:videoID];
         [self presentPlayer:videoID];
-    } else if (isLive != true && [playabilityStatus isEqual:@"OK"]) {
-        [self getVideoUrl];
-        [self getVideoInfo];
-        [self getReturnYouTubeDislikesInfo:videoID];
-        [self getSponsorBlockInfo:videoID];
-        [self presentPlayer:videoID];
+    } else if ([playabilityStatus isEqual:@"LOGIN_REQUIRED"]) {
+        BOOL isLocatedInEU = [EUCheck isLocatedInEU];
+        if (isLocatedInEU) {
+            UIWindow *boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
+            (void)[[MainPopupView alloc] initWithFrame:CGRectMake(20, topViewController.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 80, topViewController.view.bounds.size.width - 40, 80) message:@"Age Restricted Videos Are Unsupported In The EU"];
+        } else {
+            youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"TVHTML5_SIMPLY_EMBEDDED_PLAYER":@"2.0":videoID];
+            BOOL isLive = youtubePlayerRequest[@"videoDetails"][@"isLive"];
+            if (isLive) {
+                videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubePlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
+            } else if (!isLive) {
+                [self getVideoUrl];
+            }
+            [self getVideoInfo];
+            [self getReturnYouTubeDislikesInfo:videoID];
+            [self getSponsorBlockInfo:videoID];
+            [self presentPlayer:videoID];
+        }
+    } else {
+        UIWindow *boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
+        (void)[[MainPopupView alloc] initWithFrame:CGRectMake(20, topViewController.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 80, topViewController.view.bounds.size.width - 40, 80) message:@"Video Unsupported"];
     }
 }
 
