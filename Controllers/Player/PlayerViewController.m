@@ -26,6 +26,7 @@
 	BOOL playbackMode;
 	BOOL overlayHidden;
 	BOOL loopEnabled;
+	float playbackRate;
 	NSString *playerAssetsBundlePath;
 	NSBundle *playerAssetsBundle;
 	NSMutableDictionary *songInfo;
@@ -97,6 +98,7 @@
 	playbackMode = 0;
 	overlayHidden = 0;
 	loopEnabled = 0;
+	playbackRate = 1.00f;
 	playerAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"PlayerAssets" ofType:@"bundle"];
 	playerAssetsBundle = [NSBundle bundleWithPath:playerAssetsBundlePath];
 	songInfo = [NSMutableDictionary new];
@@ -255,7 +257,7 @@
 	progressSlider.minimumTrackTintColor = [UIColor redColor];
 	progressSlider.minimumValue = 0.0f;
 	progressSlider.maximumValue = [self.videoLength floatValue];
-	[progressSlider addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+	[progressSlider addTarget:self action:@selector(progressSliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 	[self.view addSubview:progressSlider];
 }
 
@@ -347,6 +349,15 @@
 	stackScrollView.contentSize = CGSizeMake(stackView.bounds.size.width, 30);
 	[scrollView addSubview:stackScrollView];
 
+	UIStepper *rateStepper = [[UIStepper alloc] init];
+	rateStepper.frame = CGRectMake(0, videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + 70, self.view.bounds.size.width, 15);
+	rateStepper.stepValue = 0.25f;
+	rateStepper.minimumValue = 0.25f;
+	rateStepper.maximumValue = 10.00f;
+	rateStepper.value = 1.00f;
+	[rateStepper addTarget:self action:@selector(rateStepperValueChanged:) forControlEvents:UIControlEventValueChanged];
+	[scrollView addSubview:rateStepper];
+
 	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 124);
 	[self.view addSubview:scrollView];
 }
@@ -363,6 +374,7 @@
 
 	[commandCenter.playCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
         [player play];
+		player.rate = playbackRate;
         return MPRemoteCommandHandlerStatusSuccess;
     }];
     [commandCenter.pauseCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
@@ -591,6 +603,7 @@
 			}
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerReachedEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
             [player play];
+			player.rate = playbackRate;
         }
     } else if (object == player && [keyPath isEqualToString:@"timeControlStatus"]) {
         if (player.timeControlStatus == AVPlayerTimeControlStatusPlaying) {
@@ -704,6 +717,7 @@
 		[player pause];
 	} else {
 		[player play];
+		player.rate = playbackRate;
 	}
 }
 
@@ -754,8 +768,13 @@
 	}
 }
 
-- (void)sliderValueChanged:(UISlider *)sender {
+- (void)progressSliderValueChanged:(UISlider *)sender {
 	[player seekToTime:CMTimeMakeWithSeconds(sender.value, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+}
+
+- (void)rateStepperValueChanged:(UIStepper *)sender {
+	playbackRate = [[NSString stringWithFormat:@"%.01f", sender.value] floatValue];
+	player.rate = playbackRate;
 }
 
 - (MPRemoteCommandHandlerStatus)changedLockscreenPlaybackSlider:(MPChangePlaybackPositionCommandEvent *)event {
@@ -767,6 +786,7 @@
 	if (loopEnabled) {
 		[player seekToTime:CMTimeMakeWithSeconds(0, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
 			[player play];
+			player.rate = playbackRate;
 		}];
 	}
 }
