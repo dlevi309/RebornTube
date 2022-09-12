@@ -19,6 +19,7 @@
         UIView *mainView = [UIView new];
         mainView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
         mainView.backgroundColor = [AppColours viewBackgroundColour];
+        mainView.clipsToBounds = YES;
         mainView.layer.cornerRadius = 5;
 
         UILabel *messageLabel = [UILabel new];

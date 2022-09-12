@@ -17,17 +17,19 @@
 @interface MainDisplayView ()
 {
     NSString *videoID;
+    BOOL saveToHistory;
 }
 @end
 
 @implementation MainDisplayView
 
-- (id)initWithFrame:(CGRect)frame array:(NSArray *)array position:(int)position {
+- (id)initWithFrame:(CGRect)frame array:(NSArray *)array position:(int)position save:(BOOL)save {
     self = [super initWithFrame:frame];
     if (self) {
         UIView *mainView = [UIView new];
         mainView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
         mainView.backgroundColor = [AppColours viewBackgroundColour];
+        mainView.clipsToBounds = YES;
         mainView.tag = position;
         mainView.userInteractionEnabled = YES;
         UITapGestureRecognizer *mainViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(mainTap:)];
@@ -47,7 +49,6 @@
         timeLabel.numberOfLines = 1;
         timeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
         timeLabel.layer.cornerRadius = 5;
-        timeLabel.clipsToBounds = YES;
         timeLabel.adjustsFontSizeToFitWidth = YES;
         [mainView addSubview:timeLabel];
 
@@ -88,6 +89,7 @@
         [mainView addSubview:actionLabel];
 
         videoID = array[position][@"id"];
+        saveToHistory = save;
         [self addSubview:mainView];
     }
     return self;
@@ -98,7 +100,9 @@
 @implementation MainDisplayView (Privates)
 
 - (void)mainTap:(UITapGestureRecognizer *)recognizer {
-    [AppHistory init:videoID];
+    if (saveToHistory) {
+        [AppHistory init:videoID];
+    }
     [YouTubeLoader init:videoID];
 }
 

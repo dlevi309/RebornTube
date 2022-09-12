@@ -131,6 +131,7 @@
 	// Overlay Left
 	overlayLeftView = [[UIView alloc] init];
 	overlayLeftView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+	overlayLeftView.clipsToBounds = YES;
 	overlayLeftView.userInteractionEnabled = YES;
 	UITapGestureRecognizer *overlayLeftViewSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTap:)];
 	overlayLeftViewSingleTap.numberOfTapsRequired = 1;
@@ -167,6 +168,7 @@
 	// Overlay Middle
 	overlayMiddleView = [[UIView alloc] init];
 	overlayMiddleView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+	overlayMiddleView.clipsToBounds = YES;
 	overlayMiddleView.userInteractionEnabled = YES;
 	UITapGestureRecognizer *overlayMiddleViewSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTap:)];
 	overlayMiddleViewSingleTap.numberOfTapsRequired = 1;
@@ -202,6 +204,7 @@
 	// Overlay Right
 	overlayRightView = [[UIView alloc] init];
 	overlayRightView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
+	overlayRightView.clipsToBounds = YES;
 	overlayRightView.userInteractionEnabled = YES;
 	UITapGestureRecognizer *overlayRightViewSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTap:)];
 	overlayRightViewSingleTap.numberOfTapsRequired = 1;
