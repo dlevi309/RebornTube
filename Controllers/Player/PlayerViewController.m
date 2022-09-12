@@ -8,6 +8,10 @@
 #import "../../Classes/AppDelegate.h"
 #import "../../Classes/YouTubeDownloader.h"
 
+// Views
+
+#import "../../Views/MainPopupView.h"
+
 // Other
 
 #import "../Playlists/AddToPlaylistsViewController.h"
@@ -553,7 +557,7 @@
 
 		// Info
 		progressSlider.frame = CGRectMake(boundsWindow.safeAreaInsets.left, (self.view.bounds.size.height / 2) + 100, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right, 15);
-		if (overlayHidden == 1) {
+		if (overlayHidden) {
 			progressSlider.hidden = YES;
 		}
 		scrollView.hidden = YES;
@@ -606,7 +610,7 @@
 }
 
 - (void)overlayTap:(UITapGestureRecognizer *)recognizer {
-	if (overlayHidden == 1) {
+	if (overlayHidden) {
 		overlayHidden = 0;
 		overlayTimer = [NSTimer scheduledTimerWithTimeInterval:5.0f target:self selector:@selector(overlayTimerCheck:) userInfo:nil repeats:NO];
 		[overlayLeftView.subviews setValue:@NO forKeyPath:@"hidden"];
@@ -624,7 +628,7 @@
 		[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
 		[overlayRightView.subviews setValue:@YES forKeyPath:@"hidden"];
 		videoOverlayTitleLabel.hidden = YES;
-		if (deviceOrientation == 1) {
+		if (deviceOrientation) {
 			progressSlider.hidden = YES;
 		} else {
 			progressSlider.hidden = NO;
@@ -633,7 +637,7 @@
 }
 
 - (void)overlayTimerCheck:(NSTimer *)timer {
-	if (overlayHidden == 0) {
+	if (!overlayHidden) {
 		overlayHidden = 1;
 		if ([overlayTimer isValid]) {
 			[overlayTimer invalidate];
@@ -643,7 +647,7 @@
 		[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
 		[overlayRightView.subviews setValue:@YES forKeyPath:@"hidden"];
 		videoOverlayTitleLabel.hidden = YES;
-		if (deviceOrientation == 1) {
+		if (deviceOrientation) {
 			progressSlider.hidden = YES;
 		} else {
 			progressSlider.hidden = NO;
@@ -671,7 +675,7 @@
 
 - (void)rewindTap:(UITapGestureRecognizer *)recognizer {
 	[player seekToTime:CMTimeMakeWithSeconds(CMTimeGetSeconds(player.currentTime) - 10.0f, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-		if (overlayHidden == 0) {
+		if (!overlayHidden) {
 			overlayHidden = 1;
 			if ([overlayTimer isValid]) {
 				[overlayTimer invalidate];
@@ -681,7 +685,7 @@
 			[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
 			[overlayRightView.subviews setValue:@YES forKeyPath:@"hidden"];
 			videoOverlayTitleLabel.hidden = YES;
-			if (deviceOrientation == 1) {
+			if (deviceOrientation) {
 				progressSlider.hidden = YES;
 			} else {
 				progressSlider.hidden = NO;
@@ -705,7 +709,7 @@
 
 - (void)forwardTap:(UITapGestureRecognizer *)recognizer {
 	[player seekToTime:CMTimeMakeWithSeconds(CMTimeGetSeconds(player.currentTime) + 10.0f, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
-		if (overlayHidden == 0) {
+		if (!overlayHidden) {
 			overlayHidden = 1;
 			if ([overlayTimer isValid]) {
 				[overlayTimer invalidate];
@@ -715,7 +719,7 @@
 			[overlayMiddleView.subviews setValue:@YES forKeyPath:@"hidden"];
 			[overlayRightView.subviews setValue:@YES forKeyPath:@"hidden"];
 			videoOverlayTitleLabel.hidden = YES;
-			if (deviceOrientation == 1) {
+			if (deviceOrientation) {
 				progressSlider.hidden = YES;
 			} else {
 				progressSlider.hidden = NO;
@@ -731,7 +735,7 @@
 
 - (void)enteredBackground:(NSNotification *)notification {
 	if (![pictureInPictureController isPictureInPictureActive]) {
-		if (playbackMode == 0) {
+		if (!playbackMode) {
 			playerLayer.player = nil;
 		}
 	}
@@ -744,7 +748,7 @@
 
 - (void)enteredForeground:(NSNotification *)notification {
 	if (![pictureInPictureController isPictureInPictureActive]) {
-		if (playbackMode == 0) {
+		if (!playbackMode) {
 			playerLayer.player = player;
 		}
 	}
@@ -760,7 +764,7 @@
 }
 
 - (void)playerReachedEnd:(NSNotification *)notification {
-	if (loopEnabled == 1) {
+	if (loopEnabled) {
 		[player seekToTime:CMTimeMakeWithSeconds(0, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
 			[player play];
 		}];
@@ -768,19 +772,13 @@
 }
 
 - (void)loopButtonClicked:(UIButton *)sender {
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleAlert];
-	if (loopEnabled == 0) {
+	if (!loopEnabled) {
 		loopEnabled = 1;
-		alert.message = @"Loop Enabled";
+		(void)[[MainPopupView alloc] init:@"Loop Enabled"];
 	} else {
 		loopEnabled = 0;
-		alert.message = @"Loop Disabled";
+		(void)[[MainPopupView alloc] init:@"Loop Disabled"];
 	}
-
-	[alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-	}]];
-
-	[self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)shareButtonClicked:(UIButton *)sender {

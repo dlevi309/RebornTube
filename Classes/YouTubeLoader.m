@@ -46,8 +46,7 @@ NSDictionary *sponsorBlockValues;
     } else if ([playabilityStatus isEqual:@"LOGIN_REQUIRED"]) {
         BOOL isLocatedInEU = [EUCheck isLocatedInEU];
         if (isLocatedInEU) {
-            UIWindow *boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
-            (void)[[MainPopupView alloc] initWithFrame:CGRectMake(20, topViewController.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 80, topViewController.view.bounds.size.width - 40, 80) message:@"Age Restricted Videos Are Unsupported In The EU"];
+            (void)[[MainPopupView alloc] init:@"Restricted Videos Are Unsupported In The EU"];
         } else {
             youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"TVHTML5_SIMPLY_EMBEDDED_PLAYER":@"2.0":videoID];
             BOOL isLive = youtubePlayerRequest[@"videoDetails"][@"isLive"];
@@ -64,8 +63,7 @@ NSDictionary *sponsorBlockValues;
             [self presentPlayer:videoID];
         }
     } else {
-        UIWindow *boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
-        (void)[[MainPopupView alloc] initWithFrame:CGRectMake(20, topViewController.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 80, topViewController.view.bounds.size.width - 40, 80) message:@"Video Unsupported"];
+        (void)[[MainPopupView alloc] init:@"Video Unsupported"];
     }
 }
 

@@ -13,26 +13,9 @@
 
 @implementation MainPopupView
 
-- (id)initWithFrame:(CGRect)frame message:(NSString *)message {
-    self = [super initWithFrame:frame];
+- (id)init :(NSString *)message {
+    self = [super init];
     if (self) {
-        UIView *mainView = [UIView new];
-        mainView.frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
-        mainView.backgroundColor = [AppColours viewBackgroundColour];
-        mainView.clipsToBounds = YES;
-        mainView.layer.cornerRadius = 5;
-
-        UILabel *messageLabel = [UILabel new];
-        messageLabel.frame = CGRectMake(0, 0, mainView.frame.size.width, mainView.frame.size.height);
-        messageLabel.text = message;
-        messageLabel.textAlignment = NSTextAlignmentCenter;
-        messageLabel.textColor = [UIColor whiteColor];
-        messageLabel.numberOfLines = 2;
-        messageLabel.adjustsFontSizeToFitWidth = YES;
-        [mainView addSubview:messageLabel];
-
-        [self addSubview:mainView];
-
         UIViewController *topViewController = [[[[UIApplication sharedApplication] windows] firstObject] rootViewController];
         while (true) {
             if (topViewController.presentedViewController) {
@@ -47,6 +30,25 @@
                 break;
             }
         }
+
+        UIWindow *boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
+
+        UIView *mainView = [UIView new];
+        mainView.frame = CGRectMake(20, topViewController.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 40, topViewController.view.bounds.size.width - 40, 40);
+        mainView.backgroundColor = [AppColours viewBackgroundColour];
+        mainView.clipsToBounds = YES;
+        mainView.layer.cornerRadius = 5;
+
+        UILabel *messageLabel = [UILabel new];
+        messageLabel.frame = CGRectMake(0, 0, mainView.frame.size.width, mainView.frame.size.height);
+        messageLabel.text = message;
+        messageLabel.textAlignment = NSTextAlignmentCenter;
+        messageLabel.textColor = [UIColor whiteColor];
+        messageLabel.numberOfLines = 1;
+        messageLabel.adjustsFontSizeToFitWidth = YES;
+        [mainView addSubview:messageLabel];
+
+        [self addSubview:mainView];
 
         [topViewController.view addSubview:self];
         [NSTimer scheduledTimerWithTimeInterval:3.0 repeats:NO block:^(NSTimer *timer) {
