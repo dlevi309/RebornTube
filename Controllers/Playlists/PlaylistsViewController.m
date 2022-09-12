@@ -164,7 +164,7 @@
 	NSString *playlistsViewID = [playlistsIDDictionary valueForKey:playlistsViewTag];
 
     VideoPlaylistsViewController *playlistsVideosViewController = [[VideoPlaylistsViewController alloc] init];
-    playlistsVideosViewController.playlistsViewID = playlistsViewID;
+    playlistsVideosViewController.entryID = playlistsViewID;
     
     [self.navigationController pushViewController:playlistsVideosViewController animated:YES];
 }

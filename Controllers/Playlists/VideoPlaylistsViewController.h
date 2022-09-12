@@ -2,6 +2,6 @@
 
 @interface VideoPlaylistsViewController : UIViewController
 
-@property (nonatomic, strong) NSString *playlistsViewID;
+@property (nonatomic, strong) NSString *entryID;
 
 @end
