@@ -142,7 +142,7 @@
 	NSString *historyViewID = [historyIDDictionary valueForKey:historyViewTag];
 
     VideoHistoryViewController *videoHistoryViewController = [[VideoHistoryViewController alloc] init];
-    videoHistoryViewController.historyViewID = historyViewID;
+    videoHistoryViewController.entryID = historyViewID;
 
     [self.navigationController pushViewController:videoHistoryViewController animated:YES];
 }

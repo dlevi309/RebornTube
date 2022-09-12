@@ -61,7 +61,11 @@
 
         UILabel *infoLabel = [UILabel new];
         infoLabel.frame = CGRectMake(5, 80, mainView.frame.size.width - 45, 20);
-        infoLabel.text = [NSString stringWithFormat:@"%@ - %@", array[position][@"count"], array[position][@"author"]];
+        if (array[position][@"count"] && array[position][@"author"]) {
+            infoLabel.text = [NSString stringWithFormat:@"%@ - %@", array[position][@"count"], array[position][@"author"]];
+        } else if (!array[position][@"count"] && array[position][@"author"]) {
+            infoLabel.text = [NSString stringWithFormat:@"%@", array[position][@"author"]];
+        }
         infoLabel.textColor = [AppColours textColour];
         infoLabel.numberOfLines = 1;
         [infoLabel setFont:[UIFont systemFontOfSize:12]];

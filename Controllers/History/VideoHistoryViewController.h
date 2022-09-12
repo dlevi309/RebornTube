@@ -2,6 +2,6 @@
 
 @interface VideoHistoryViewController : UIViewController
 
-@property (nonatomic, strong) NSString *historyViewID;
+@property (nonatomic, strong) NSString *entryID;
 
 @end
