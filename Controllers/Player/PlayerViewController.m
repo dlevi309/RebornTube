@@ -23,6 +23,7 @@
 	// Keys
 	UIWindow *boundsWindow;
 	BOOL deviceOrientation;
+	BOOL isFullscreen;
 	BOOL playbackMode;
 	BOOL overlayHidden;
 	BOOL loopEnabled;
@@ -54,6 +55,8 @@
 	UIView *overlayRightView;
 	UIView *overlayRightViewShadow;
 	UISwitch *playbackModeSwitch;
+	UIImageView *fullscreenImage;
+	UIImageView *exitFullscreenImage;
 
 	// Overlay Other
 	UILabel *videoOverlayTitleLabel;
@@ -95,6 +98,7 @@
 - (void)keysSetup {
 	boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
 	deviceOrientation = 0;
+	isFullscreen = 0;
 	playbackMode = 0;
 	overlayHidden = 0;
 	loopEnabled = 0;
@@ -229,6 +233,17 @@
 	[playbackModeSwitch addTarget:self action:@selector(togglePlaybackMode:) forControlEvents:UIControlEventValueChanged];
 	[overlayRightView addSubview:playbackModeSwitch];
 
+	fullscreenImage = [[UIImageView alloc] init];
+	NSString *fullscreenImagePath = [playerAssetsBundle pathForResource:@"fullscreen" ofType:@"png"];
+	fullscreenImage.image = [[UIImage imageWithContentsOfFile:fullscreenImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	fullscreenImage.frame = CGRectMake(overlayRightView.bounds.size.width - 34, overlayRightView.bounds.size.height - 34, 24, 24);
+	fullscreenImage.tintColor = [UIColor whiteColor];
+	fullscreenImage.userInteractionEnabled = YES;
+	UITapGestureRecognizer *fullscreenViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fullscreenTap:)];
+	fullscreenViewTap.numberOfTapsRequired = 1;
+	[fullscreenImage addGestureRecognizer:fullscreenViewTap];
+	[overlayRightView addSubview:fullscreenImage];
+
 	// Overlay Other
 	videoOverlayTitleLabel = [[UILabel alloc] init];
 	videoOverlayTitleLabel.text = self.videoTitle;
@@ -350,7 +365,7 @@
 	[scrollView addSubview:stackScrollView];
 
 	UIStepper *rateStepper = [[UIStepper alloc] init];
-	rateStepper.frame = CGRectMake(0, videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + 70, self.view.bounds.size.width, 15);
+	rateStepper.frame = CGRectMake(10, videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + 70, self.view.bounds.size.width - 10, 15);
 	rateStepper.stepValue = 0.25f;
 	rateStepper.minimumValue = 0.25f;
 	rateStepper.maximumValue = 10.00f;
@@ -745,6 +760,37 @@
 			overlayTimer = nil;
 		}
 	}];
+}
+
+- (void)fullscreenTap:(UITapGestureRecognizer *)recognizer {
+	if (!isFullscreen) {
+		isFullscreen = 1;
+	} else {
+		isFullscreen = 0;
+	}
+	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
+	switch (orientation) {
+		case UIInterfaceOrientationPortrait:
+		[self rotationMode:0];
+		break;
+
+		case UIInterfaceOrientationLandscapeLeft:
+		[self rotationMode:1];
+		break;
+
+		case UIInterfaceOrientationLandscapeRight:
+		[self rotationMode:1];
+		break;
+
+		case UIInterfaceOrientationPortraitUpsideDown:
+		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+			[self rotationMode:0];
+		}
+		break;
+
+		case UIInterfaceOrientationUnknown:
+		break;
+	}
 }
 
 - (void)enteredBackground:(NSNotification *)notification {
