@@ -1,5 +1,4 @@
 #import "YouTubeLoader.h"
-#import "EUCheck.h"
 #import "YouTubeExtractor.h"
 #import "../Views/MainPopupView.h"
 #import "../Controllers/Player/PlayerViewController.h"
@@ -43,32 +42,11 @@ NSDictionary *sponsorBlockValues;
             videoLive = NO;
             videoAgeRestricted = NO;
         }
+        videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubePlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
         [self getVideoInfo];
         [self getReturnYouTubeDislikesInfo:videoID];
         [self getSponsorBlockInfo:videoID];
         [self presentPlayer:videoID];
-    } else if ([playabilityStatus isEqual:@"LOGIN_REQUIRED"]) {
-        BOOL isLocatedInEU = [EUCheck isLocatedInEU];
-        if (isLocatedInEU) {
-            (void)[[MainPopupView alloc] init:@"Restricted Videos Are Unsupported In The EU"];
-        } else {
-            youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"TVHTML5_SIMPLY_EMBEDDED_PLAYER":@"2.0":videoID];
-            BOOL isLive = youtubePlayerRequest[@"videoDetails"][@"isLive"];
-            if (isLive) {
-                videoLiveOrAgeRestricted = YES;
-                videoLive = YES;
-                videoAgeRestricted = YES;
-            } else if (!isLive) {
-                videoLiveOrAgeRestricted = YES;
-                videoLive = NO;
-                videoAgeRestricted = YES;
-            }
-            videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubePlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
-            [self getVideoInfo];
-            [self getReturnYouTubeDislikesInfo:videoID];
-            [self getSponsorBlockInfo:videoID];
-            [self presentPlayer:videoID];
-        }
     } else {
         (void)[[MainPopupView alloc] init:@"Video Unsupported"];
     }
