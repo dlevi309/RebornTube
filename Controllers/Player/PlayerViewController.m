@@ -55,8 +55,6 @@
 	UIView *overlayRightView;
 	UIView *overlayRightViewShadow;
 	UISwitch *playbackModeSwitch;
-	UIImageView *fullscreenImage;
-	UIImageView *exitFullscreenImage;
 
 	// Overlay Other
 	UILabel *videoOverlayTitleLabel;
@@ -232,30 +230,6 @@
 	playbackModeSwitch.frame = CGRectMake(overlayRightView.bounds.size.width - 61, 10, 0, 0);
 	[playbackModeSwitch addTarget:self action:@selector(togglePlaybackMode:) forControlEvents:UIControlEventValueChanged];
 	[overlayRightView addSubview:playbackModeSwitch];
-
-	fullscreenImage = [[UIImageView alloc] init];
-	NSString *fullscreenImagePath = [playerAssetsBundle pathForResource:@"fullscreen" ofType:@"png"];
-	fullscreenImage.image = [[UIImage imageWithContentsOfFile:fullscreenImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-	fullscreenImage.frame = CGRectMake(overlayRightView.bounds.size.width - 34, overlayRightView.bounds.size.height - 34, 24, 24);
-	fullscreenImage.tintColor = [UIColor whiteColor];
-	fullscreenImage.alpha = 0.0;
-	fullscreenImage.userInteractionEnabled = YES;
-	UITapGestureRecognizer *fullscreenViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fullscreenTap:)];
-	fullscreenViewTap.numberOfTapsRequired = 1;
-	[fullscreenImage addGestureRecognizer:fullscreenViewTap];
-	[overlayRightView addSubview:fullscreenImage];
-
-	exitFullscreenImage = [[UIImageView alloc] init];
-	NSString *exitFullscreenImagePath = [playerAssetsBundle pathForResource:@"exitfullscreen" ofType:@"png"];
-	exitFullscreenImage.image = [[UIImage imageWithContentsOfFile:exitFullscreenImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-	exitFullscreenImage.frame = CGRectMake(overlayRightView.bounds.size.width - 34, overlayRightView.bounds.size.height - 34, 24, 24);
-	exitFullscreenImage.tintColor = [UIColor whiteColor];
-	exitFullscreenImage.alpha = 0.0;
-	exitFullscreenImage.userInteractionEnabled = YES;
-	UITapGestureRecognizer *exitFullscreenViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(fullscreenTap:)];
-	exitFullscreenViewTap.numberOfTapsRequired = 1;
-	[exitFullscreenImage addGestureRecognizer:exitFullscreenViewTap];
-	[overlayRightView addSubview:exitFullscreenImage];
 
 	// Overlay Other
 	videoOverlayTitleLabel = [[UILabel alloc] init];
@@ -456,9 +430,6 @@
 		break;
 
 		case UIInterfaceOrientationPortraitUpsideDown:
-		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-			[self rotationMode:0];
-		}
 		break;
 
 		case UIInterfaceOrientationUnknown:
@@ -753,41 +724,6 @@
 			overlayTimer = nil;
 		}
 	}];
-}
-
-- (void)fullscreenTap:(UITapGestureRecognizer *)recognizer {
-	if (!isFullscreen) {
-		isFullscreen = YES;
-		fullscreenImage.alpha = 0.0;
-		exitFullscreenImage.alpha = 1.0;
-	} else {
-		isFullscreen = NO;
-		fullscreenImage.alpha = 1.0;
-		exitFullscreenImage.alpha = 0.0;
-	}
-	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
-	switch (orientation) {
-		case UIInterfaceOrientationPortrait:
-		[self rotationMode:0];
-		break;
-
-		case UIInterfaceOrientationLandscapeLeft:
-		[self rotationMode:1];
-		break;
-
-		case UIInterfaceOrientationLandscapeRight:
-		[self rotationMode:1];
-		break;
-
-		case UIInterfaceOrientationPortraitUpsideDown:
-		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-			[self rotationMode:0];
-		}
-		break;
-
-		case UIInterfaceOrientationUnknown:
-		break;
-	}
 }
 
 - (void)enteredBackground:(NSNotification *)notification {

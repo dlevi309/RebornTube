@@ -130,13 +130,7 @@
 	
 		UIActivityViewController *shareSheet = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
         
-        [shareSheet setModalPresentationStyle:UIModalPresentationPopover];
-        UIPopoverPresentationController *popPresenter = [shareSheet popoverPresentationController];
-        popPresenter.sourceView = topViewController.view;
-        popPresenter.sourceRect = topViewController.view.bounds;
-        popPresenter.permittedArrowDirections = 0;
-
-		[topViewController presentViewController:shareSheet animated:YES completion:nil];
+        [topViewController presentViewController:shareSheet animated:YES completion:nil];
     }]];
 
 	[alertSelector addAction:[UIAlertAction actionWithTitle:@"Add To Playlist" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -148,12 +142,6 @@
 
 	[alertSelector addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
     }]];
-
-    [alertSelector setModalPresentationStyle:UIModalPresentationPopover];
-    UIPopoverPresentationController *popPresenter = [alertSelector popoverPresentationController];
-    popPresenter.sourceView = topViewController.view;
-    popPresenter.sourceRect = topViewController.view.bounds;
-    popPresenter.permittedArrowDirections = 0;
 
     [topViewController presentViewController:alertSelector animated:YES completion:nil];
 }

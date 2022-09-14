@@ -128,34 +128,6 @@
 	[self.view addSubview:scrollView];
 }
 
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-    [super traitCollectionDidChange:previousTraitCollection];
-
-	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
-	switch (orientation) {
-		case UIInterfaceOrientationPortrait:
-		[self mainViewSetup];
-		break;
-
-		case UIInterfaceOrientationLandscapeLeft:
-		[self mainViewSetup];
-		break;
-
-		case UIInterfaceOrientationLandscapeRight:
-		[self mainViewSetup];
-		break;
-
-		case UIInterfaceOrientationPortraitUpsideDown:
-		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-			[self mainViewSetup];
-		}
-		break;
-
-		case UIInterfaceOrientationUnknown:
-		break;
-	}
-}
-
 @end
 
 @implementation VideoPlaylistsViewController (Privates)
