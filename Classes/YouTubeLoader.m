@@ -11,9 +11,7 @@ NSDictionary *youtubePlayerRequest;
 
 // Video Info
 NSURL *videoURL;
-BOOL videoLiveOrAgeRestricted;
 BOOL videoLive;
-BOOL videoAgeRestricted;
 NSString *videoTitle;
 NSString *videoAuthor;
 NSString *videoLength;
@@ -34,13 +32,9 @@ NSDictionary *sponsorBlockValues;
     if ([playabilityStatus isEqual:@"OK"]) {
         BOOL isLive = youtubePlayerRequest[@"videoDetails"][@"isLive"];
         if (isLive) {
-            videoLiveOrAgeRestricted = YES;
             videoLive = YES;
-            videoAgeRestricted = NO;
         } else if (!isLive) {
-            videoLiveOrAgeRestricted = NO;
             videoLive = NO;
-            videoAgeRestricted = NO;
         }
         videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubePlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
         [self getVideoInfo];
@@ -61,9 +55,7 @@ NSDictionary *sponsorBlockValues;
 
     // Video Info
     videoURL = nil;
-    videoLiveOrAgeRestricted = NO;
     videoLive = NO;
-    videoAgeRestricted = NO;
     videoTitle = nil;
     videoAuthor = nil;
     videoLength = nil;
@@ -116,9 +108,7 @@ NSDictionary *sponsorBlockValues;
     PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
     playerViewController.videoID = videoID;
     playerViewController.videoURL = videoURL;
-    playerViewController.videoLiveOrAgeRestricted = videoLiveOrAgeRestricted;
     playerViewController.videoLive = videoLive;
-    playerViewController.videoAgeRestricted = videoAgeRestricted;
     playerViewController.videoTitle = videoTitle;
     playerViewController.videoAuthor = videoAuthor;
     playerViewController.videoLength = videoLength;

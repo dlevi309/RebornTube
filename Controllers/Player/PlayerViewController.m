@@ -339,7 +339,7 @@
 		[stackView addArrangedSubview:loopButton];
 	}
     [stackView addArrangedSubview:shareButton];
-	if (!self.videoLiveOrAgeRestricted) {
+	if (!self.videoLive) {
 		[stackView addArrangedSubview:downloadButton];
 	}
 	[stackView addArrangedSubview:addToPlaylistsButton];
