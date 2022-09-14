@@ -274,12 +274,6 @@
 	[alertSelector addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
     }]];
 
-    [alertSelector setModalPresentationStyle:UIModalPresentationPopover];
-    UIPopoverPresentationController *popPresenter = [alertSelector popoverPresentationController];
-    popPresenter.sourceView = self.view;
-    popPresenter.sourceRect = self.view.bounds;
-    popPresenter.permittedArrowDirections = 0;
-
     [self presentViewController:alertSelector animated:YES completion:nil];
 }
 
