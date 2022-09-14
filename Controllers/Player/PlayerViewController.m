@@ -361,7 +361,7 @@
 	stackView.alignment = UIStackViewAlignmentFill;
     stackView.spacing = 10;
 
-    if (!self.videoLiveOrAgeRestricted) {
+    if (!self.videoLive) {
 		[stackView addArrangedSubview:loopButton];
 	}
     [stackView addArrangedSubview:shareButton];

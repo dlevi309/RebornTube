@@ -4,7 +4,6 @@
 + (void)init :(NSString *)videoID;
 + (void)resetLoaderKeys;
 + (void)getTopViewController;
-+ (void)getVideoUrl;
 + (void)getVideoInfo;
 + (void)getReturnYouTubeDislikesInfo :(NSString *)videoID;
 + (void)getSponsorBlockInfo :(NSString *)videoID;

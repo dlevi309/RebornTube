@@ -13,6 +13,8 @@ NSDictionary *youtubePlayerRequest;
 // Video Info
 NSURL *videoURL;
 BOOL videoLiveOrAgeRestricted;
+BOOL videoLive;
+BOOL videoAgeRestricted;
 NSString *videoTitle;
 NSString *videoAuthor;
 NSString *videoLength;
@@ -28,16 +30,18 @@ NSDictionary *sponsorBlockValues;
     [self resetLoaderKeys];
     [self getTopViewController];
 
-    youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"ANDROID":@"16.20":videoID];
+    youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"IOS":@"16.20":videoID];
     NSString *playabilityStatus = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"playabilityStatus"][@"status"]];
     if ([playabilityStatus isEqual:@"OK"]) {
         BOOL isLive = youtubePlayerRequest[@"videoDetails"][@"isLive"];
         if (isLive) {
-            videoLiveOrAgeRestricted = 1;
-            videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubePlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
+            videoLiveOrAgeRestricted = YES;
+            videoLive = YES;
+            videoAgeRestricted = NO;
         } else if (!isLive) {
-            videoLiveOrAgeRestricted = 0;
-            [self getVideoUrl];
+            videoLiveOrAgeRestricted = NO;
+            videoLive = NO;
+            videoAgeRestricted = NO;
         }
         [self getVideoInfo];
         [self getReturnYouTubeDislikesInfo:videoID];
@@ -51,12 +55,15 @@ NSDictionary *sponsorBlockValues;
             youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"TVHTML5_SIMPLY_EMBEDDED_PLAYER":@"2.0":videoID];
             BOOL isLive = youtubePlayerRequest[@"videoDetails"][@"isLive"];
             if (isLive) {
-                videoLiveOrAgeRestricted = 1;
-                videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubePlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
+                videoLiveOrAgeRestricted = YES;
+                videoLive = YES;
+                videoAgeRestricted = YES;
             } else if (!isLive) {
-                videoLiveOrAgeRestricted = 1;
-                [self getVideoUrl];
+                videoLiveOrAgeRestricted = YES;
+                videoLive = NO;
+                videoAgeRestricted = YES;
             }
+            videoURL = [NSURL URLWithString:[NSString stringWithFormat:@"%@", youtubePlayerRequest[@"streamingData"][@"hlsManifestUrl"]]];
             [self getVideoInfo];
             [self getReturnYouTubeDislikesInfo:videoID];
             [self getSponsorBlockInfo:videoID];
@@ -76,7 +83,9 @@ NSDictionary *sponsorBlockValues;
 
     // Video Info
     videoURL = nil;
-    videoLiveOrAgeRestricted = 0;
+    videoLiveOrAgeRestricted = NO;
+    videoLive = NO;
+    videoAgeRestricted = NO;
     videoTitle = nil;
     videoAuthor = nil;
     videoLength = nil;
@@ -101,64 +110,6 @@ NSDictionary *sponsorBlockValues;
         } else {
             break;
         }
-    }
-}
-
-+ (void)getVideoUrl {
-    NSDictionary *innertubeFormats = youtubePlayerRequest[@"streamingData"][@"formats"];
-    NSURL *video2160p;
-    NSURL *video1440p;
-    NSURL *video1080p;
-    NSURL *video720p;
-    NSURL *video480p;
-    NSURL *video360p;
-    NSURL *video240p;
-    for (NSDictionary *format in innertubeFormats) {
-        if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"2160"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"quality"]] isEqual:@"hd2160"]) {
-            if (video2160p == nil) {
-                video2160p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"1440"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"quality"]] isEqual:@"hd1440"]) {
-            if (video1440p == nil) {
-                video1440p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"1080"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"quality"]] isEqual:@"hd1080"]) {
-            if (video1080p == nil) {
-                video1080p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"720"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"quality"]] isEqual:@"hd720"]) {
-            if (video720p == nil) {
-                video720p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"480"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"qualityLabel"]] isEqual:@"480p"]) {
-            if (video480p == nil) {
-                video480p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"360"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"qualityLabel"]] isEqual:@"360p"]) {
-            if (video360p == nil) {
-                video360p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        } else if ([[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"height"]] isEqual:@"240"] || [[format objectForKey:@"mimeType"] containsString:@"video/mp4"] & [[NSString stringWithFormat:@"%@", [format objectForKey:@"qualityLabel"]] isEqual:@"240p"]) {
-            if (video240p == nil) {
-                video240p = [NSURL URLWithString:[NSString stringWithFormat:@"%@", [format objectForKey:@"url"]]];
-            }
-        }
-    }
-
-    if (video2160p != nil) {
-        videoURL = video2160p;
-    } else if (video1440p != nil) {
-        videoURL = video1440p;
-    } else if (video1080p != nil) {
-        videoURL = video1080p;
-    } else if (video720p != nil) {
-        videoURL = video720p;
-    } else if (video480p != nil) {
-        videoURL = video480p;
-    } else if (video360p != nil) {
-        videoURL = video360p;
-    } else if (video240p != nil) {
-        videoURL = video240p;
     }
 }
 
@@ -188,6 +139,8 @@ NSDictionary *sponsorBlockValues;
     playerViewController.videoID = videoID;
     playerViewController.videoURL = videoURL;
     playerViewController.videoLiveOrAgeRestricted = videoLiveOrAgeRestricted;
+    playerViewController.videoLive = videoLive;
+    playerViewController.videoAgeRestricted = videoAgeRestricted;
     playerViewController.videoTitle = videoTitle;
     playerViewController.videoAuthor = videoAuthor;
     playerViewController.videoLength = videoLength;
