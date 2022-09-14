@@ -48,6 +48,7 @@
         timeLabel.textColor = [UIColor whiteColor];
         timeLabel.numberOfLines = 1;
         timeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
+        timeLabel.clipsToBounds = YES;
         timeLabel.layer.cornerRadius = 5;
         timeLabel.adjustsFontSizeToFitWidth = YES;
         [mainView addSubview:timeLabel];
