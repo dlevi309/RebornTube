@@ -26,31 +26,36 @@
 
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 
-	self.tabBarController = [[UITabBarController alloc] init];
+	if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:@"iPadOS Unsupported" preferredStyle:UIAlertControllerStyleAlert];
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        self.tabBarController = [[UITabBarController alloc] init];
 
-    HomeViewController *homeViewController = [[HomeViewController alloc] init];
-    UINavigationController *homeNavViewController = [[UINavigationController alloc] initWithRootViewController:homeViewController];
-    homeNavViewController.tabBarItem.title = @"Home";
+        HomeViewController *homeViewController = [[HomeViewController alloc] init];
+        UINavigationController *homeNavViewController = [[UINavigationController alloc] initWithRootViewController:homeViewController];
+        homeNavViewController.tabBarItem.title = @"Home";
 
-    SubscriptionsViewController *subscriptionsViewController = [[SubscriptionsViewController alloc] init];
-    UINavigationController *subscriptionsNavViewController = [[UINavigationController alloc] initWithRootViewController:subscriptionsViewController];
-    subscriptionsNavViewController.tabBarItem.title = @"Subscriptions";
+        SubscriptionsViewController *subscriptionsViewController = [[SubscriptionsViewController alloc] init];
+        UINavigationController *subscriptionsNavViewController = [[UINavigationController alloc] initWithRootViewController:subscriptionsViewController];
+        subscriptionsNavViewController.tabBarItem.title = @"Subscriptions";
 
-    HistoryViewController *historyViewController = [[HistoryViewController alloc] init];
-    UINavigationController *historyNavViewController = [[UINavigationController alloc] initWithRootViewController:historyViewController];
-    historyNavViewController.tabBarItem.title = @"History";
+        HistoryViewController *historyViewController = [[HistoryViewController alloc] init];
+        UINavigationController *historyNavViewController = [[UINavigationController alloc] initWithRootViewController:historyViewController];
+        historyNavViewController.tabBarItem.title = @"History";
 
-    PlaylistsViewController *playlistsViewController = [[PlaylistsViewController alloc] init];
-    UINavigationController *playlistsNavViewController = [[UINavigationController alloc] initWithRootViewController:playlistsViewController];
-    playlistsNavViewController.tabBarItem.title = @"Playlists";
+        PlaylistsViewController *playlistsViewController = [[PlaylistsViewController alloc] init];
+        UINavigationController *playlistsNavViewController = [[UINavigationController alloc] initWithRootViewController:playlistsViewController];
+        playlistsNavViewController.tabBarItem.title = @"Playlists";
 
-    DownloadsViewController *downloadsViewController = [[DownloadsViewController alloc] init];
-    UINavigationController *downloadsNavViewController = [[UINavigationController alloc] initWithRootViewController:downloadsViewController];
-    downloadsNavViewController.tabBarItem.title = @"Downloads";
+        DownloadsViewController *downloadsViewController = [[DownloadsViewController alloc] init];
+        UINavigationController *downloadsNavViewController = [[UINavigationController alloc] initWithRootViewController:downloadsViewController];
+        downloadsNavViewController.tabBarItem.title = @"Downloads";
 
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:homeNavViewController, historyNavViewController, playlistsNavViewController, nil];
+        self.tabBarController.viewControllers = [NSArray arrayWithObjects:homeNavViewController, historyNavViewController, playlistsNavViewController, nil];
 
-    [self.view addSubview:self.tabBarController.view];
+        [self.view addSubview:self.tabBarController.view];
+    }
 }
 
 @end
