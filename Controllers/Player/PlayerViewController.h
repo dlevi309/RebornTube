@@ -10,7 +10,6 @@
 @property (nonatomic, assign) BOOL videoLive;
 @property (nonatomic, strong) NSString *videoTitle;
 @property (nonatomic, strong) NSString *videoAuthor;
-@property (nonatomic, strong) NSString *videoLength;
 @property (nonatomic, strong) NSURL *videoArtwork;
 @property (nonatomic, strong) NSString *videoViewCount;
 @property (nonatomic, strong) NSString *videoLikes;

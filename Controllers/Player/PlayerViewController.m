@@ -259,7 +259,6 @@
 	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateHighlighted];
 	progressSlider.minimumTrackTintColor = [UIColor redColor];
 	progressSlider.minimumValue = 0.0f;
-	progressSlider.maximumValue = [self.videoLength floatValue];
 	[progressSlider addTarget:self action:@selector(progressSliderValueChanged:) forControlEvents:UIControlEventValueChanged];
 	[self.view addSubview:progressSlider];
 }
@@ -439,8 +438,9 @@
 }
 
 - (void)playerTimeChanged {
+	progressSlider.maximumValue = (float)CMTimeGetSeconds(playerItem.duration);
 	progressSlider.value = (float)CMTimeGetSeconds(player.currentTime);
-	videoTimeLabel.text = [NSString stringWithFormat:@"%d:%02d / %d:%02d", ((int)CMTimeGetSeconds(player.currentTime)) / 60, ((int)CMTimeGetSeconds(player.currentTime)) % 60, [self.videoLength intValue] / 60, [self.videoLength intValue] % 60];
+	videoTimeLabel.text = [NSString stringWithFormat:@"%d:%02d / %d:%02d", ((int)CMTimeGetSeconds(player.currentTime)) / 60, ((int)CMTimeGetSeconds(player.currentTime)) % 60, ((int)CMTimeGetSeconds(playerItem.duration)) / 60, ((int)CMTimeGetSeconds(playerItem.duration)) % 60];
 
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 		MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
