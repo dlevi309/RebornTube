@@ -6,6 +6,7 @@
 
 #import "../../Classes/AppColours.h"
 #import "../../Classes/AppDelegate.h"
+#import "../../Classes/PlayerHistory.h"
 #import "../../Classes/YouTubeDownloader.h"
 
 // Views
@@ -581,8 +582,26 @@
 				}
 			}
 			[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playerReachedEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
-            [player play];
-			player.rate = playbackRate;
+            
+			NSFileManager *fm = [[NSFileManager alloc] init];
+			NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    		NSString *documentsDirectory = [paths objectAtIndex:0];
+			NSString *playerPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"player.plist"];
+			if ([fm fileExistsAtPath:playerPlistFilePath]) {
+				NSMutableDictionary *playerDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:playerPlistFilePath];
+				if ([playerDictionary objectForKey:self.videoID]) {
+					[player seekToTime:CMTimeMakeWithSeconds([[playerDictionary objectForKey:self.videoID] floatValue], NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+						[player play];
+						player.rate = playbackRate;
+					}];
+				} else {
+					[player play];
+					player.rate = playbackRate;
+				}
+			} else {
+				[player play];
+				player.rate = playbackRate;
+			}
         }
     } else if (object == player && [keyPath isEqualToString:@"timeControlStatus"]) {
         if (player.timeControlStatus == AVPlayerTimeControlStatusPlaying) {
@@ -659,6 +678,7 @@
         [pictureInPictureController stopPictureInPicture];
     }
     [player pause];
+	[PlayerHistory init:self.videoID:[NSString stringWithFormat:@"%f", CMTimeGetSeconds(player.currentTime)]];
 	playerLayer.player = nil;
 	player = nil;
     [playerLayer removeFromSuperlayer];

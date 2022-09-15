@@ -167,6 +167,7 @@
                 NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
                 NSString *documentsDirectory = [paths objectAtIndex:0];
                 [fm removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:@"history.plist"] error:nil];
+                [fm removeItemAtPath:[documentsDirectory stringByAppendingPathComponent:@"player.plist"] error:nil];
             }]];
 
             [self presentViewController:alert animated:YES completion:nil];
@@ -187,7 +188,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
     if (section == 3) {
-        return @"Version: 1.0.0 (Alpha 37)";
+        return @"Version: 1.0.0 (Alpha 38 Dev)";
     }
     return nil;
 }
