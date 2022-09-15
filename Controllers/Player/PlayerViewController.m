@@ -51,6 +51,7 @@
 	UIView *overlayMiddleViewShadow;
 	UIImageView *playImage;
 	UIImageView *pauseImage;
+	UIImageView *restartImage;
 
 	// Overlay Right
 	UIView *overlayRightView;
@@ -192,6 +193,7 @@
 	NSString *playImagePath = [playerAssetsBundle pathForResource:@"play" ofType:@"png"];
 	playImage.image = [[UIImage imageWithContentsOfFile:playImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	playImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
+	playImage.alpha = 0.0;
 	playImage.tintColor = [UIColor whiteColor];
 	playImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *playViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
@@ -203,12 +205,25 @@
 	NSString *pauseImagePath = [playerAssetsBundle pathForResource:@"pause" ofType:@"png"];
 	pauseImage.image = [[UIImage imageWithContentsOfFile:pauseImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 	pauseImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
+	pauseImage.alpha = 0.0;
 	pauseImage.tintColor = [UIColor whiteColor];
 	pauseImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *pauseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playPauseTap:)];
 	pauseViewTap.numberOfTapsRequired = 1;
 	[pauseImage addGestureRecognizer:pauseViewTap];
 	[overlayMiddleView addSubview:pauseImage];
+
+	restartImage = [[UIImageView alloc] init];
+	NSString *restartImagePath = [playerAssetsBundle pathForResource:@"restart" ofType:@"png"];
+	restartImage.image = [[UIImage imageWithContentsOfFile:restartImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+	restartImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
+	restartImage.alpha = 0.0;
+	restartImage.tintColor = [UIColor whiteColor];
+	restartImage.userInteractionEnabled = YES;
+	UITapGestureRecognizer *restartViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(restartTap:)];
+	restartViewTap.numberOfTapsRequired = 1;
+	[restartImage addGestureRecognizer:restartViewTap];
+	[overlayMiddleView addSubview:restartImage];
 
 	// Overlay Right
 	overlayRightView = [[UIView alloc] init];
@@ -504,6 +519,7 @@
 		overlayMiddleViewShadow.frame = CGRectMake(0, 0, overlayMiddleView.bounds.size.width, overlayMiddleView.bounds.size.height);
 		playImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
+		restartImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 
 		// Overlay Right
 		overlayRightView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
@@ -537,6 +553,7 @@
 		overlayMiddleViewShadow.frame = CGRectMake(0, 0, overlayMiddleView.bounds.size.width, overlayMiddleView.bounds.size.height);
 		playImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 		pauseImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
+		restartImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 		
 		// Overlay Right
 		overlayRightView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
@@ -607,9 +624,17 @@
         if (player.timeControlStatus == AVPlayerTimeControlStatusPlaying) {
 			playImage.alpha = 0.0;
 			pauseImage.alpha = 1.0;
+			restartImage.alpha = 0.0;
         } else if (player.timeControlStatus == AVPlayerTimeControlStatusPaused) {
-			playImage.alpha = 1.0;
-			pauseImage.alpha = 0.0;
+			if ([[NSString stringWithFormat:@"%d:%02d", ((int)CMTimeGetSeconds(player.currentTime)) / 60, ((int)CMTimeGetSeconds(player.currentTime)) % 60] isEqual:[NSString stringWithFormat:@"%d:%02d", ((int)CMTimeGetSeconds(playerItem.duration)) / 60, ((int)CMTimeGetSeconds(playerItem.duration)) % 60]]) {
+				playImage.alpha = 0.0;
+				pauseImage.alpha = 0.0;
+				restartImage.alpha = 1.0;
+			} else {
+				playImage.alpha = 1.0;
+				pauseImage.alpha = 0.0;
+				restartImage.alpha = 0.0;
+			}
 		}
 		if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 			MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
@@ -718,6 +743,13 @@
 		[player play];
 		player.rate = playbackRate;
 	}
+}
+
+- (void)restartTap:(UITapGestureRecognizer *)recognizer {
+	[player seekToTime:CMTimeMakeWithSeconds(0, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+		[player play];
+		player.rate = playbackRate;
+	}];
 }
 
 - (void)forwardTap:(UITapGestureRecognizer *)recognizer {
