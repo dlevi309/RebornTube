@@ -438,7 +438,6 @@
 }
 
 - (void)playerTimeChanged {
-	progressSlider.maximumValue = (float)CMTimeGetSeconds(playerItem.duration);
 	progressSlider.value = (float)CMTimeGetSeconds(player.currentTime);
 	videoTimeLabel.text = [NSString stringWithFormat:@"%d:%02d / %d:%02d", ((int)CMTimeGetSeconds(player.currentTime)) / 60, ((int)CMTimeGetSeconds(player.currentTime)) % 60, ((int)CMTimeGetSeconds(playerItem.duration)) / 60, ((int)CMTimeGetSeconds(playerItem.duration)) % 60];
 
@@ -563,6 +562,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (object == player && [keyPath isEqualToString:@"status"]) {
         if (player.status == AVPlayerStatusReadyToPlay) {
+			progressSlider.maximumValue = (float)CMTimeGetSeconds(playerItem.duration);
 			if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 				[[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
 				[[AVAudioSession sharedInstance] setActive:YES error:nil];
@@ -678,7 +678,7 @@
         [pictureInPictureController stopPictureInPicture];
     }
     [player pause];
-	// [PlayerHistory init:self.videoID:[NSString stringWithFormat:@"%f", CMTimeGetSeconds(player.currentTime)]];
+	[PlayerHistory init:self.videoID:[NSString stringWithFormat:@"%f", CMTimeGetSeconds(player.currentTime)]];
 	playerLayer.player = nil;
 	player = nil;
     [playerLayer removeFromSuperlayer];
