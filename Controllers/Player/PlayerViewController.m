@@ -678,7 +678,7 @@
         [pictureInPictureController stopPictureInPicture];
     }
     [player pause];
-	[PlayerHistory init:self.videoID:[NSString stringWithFormat:@"%f", CMTimeGetSeconds(player.currentTime)]];
+	// [PlayerHistory init:self.videoID:[NSString stringWithFormat:@"%f", CMTimeGetSeconds(player.currentTime)]];
 	playerLayer.player = nil;
 	player = nil;
     [playerLayer removeFromSuperlayer];
