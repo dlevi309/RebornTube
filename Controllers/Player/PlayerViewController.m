@@ -94,7 +94,7 @@
 }
 
 - (void)keysSetup {
-	boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
+	boundsWindow = [[[UIApplication sharedApplication] windows] lastObject];
 	deviceOrientation = NO;
 	isFullscreen = NO;
 	playbackMode = NO;
@@ -415,7 +415,7 @@
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
 
-	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
+	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] lastObject] windowScene] interfaceOrientation];
 	switch (orientation) {
 		case UIInterfaceOrientationPortrait:
 		[self rotationMode:0];

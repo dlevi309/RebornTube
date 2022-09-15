@@ -67,7 +67,7 @@ NSDictionary *sponsorBlockValues;
 }
 
 + (void)getTopViewController {
-    topViewController = [[[[UIApplication sharedApplication] windows] firstObject] rootViewController];
+    topViewController = [[[[UIApplication sharedApplication] windows] lastObject] rootViewController];
     while (true) {
         if (topViewController.presentedViewController) {
             topViewController = topViewController.presentedViewController;

@@ -34,7 +34,7 @@
 }
 
 - (void)keysSetup {
-	boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
+	boundsWindow = [[[UIApplication sharedApplication] windows] lastObject];
 }
 
 - (void)navBarSetup {
