@@ -22,9 +22,11 @@
     UIWindow *boundsWindow;
 	UIScrollView *scrollView;
 
+	// Main Array
+    NSMutableArray *mainArray;
+
 	// Other
 	UITextField *searchTextField;
-	NSMutableDictionary *searchVideoIDDictionary;
 }
 - (void)keysSetup;
 - (void)navBarSetup;
