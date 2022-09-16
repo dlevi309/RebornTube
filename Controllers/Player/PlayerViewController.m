@@ -112,9 +112,10 @@
 	AVURLAsset *videoAsset = [[AVURLAsset alloc] initWithURL:self.videoURL options:nil];
 
 	playerItem = [[AVPlayerItem alloc] initWithAsset:videoAsset];
-	AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
-	[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
-	playerItem.audioTimePitchAlgorithm = AVAudioTimePitchAlgorithmLowQualityZeroLatency;
+	if ([[NSUserDefaults standardUserDefaults] boolForKey:@"kEnableCaptions"] != YES) {
+		AVMediaSelectionGroup *subtitleSelectionGroup = [playerItem.asset mediaSelectionGroupForMediaCharacteristic:AVMediaCharacteristicLegible];
+		[playerItem selectMediaOption:nil inMediaSelectionGroup:subtitleSelectionGroup];
+	}
 
 	player = [AVPlayer playerWithPlayerItem:playerItem];
 	player.allowsExternalPlayback = YES;
