@@ -807,6 +807,7 @@
 - (void)rateStepperValueChanged:(UIStepper *)sender {
 	playbackRate = [[NSString stringWithFormat:@"%.01f", sender.value] floatValue];
 	player.rate = playbackRate;
+	(void)[[MainPopupView alloc] init:[NSString stringWithFormat:@"Speed: %f", playbackRate];
 }
 
 - (MPRemoteCommandHandlerStatus)changedLockscreenPlaybackSlider:(MPChangePlaybackPositionCommandEvent *)event {
