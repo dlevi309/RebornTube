@@ -69,38 +69,34 @@
 
 	[plistArray enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
 		NSDictionary *youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"ANDROID":@"16.20":key];
-		@try {
-			NSArray *videoArtworkArray = youtubePlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
-			NSString *videoArtwork;
-			if (videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]) {
-				videoArtwork = [NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]];
-			}
-			NSString *videoTime;
-			if (youtubePlayerRequest[@"videoDetails"][@"lengthSeconds"]) {
-				NSString *videoLength = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"lengthSeconds"]];
-				videoTime = [NSString stringWithFormat:@"%d:%02d", [videoLength intValue] / 60, [videoLength intValue] % 60];
-			}
-			NSString *videoTitle;
-			if (youtubePlayerRequest[@"videoDetails"][@"title"]) {
-				videoTitle = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"title"]];
-			}
-			NSString *videoAuthor;
-			if (youtubePlayerRequest[@"videoDetails"][@"author"]) {
-				videoAuthor = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"author"]];
-			}
-			NSMutableDictionary *mainDictionary = [NSMutableDictionary new];
-			[mainDictionary setValue:videoArtwork forKey:@"artwork"];
-			[mainDictionary setValue:videoTime forKey:@"time"];
-			[mainDictionary setValue:videoTitle forKey:@"title"];
-			[mainDictionary setValue:videoAuthor forKey:@"author"];
-			[mainDictionary setValue:key forKey:@"id"];
-
-			if ([mainDictionary count] != 0) {
-				[mainArray addObject:mainDictionary];
-			}
+		NSArray *videoArtworkArray = youtubePlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
+		NSString *videoArtwork;
+		if (videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]) {
+			videoArtwork = [NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]];
 		}
-        @catch (NSException *exception) {
-        }
+		NSString *videoTime;
+		if (youtubePlayerRequest[@"videoDetails"][@"lengthSeconds"]) {
+			NSString *videoLength = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"lengthSeconds"]];
+			videoTime = [NSString stringWithFormat:@"%d:%02d", [videoLength intValue] / 60, [videoLength intValue] % 60];
+		}
+		NSString *videoTitle;
+		if (youtubePlayerRequest[@"videoDetails"][@"title"]) {
+			videoTitle = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"title"]];
+		}
+		NSString *videoAuthor;
+		if (youtubePlayerRequest[@"videoDetails"][@"author"]) {
+			videoAuthor = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"author"]];
+		}
+		NSMutableDictionary *mainDictionary = [NSMutableDictionary new];
+		[mainDictionary setValue:videoArtwork forKey:@"artwork"];
+		[mainDictionary setValue:videoTime forKey:@"time"];
+		[mainDictionary setValue:videoTitle forKey:@"title"];
+		[mainDictionary setValue:videoAuthor forKey:@"author"];
+		[mainDictionary setValue:key forKey:@"id"];
+
+		if ([mainDictionary count] != 0) {
+			[mainArray addObject:mainDictionary];
+		}
 	}];
 }
 
@@ -114,14 +110,10 @@
 	__block int viewBounds = 0;
 	__block int viewCount = 0;
 	[infoArray enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
-		@try {
-			MainDisplayView *mainDisplayView = [[MainDisplayView alloc] initWithFrame:CGRectMake(0, viewBounds, scrollView.bounds.size.width, 100) array:infoArray position:viewCount save:0];
-			[scrollView addSubview:mainDisplayView];
-			viewBounds += 102;
-			viewCount += 1;
-		}
-        @catch (NSException *exception) {
-        }
+		MainDisplayView *mainDisplayView = [[MainDisplayView alloc] initWithFrame:CGRectMake(0, viewBounds, scrollView.bounds.size.width, 100) array:infoArray position:viewCount save:0];
+		[scrollView addSubview:mainDisplayView];
+		viewBounds += 102;
+		viewCount += 1;
 	}];
 
 	scrollView.contentSize = CGSizeMake(scrollView.bounds.size.width, viewBounds);
@@ -137,10 +129,7 @@
 - (void)search {
     SearchViewController *searchViewController = [[SearchViewController alloc] init];
 
-	UINavigationController *searchViewControllerView = [[UINavigationController alloc] initWithRootViewController:searchViewController];
-    searchViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:searchViewControllerView animated:YES completion:nil];
+	[self.navigationController pushViewController:searchViewController animated:YES];
 }
 
 - (void)settings {

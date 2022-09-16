@@ -74,46 +74,42 @@
 	NSDictionary *youtubeBrowseRequest = [YouTubeExtractor youtubeBrowseRequest:@"ANDROID":@"16.20":@"FEtrending":nil];
     NSArray *youtubeBrowseRequestContents = youtubeBrowseRequest[@"contents"][@"singleColumnBrowseResultsRenderer"][@"tabs"][0][@"tabRenderer"][@"content"][@"sectionListRenderer"][@"contents"];
 	[youtubeBrowseRequestContents enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
-		@try {
-			NSArray *videoArtworkArray = youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"thumbnail"][@"thumbnails"];
-			NSString *videoArtwork;
-			if (videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]) {
-				videoArtwork = [NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]];
-			}
-			NSString *videoTime;
-			if (youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"lengthText"][@"runs"][0][@"text"]) {
-				videoTime = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"lengthText"][@"runs"][0][@"text"]];
-			}
-			NSString *videoTitle;
-			if (youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"headline"][@"runs"][0][@"text"]) {
-				videoTitle = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"headline"][@"runs"][0][@"text"]];
-			}
-			NSString *videoCount;
-			if (youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"shortViewCountText"][@"runs"][0][@"text"]) {
-				videoCount = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"shortViewCountText"][@"runs"][0][@"text"]];
-			}
-			NSString *videoAuthor;
-			if (youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"shortBylineText"][@"runs"][0][@"text"]) {
-				videoAuthor = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"shortBylineText"][@"runs"][0][@"text"]];
-			}
-			NSString *videoID;
-			if (youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"navigationEndpoint"][@"watchEndpoint"][@"videoId"]) {
-				videoID = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"navigationEndpoint"][@"watchEndpoint"][@"videoId"]];
-			}
-			NSMutableDictionary *mainDictionary = [NSMutableDictionary new];
-			[mainDictionary setValue:videoArtwork forKey:@"artwork"];
-			[mainDictionary setValue:videoTime forKey:@"time"];
-			[mainDictionary setValue:videoTitle forKey:@"title"];
-			[mainDictionary setValue:videoCount forKey:@"count"];
-			[mainDictionary setValue:videoAuthor forKey:@"author"];
-			[mainDictionary setValue:videoID forKey:@"id"];
-
-			if ([mainDictionary count] != 0) {
-				[mainArray addObject:mainDictionary];
-			}
+		NSArray *videoArtworkArray = youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"thumbnail"][@"thumbnails"];
+		NSString *videoArtwork;
+		if (videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]) {
+			videoArtwork = [NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]];
 		}
-        @catch (NSException *exception) {
-        }
+		NSString *videoTime;
+		if (youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"lengthText"][@"runs"][0][@"text"]) {
+			videoTime = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"lengthText"][@"runs"][0][@"text"]];
+		}
+		NSString *videoTitle;
+		if (youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"headline"][@"runs"][0][@"text"]) {
+			videoTitle = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"headline"][@"runs"][0][@"text"]];
+		}
+		NSString *videoCount;
+		if (youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"shortViewCountText"][@"runs"][0][@"text"]) {
+			videoCount = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"shortViewCountText"][@"runs"][0][@"text"]];
+		}
+		NSString *videoAuthor;
+		if (youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"shortBylineText"][@"runs"][0][@"text"]) {
+			videoAuthor = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"shortBylineText"][@"runs"][0][@"text"]];
+		}
+		NSString *videoID;
+		if (youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"navigationEndpoint"][@"watchEndpoint"][@"videoId"]) {
+			videoID = [NSString stringWithFormat:@"%@", youtubeBrowseRequestContents[value][@"itemSectionRenderer"][@"contents"][0][@"videoWithContextRenderer"][@"navigationEndpoint"][@"watchEndpoint"][@"videoId"]];
+		}
+		NSMutableDictionary *mainDictionary = [NSMutableDictionary new];
+		[mainDictionary setValue:videoArtwork forKey:@"artwork"];
+		[mainDictionary setValue:videoTime forKey:@"time"];
+		[mainDictionary setValue:videoTitle forKey:@"title"];
+		[mainDictionary setValue:videoCount forKey:@"count"];
+		[mainDictionary setValue:videoAuthor forKey:@"author"];
+		[mainDictionary setValue:videoID forKey:@"id"];
+
+		if ([mainDictionary count] != 0) {
+			[mainArray addObject:mainDictionary];
+		}
 	}];
 }
 
@@ -127,14 +123,10 @@
 	__block int viewBounds = 0;
 	__block int viewCount = 0;
 	[infoArray enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
-		@try {
-			MainDisplayView *mainDisplayView = [[MainDisplayView alloc] initWithFrame:CGRectMake(0, viewBounds, scrollView.bounds.size.width, 100) array:infoArray position:viewCount save:1];
-			[scrollView addSubview:mainDisplayView];
-			viewBounds += 102;
-			viewCount += 1;
-		}
-        @catch (NSException *exception) {
-        }
+		MainDisplayView *mainDisplayView = [[MainDisplayView alloc] initWithFrame:CGRectMake(0, viewBounds, scrollView.bounds.size.width, 100) array:infoArray position:viewCount save:1];
+		[scrollView addSubview:mainDisplayView];
+		viewBounds += 102;
+		viewCount += 1;
 	}];
 
 	scrollView.contentSize = CGSizeMake(scrollView.bounds.size.width, viewBounds);
@@ -150,10 +142,7 @@
 - (void)search {
     SearchViewController *searchViewController = [[SearchViewController alloc] init];
 
-	UINavigationController *searchViewControllerView = [[UINavigationController alloc] initWithRootViewController:searchViewController];
-    searchViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:searchViewControllerView animated:YES completion:nil];
+	[self.navigationController pushViewController:searchViewController animated:YES];
 }
 
 - (void)settings {

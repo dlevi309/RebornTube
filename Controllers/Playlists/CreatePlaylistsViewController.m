@@ -80,10 +80,7 @@
 - (void)search {
     SearchViewController *searchViewController = [[SearchViewController alloc] init];
 
-	UINavigationController *searchViewControllerView = [[UINavigationController alloc] initWithRootViewController:searchViewController];
-    searchViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:searchViewControllerView animated:YES completion:nil];
+	[self.navigationController pushViewController:searchViewController animated:YES];
 }
 
 - (void)settings {
