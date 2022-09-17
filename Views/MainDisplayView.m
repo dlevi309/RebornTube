@@ -42,7 +42,6 @@
         [mainView addSubview:imageView];
 
         UILabel *timeLabel = [UILabel new];
-        timeLabel.frame = CGRectMake(40, 65, 40, 15);
         timeLabel.text = [NSString stringWithFormat:@"%@", array[position][@"time"]];
         timeLabel.textAlignment = NSTextAlignmentCenter;
         timeLabel.textColor = [UIColor whiteColor];
@@ -51,7 +50,32 @@
         timeLabel.clipsToBounds = YES;
         timeLabel.layer.cornerRadius = 5;
         timeLabel.adjustsFontSizeToFitWidth = YES;
-        [mainView addSubview:timeLabel];
+
+        NSFileManager *fm = [NSFileManager new];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+        NSString *playerPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"player.plist"];
+        if ([fm fileExistsAtPath:playerPlistFilePath]) {
+            NSMutableDictionary *playerDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:playerPlistFilePath];
+            if ([playerDictionary objectForKey:array[position][@"id"]]) {
+                timeLabel.frame = CGRectMake(40, 55, 40, 15);
+                [mainView addSubview:timeLabel];
+                
+                UIProgressView *progressView = [UIProgressView new];
+                progressView.frame = CGRectMake(0, 75, 80, 0);
+                progressView.progress = [[playerDictionary objectForKey:array[position][@"id"]] floatValue] / 100;
+                progressView.progressTintColor = [UIColor redColor];
+                progressView.clipsToBounds = YES;
+                progressView.layer.cornerRadius = 0;
+                [mainView addSubview:progressView];
+            } else {
+                timeLabel.frame = CGRectMake(40, 65, 40, 15);
+                [mainView addSubview:timeLabel];
+            }
+        } else {
+            timeLabel.frame = CGRectMake(40, 65, 40, 15);
+            [mainView addSubview:timeLabel];
+        }
 
         UILabel *titleLabel = [UILabel new];
         titleLabel.frame = CGRectMake(85, 0, mainView.frame.size.width - 85, 80);
