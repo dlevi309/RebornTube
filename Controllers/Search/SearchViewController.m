@@ -117,7 +117,7 @@
 	__block int viewBounds = 0;
 	__block int viewCount = 0;
 	[infoArray enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
-		MainDisplayView *mainDisplayView = [[MainDisplayView alloc] initWithFrame:CGRectMake(0, viewBounds, scrollView.bounds.size.width, 100) array:infoArray position:viewCount save:0];
+		MainDisplayView *mainDisplayView = [[MainDisplayView alloc] initWithFrame:CGRectMake(0, viewBounds, scrollView.bounds.size.width, 100) array:infoArray position:viewCount save:1];
 		[scrollView addSubview:mainDisplayView];
 		viewBounds += 102;
 		viewCount += 1;
