@@ -73,10 +73,7 @@
 		}
 		NSString *videoTime;
 		if (searchContents[value][@"videoRenderer"][@"lengthText"][@"simpleText"]) {
-			NSString *videoLength = [NSString stringWithFormat:@"%@", searchContents[value][@"videoRenderer"][@"lengthText"][@"simpleText"]];
-			videoTime = [NSString stringWithFormat:@"%d:%02d", [videoLength intValue] / 60, [videoLength intValue] % 60];
-		} else {
-			videoTime = @"Live";
+			videoTime = [NSString stringWithFormat:@"%@", searchContents[value][@"videoRenderer"][@"lengthText"][@"simpleText"]];
 		}
 		NSString *videoTitle;
 		if (searchContents[value][@"videoRenderer"][@"title"][@"runs"][0][@"text"]) {
