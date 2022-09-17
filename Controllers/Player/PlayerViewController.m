@@ -102,7 +102,7 @@
 	playbackMode = NO;
 	overlayHidden = NO;
 	loopEnabled = NO;
-	playbackRate = 1.00f;
+	playbackRate = 1.0f;
 	playerAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"PlayerAssets" ofType:@"bundle"];
 	playerAssetsBundle = [NSBundle bundleWithPath:playerAssetsBundlePath];
 	songInfo = [NSMutableDictionary new];
@@ -370,10 +370,10 @@
 
 	UIStepper *rateStepper = [[UIStepper alloc] init];
 	rateStepper.frame = CGRectMake(10, videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + 70, self.view.bounds.size.width - 10, 15);
-	rateStepper.stepValue = 0.25f;
-	rateStepper.minimumValue = 0.25f;
-	rateStepper.maximumValue = 10.00f;
-	rateStepper.value = 1.00f;
+	rateStepper.stepValue = 0.1f;
+	rateStepper.minimumValue = 0.1f;
+	rateStepper.maximumValue = 2.0f;
+	rateStepper.value = 1.0f;
 	[rateStepper addTarget:self action:@selector(rateStepperValueChanged:) forControlEvents:UIControlEventValueChanged];
 	[scrollView addSubview:rateStepper];
 
@@ -805,9 +805,9 @@
 }
 
 - (void)rateStepperValueChanged:(UIStepper *)sender {
-	playbackRate = [[NSString stringWithFormat:@"%.02f", sender.value] floatValue];
+	playbackRate = [[NSString stringWithFormat:@"%.01f", sender.value] floatValue];
 	player.rate = playbackRate;
-	(void)[[MainPopupView alloc] init:[NSString stringWithFormat:@"Speed: %.02f", playbackRate]];
+	(void)[[MainPopupView alloc] init:[NSString stringWithFormat:@"Speed: %.01f", playbackRate]];
 }
 
 - (MPRemoteCommandHandlerStatus)changedLockscreenPlaybackSlider:(MPChangePlaybackPositionCommandEvent *)event {
