@@ -62,6 +62,7 @@
 }
 
 - (void)mainArraySetup {
+	mainArray = [NSMutableArray new];
 	NSDictionary *youtubeSearchRequest = [YouTubeExtractor youtubeSearchRequest:@"WEB":@"2.20210401.08.00":[searchTextField text]];
 	NSArray *searchContents = youtubeSearchRequest[@"contents"][@"twoColumnSearchResultsRenderer"][@"primaryContents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
 	[searchContents enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
