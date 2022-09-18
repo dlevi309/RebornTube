@@ -58,7 +58,7 @@
         NSString *playerPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"player.plist"];
         if ([fm fileExistsAtPath:playerPlistFilePath]) {
             NSMutableDictionary *playerDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:playerPlistFilePath];
-            if ([playerDictionary objectForKey:array[position][@"id"]]) {
+            if ([playerDictionary objectForKey:array[position][@"id"]] && [playerDictionary objectForKey:array[position][@"length"]]) {
                 timeLabel.frame = CGRectMake(40, 55, 40, 15);
                 [mainView addSubview:timeLabel];
                 
@@ -69,7 +69,8 @@
                 progressView.enabled = NO;
                 progressView.minimumTrackTintColor = [UIColor redColor];
 	            progressView.minimumValue = 0.0f;
-                // progressView.value = [[playerDictionary objectForKey:array[position][@"id"]] floatValue];
+                progressView.maximumValue = [[playerDictionary objectForKey:array[position][@"length"]] floatValue];
+                progressView.value = [[playerDictionary objectForKey:array[position][@"id"]] floatValue];
                 [mainView addSubview:progressView];
             } else {
                 timeLabel.frame = CGRectMake(40, 65, 40, 15);

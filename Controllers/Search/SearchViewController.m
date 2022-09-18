@@ -131,11 +131,16 @@
 		if (youtubePlayerRequest[@"videoDetails"][@"videoId"]) {
 			videoID = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"videoId"]];
 		}
+		NSString *videoLength;
+		if (youtubePlayerRequest[@"videoDetails"][@"lengthSeconds"]) {
+			videoLength = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"lengthSeconds"]];
+		}
 		NSMutableDictionary *mainDictionary = [NSMutableDictionary new];
 		[mainDictionary setValue:videoArtwork forKey:@"artwork"];
 		[mainDictionary setValue:videoTime forKey:@"time"];
 		[mainDictionary setValue:videoTitle forKey:@"title"];
 		[mainDictionary setValue:videoAuthor forKey:@"author"];
+		[mainDictionary setValue:videoLength forKey:@"length"];
 		[mainDictionary setValue:videoID forKey:@"id"];
 
 		if ([mainDictionary count] != 0) {
