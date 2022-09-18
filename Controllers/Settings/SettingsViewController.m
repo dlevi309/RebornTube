@@ -2,6 +2,7 @@
 
 #import "SettingsViewController.h"
 #import "ThemeSettingsViewController.h"
+#import "FontSettingsViewController.h"
 #import "BackgroundModeSettingsViewController.h"
 #import "SponsorBlockSettingsViewController.h"
 
@@ -42,7 +43,7 @@
         return 1;
     }
     if (section == 1) {
-        return 4;
+        return 5;
     }
     if (section == 2) {
         return 1;
@@ -94,6 +95,10 @@
             }
             if (indexPath.row == 1) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                cell.textLabel.text = @"Font";
+            }
+            if (indexPath.row == 2) {
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cell.textLabel.text = @"Background Mode";
                 if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"]) {
                     cell.detailTextLabel.text = @"None";
@@ -110,11 +115,11 @@
                     }
                 }
             }
-            if (indexPath.row == 2) {
+            if (indexPath.row == 3) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cell.textLabel.text = @"SponsorBlock";
             }
-            if (indexPath.row == 3) {
+            if (indexPath.row == 4) {
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 cell.textLabel.text = @"Enable Captions";
                 cell.detailTextLabel.text = @"Make sure captions is on in iOS settings";
@@ -156,10 +161,14 @@
             [self.navigationController pushViewController:themeSettingsViewController animated:YES];
         }
         if (indexPath.row == 1) {
+            FontSettingsViewController *fontSettingsViewController = [[FontSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            [self.navigationController pushViewController:fontSettingsViewController animated:YES];
+        }
+        if (indexPath.row == 2) {
             BackgroundModeSettingsViewController *backgroundModeSettingsViewController = [[BackgroundModeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:backgroundModeSettingsViewController animated:YES];
         }
-        if (indexPath.row == 2) {
+        if (indexPath.row == 3) {
             SponsorBlockSettingsViewController *sponsorBlockSettingsViewController = [[SponsorBlockSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:sponsorBlockSettingsViewController animated:YES];
         }
