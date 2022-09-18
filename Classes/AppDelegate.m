@@ -4,13 +4,7 @@
 #import "YouTubeLoader.h"
 #import "../Controllers/RootViewController.h"
 
-@import Sentry;
-
 @implementation AppDelegate
-
-static void crashHandler(NSException *exception) {
-    [SentrySDK captureException:exception];
-}
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	if (@available(iOS 15.0, *)){
@@ -38,12 +32,6 @@ static void crashHandler(NSException *exception) {
         tabBarAppearance.backgroundColor = [AppColours mainBackgroundColour];
 		[UITabBar appearance].standardAppearance = tabBarAppearance;
 	}
-    [SentrySDK startWithConfigureOptions:^(SentryOptions *options) {
-        options.dsn = @"https://51e6a16938504dc898d72605be4c0b23@o1412709.ingest.sentry.io/6752018";
-        options.debug = YES;
-        options.tracesSampleRate = [NSNumber numberWithDouble:1.0];
-    }];
-    NSSetUncaughtExceptionHandler(&crashHandler);
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[RootViewController alloc] init]];
     self.window.rootViewController = self.rootViewController;
@@ -51,7 +39,7 @@ static void crashHandler(NSException *exception) {
     return YES;
 }
 
-- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
+/* - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
     NSString *returnURL = [NSString stringWithFormat:@"%@", url];
     NSString *regexString = @"((?<=(v|V)/)|(?<=be/)|(?<=(\\?|\\&)v=)|(?<=embed/))([\\w-]++)";
     NSRegularExpression *regExp = [NSRegularExpression regularExpressionWithPattern:regexString options:NSRegularExpressionCaseInsensitive error:nil];
@@ -64,7 +52,7 @@ static void crashHandler(NSException *exception) {
         [YouTubeLoader init:videoID];
     }
     return YES;
-}
+} */
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
     if (self.allowRotation) {
