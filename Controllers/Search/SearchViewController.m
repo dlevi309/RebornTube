@@ -63,48 +63,85 @@
 
 - (void)mainArraySetup {
 	mainArray = [NSMutableArray new];
-	NSDictionary *youtubeSearchRequest = [YouTubeExtractor youtubeSearchRequest:@"WEB":@"2.20210401.08.00":[searchTextField text]];
-	NSArray *searchContents = youtubeSearchRequest[@"contents"][@"twoColumnSearchResultsRenderer"][@"primaryContents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
-	[searchContents enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
-		NSArray *videoArtworkArray = searchContents[value][@"videoRenderer"][@"thumbnail"][@"thumbnails"];
+	NSDictionary *youtubePlayerRequest = [YouTubeExtractor youtubePlayerRequest:@"ANDROID":@"16.20":[searchTextField text]];
+	NSString *playabilityStatus = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"playabilityStatus"][@"status"]];
+	if ([playabilityStatus isEqual:@"ERROR"]) {
+		NSDictionary *youtubeSearchRequest = [YouTubeExtractor youtubeSearchRequest:@"WEB":@"2.20210401.08.00":[searchTextField text]];
+		NSArray *searchContents = youtubeSearchRequest[@"contents"][@"twoColumnSearchResultsRenderer"][@"primaryContents"][@"sectionListRenderer"][@"contents"][0][@"itemSectionRenderer"][@"contents"];
+		[searchContents enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
+			NSArray *videoArtworkArray = searchContents[value][@"videoRenderer"][@"thumbnail"][@"thumbnails"];
+			NSString *videoArtwork;
+			if (videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]) {
+				videoArtwork = [NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]];
+			}
+			NSString *videoTime;
+			if (searchContents[value][@"videoRenderer"][@"lengthText"][@"simpleText"]) {
+				videoTime = [NSString stringWithFormat:@"%@", searchContents[value][@"videoRenderer"][@"lengthText"][@"simpleText"]];
+			}
+			NSString *videoTitle;
+			if (searchContents[value][@"videoRenderer"][@"title"][@"runs"][0][@"text"]) {
+				videoTitle = [NSString stringWithFormat:@"%@", searchContents[value][@"videoRenderer"][@"title"][@"runs"][0][@"text"]];
+			}
+			NSString *videoCount;
+			if (searchContents[value][@"videoRenderer"][@"viewCountText"][@"simpleText"]) {
+				videoCount = [NSString stringWithFormat:@"%@", searchContents[value][@"videoRenderer"][@"viewCountText"][@"simpleText"]];
+			} else if ([searchContents[value][@"videoRenderer"][@"viewCountText"][@"runs"] count] >= 1) {
+				videoCount = [NSString stringWithFormat:@"%@%@", searchContents[value][@"videoRenderer"][@"viewCountText"][@"runs"][0][@"text"], searchContents[value][@"videoRenderer"][@"viewCountText"][@"runs"][1][@"text"]];
+			}
+			NSString *videoAuthor;
+			if (searchContents[value][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]) {
+				videoAuthor = [NSString stringWithFormat:@"%@", searchContents[value][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]];
+			}
+			NSString *videoID;
+			if (searchContents[value][@"videoRenderer"][@"videoId"]) {
+				videoID = [NSString stringWithFormat:@"%@", searchContents[value][@"videoRenderer"][@"videoId"]];
+			}
+			NSMutableDictionary *mainDictionary = [NSMutableDictionary new];
+			[mainDictionary setValue:videoArtwork forKey:@"artwork"];
+			[mainDictionary setValue:videoTime forKey:@"time"];
+			[mainDictionary setValue:videoTitle forKey:@"title"];
+			[mainDictionary setValue:videoCount forKey:@"count"];
+			[mainDictionary setValue:videoAuthor forKey:@"author"];
+			[mainDictionary setValue:videoID forKey:@"id"];
+
+			if ([mainDictionary count] != 0) {
+				[mainArray addObject:mainDictionary];
+			}
+		}];
+	} else {
+		NSArray *videoArtworkArray = youtubePlayerRequest[@"videoDetails"][@"thumbnail"][@"thumbnails"];
 		NSString *videoArtwork;
 		if (videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]) {
 			videoArtwork = [NSString stringWithFormat:@"%@", videoArtworkArray[([videoArtworkArray count] - 1)][@"url"]];
 		}
 		NSString *videoTime;
-		if (searchContents[value][@"videoRenderer"][@"lengthText"][@"simpleText"]) {
-			videoTime = [NSString stringWithFormat:@"%@", searchContents[value][@"videoRenderer"][@"lengthText"][@"simpleText"]];
+		if (youtubePlayerRequest[@"videoDetails"][@"lengthSeconds"]) {
+			NSString *videoLength = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"lengthSeconds"]];
+			videoTime = [NSString stringWithFormat:@"%d:%02d", [videoLength intValue] / 60, [videoLength intValue] % 60];
 		}
 		NSString *videoTitle;
-		if (searchContents[value][@"videoRenderer"][@"title"][@"runs"][0][@"text"]) {
-			videoTitle = [NSString stringWithFormat:@"%@", searchContents[value][@"videoRenderer"][@"title"][@"runs"][0][@"text"]];
-		}
-		NSString *videoCount;
-		if (searchContents[value][@"videoRenderer"][@"viewCountText"][@"simpleText"]) {
-			videoCount = [NSString stringWithFormat:@"%@", searchContents[value][@"videoRenderer"][@"viewCountText"][@"simpleText"]];
-		} else if ([searchContents[value][@"videoRenderer"][@"viewCountText"][@"runs"] count] >= 1) {
-			videoCount = [NSString stringWithFormat:@"%@%@", searchContents[value][@"videoRenderer"][@"viewCountText"][@"runs"][0][@"text"], searchContents[value][@"videoRenderer"][@"viewCountText"][@"runs"][1][@"text"]];
+		if (youtubePlayerRequest[@"videoDetails"][@"title"]) {
+			videoTitle = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"title"]];
 		}
 		NSString *videoAuthor;
-		if (searchContents[value][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]) {
-			videoAuthor = [NSString stringWithFormat:@"%@", searchContents[value][@"videoRenderer"][@"longBylineText"][@"runs"][0][@"text"]];
+		if (youtubePlayerRequest[@"videoDetails"][@"author"]) {
+			videoAuthor = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"author"]];
 		}
 		NSString *videoID;
-		if (searchContents[value][@"videoRenderer"][@"videoId"]) {
-			videoID = [NSString stringWithFormat:@"%@", searchContents[value][@"videoRenderer"][@"videoId"]];
+		if (youtubePlayerRequest[@"videoDetails"][@"videoId"]) {
+			videoID = [NSString stringWithFormat:@"%@", youtubePlayerRequest[@"videoDetails"][@"videoId"]];
 		}
 		NSMutableDictionary *mainDictionary = [NSMutableDictionary new];
 		[mainDictionary setValue:videoArtwork forKey:@"artwork"];
 		[mainDictionary setValue:videoTime forKey:@"time"];
 		[mainDictionary setValue:videoTitle forKey:@"title"];
-		[mainDictionary setValue:videoCount forKey:@"count"];
 		[mainDictionary setValue:videoAuthor forKey:@"author"];
 		[mainDictionary setValue:videoID forKey:@"id"];
 
 		if ([mainDictionary count] != 0) {
 			[mainArray addObject:mainDictionary];
 		}
-	}];
+	}
 }
 
 - (void)mainViewSetup {
