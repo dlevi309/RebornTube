@@ -62,12 +62,14 @@
                 timeLabel.frame = CGRectMake(40, 55, 40, 15);
                 [mainView addSubview:timeLabel];
                 
-                UIProgressView *progressView = [UIProgressView new];
+                UISlider *progressView = [UISlider new];
                 progressView.frame = CGRectMake(0, 75, 80, 0);
-                progressView.progress = [[playerDictionary objectForKey:array[position][@"id"]] floatValue] / 100;
-                progressView.progressTintColor = [UIColor redColor];
-                progressView.clipsToBounds = YES;
-                progressView.layer.cornerRadius = 0;
+                [progressView setThumbImage:[UIImage new] forState:UIControlStateNormal];
+                [progressView setThumbImage:[UIImage new] forState:UIControlStateHighlighted];
+                progressView.enabled = NO;
+                progressView.minimumTrackTintColor = [UIColor redColor];
+	            progressView.minimumValue = 0.0f;
+                // progressView.value = [[playerDictionary objectForKey:array[position][@"id"]] floatValue];
                 [mainView addSubview:progressView];
             } else {
                 timeLabel.frame = CGRectMake(40, 65, 40, 15);
