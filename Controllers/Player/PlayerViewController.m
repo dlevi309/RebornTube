@@ -24,7 +24,6 @@
 	// Keys
 	UIWindow *boundsWindow;
 	BOOL deviceOrientation;
-	BOOL isFullscreen;
 	BOOL playbackMode;
 	BOOL overlayHidden;
 	BOOL loopEnabled;
@@ -97,7 +96,6 @@
 - (void)keysSetup {
 	boundsWindow = [[[UIApplication sharedApplication] windows] lastObject];
 	deviceOrientation = NO;
-	isFullscreen = NO;
 	playbackMode = NO;
 	overlayHidden = NO;
 	loopEnabled = NO;
