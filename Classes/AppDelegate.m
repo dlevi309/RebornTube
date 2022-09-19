@@ -71,7 +71,7 @@
         }
     }
     if ([topViewController isMemberOfClass:[PlayerViewController class]]){
-        return UIInterfaceOrientationMaskAll;
+        return UIInterfaceOrientationMaskAllButUpsideDown;
     }
     return UIInterfaceOrientationMaskPortrait;
 }

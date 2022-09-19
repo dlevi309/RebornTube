@@ -4,6 +4,5 @@
 
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, strong) UINavigationController *rootViewController;
-@property (nonatomic, assign) BOOL allowRotation;
 
 @end
