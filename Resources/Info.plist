@@ -64,6 +64,8 @@
 	<string>RebornTube</string>
 	<key>MinimumOSVersion</key>
 	<string>13.0</string>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>UIApplicationSupportsMultipleScenes</key>
     <false/>
 	<key>CFBundleURLTypes</key>
