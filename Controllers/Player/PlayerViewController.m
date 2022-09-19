@@ -5,7 +5,6 @@
 // Classes
 
 #import "../../Classes/AppColours.h"
-#import "../../Classes/AppDelegate.h"
 #import "../../Classes/PlayerHistory.h"
 #import "../../Classes/YouTubeDownloader.h"
 
@@ -415,13 +414,6 @@
 	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	[super viewWillAppear:animated];
-	
-	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-	appDelegate.allowRotation = YES;
-}
-
 - (BOOL)prefersHomeIndicatorAutoHidden {
 	return YES;
 }
@@ -671,8 +663,6 @@
 }
 
 - (void)collapseTap:(UITapGestureRecognizer *)recognizer {
-	AppDelegate *appDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-	appDelegate.allowRotation = NO;
 	if ([pictureInPictureController isPictureInPictureActive]) {
         [pictureInPictureController stopPictureInPicture];
     }
