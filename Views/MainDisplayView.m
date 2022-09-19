@@ -19,7 +19,6 @@
     NSString *videoID;
     BOOL saveToHistory;
 }
-- (id)_viewControllerForAncestor;
 @end
 
 @implementation MainDisplayView
@@ -136,7 +135,20 @@
 }
 
 - (void)actionTap:(UITapGestureRecognizer *)recognizer {
-    UIViewController *mainViewController = [self _viewControllerForAncestor];
+    UIViewController *topViewController = [[[[UIApplication sharedApplication] windows] firstObject] rootViewController];
+    while (true) {
+        if (topViewController.presentedViewController) {
+            topViewController = topViewController.presentedViewController;
+        } else if ([topViewController isKindOfClass:[UINavigationController class]]) {
+            UINavigationController *nav = (UINavigationController *)topViewController;
+            topViewController = nav.topViewController;
+        } else if ([topViewController isKindOfClass:[UITabBarController class]]) {
+            UITabBarController *tab = (UITabBarController *)topViewController;
+            topViewController = tab.selectedViewController;
+        } else {
+            break;
+        }
+    }
 
     UIAlertController *alertSelector = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
@@ -145,20 +157,20 @@
 	
 		UIActivityViewController *shareSheet = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
         
-        [mainViewController presentViewController:shareSheet animated:YES completion:nil];
+        [topViewController presentViewController:shareSheet animated:YES completion:nil];
     }]];
 
 	[alertSelector addAction:[UIAlertAction actionWithTitle:@"Add To Playlist" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 		AddToPlaylistsViewController *addToPlaylistsViewController = [[AddToPlaylistsViewController alloc] init];
 		addToPlaylistsViewController.videoID = videoID;
 
-		[mainViewController presentViewController:addToPlaylistsViewController animated:YES completion:nil];
+		[topViewController presentViewController:addToPlaylistsViewController animated:YES completion:nil];
     }]];
 
 	[alertSelector addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
     }]];
 
-    [mainViewController presentViewController:alertSelector animated:YES completion:nil];
+    [topViewController presentViewController:alertSelector animated:YES completion:nil];
 }
 
 @end
