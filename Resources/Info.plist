@@ -75,6 +75,7 @@
 	</array>
 	<key>UIAppFonts</key>
 	<array>
+		<string>Minecraft.ttf</string>
 		<string>Tabitha.ttf</string>
 	</array>
 	<key>NSPhotoLibraryUsageDescription</key>
