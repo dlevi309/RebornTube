@@ -30,7 +30,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 2;
+        return 3;
     }
     return 0;
 }
@@ -47,9 +47,12 @@
         cell.textLabel.textColor = [AppColours textColour];
         if (indexPath.section == 0) {
             if (indexPath.row == 0) {
-                cell.textLabel.text = @"San Francisco";
+                cell.textLabel.text = @"San Francisco (iOS Default)";
             }
             if (indexPath.row == 1) {
+                cell.textLabel.text = @"Minecraft";
+            }
+            if (indexPath.row == 2) {
                 cell.textLabel.text = @"Tabitha";
             }
         }
