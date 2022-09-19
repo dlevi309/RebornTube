@@ -9,7 +9,6 @@
 // Interface
 
 @interface MainPopupView ()
-- (id)_viewControllerForAncestor;
 @end
 
 @implementation MainPopupView
@@ -17,7 +16,21 @@
 - (id)init :(NSString *)message {
     self = [super init];
     if (self) {
-        UIViewController *mainViewController = [self _viewControllerForAncestor];        
+        UIViewController *topViewController = [[[[UIApplication sharedApplication] windows] lastObject] rootViewController];
+        while (true) {
+            if (topViewController.presentedViewController) {
+                topViewController = topViewController.presentedViewController;
+            } else if ([topViewController isKindOfClass:[UINavigationController class]]) {
+                UINavigationController *nav = (UINavigationController *)topViewController;
+                topViewController = nav.topViewController;
+            } else if ([topViewController isKindOfClass:[UITabBarController class]]) {
+                UITabBarController *tab = (UITabBarController *)topViewController;
+                topViewController = tab.selectedViewController;
+            } else {
+                break;
+            }
+        }
+
         UIWindow *boundsWindow = [[[UIApplication sharedApplication] windows] lastObject];
 
         UIView *mainView = [UIView new];
@@ -37,7 +50,7 @@
 
         [self addSubview:mainView];
 
-        [mainViewController.view addSubview:self];
+        [topViewController.view addSubview:self];
         [NSTimer scheduledTimerWithTimeInterval:3.0 repeats:NO block:^(NSTimer *timer) {
             [self removeFromSuperview];
         }];
