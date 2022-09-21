@@ -34,8 +34,7 @@
 		[UITabBar appearance].standardAppearance = tabBarAppearance;
 	}
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[RootViewController alloc] init]];
-    self.window.rootViewController = self.rootViewController;
+    self.window.rootViewController = [[RootViewController alloc] init];
     [self.window makeKeyAndVisible];
     return YES;
 }
