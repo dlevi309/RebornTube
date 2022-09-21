@@ -56,9 +56,6 @@
 	searchTextField.translatesAutoresizingMaskIntoConstraints = NO;
 	[searchTextField addTarget:self action:@selector(searchRequest) forControlEvents:UIControlEventEditingDidEndOnExit];
 	self.navigationItem.titleView = searchTextField;
-
-	UIBarButtonItem *voiceButton = [[UIBarButtonItem alloc] initWithTitle:@"Voice" style:UIBarButtonItemStylePlain target:self action:@selector(voice)];    
-    self.navigationItem.rightBarButtonItem = voiceButton;
 }
 
 - (void)mainArraySetup {
@@ -174,10 +171,6 @@
 @implementation SearchViewController (Privates)
 
 // Nav Bar
-
-- (void)voice {
-    (void)[[MainPopupView alloc] init:@"In Development"];
-}
 
 - (void)searchRequest {
 	[searchTextField resignFirstResponder];
