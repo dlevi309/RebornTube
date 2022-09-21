@@ -54,25 +54,4 @@
     return YES;
 } */
 
-- (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    UIViewController *topViewController = [[[[UIApplication sharedApplication] windows] lastObject] rootViewController];
-    while (true) {
-        if (topViewController.presentedViewController) {
-            topViewController = topViewController.presentedViewController;
-        } else if ([topViewController isKindOfClass:[UINavigationController class]]) {
-            UINavigationController *nav = (UINavigationController *)topViewController;
-            topViewController = nav.topViewController;
-        } else if ([topViewController isKindOfClass:[UITabBarController class]]) {
-            UITabBarController *tab = (UITabBarController *)topViewController;
-            topViewController = tab.selectedViewController;
-        } else {
-            break;
-        }
-    }
-    if ([topViewController isMemberOfClass:[PlayerViewController class]]){
-        return UIInterfaceOrientationMaskAllButUpsideDown;
-    }
-    return UIInterfaceOrientationMaskPortrait;
-}
-
 @end

@@ -414,6 +414,22 @@
 	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
 }
 
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
+}
+
+- (BOOL)shouldAutorotate {
+    return YES;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+- (UIInterfaceOrientationMask)navigationControllerSupportedInterfaceOrientations:(UINavigationController *)navigationController {
+    return [navigationController.topViewController supportedInterfaceOrientations];
+}
+
 - (BOOL)prefersHomeIndicatorAutoHidden {
 	return YES;
 }
