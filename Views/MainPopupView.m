@@ -16,7 +16,7 @@
 - (id)init :(NSString *)message {
     self = [super init];
     if (self) {
-        UIViewController *topViewController = [[[[UIApplication sharedApplication] windows] lastObject] rootViewController];
+        UIViewController *topViewController = [[[[UIApplication sharedApplication] windows] firstObject] rootViewController];
         while (true) {
             if (topViewController.presentedViewController) {
                 topViewController = topViewController.presentedViewController;
@@ -31,7 +31,7 @@
             }
         }
 
-        UIWindow *boundsWindow = [[[UIApplication sharedApplication] windows] lastObject];
+        UIWindow *boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
 
         UIView *mainView = [UIView new];
         mainView.frame = CGRectMake(20, topViewController.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 40, topViewController.view.bounds.size.width - 40, 40);
