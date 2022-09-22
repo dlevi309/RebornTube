@@ -2,6 +2,6 @@
 
 @interface MainPopupView : UIView
 
-- (id)init :(NSString *)message;
+- (id)initWithFrame:(CGRect)frame :(NSString *)message :(BOOL)top;
 
 @end

@@ -786,7 +786,11 @@
 - (void)rateStepperValueChanged:(UIStepper *)sender {
 	playbackRate = [[NSString stringWithFormat:@"%.01f", sender.value] floatValue];
 	player.rate = playbackRate;
-	(void)[[MainPopupView alloc] init:[NSString stringWithFormat:@"Speed: %.01f", playbackRate]];
+	MainPopupView *mainPopupView = [[MainPopupView alloc] initWithFrame:CGRectMake(20, self.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 40, self.view.bounds.size.width - 40, 40):[NSString stringWithFormat:@"Speed: %.01f", playbackRate]:0];
+	[self.view addSubview:mainPopupView];
+	[NSTimer scheduledTimerWithTimeInterval:3.0 repeats:NO block:^(NSTimer *timer) {
+		[mainPopupView removeFromSuperview];
+	}];
 }
 
 - (MPRemoteCommandHandlerStatus)changedLockscreenPlaybackSlider:(MPChangePlaybackPositionCommandEvent *)event {
@@ -806,10 +810,18 @@
 - (void)loopButtonClicked:(UIButton *)sender {
 	if (!loopEnabled) {
 		loopEnabled = YES;
-		(void)[[MainPopupView alloc] init:@"Loop Enabled"];
+		MainPopupView *mainPopupView = [[MainPopupView alloc] initWithFrame:CGRectMake(20, self.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 40, self.view.bounds.size.width - 40, 40):@"Loop Enabled":0];
+		[self.view addSubview:mainPopupView];
+		[NSTimer scheduledTimerWithTimeInterval:3.0 repeats:NO block:^(NSTimer *timer) {
+			[mainPopupView removeFromSuperview];
+		}];
 	} else {
 		loopEnabled = NO;
-		(void)[[MainPopupView alloc] init:@"Loop Disabled"];
+		MainPopupView *mainPopupView = [[MainPopupView alloc] initWithFrame:CGRectMake(20, self.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 40, self.view.bounds.size.width - 40, 40):@"Loop Disabled":0];
+		[self.view addSubview:mainPopupView];
+		[NSTimer scheduledTimerWithTimeInterval:3.0 repeats:NO block:^(NSTimer *timer) {
+			[mainPopupView removeFromSuperview];
+		}];
 	}
 }
 
