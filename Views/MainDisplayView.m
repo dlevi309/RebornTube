@@ -170,6 +170,11 @@
 		NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"https://www.youtube.com/watch?v=%@", videoID]];
 	
 		UIActivityViewController *shareSheet = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
+        [shareSheet setModalPresentationStyle:UIModalPresentationPopover];
+        UIPopoverPresentationController *popPresenter = [shareSheet popoverPresentationController];
+        popPresenter.sourceView = mainViewController.view;
+        popPresenter.sourceRect = mainViewController.view.bounds;
+        popPresenter.permittedArrowDirections = 0;
         
         [mainViewController presentViewController:shareSheet animated:YES completion:nil];
     }]];
@@ -183,6 +188,12 @@
 
 	[alertSelector addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
     }]];
+
+    [alertSelector setModalPresentationStyle:UIModalPresentationPopover];
+    UIPopoverPresentationController *popPresenter = [alertSelector popoverPresentationController];
+    popPresenter.sourceView = mainViewController.view;
+    popPresenter.sourceRect = mainViewController.view.bounds;
+    popPresenter.permittedArrowDirections = 0;
 
     [mainViewController presentViewController:alertSelector animated:YES completion:nil];
 }
