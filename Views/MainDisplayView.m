@@ -13,6 +13,10 @@
 #import "../Controllers/Playlists/AddToPlaylistsViewController.h"
 #import "../Controllers/Player/PlayerViewController.h"
 
+// Views
+
+#import "../Views/MainPopupView.h"
+
 // Interface
 
 @interface MainDisplayView ()
@@ -135,22 +139,26 @@
     }
     NSDictionary *loaderDictionary = [YouTubeLoader init:videoID];
 
-    PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
-    playerViewController.videoID = loaderDictionary[@"videoID"];
-    playerViewController.videoURL = loaderDictionary[@"videoURL"];
-    playerViewController.videoLive = [loaderDictionary[@"videoLive"] boolValue];
-    playerViewController.videoTitle = loaderDictionary[@"videoTitle"];
-    playerViewController.videoAuthor = loaderDictionary[@"videoAuthor"];
-    playerViewController.videoLength = loaderDictionary[@"videoLength"];
-    playerViewController.videoArtwork = loaderDictionary[@"videoArtwork"];
-    playerViewController.videoViewCount = loaderDictionary[@"videoViewCount"];
-    playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
-    playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
-    playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
-    playerViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-    
-    UIViewController *mainViewController = [self _viewControllerForAncestor];
-    [mainViewController presentViewController:playerViewController animated:YES completion:nil];
+    if (loaderDictionary == nil) {
+        (void)[[MainPopupView alloc] initWithFrame:CGRectZero:@"Video Unsupported":1];
+    } else {
+        PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+        playerViewController.videoID = loaderDictionary[@"videoID"];
+        playerViewController.videoURL = loaderDictionary[@"videoURL"];
+        playerViewController.videoLive = [loaderDictionary[@"videoLive"] boolValue];
+        playerViewController.videoTitle = loaderDictionary[@"videoTitle"];
+        playerViewController.videoAuthor = loaderDictionary[@"videoAuthor"];
+        playerViewController.videoLength = loaderDictionary[@"videoLength"];
+        playerViewController.videoArtwork = loaderDictionary[@"videoArtwork"];
+        playerViewController.videoViewCount = loaderDictionary[@"videoViewCount"];
+        playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
+        playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
+        playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
+        playerViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+        
+        UIViewController *mainViewController = [self _viewControllerForAncestor];
+        [mainViewController presentViewController:playerViewController animated:YES completion:nil];
+    }
 }
 
 - (void)actionTap:(UITapGestureRecognizer *)recognizer {
