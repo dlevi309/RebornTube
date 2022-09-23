@@ -7,6 +7,7 @@
 
 #import "../Search/SearchViewController.h"
 #import "../Settings/SettingsViewController.h"
+#import "../Settings/SettingsNavigationController.h"
 
 // Classes
 
@@ -125,11 +126,9 @@
 
 - (void)settings {
     SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-
-	UINavigationController *settingsViewControllerView = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
-    settingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:settingsViewControllerView animated:YES completion:nil];
+	SettingsNavigationController *settingsNavigationController = [[SettingsNavigationController alloc] initWithRootViewController:settingsViewController];
+    
+	[self presentViewController:settingsNavigationController animated:YES completion:nil];
 }
 
 // Other

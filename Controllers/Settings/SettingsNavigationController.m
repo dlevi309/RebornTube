@@ -1,9 +1,9 @@
-#import "PlayerNavigationController.h"
+#import "SettingsNavigationController.h"
 
-@interface PlayerNavigationController ()
+@interface SettingsNavigationController ()
 @end
 
-@implementation PlayerNavigationController
+@implementation SettingsNavigationController
 
 - (id)initWithRootViewController:(UIViewController *)rootViewController {
 	self = [super initWithRootViewController:rootViewController];

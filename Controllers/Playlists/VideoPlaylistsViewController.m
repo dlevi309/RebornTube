@@ -6,6 +6,7 @@
 
 #import "../Search/SearchViewController.h"
 #import "../Settings/SettingsViewController.h"
+#import "../Settings/SettingsNavigationController.h"
 
 // Classes
 
@@ -125,6 +126,34 @@
 	[self.view addSubview:scrollView];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+
+	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
+	switch (orientation) {
+		case UIInterfaceOrientationPortrait:
+		[self mainViewSetup];
+		break;
+
+		case UIInterfaceOrientationLandscapeLeft:
+		[self mainViewSetup];
+		break;
+
+		case UIInterfaceOrientationLandscapeRight:
+		[self mainViewSetup];
+		break;
+
+		case UIInterfaceOrientationPortraitUpsideDown:
+		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+			[self mainViewSetup];
+		}
+		break;
+
+		case UIInterfaceOrientationUnknown:
+		break;
+	}
+}
+
 @end
 
 @implementation VideoPlaylistsViewController (Privates)
@@ -139,11 +168,9 @@
 
 - (void)settings {
     SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-
-	UINavigationController *settingsViewControllerView = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
-    settingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
-
-    [self presentViewController:settingsViewControllerView animated:YES completion:nil];
+	SettingsNavigationController *settingsNavigationController = [[SettingsNavigationController alloc] initWithRootViewController:settingsViewController];
+    
+	[self presentViewController:settingsNavigationController animated:YES completion:nil];
 }
 
 // Scroll View

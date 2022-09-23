@@ -155,8 +155,7 @@
         playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
         playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
         playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
-        // playerViewController.modalPresentationStyle = UIModalPresentationFullScreen;
-
+        
         PlayerNavigationController *playerNavigationController = [[PlayerNavigationController alloc] initWithRootViewController:playerViewController];
         
         UIViewController *mainViewController = [self _viewControllerForAncestor];
