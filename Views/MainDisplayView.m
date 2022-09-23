@@ -11,6 +11,7 @@
 // Controllers
 
 #import "../Controllers/Playlists/AddToPlaylistsViewController.h"
+#import "../Controllers/Player/PlayerNavigationController.h"
 #import "../Controllers/Player/PlayerViewController.h"
 
 // Views
@@ -154,10 +155,12 @@
         playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
         playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
         playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
-        playerViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+        // playerViewController.modalPresentationStyle = UIModalPresentationFullScreen;
+
+        PlayerNavigationController *playerNavigationController = [[PlayerNavigationController alloc] initWithRootViewController:playerViewController];
         
         UIViewController *mainViewController = [self _viewControllerForAncestor];
-        [mainViewController presentViewController:playerViewController animated:YES completion:nil];
+        [mainViewController presentViewController:playerNavigationController animated:YES completion:nil];
     }
 }
 
