@@ -160,10 +160,10 @@
             ThemeSettingsViewController *themeSettingsViewController = [[ThemeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:themeSettingsViewController animated:YES];
         }
-        /* if (indexPath.row == 1) {
+        if (indexPath.row == 1) {
             FontSettingsViewController *fontSettingsViewController = [[FontSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:fontSettingsViewController animated:YES];
-        } */
+        }
         if (indexPath.row == 2) {
             BackgroundModeSettingsViewController *backgroundModeSettingsViewController = [[BackgroundModeSettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:backgroundModeSettingsViewController animated:YES];
@@ -206,7 +206,7 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
     if (section == 3) {
-        return @"Version: 1.0.0 (Alpha 41)";
+        return @"Version: 1.0.0 (Alpha 42 Dev)";
     }
     return nil;
 }
