@@ -1,5 +1,4 @@
 #import "PlayerNavigationController.h"
-#import "PlayerViewController.h"
 
 @interface PlayerNavigationController ()
 @end
@@ -28,14 +27,6 @@
 
 - (UIInterfaceOrientationMask)navigationControllerSupportedInterfaceOrientations:(UINavigationController *)navigationController {
     return [navigationController.topViewController supportedInterfaceOrientations];
-}
-
-- (BOOL)prefersHomeIndicatorAutoHidden {
-	return YES;
-}
-
-- (UIViewController *)childViewControllerForHomeIndicatorAutoHidden {
-    return [PlayerViewController new];
 }
 
 @end

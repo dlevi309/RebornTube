@@ -69,4 +69,8 @@
     return [navigationController.topViewController supportedInterfaceOrientations];
 }
 
+- (BOOL)prefersHomeIndicatorAutoHidden {
+	return YES;
+}
+
 @end
