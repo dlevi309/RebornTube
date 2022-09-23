@@ -417,7 +417,8 @@
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
     [super traitCollectionDidChange:previousTraitCollection];
 
-	if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassRegular && self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact) {
+	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
+	if (orientation == UIInterfaceOrientationPortrait) {
 		deviceOrientation = NO;
 
 		// Main
@@ -450,7 +451,7 @@
 		progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + (self.view.bounds.size.width * 9 / 16), self.view.bounds.size.width, 15);
 		progressSlider.hidden = NO;
 		scrollView.hidden = NO;
-	} else if (self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact && self.traitCollection.horizontalSizeClass == UIUserInterfaceSizeClassCompact) {
+	} else if (orientation == UIInterfaceOrientationLandscapeLeft || orientation == UIInterfaceOrientationLandscapeRight) {
 		deviceOrientation = YES;
 
 		// Main
@@ -760,7 +761,23 @@
 }
 
 - (void)progressSliderValueChanged:(UISlider *)sender {
-	[player seekToTime:CMTimeMakeWithSeconds(sender.value, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+	[player seekToTime:CMTimeMakeWithSeconds(sender.value, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero completionHandler:^(BOOL finished) {
+		if (player.timeControlStatus == AVPlayerTimeControlStatusPlaying) {
+			playImage.alpha = 0.0;
+			pauseImage.alpha = 1.0;
+			restartImage.alpha = 0.0;
+        } else if (player.timeControlStatus == AVPlayerTimeControlStatusPaused) {
+			if ([[NSString stringWithFormat:@"%d:%02d", ((int)CMTimeGetSeconds(player.currentTime)) / 60, ((int)CMTimeGetSeconds(player.currentTime)) % 60] isEqual:[NSString stringWithFormat:@"%d:%02d", ((int)CMTimeGetSeconds(playerItem.duration)) / 60, ((int)CMTimeGetSeconds(playerItem.duration)) % 60]]) {
+				playImage.alpha = 0.0;
+				pauseImage.alpha = 0.0;
+				restartImage.alpha = 1.0;
+			} else {
+				playImage.alpha = 1.0;
+				pauseImage.alpha = 0.0;
+				restartImage.alpha = 0.0;
+			}
+		}
+	}];
 }
 
 - (void)rateStepperValueChanged:(UIStepper *)sender {
