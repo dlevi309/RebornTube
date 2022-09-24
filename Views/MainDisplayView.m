@@ -5,6 +5,7 @@
 // Classes
 
 #import "../Classes/AppColours.h"
+#import "../Classes/AppFonts.h"
 #import "../Classes/AppHistory.h"
 #import "../Classes/YouTubeLoader.h"
 
@@ -56,6 +57,7 @@
         timeLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.4];
         timeLabel.clipsToBounds = YES;
         timeLabel.layer.cornerRadius = 5;
+        [timeLabel setFont:[AppFonts mainFont:timeLabel.font.pointSize]];
         timeLabel.adjustsFontSizeToFitWidth = YES;
 
         NSFileManager *fm = [NSFileManager new];
@@ -92,6 +94,7 @@
         titleLabel.text = [NSString stringWithFormat:@"%@", array[position][@"title"]];
         titleLabel.textColor = [AppColours textColour];
         titleLabel.numberOfLines = 2;
+        [titleLabel setFont:[AppFonts mainFont:titleLabel.font.pointSize]];
         titleLabel.adjustsFontSizeToFitWidth = YES;
         [mainView addSubview:titleLabel];
 
@@ -104,7 +107,7 @@
         }
         infoLabel.textColor = [AppColours textColour];
         infoLabel.numberOfLines = 1;
-        [infoLabel setFont:[UIFont systemFontOfSize:12]];
+        [infoLabel setFont:[AppFonts mainFont:12]];
         infoLabel.adjustsFontSizeToFitWidth = YES;
         [mainView addSubview:infoLabel];
 
@@ -115,7 +118,7 @@
         actionLabel.textAlignment = NSTextAlignmentCenter;
         actionLabel.textColor = [AppColours textColour];
         actionLabel.numberOfLines = 1;
-        [actionLabel setFont:[UIFont systemFontOfSize:12]];
+        [actionLabel setFont:[AppFonts mainFont:12]];
         actionLabel.adjustsFontSizeToFitWidth = YES;
         actionLabel.userInteractionEnabled = YES;
         UITapGestureRecognizer *actionLabelTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(actionTap:)];
