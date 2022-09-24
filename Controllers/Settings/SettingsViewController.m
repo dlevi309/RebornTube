@@ -98,6 +98,29 @@
             if (indexPath.row == 1) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cell.textLabel.text = @"Font";
+                if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kFontOption"]) {
+                    cell.detailTextLabel.text = @"San Francisco (iOS Default)";
+                } else {
+                    int selectedTab = [[NSUserDefaults standardUserDefaults] integerForKey:@"kFontOption"];
+                    if (selectedTab == 0) {
+                        cell.detailTextLabel.text = @"San Francisco (iOS Default)";
+                    }
+                    if (selectedTab == 1) {
+                        cell.detailTextLabel.text = @"Arial";
+                    }
+                    if (selectedTab == 2) {
+                        cell.detailTextLabel.text = @"Helvetica";
+                    }
+                    if (selectedTab == 3) {
+                        cell.detailTextLabel.text = @"Minecraft";
+                    }
+                    if (selectedTab == 4) {
+                        cell.detailTextLabel.text = @"Tabitha";
+                    }
+                    if (selectedTab == 5) {
+                        cell.detailTextLabel.text = @"Times New Roman";
+                    }
+                }
             }
             if (indexPath.row == 2) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
