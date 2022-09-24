@@ -5,6 +5,7 @@
 #import "FontSettingsViewController.h"
 #import "BackgroundModeSettingsViewController.h"
 #import "SponsorBlockSettingsViewController.h"
+#import "CreditsViewController.h"
 #import "OpenSourceLibrariesViewController.h"
 
 // Classes
@@ -193,6 +194,10 @@
         }
     }
     if (indexPath.section == 3) {
+        if (indexPath.row == 0) {
+            CreditsViewController *creditsViewController = [[CreditsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            [self.navigationController pushViewController:creditsViewController animated:YES];
+        }
         if (indexPath.row == 1) {
             OpenSourceLibrariesViewController *openSourceLibrariesViewController = [[OpenSourceLibrariesViewController alloc] initWithStyle:UITableViewStyleGrouped];
             [self.navigationController pushViewController:openSourceLibrariesViewController animated:YES];
