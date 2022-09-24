@@ -5,6 +5,7 @@
 #import "FontSettingsViewController.h"
 #import "BackgroundModeSettingsViewController.h"
 #import "SponsorBlockSettingsViewController.h"
+#import "OpenSourceLibrariesViewController.h"
 
 // Classes
 
@@ -189,6 +190,12 @@
             }]];
 
             [self presentViewController:alert animated:YES completion:nil];
+        }
+    }
+    if (indexPath.section == 3) {
+        if (indexPath.row == 1) {
+            OpenSourceLibrariesViewController *openSourceLibrariesViewController = [[OpenSourceLibrariesViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            [self.navigationController pushViewController:openSourceLibrariesViewController animated:YES];
         }
     }
 }
