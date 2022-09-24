@@ -99,25 +99,19 @@
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 cell.textLabel.text = @"Font";
                 if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kFontOption"]) {
-                    cell.detailTextLabel.text = @"San Francisco (iOS Default)";
+                    cell.detailTextLabel.text = @"Default";
                 } else {
-                    int selectedTab = [[NSUserDefaults standardUserDefaults] integerForKey:@"kFontOption"];
-                    if (selectedTab == 0) {
-                        cell.detailTextLabel.text = @"San Francisco (iOS Default)";
+                    int selectedFontTag = [[NSUserDefaults standardUserDefaults] integerForKey:@"kFontOption"];
+                    if (selectedFontTag == 0) {
+                        cell.detailTextLabel.text = @"Default";
                     }
-                    if (selectedTab == 1) {
-                        cell.detailTextLabel.text = @"Arial";
-                    }
-                    if (selectedTab == 2) {
-                        cell.detailTextLabel.text = @"Helvetica";
-                    }
-                    if (selectedTab == 3) {
+                    if (selectedFontTag == 3) {
                         cell.detailTextLabel.text = @"Minecraft";
                     }
-                    if (selectedTab == 4) {
+                    if (selectedFontTag == 4) {
                         cell.detailTextLabel.text = @"Tabitha";
                     }
-                    if (selectedTab == 5) {
+                    if (selectedFontTag == 5) {
                         cell.detailTextLabel.text = @"Times New Roman";
                     }
                 }

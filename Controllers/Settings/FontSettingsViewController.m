@@ -10,7 +10,7 @@
 
 @interface FontSettingsViewController ()
 {
-    int selectedIndex;
+    int selectedFontTag;
 }
 @end
 
@@ -27,9 +27,9 @@
 	}
 
     if (![[NSUserDefaults standardUserDefaults] integerForKey:@"kFontOption"]) {
-        selectedIndex = 0;
+        selectedFontTag = 0;
     } else {
-        selectedIndex = [[NSUserDefaults standardUserDefaults] integerForKey:@"kFontOption"];
+        selectedFontTag = [[NSUserDefaults standardUserDefaults] integerForKey:@"kFontOption"];
     }
 }
 
@@ -39,7 +39,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 6;
+        return 4;
     }
     return 0;
 }
@@ -56,38 +56,30 @@
         cell.textLabel.textColor = [AppColours textColour];
         if (indexPath.section == 0) {
             if (indexPath.row == 0) {
-                cell.textLabel.text = @"San Francisco (iOS Default)";
-                if (selectedIndex == 0) {
+                cell.textLabel.text = @"Default";
+                cell.tag = 0;
+                if (selectedFontTag == 0) {
                     cell.accessoryType = UITableViewCellAccessoryCheckmark;
                 }
             }
             if (indexPath.row == 1) {
-                cell.textLabel.text = @"Arial";
-                if (selectedIndex == 1) {
+                cell.textLabel.text = @"Minecraft";
+                cell.tag = 3;
+                if (selectedFontTag == 3) {
                     cell.accessoryType = UITableViewCellAccessoryCheckmark;
                 }
             }
             if (indexPath.row == 2) {
-                cell.textLabel.text = @"Helvetica";
-                if (selectedIndex == 2) {
+                cell.textLabel.text = @"Tabitha";
+                cell.tag = 4;
+                if (selectedFontTag == 4) {
                     cell.accessoryType = UITableViewCellAccessoryCheckmark;
                 }
             }
             if (indexPath.row == 3) {
-                cell.textLabel.text = @"Minecraft";
-                if (selectedIndex == 3) {
-                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
-                }
-            }
-            if (indexPath.row == 4) {
-                cell.textLabel.text = @"Tabitha";
-                if (selectedIndex == 4) {
-                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
-                }
-            }
-            if (indexPath.row == 5) {
                 cell.textLabel.text = @"Times New Roman";
-                if (selectedIndex == 5) {
+                cell.tag = 5;
+                if (selectedFontTag == 5) {
                     cell.accessoryType = UITableViewCellAccessoryCheckmark;
                 }
             }
@@ -98,8 +90,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    selectedIndex = indexPath.row;
-    [[NSUserDefaults standardUserDefaults] setInteger:selectedIndex forKey:@"kFontOption"];
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    selectedFontTag = cell.tag;
+    [[NSUserDefaults standardUserDefaults] setInteger:selectedFontTag forKey:@"kFontOption"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [self.tableView reloadData];
 }
