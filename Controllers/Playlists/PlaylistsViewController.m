@@ -113,7 +113,7 @@
 	__block int viewBounds = 0;
 	__block int viewCount = 0;
 	[mainArray enumerateObjectsUsingBlock:^(id key, NSUInteger value, BOOL *stop) {
-		MainMiniDisplayView *mainMiniDisplayView = [[MainMiniDisplayView alloc] initWithFrame:CGRectMake(0, viewBounds, scrollView.bounds.size.width, 40) array:mainArray position:viewCount viewcontroller:1];
+		MainMiniDisplayView *mainMiniDisplayView = [[MainMiniDisplayView alloc] initWithFrame:CGRectMake(0, viewBounds, scrollView.bounds.size.width, 40) videoid:nil array:mainArray position:viewCount viewcontroller:1];
 		[scrollView addSubview:mainMiniDisplayView];
 		viewBounds += 42;
 		viewCount += 1;

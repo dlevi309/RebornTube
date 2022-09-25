@@ -19,13 +19,14 @@
 {
     NSString *viewControllerID;
     int viewControllerInt;
+    NSString *videoIdentifier;
 }
 - (id)_viewControllerForAncestor;
 @end
 
 @implementation MainMiniDisplayView
 
-- (id)initWithFrame:(CGRect)frame array:(NSArray *)array position:(int)position viewcontroller:(int)viewcontroller {
+- (id)initWithFrame:(CGRect)frame videoid:(NSString *)videoid array:(NSArray *)array position:(int)position viewcontroller:(int)viewcontroller {
     self = [super initWithFrame:frame];
     if (self) {
         UIView *mainView = [UIView new];
@@ -57,6 +58,11 @@
 
         viewControllerID = array[position];
         viewControllerInt = viewcontroller;
+        if (videoid == nil) {
+            videoIdentifier = nil;
+        } else if (videoid != nil) {
+            videoIdentifier = videoid;
+        }
         [self addSubview:mainView];
     }
     return self;
@@ -79,6 +85,42 @@
         playlistsVideosViewController.entryID = viewControllerID;
         
         [mainViewController.navigationController pushViewController:playlistsVideosViewController animated:YES];
+    }
+    if (viewControllerInt == 2) {
+        NSFileManager *fm = [[NSFileManager alloc] init];
+        NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSString *documentsDirectory = [paths objectAtIndex:0];
+
+        NSString *playlistsPlistFilePath = [documentsDirectory stringByAppendingPathComponent:@"playlists.plist"];
+
+        NSMutableDictionary *playlistsDictionary;
+        if (![fm fileExistsAtPath:playlistsPlistFilePath]) {
+            playlistsDictionary = [[NSMutableDictionary alloc] init];
+        } else {
+            playlistsDictionary = [NSMutableDictionary dictionaryWithContentsOfFile:playlistsPlistFilePath];
+        }
+
+        NSMutableArray *playlistsArray;
+        if ([playlistsDictionary objectForKey:viewControllerID]) {
+            playlistsArray = [playlistsDictionary objectForKey:viewControllerID];
+        } else {
+            playlistsArray = [[NSMutableArray alloc] init];
+        }
+
+        if (![playlistsArray containsObject:videoIdentifier]) {
+            [playlistsArray addObject:videoIdentifier];
+        }
+        
+        [playlistsDictionary setValue:playlistsArray forKey:viewControllerID];
+
+        [playlistsDictionary writeToFile:playlistsPlistFilePath atomically:YES];
+
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Notice" message:[NSString stringWithFormat:@"Successfully added video to %@", viewControllerID] preferredStyle:UIAlertControllerStyleAlert];
+
+        [alert addAction:[UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        }]];
+
+        [mainViewController presentViewController:alert animated:YES completion:nil];
     }
 }
 
