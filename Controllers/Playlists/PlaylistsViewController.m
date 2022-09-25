@@ -28,6 +28,7 @@
     // Keys
 	UIWindow *boundsWindow;
     UIScrollView *scrollView;
+	UIView *createPlaylistsView;
     
     // Main Array
     NSArray *mainArray;
@@ -54,6 +55,7 @@
 - (void)keysSetup {
 	boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
     scrollView = [[UIScrollView alloc] init];
+	createPlaylistsView = [[UIView alloc] init];
 }
 
 - (void)navBarSetup {
@@ -84,8 +86,8 @@
 }
 
 - (void)mainViewSetup {
-	UIView *createPlaylistsView = [[UIView alloc] init];
-	createPlaylistsView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, 40);
+	[createPlaylistsView removeFromSuperview];
+	createPlaylistsView.frame = CGRectMake(boundsWindow.safeAreaInsets.left, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right, 40);
 	createPlaylistsView.backgroundColor = [AppColours viewBackgroundColour];
 	createPlaylistsView.userInteractionEnabled = YES;
     UITapGestureRecognizer *createPlaylistsViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(createPlaylistsTap:)];
