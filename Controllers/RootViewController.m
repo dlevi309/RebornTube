@@ -53,20 +53,15 @@
     [self.view addSubview:self.tabBarController.view];
 }
 
-- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
-    return UIInterfaceOrientationPortrait;
-}
-
 - (BOOL)shouldAutorotate {
     return YES;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    /* if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
         return UIInterfaceOrientationMaskAll;
     }
-    return UIInterfaceOrientationMaskAllButUpsideDown; */
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
 
 - (UIInterfaceOrientationMask)navigationControllerSupportedInterfaceOrientations:(UINavigationController *)navigationController {
