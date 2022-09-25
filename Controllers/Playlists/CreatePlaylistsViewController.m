@@ -21,9 +21,11 @@
 
     // Other
 	UITextField *playlistsTextField;
+    UIButton *createButton;
 }
 - (void)keysSetup;
 - (void)navBarSetup;
+- (void)mainViewSetup;
 @end
 
 @implementation CreatePlaylistsViewController
@@ -31,15 +33,17 @@
 - (void)loadView {
 	[super loadView];
 
-    self.title = @"";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
 
     [self keysSetup];
     [self navBarSetup];
+    [self mainViewSetup];
 }
 
 - (void)keysSetup {
 	boundsWindow = [[[UIApplication sharedApplication] windows] firstObject];
+    playlistsTextField = [[UITextField alloc] init];
+    createButton = [[UIButton alloc] init];
 }
 
 - (void)navBarSetup {
@@ -49,9 +53,9 @@
     self.navigationItem.rightBarButtonItems = @[settingsButton, searchButton];
 }
 
-- (void)viewDidLoad {
-    playlistsTextField = [[UITextField alloc] init];
-	playlistsTextField.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width, 60);
+- (void)mainViewSetup {
+    [playlistsTextField removeFromSuperview];
+    playlistsTextField.frame = CGRectMake(boundsWindow.safeAreaInsets.left, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right, 60);
 	playlistsTextField.backgroundColor = [AppColours viewBackgroundColour];
 	playlistsTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:@"Enter Playlist Name Here" attributes:@{NSForegroundColorAttributeName:[AppColours textColour]}];
 	playlistsTextField.textColor = [AppColours textColour];
@@ -61,15 +65,42 @@
     dismissKeyboardTap.numberOfTapsRequired = 1;
     [self.view addGestureRecognizer:dismissKeyboardTap];
 
-    UIButton *createButton = [[UIButton alloc] init];
-    createButton.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playlistsTextField.bounds.size.height + 10, self.view.bounds.size.width, 40);
+    [createButton removeFromSuperview];
+    createButton.frame = CGRectMake(boundsWindow.safeAreaInsets.left, boundsWindow.safeAreaInsets.top + self.navigationController.navigationBar.frame.size.height + playlistsTextField.bounds.size.height + 10, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right, 40);
     [createButton addTarget:self action:@selector(createTap:) forControlEvents:UIControlEventTouchUpInside];
     [createButton setTitle:@"Create" forState:UIControlStateNormal];
 	[createButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
     createButton.backgroundColor = [AppColours viewBackgroundColour];
 	createButton.layer.cornerRadius = 5;
-
     [self.view addSubview:createButton];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
+    [super traitCollectionDidChange:previousTraitCollection];
+
+	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
+	switch (orientation) {
+		case UIInterfaceOrientationPortrait:
+		[self mainViewSetup];
+		break;
+
+		case UIInterfaceOrientationLandscapeLeft:
+		[self mainViewSetup];
+		break;
+
+		case UIInterfaceOrientationLandscapeRight:
+		[self mainViewSetup];
+		break;
+
+		case UIInterfaceOrientationPortraitUpsideDown:
+		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+			[self mainViewSetup];
+		}
+		break;
+
+		case UIInterfaceOrientationUnknown:
+		break;
+	}
 }
 
 @end
