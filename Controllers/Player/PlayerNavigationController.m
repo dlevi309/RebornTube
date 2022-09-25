@@ -13,6 +13,10 @@
     return self;
 }
 
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
+}
+
 - (BOOL)shouldAutorotate {
     return YES;
 }
