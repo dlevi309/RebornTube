@@ -60,9 +60,15 @@
 	UILabel *videoOverlayTitleLabel;
 	NSTimer *overlayTimer;
 
-	// Info
+	// Progress Slider
 	UISlider *progressSlider;
+
+	// Scroll View
 	UIScrollView *scrollView;
+	UILabel *videoTitleLabel;
+	UILabel *videoInfoLabel;
+	UIScrollView *stackScrollView;
+	UIStepper *rateStepper;
 }
 - (void)keysSetup;
 - (void)playerSetup;
@@ -283,7 +289,7 @@
 	[scrollView setShowsHorizontalScrollIndicator:NO];
 	[scrollView setShowsVerticalScrollIndicator:NO];
 
-	UILabel *videoTitleLabel = [[UILabel alloc] init];
+	videoTitleLabel = [[UILabel alloc] init];
 	videoTitleLabel.frame = CGRectMake(0, 0, self.view.bounds.size.width, 40);
 	videoTitleLabel.text = self.videoTitle;
 	videoTitleLabel.textColor = [AppColours textColour];
@@ -291,7 +297,7 @@
 	videoTitleLabel.adjustsFontSizeToFitWidth = YES;
 	[scrollView addSubview:videoTitleLabel];
 
-	UILabel *videoInfoLabel = [[UILabel alloc] init];
+	videoInfoLabel = [[UILabel alloc] init];
 	videoInfoLabel.frame = CGRectMake(0, videoTitleLabel.frame.size.height + 5, self.view.bounds.size.width, 24);
 	videoInfoLabel.text = [NSString stringWithFormat:@"%@ Views - %@\n%@ Likes - %@ Dislikes", self.videoViewCount, self.videoAuthor, self.videoLikes, self.videoDislikes];
 	videoInfoLabel.textColor = [AppColours textColour];
@@ -339,7 +345,7 @@
 	addToPlaylistsButton.layer.cornerRadius = 5;
 	[addToPlaylistsButton addConstraints:@[addToPlaylistsButtonWidth, addToPlaylistsButtonHeight]];
 
-	UIScrollView *stackScrollView = [[UIScrollView alloc] init];
+	stackScrollView = [[UIScrollView alloc] init];
 	stackScrollView.frame = CGRectMake(10, videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + 25, self.view.bounds.size.width - 20, 30);
 	[stackScrollView setShowsHorizontalScrollIndicator:NO];
 	[stackScrollView setShowsVerticalScrollIndicator:NO];
@@ -365,7 +371,7 @@
 	stackScrollView.contentSize = CGSizeMake(stackView.bounds.size.width, 30);
 	[scrollView addSubview:stackScrollView];
 
-	UIStepper *rateStepper = [[UIStepper alloc] init];
+	rateStepper = [[UIStepper alloc] init];
 	rateStepper.frame = CGRectMake(10, videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + 70, self.view.bounds.size.width - 10, 15);
 	rateStepper.stepValue = 0.1f;
 	rateStepper.minimumValue = 0.1f;
@@ -413,6 +419,34 @@
 	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoTitle] forKey:MPMediaItemPropertyTitle];
 	[songInfo setObject:[NSString stringWithFormat:@"%@", self.videoAuthor] forKey:MPMediaItemPropertyArtist];
 	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+
+	UIInterfaceOrientation orientation = [[[[[UIApplication sharedApplication] windows] firstObject] windowScene] interfaceOrientation];
+	switch (orientation) {
+		case UIInterfaceOrientationPortrait:
+		[self rotationMode:0];
+		break;
+
+		case UIInterfaceOrientationLandscapeLeft:
+		[self rotationMode:1];
+		break;
+
+		case UIInterfaceOrientationLandscapeRight:
+		[self rotationMode:1];
+		break;
+
+		case UIInterfaceOrientationPortraitUpsideDown:
+		if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
+			[self rotationMode:0];
+		}
+		break;
+
+		case UIInterfaceOrientationUnknown:
+		break;
+	}
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
@@ -519,9 +553,17 @@
 		// Overlay Other
 		videoOverlayTitleLabel.alpha = 0.0;
 
-		// Info
+		// Progress Slider
 		progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + (self.view.bounds.size.width * 9 / 16), self.view.bounds.size.width, 15);
 		progressSlider.hidden = NO;
+
+		// Scroll View
+		scrollView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + (self.view.bounds.size.width * 9 / 16) + progressSlider.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height - boundsWindow.safeAreaInsets.top - boundsWindow.safeAreaInsets.bottom - (self.view.bounds.size.width * 9 / 16) - progressSlider.frame.size.height);
+		videoTitleLabel.frame = CGRectMake(0, 0, self.view.bounds.size.width, 40);
+		videoInfoLabel.frame = CGRectMake(0, videoTitleLabel.frame.size.height + 5, self.view.bounds.size.width, 24);
+		stackScrollView.frame = CGRectMake(10, videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + 25, self.view.bounds.size.width - 20, 30);
+		rateStepper.frame = CGRectMake(10, videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + 70, self.view.bounds.size.width - 10, 15);
+		scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 124);
 		scrollView.hidden = NO;
 	}
 	if (mode == 1) {
@@ -554,11 +596,13 @@
 		videoOverlayTitleLabel.frame = CGRectMake(boundsWindow.safeAreaInsets.left, 10, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right - (self.view.bounds.size.width / 3), 31);
 		videoOverlayTitleLabel.alpha = 1.0;
 
-		// Info
+		// Progress Slider
 		progressSlider.frame = CGRectMake(boundsWindow.safeAreaInsets.left, (self.view.bounds.size.height / 2) + 100, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right, 15);
 		if (overlayHidden) {
 			progressSlider.hidden = YES;
 		}
+
+		// Scroll View
 		scrollView.hidden = YES;
 	}
 }
