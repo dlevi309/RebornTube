@@ -5,6 +5,7 @@
 // Classes
 
 #import "../../Classes/AppColours.h"
+#import "../../Classes/AppFonts.h"
 #import "../../Classes/PlayerHistory.h"
 #import "../../Classes/YouTubeDownloader.h"
 
@@ -175,7 +176,7 @@
 	videoTimeLabel.textAlignment = NSTextAlignmentCenter;
 	videoTimeLabel.textColor = [UIColor whiteColor];
 	videoTimeLabel.numberOfLines = 1;
-	[videoTimeLabel setFont:[UIFont boldSystemFontOfSize:videoTimeLabel.font.pointSize]];
+	[videoTimeLabel setFont:[AppFonts mainFont:videoTimeLabel.font.pointSize]];
 	videoTimeLabel.adjustsFontSizeToFitWidth = YES;
 	[overlayLeftView addSubview:videoTimeLabel];
 
@@ -256,6 +257,7 @@
 	videoOverlayTitleLabel.text = self.videoTitle;
 	videoOverlayTitleLabel.textColor = [AppColours textColour];
 	videoOverlayTitleLabel.numberOfLines = 1;
+	[videoOverlayTitleLabel setFont:[AppFonts mainFont:videoOverlayTitleLabel.font.pointSize]];
 	videoOverlayTitleLabel.alpha = 0.0;
 	
 	// Overlays
@@ -294,6 +296,7 @@
 	videoTitleLabel.text = self.videoTitle;
 	videoTitleLabel.textColor = [AppColours textColour];
 	videoTitleLabel.numberOfLines = 2;
+	[videoTitleLabel setFont:[AppFonts mainFont:videoTitleLabel.font.pointSize]];
 	videoTitleLabel.adjustsFontSizeToFitWidth = YES;
 	[scrollView addSubview:videoTitleLabel];
 
@@ -302,6 +305,7 @@
 	videoInfoLabel.text = [NSString stringWithFormat:@"%@ Views - %@\n%@ Likes - %@ Dislikes", self.videoViewCount, self.videoAuthor, self.videoLikes, self.videoDislikes];
 	videoInfoLabel.textColor = [AppColours textColour];
 	videoInfoLabel.numberOfLines = 2;
+	[videoInfoLabel setFont:[AppFonts mainFont:videoInfoLabel.font.pointSize]];
 	videoInfoLabel.adjustsFontSizeToFitWidth = YES;
 	[scrollView addSubview:videoInfoLabel];
 
@@ -311,6 +315,7 @@
 	[loopButton addTarget:self action:@selector(loopButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[loopButton setTitle:@"Loop" forState:UIControlStateNormal];
 	[loopButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
+	[loopButton setFont:[AppFonts mainFont:loopButton.font.pointSize]];
 	loopButton.backgroundColor = [AppColours viewBackgroundColour];
 	loopButton.layer.cornerRadius = 5;
 	[loopButton addConstraints:@[loopButtonWidth, loopButtonHeight]];
@@ -321,6 +326,7 @@
 	[shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[shareButton setTitle:@"Share" forState:UIControlStateNormal];
 	[shareButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
+	[shareButton setFont:[AppFonts mainFont:shareButton.font.pointSize]];
 	shareButton.backgroundColor = [AppColours viewBackgroundColour];
 	shareButton.layer.cornerRadius = 5;
 	[shareButton addConstraints:@[shareButtonWidth, shareButtonHeight]];
@@ -331,6 +337,7 @@
 	[downloadButton addTarget:self action:@selector(downloadButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[downloadButton setTitle:@"Download" forState:UIControlStateNormal];
 	[downloadButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
+	[downloadButton setFont:[AppFonts mainFont:downloadButton.font.pointSize]];
 	downloadButton.backgroundColor = [AppColours viewBackgroundColour];
 	downloadButton.layer.cornerRadius = 5;
 	[downloadButton addConstraints:@[downloadButtonWidth, downloadButtonHeight]];
@@ -341,6 +348,7 @@
 	[addToPlaylistsButton addTarget:self action:@selector(addToPlaylistsButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[addToPlaylistsButton setTitle:@"Add To Playlist" forState:UIControlStateNormal];
 	[addToPlaylistsButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
+	[addToPlaylistsButton setFont:[AppFonts mainFont:addToPlaylistsButton.font.pointSize]];
 	addToPlaylistsButton.backgroundColor = [AppColours viewBackgroundColour];
 	addToPlaylistsButton.layer.cornerRadius = 5;
 	[addToPlaylistsButton addConstraints:@[addToPlaylistsButtonWidth, addToPlaylistsButtonHeight]];
