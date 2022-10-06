@@ -14,6 +14,8 @@
 #import "../Controllers/Playlists/AddToPlaylistsViewController.h"
 #import "../Controllers/Player/PlayerNavigationController.h"
 #import "../Controllers/Player/PlayerViewController.h"
+#import "../Controllers/Player/VLCPlayerNavigationController.h"
+#import "../Controllers/Player/VLCPlayerViewController.h"
 
 // Views
 
@@ -146,23 +148,58 @@
     if (loaderDictionary == nil) {
         (void)[[MainPopupView alloc] initWithFrame:CGRectZero:@"Video Unsupported":1];
     } else {
-        PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
-        playerViewController.videoID = loaderDictionary[@"videoID"];
-        playerViewController.videoURL = loaderDictionary[@"videoURL"];
-        playerViewController.videoLive = [loaderDictionary[@"videoLive"] boolValue];
-        playerViewController.videoTitle = loaderDictionary[@"videoTitle"];
-        playerViewController.videoAuthor = loaderDictionary[@"videoAuthor"];
-        playerViewController.videoLength = loaderDictionary[@"videoLength"];
-        playerViewController.videoArtwork = loaderDictionary[@"videoArtwork"];
-        playerViewController.videoViewCount = loaderDictionary[@"videoViewCount"];
-        playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
-        playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
-        playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
-        
-        PlayerNavigationController *playerNavigationController = [[PlayerNavigationController alloc] initWithRootViewController:playerViewController];
-        
         UIViewController *mainViewController = [self _viewControllerForAncestor];
-        [mainViewController presentViewController:playerNavigationController animated:YES completion:nil];
+        
+        UIAlertController *alertPlayerOptions = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+        [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"AVPlayer" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+            playerViewController.videoID = loaderDictionary[@"videoID"];
+            playerViewController.videoURL = loaderDictionary[@"videoURL"];
+            playerViewController.videoLive = [loaderDictionary[@"videoLive"] boolValue];
+            playerViewController.videoTitle = loaderDictionary[@"videoTitle"];
+            playerViewController.videoAuthor = loaderDictionary[@"videoAuthor"];
+            playerViewController.videoLength = loaderDictionary[@"videoLength"];
+            playerViewController.videoArtwork = loaderDictionary[@"videoArtwork"];
+            playerViewController.videoViewCount = loaderDictionary[@"videoViewCount"];
+            playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
+            playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
+            playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
+            
+            PlayerNavigationController *playerNavigationController = [[PlayerNavigationController alloc] initWithRootViewController:playerViewController];
+            
+            [mainViewController presentViewController:playerNavigationController animated:YES completion:nil];
+        }]];
+
+        [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"VLC (Experimental)" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+            VLCPlayerViewController *playerViewController = [[VLCPlayerViewController alloc] init];
+            playerViewController.videoID = loaderDictionary[@"videoID"];
+            playerViewController.videoURL = loaderDictionary[@"videoURL"];
+            playerViewController.videoLive = [loaderDictionary[@"videoLive"] boolValue];
+            playerViewController.videoTitle = loaderDictionary[@"videoTitle"];
+            playerViewController.videoAuthor = loaderDictionary[@"videoAuthor"];
+            playerViewController.videoLength = loaderDictionary[@"videoLength"];
+            playerViewController.videoArtwork = loaderDictionary[@"videoArtwork"];
+            playerViewController.videoViewCount = loaderDictionary[@"videoViewCount"];
+            playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
+            playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
+            playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
+            
+            VLCPlayerNavigationController *playerNavigationController = [[VLCPlayerNavigationController alloc] initWithRootViewController:playerViewController];
+            
+            [mainViewController presentViewController:playerNavigationController animated:YES completion:nil];
+        }]];
+
+        [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        }]];
+
+        [alertPlayerOptions setModalPresentationStyle:UIModalPresentationPopover];
+        UIPopoverPresentationController *popPresenter = [alertPlayerOptions popoverPresentationController];
+        popPresenter.sourceView = mainViewController.view;
+        popPresenter.sourceRect = mainViewController.view.bounds;
+        popPresenter.permittedArrowDirections = 0;
+        
+        [mainViewController presentViewController:alertPlayerOptions animated:YES completion:nil];
     }
 }
 
