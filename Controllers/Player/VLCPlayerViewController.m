@@ -527,7 +527,7 @@
 		// Overlay Left
 		overlayLeftView.frame = CGRectMake(0, 0, self.view.bounds.size.width / 3, self.view.bounds.size.height);
 		overlayLeftViewShadow.frame = CGRectMake(0, 0, overlayLeftView.bounds.size.width, overlayLeftView.bounds.size.height);
-		collapseImage.frame = CGRectMake(boundsWindow.safeAreaInsets.left, 10, 24, 24);
+		collapseImage.frame = CGRectMake(boundsWindow.safeAreaInsets.left, 10, 31, 31);
 		videoTimeLabel.frame = CGRectMake(boundsWindow.safeAreaInsets.left + 10, (self.view.bounds.size.height / 2) + 75, 80, 15);
 		
 		// Overlay Middle
@@ -543,7 +543,7 @@
 		playbackModeSwitch.frame = CGRectMake(overlayRightView.bounds.size.width - boundsWindow.safeAreaInsets.right - 61, 10, 0, 0);
 
 		// Overlay Other
-		videoOverlayTitleLabel.frame = CGRectMake(boundsWindow.safeAreaInsets.left + 34, 10, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right - (self.view.bounds.size.width / 3) - 34, 31);
+		videoOverlayTitleLabel.frame = CGRectMake(boundsWindow.safeAreaInsets.left + 41, 10, self.view.bounds.size.width - boundsWindow.safeAreaInsets.left - boundsWindow.safeAreaInsets.right - (self.view.bounds.size.width / 3) - 41, 31);
 		videoOverlayTitleLabel.alpha = 1.0;
 
 		// Progress Slider
