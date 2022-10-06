@@ -129,6 +129,7 @@
 
 	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
 		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enteredForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 	}
 	[mediaPlayer play];
 }
@@ -564,6 +565,12 @@
 - (void)mediaPlayerTimeChanged:(NSNotification *)aNotification {
 	progressSlider.maximumValue = [mediaPlayer.media.length intValue];
 	progressSlider.value = [mediaPlayer.time intValue];
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
+		MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
+		[songInfo setObject:[NSNumber numberWithInteger:[mediaPlayer.time intValue]] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
+		[songInfo setObject:[NSNumber numberWithInteger:[mediaPlayer.media.length intValue]] forKey:MPMediaItemPropertyPlaybackDuration];
+		[playingInfoCenter setNowPlayingInfo:songInfo];
+	}
 }
 
 - (void)mediaPlayerStateChanged:(NSNotification *)aNotification {
@@ -711,10 +718,12 @@
 }
 
 - (void)enteredBackground:(NSNotification *)notification {
-	MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
-	[songInfo setObject:[NSNumber numberWithInteger:[mediaPlayer.time intValue]] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
-	[songInfo setObject:[NSNumber numberWithInteger:[mediaPlayer.media.length intValue]] forKey:MPMediaItemPropertyPlaybackDuration];
-	[playingInfoCenter setNowPlayingInfo:songInfo];
+	if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 1 || [[NSUserDefaults standardUserDefaults] integerForKey:@"kBackgroundMode"] == 2) {
+		MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
+		[songInfo setObject:[NSNumber numberWithInteger:[mediaPlayer.time intValue]] forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
+		[songInfo setObject:[NSNumber numberWithInteger:[mediaPlayer.media.length intValue]] forKey:MPMediaItemPropertyPlaybackDuration];
+		[playingInfoCenter setNowPlayingInfo:songInfo];
+	}
 }
 
 - (void)enteredForeground:(NSNotification *)notification {
