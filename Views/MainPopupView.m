@@ -5,6 +5,7 @@
 // Classes
 
 #import "../Classes/AppColours.h"
+#import "../Classes/AppFonts.h"
 
 // Interface
 
@@ -52,6 +53,7 @@
         messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.textColor = [UIColor whiteColor];
         messageLabel.numberOfLines = 1;
+        [messageLabel setFont:[AppFonts mainFont:messageLabel.font.pointSize]];
         messageLabel.adjustsFontSizeToFitWidth = YES;
         [mainView addSubview:messageLabel];
 
