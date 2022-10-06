@@ -5,6 +5,7 @@
 // Classes
 
 #import "../../Classes/AppColours.h"
+#import "../../Classes/AppFonts.h"
 
 // Interface
 
@@ -54,6 +55,9 @@
         cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
         cell.backgroundColor = [AppColours viewBackgroundColour];
         cell.textLabel.textColor = [AppColours textColour];
+        cell.detailTextLabel.textColor = [AppColours textColour];
+        [cell.textLabel setFont:[AppFonts mainFont:cell.textLabel.font.pointSize]];
+        [cell.detailTextLabel setFont:[AppFonts mainFont:cell.detailTextLabel.font.pointSize]];
         if (indexPath.section == 0) {
             if (indexPath.row == 0) {
                 cell.textLabel.text = @"Default";

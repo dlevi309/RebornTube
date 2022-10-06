@@ -315,7 +315,7 @@
 	[loopButton addTarget:self action:@selector(loopButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[loopButton setTitle:@"Loop" forState:UIControlStateNormal];
 	[loopButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
-	[loopButton setFont:[AppFonts mainFont:loopButton.font.pointSize]];
+	[loopButton.titleLabel setFont:[AppFonts mainFont:loopButton.titleLabel.font.pointSize]];
 	loopButton.backgroundColor = [AppColours viewBackgroundColour];
 	loopButton.layer.cornerRadius = 5;
 	[loopButton addConstraints:@[loopButtonWidth, loopButtonHeight]];
@@ -326,7 +326,7 @@
 	[shareButton addTarget:self action:@selector(shareButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[shareButton setTitle:@"Share" forState:UIControlStateNormal];
 	[shareButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
-	[shareButton setFont:[AppFonts mainFont:shareButton.font.pointSize]];
+	[shareButton.titleLabel setFont:[AppFonts mainFont:shareButton.titleLabel.font.pointSize]];
 	shareButton.backgroundColor = [AppColours viewBackgroundColour];
 	shareButton.layer.cornerRadius = 5;
 	[shareButton addConstraints:@[shareButtonWidth, shareButtonHeight]];
@@ -337,7 +337,7 @@
 	[downloadButton addTarget:self action:@selector(downloadButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[downloadButton setTitle:@"Download" forState:UIControlStateNormal];
 	[downloadButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
-	[downloadButton setFont:[AppFonts mainFont:downloadButton.font.pointSize]];
+	[downloadButton.titleLabel setFont:[AppFonts mainFont:downloadButton.titleLabel.font.pointSize]];
 	downloadButton.backgroundColor = [AppColours viewBackgroundColour];
 	downloadButton.layer.cornerRadius = 5;
 	[downloadButton addConstraints:@[downloadButtonWidth, downloadButtonHeight]];
@@ -348,7 +348,7 @@
 	[addToPlaylistsButton addTarget:self action:@selector(addToPlaylistsButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
  	[addToPlaylistsButton setTitle:@"Add To Playlist" forState:UIControlStateNormal];
 	[addToPlaylistsButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
-	[addToPlaylistsButton setFont:[AppFonts mainFont:addToPlaylistsButton.font.pointSize]];
+	[addToPlaylistsButton.titleLabel setFont:[AppFonts mainFont:addToPlaylistsButton.titleLabel.font.pointSize]];
 	addToPlaylistsButton.backgroundColor = [AppColours viewBackgroundColour];
 	addToPlaylistsButton.layer.cornerRadius = 5;
 	[addToPlaylistsButton addConstraints:@[addToPlaylistsButtonWidth, addToPlaylistsButtonHeight]];

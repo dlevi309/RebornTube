@@ -45,6 +45,9 @@
         cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
         cell.backgroundColor = [AppColours viewBackgroundColour];
         cell.textLabel.textColor = [AppColours textColour];
+        cell.detailTextLabel.textColor = [AppColours textColour];
+        [cell.textLabel setFont:[AppFonts mainFont:cell.textLabel.font.pointSize]];
+        [cell.detailTextLabel setFont:[AppFonts mainFont:cell.detailTextLabel.font.pointSize]];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         if (indexPath.section == 0) {
             if (indexPath.row == 0) {
