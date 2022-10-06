@@ -5,6 +5,7 @@
 // Classes
 
 #import "../../Classes/AppColours.h"
+#import "../../Classes/AppFonts.h"
 
 // Interface
 
