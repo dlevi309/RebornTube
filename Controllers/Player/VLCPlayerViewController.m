@@ -382,7 +382,7 @@
 	rateStepper.maximumValue = 2.0f;
 	rateStepper.value = 1.0f;
 	[rateStepper addTarget:self action:@selector(rateStepperValueChanged:) forControlEvents:UIControlEventValueChanged];
-	[scrollView addSubview:rateStepper];
+	// [scrollView addSubview:rateStepper];
 
 	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 124);
 	[self.view addSubview:scrollView];
@@ -407,10 +407,16 @@
         return MPRemoteCommandHandlerStatusSuccess;
     }];
 	[commandCenter.nextTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        return MPRemoteCommandHandlerStatusSuccess;
+        if (mediaPlayer.seekable) {
+			[mediaPlayer jumpForward:10];
+		}
+		return MPRemoteCommandHandlerStatusSuccess;
     }];
 	[commandCenter.previousTrackCommand addTargetWithHandler:^MPRemoteCommandHandlerStatus(MPRemoteCommandEvent * _Nonnull event) {
-        return MPRemoteCommandHandlerStatusSuccess;
+        if (mediaPlayer.seekable) {
+			[mediaPlayer jumpBackward:10];
+		}
+		return MPRemoteCommandHandlerStatusSuccess;
     }];
 
 	UIImage *videoArt = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
