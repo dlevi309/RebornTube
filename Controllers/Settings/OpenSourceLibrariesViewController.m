@@ -31,7 +31,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-        return 2;
+        return 3;
     }
     return 0;
 }
@@ -57,6 +57,9 @@
             if (indexPath.row == 1) {
                 cell.textLabel.text = @"FFmpegKit";
             }
+            if (indexPath.row == 2) {
+                cell.textLabel.text = @"MobileVLCKit";
+            }
         }
     }
     return cell;
@@ -69,7 +72,10 @@
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/AFNetworking/AFNetworking"] options:@{} completionHandler:nil];
         }
         if (indexPath.row == 1) {
-            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/tanersener/ffmpeg-kit"] options:@{} completionHandler:nil];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://github.com/arthenica/ffmpeg-kit"] options:@{} completionHandler:nil];
+        }
+        if (indexPath.row == 2) {
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://code.videolan.org/videolan/VLCKit"] options:@{} completionHandler:nil];
         }
     }
 }
