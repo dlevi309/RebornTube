@@ -118,8 +118,12 @@
     mediaPlayer.delegate = self;
     mediaPlayer.drawable = vlcView;
 
-    mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
-	// [mediaPlayer addPlaybackSlave:self.audioURL type:VLCMediaPlaybackSlaveTypeAudio enforce:YES];
+    if (!self.videoLive) {
+		mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
+		[mediaPlayer addPlaybackSlave:self.audioURL type:VLCMediaPlaybackSlaveTypeAudio enforce:YES];
+	} else if (self.videoLive) {
+		mediaPlayer.media = [VLCMedia mediaWithURL:self.streamURL];
+	}
 
 	videoImage = [[UIImageView alloc] init];
 	videoImage.image = [UIImage imageWithData:[NSData dataWithContentsOfURL:self.videoArtwork]];
@@ -355,9 +359,9 @@
 	stackView.alignment = UIStackViewAlignmentFill;
     stackView.spacing = 10;
 
-    if (!self.videoLive) {
+    /* if (!self.videoLive) {
 		[stackView addArrangedSubview:loopButton];
-	}
+	} */
     [stackView addArrangedSubview:shareButton];
 	if (!self.videoLive) {
 		[stackView addArrangedSubview:downloadButton];

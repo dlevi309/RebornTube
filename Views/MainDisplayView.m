@@ -155,7 +155,7 @@
         [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"AVPlayer" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
             PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
             playerViewController.videoID = loaderDictionary[@"videoID"];
-            playerViewController.videoURL = loaderDictionary[@"videoURL"];
+            playerViewController.videoURL = loaderDictionary[@"streamURL"];
             playerViewController.videoLive = [loaderDictionary[@"videoLive"] boolValue];
             playerViewController.videoTitle = loaderDictionary[@"videoTitle"];
             playerViewController.videoAuthor = loaderDictionary[@"videoAuthor"];
@@ -175,6 +175,8 @@
             VLCPlayerViewController *playerViewController = [[VLCPlayerViewController alloc] init];
             playerViewController.videoID = loaderDictionary[@"videoID"];
             playerViewController.videoURL = loaderDictionary[@"videoURL"];
+            playerViewController.audioURL = loaderDictionary[@"audioURL"];
+            playerViewController.streamURL = loaderDictionary[@"streamURL"];
             playerViewController.videoLive = [loaderDictionary[@"videoLive"] boolValue];
             playerViewController.videoTitle = loaderDictionary[@"videoTitle"];
             playerViewController.videoAuthor = loaderDictionary[@"videoAuthor"];
