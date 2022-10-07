@@ -357,9 +357,9 @@
 	stackView.alignment = UIStackViewAlignmentFill;
     stackView.spacing = 10;
 
-    /* if (!self.videoLive) {
+    if (!self.videoLive) {
 		[stackView addArrangedSubview:loopButton];
-	} */
+	}
     [stackView addArrangedSubview:shareButton];
 	if (!self.videoLive) {
 		[stackView addArrangedSubview:downloadButton];
@@ -591,9 +591,13 @@
 		pauseImage.alpha = 0.0;
 		restartImage.alpha = 0.0;
 	} else if (mediaPlayer.state == VLCMediaPlayerStateStopped) {
-		playImage.alpha = 0.0;
-		pauseImage.alpha = 0.0;
-		restartImage.alpha = 1.0;
+		if (!mediaPlayer.isPlaying && loopEnabled) {
+			[mediaPlayer play];
+		} else if (!mediaPlayer.isPlaying && !loopEnabled) {
+			playImage.alpha = 0.0;
+			pauseImage.alpha = 0.0;
+			restartImage.alpha = 1.0;
+		}
 	}
 }
 
@@ -690,12 +694,15 @@
 - (void)playPauseTap:(UITapGestureRecognizer *)recognizer {
 	if (mediaPlayer.isPlaying) {
 		[mediaPlayer pause];
-	} else {
+	} else if (!mediaPlayer.isPlaying) {
 		[mediaPlayer play];
 	}
 }
 
 - (void)restartTap:(UITapGestureRecognizer *)recognizer {
+	if (!mediaPlayer.isPlaying) {
+		[mediaPlayer play];
+	}
 }
 
 - (void)forwardTap:(UITapGestureRecognizer *)recognizer {
