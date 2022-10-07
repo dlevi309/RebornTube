@@ -6,7 +6,6 @@
 
 #import "../Search/SearchViewController.h"
 #import "../Settings/SettingsViewController.h"
-#import "../Settings/SettingsNavigationController.h"
 
 // Classes
 
@@ -135,15 +134,14 @@
 
 - (void)search:(UITapGestureRecognizer *)recognizer {
     SearchViewController *searchViewController = [[SearchViewController alloc] init];
-
 	[self.navigationController pushViewController:searchViewController animated:YES];
 }
 
 - (void)settings:(UITapGestureRecognizer *)recognizer {
     SettingsViewController *settingsViewController = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
-	SettingsNavigationController *settingsNavigationController = [[SettingsNavigationController alloc] initWithRootViewController:settingsViewController];
-    
-	[self presentViewController:settingsNavigationController animated:YES completion:nil];
+	UINavigationController *settingsViewControllerView = [[UINavigationController alloc] initWithRootViewController:settingsViewController];
+    settingsViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+    [self presentViewController:settingsViewControllerView animated:YES completion:nil];
 }
 
 // Other

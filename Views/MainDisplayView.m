@@ -12,9 +12,7 @@
 // Controllers
 
 #import "../Controllers/Playlists/AddToPlaylistsViewController.h"
-#import "../Controllers/Player/PlayerNavigationController.h"
 #import "../Controllers/Player/PlayerViewController.h"
-#import "../Controllers/Player/VLCPlayerNavigationController.h"
 #import "../Controllers/Player/VLCPlayerViewController.h"
 
 // Views
@@ -165,10 +163,9 @@
             playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
             playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
             playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
-            
-            PlayerNavigationController *playerNavigationController = [[PlayerNavigationController alloc] initWithRootViewController:playerViewController];
-            
-            [mainViewController presentViewController:playerNavigationController animated:YES completion:nil];
+            UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
+            playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+            [mainViewController presentViewController:playerViewControllerView animated:YES completion:nil];
         }]];
 
         [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"VLC (Experimental)" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
@@ -186,10 +183,9 @@
             playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
             playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
             playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
-            
-            VLCPlayerNavigationController *playerNavigationController = [[VLCPlayerNavigationController alloc] initWithRootViewController:playerViewController];
-            
-            [mainViewController presentViewController:playerNavigationController animated:YES completion:nil];
+            UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
+            playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+            [mainViewController presentViewController:playerViewControllerView animated:YES completion:nil];
         }]];
 
         [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {

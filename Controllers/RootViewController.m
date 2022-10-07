@@ -53,23 +53,4 @@
     [self.view addSubview:self.tabBarController.view];
 }
 
-- (BOOL)shouldAutorotate {
-    return YES;
-}
-
-- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad) {
-        return UIInterfaceOrientationMaskAll;
-    }
-    return UIInterfaceOrientationMaskAllButUpsideDown;
-}
-
-- (UIInterfaceOrientationMask)navigationControllerSupportedInterfaceOrientations:(UINavigationController *)navigationController {
-    return [navigationController.topViewController supportedInterfaceOrientations];
-}
-
-- (BOOL)prefersHomeIndicatorAutoHidden {
-	return YES;
-}
-
 @end
