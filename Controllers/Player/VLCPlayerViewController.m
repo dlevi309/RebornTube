@@ -26,7 +26,6 @@
 	BOOL playbackMode;
 	BOOL overlayHidden;
 	BOOL loopEnabled;
-	float playbackRate;
 	NSString *playerAssetsBundlePath;
 	NSBundle *playerAssetsBundle;
 	NSMutableDictionary *songInfo;
@@ -103,7 +102,6 @@
 	playbackMode = NO;
 	overlayHidden = NO;
 	loopEnabled = NO;
-	playbackRate = 1.0f;
 	playerAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"PlayerAssets" ofType:@"bundle"];
 	playerAssetsBundle = [NSBundle bundleWithPath:playerAssetsBundlePath];
 	songInfo = [NSMutableDictionary new];
@@ -379,10 +377,10 @@
 	rateStepper.frame = CGRectMake(10, videoTitleLabel.frame.size.height + videoInfoLabel.frame.size.height + 70, self.view.bounds.size.width - 10, 15);
 	rateStepper.stepValue = 0.1f;
 	rateStepper.minimumValue = 0.1f;
-	rateStepper.maximumValue = 2.0f;
+	rateStepper.maximumValue = 5.0f;
 	rateStepper.value = 1.0f;
 	[rateStepper addTarget:self action:@selector(rateStepperValueChanged:) forControlEvents:UIControlEventValueChanged];
-	// [scrollView addSubview:rateStepper];
+	[scrollView addSubview:rateStepper];
 
 	scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 124);
 	[self.view addSubview:scrollView];
@@ -743,8 +741,8 @@
 }
 
 - (void)rateStepperValueChanged:(UIStepper *)sender {
-	playbackRate = [[NSString stringWithFormat:@"%.01f", sender.value] floatValue];
-	MainPopupView *mainPopupView = [[MainPopupView alloc] initWithFrame:CGRectMake(20, self.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 40, self.view.bounds.size.width - 40, 40):[NSString stringWithFormat:@"Speed: %.01f", playbackRate]:0];
+	mediaPlayer.rate = [[NSString stringWithFormat:@"%.01f", sender.value] floatValue];
+	MainPopupView *mainPopupView = [[MainPopupView alloc] initWithFrame:CGRectMake(20, self.view.bounds.size.height - boundsWindow.safeAreaInsets.bottom - 40, self.view.bounds.size.width - 40, 40):[NSString stringWithFormat:@"Speed: %.01f", [[NSString stringWithFormat:@"%.01f", sender.value] floatValue]]:0];
 	[self.view addSubview:mainPopupView];
 	[NSTimer scheduledTimerWithTimeInterval:3.0 repeats:NO block:^(NSTimer *timer) {
 		[mainPopupView removeFromSuperview];
