@@ -426,6 +426,13 @@
 	[songInfo setObject:albumArt forKey:MPMediaItemPropertyArtwork];
 }
 
+- (BOOL)prefersHomeIndicatorAutoHidden {
+    if (deviceOrientation) {
+		return YES;
+	}
+	return NO;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
 
@@ -485,6 +492,7 @@
 - (void)rotationMode:(int)mode {
 	if (mode == 0) {
 		deviceOrientation = NO;
+		[self setNeedsUpdateOfHomeIndicatorAutoHidden];
 
 		// Main
 		self.view.backgroundColor = [AppColours mainBackgroundColour];
@@ -527,6 +535,7 @@
 	}
 	if (mode == 1) {
 		deviceOrientation = YES;
+		[self setNeedsUpdateOfHomeIndicatorAutoHidden];
 
 		// Main
 		self.view.backgroundColor = [UIColor blackColor];
