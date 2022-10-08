@@ -23,6 +23,9 @@
 	self.title = @"Font";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
 
+    UIBarButtonItem *applyButton = [[UIBarButtonItem alloc] initWithTitle:@"Apply" style:UIBarButtonItemStylePlain target:self action:@selector(apply)];
+    self.navigationItem.rightBarButtonItem = applyButton;
+
     if (@available(iOS 15.0, *)) {
     	[self.tableView setSectionHeaderTopPadding:0.0f];
 	}
@@ -99,6 +102,14 @@
     [[NSUserDefaults standardUserDefaults] setInteger:selectedFontTag forKey:@"kFontOption"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [self.tableView reloadData];
+}
+
+@end
+
+@implementation FontSettingsViewController (Privates)
+
+- (void)apply {
+    exit(0); 
 }
 
 @end

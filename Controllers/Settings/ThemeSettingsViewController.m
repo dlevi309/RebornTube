@@ -23,6 +23,9 @@
 	self.title = @"Theme";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
 
+    UIBarButtonItem *applyButton = [[UIBarButtonItem alloc] initWithTitle:@"Apply" style:UIBarButtonItemStylePlain target:self action:@selector(apply)];
+    self.navigationItem.rightBarButtonItem = applyButton;
+
     if (@available(iOS 15.0, *)) {
     	[self.tableView setSectionHeaderTopPadding:0.0f];
 	}
@@ -94,6 +97,14 @@
     [[NSUserDefaults standardUserDefaults] setInteger:selectedIndex forKey:@"kAppTheme"];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [self.tableView reloadData];
+}
+
+@end
+
+@implementation ThemeSettingsViewController (Privates)
+
+- (void)apply {
+    exit(0); 
 }
 
 @end
