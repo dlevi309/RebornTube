@@ -1,5 +1,6 @@
 #import "AppDelegate.h"
 #import "AppColours.h"
+#import "AppFonts.h"
 #import "../Controllers/Home/HomeViewController.h"
 #import "../Controllers/Subscriptions/SubscriptionsViewController.h"
 #import "../Controllers/History/HistoryViewController.h"
@@ -10,7 +11,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.tabBarController = [[UITabBarController alloc] init];
-    
+
     HomeViewController *homeViewController = [[HomeViewController alloc] init];
     UINavigationController *homeNavViewController = [[UINavigationController alloc] initWithRootViewController:homeViewController];
     homeNavViewController.tabBarItem.title = @"Home";
@@ -39,14 +40,25 @@
     navBarAppearance.backgroundColor = [AppColours mainBackgroundColour];
     [UINavigationBar appearance].standardAppearance = navBarAppearance;
 
+    UITabBarItemAppearance *tabBarItemAppearance = [[UITabBarItemAppearance alloc] init];
+    tabBarItemAppearance.normal.titleTextAttributes = @{NSFontAttributeName : [AppFonts mainFont:14]};
+    tabBarItemAppearance.selected.titleTextAttributes = @{NSFontAttributeName : [AppFonts mainFont:14]};
+    tabBarItemAppearance.disabled.titleTextAttributes = @{NSFontAttributeName : [AppFonts mainFont:14]};
+    tabBarItemAppearance.focused.titleTextAttributes = @{NSFontAttributeName : [AppFonts mainFont:14]};
+    
     UITabBarAppearance *tabBarAppearance = [[UITabBarAppearance alloc] init];
     [tabBarAppearance configureWithOpaqueBackground];
     tabBarAppearance.backgroundColor = [AppColours mainBackgroundColour];
+    tabBarAppearance.stackedLayoutAppearance = tabBarItemAppearance;
+    tabBarAppearance.inlineLayoutAppearance = tabBarItemAppearance;
+    tabBarAppearance.compactInlineLayoutAppearance = tabBarItemAppearance;
     [UITabBar appearance].standardAppearance = tabBarAppearance;
+    
     if (@available(iOS 15.0, *)){
         [UINavigationBar appearance].scrollEdgeAppearance = navBarAppearance;
         [UITabBar appearance].scrollEdgeAppearance = tabBarAppearance;
     }
+
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];

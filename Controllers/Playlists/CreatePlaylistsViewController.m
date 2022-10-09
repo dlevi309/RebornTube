@@ -93,6 +93,7 @@
     [createButton addTarget:self action:@selector(createTap:) forControlEvents:UIControlEventTouchUpInside];
     [createButton setTitle:@"Create" forState:UIControlStateNormal];
 	[createButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
+	[createButton.titleLabel setFont:[AppFonts mainFont:createButton.titleLabel.font.pointSize]];
     createButton.backgroundColor = [AppColours viewBackgroundColour];
 	createButton.layer.cornerRadius = 5;
     [self.view addSubview:createButton];

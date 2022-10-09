@@ -5,6 +5,7 @@
 // Classes
 
 #import "../../Classes/AppColours.h"
+#import "../../Classes/AppFonts.h"
 
 // Views
 
@@ -62,6 +63,7 @@
     [closeButton addTarget:self action:@selector(closeTap:) forControlEvents:UIControlEventTouchUpInside];
     [closeButton setTitle:@"Close" forState:UIControlStateNormal];
 	[closeButton setTitleColor:[AppColours textColour] forState:UIControlStateNormal];
+	[closeButton.titleLabel setFont:[AppFonts mainFont:closeButton.titleLabel.font.pointSize]];
     closeButton.backgroundColor = [AppColours viewBackgroundColour];
 	closeButton.layer.cornerRadius = 5;
     [self.view addSubview:closeButton];
