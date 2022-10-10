@@ -70,29 +70,21 @@
 
     self.navigationItem.leftBarButtonItem = titleButton;
 
-	UILabel *searchLabel = [[UILabel alloc] init];
-	searchLabel.text = @"Search";
-	searchLabel.textColor = [UIColor systemBlueColor];
-	searchLabel.numberOfLines = 1;
-	[searchLabel setFont:[AppFonts mainFont:searchLabel.font.pointSize]];
-	searchLabel.adjustsFontSizeToFitWidth = YES;
-	searchLabel.userInteractionEnabled = YES;
+	UIImageView *searchImage = [[UIImageView alloc] init];
+	searchImage.image = [UIImage systemImageNamed:@"magnifyingglass"];
+	searchImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *searchTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(search:)];
 	searchTap.numberOfTapsRequired = 1;
-	[searchLabel addGestureRecognizer:searchTap];
-    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithCustomView:searchLabel];
+	[searchImage addGestureRecognizer:searchTap];
+    UIBarButtonItem *searchButton = [[UIBarButtonItem alloc] initWithCustomView:searchImage];
 
-	UILabel *settingsLabel = [[UILabel alloc] init];
-	settingsLabel.text = @"Settings";
-	settingsLabel.textColor = [UIColor systemBlueColor];
-	settingsLabel.numberOfLines = 1;
-	[settingsLabel setFont:[AppFonts mainFont:settingsLabel.font.pointSize]];
-	settingsLabel.adjustsFontSizeToFitWidth = YES;
-	settingsLabel.userInteractionEnabled = YES;
+	UIImageView *settingsImage = [[UIImageView alloc] init];
+	settingsImage.image = [UIImage systemImageNamed:@"gearshape"];
+	settingsImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *settingsTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(settings:)];
 	settingsTap.numberOfTapsRequired = 1;
-	[settingsLabel addGestureRecognizer:settingsTap];
-    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithCustomView:settingsLabel];
+	[settingsImage addGestureRecognizer:settingsTap];
+    UIBarButtonItem *settingsButton = [[UIBarButtonItem alloc] initWithCustomView:settingsImage];
 
 	self.navigationItem.rightBarButtonItems = @[settingsButton, searchButton];
 }
