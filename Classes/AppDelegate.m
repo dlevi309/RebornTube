@@ -57,10 +57,10 @@
     [UINavigationBar appearance].standardAppearance = navBarAppearance;
 
     UITabBarItemAppearance *tabBarItemAppearance = [[UITabBarItemAppearance alloc] init];
-    tabBarItemAppearance.normal.titleTextAttributes = @{NSFontAttributeName : [AppFonts mainFont:14]};
-    tabBarItemAppearance.selected.titleTextAttributes = @{NSFontAttributeName : [AppFonts mainFont:14]};
-    tabBarItemAppearance.disabled.titleTextAttributes = @{NSFontAttributeName : [AppFonts mainFont:14]};
-    tabBarItemAppearance.focused.titleTextAttributes = @{NSFontAttributeName : [AppFonts mainFont:14]};
+    tabBarItemAppearance.normal.titleTextAttributes = @{NSFontAttributeName : [AppFonts mainFont:12]};
+    tabBarItemAppearance.selected.titleTextAttributes = @{NSFontAttributeName : [AppFonts mainFont:12]};
+    tabBarItemAppearance.disabled.titleTextAttributes = @{NSFontAttributeName : [AppFonts mainFont:12]};
+    tabBarItemAppearance.focused.titleTextAttributes = @{NSFontAttributeName : [AppFonts mainFont:12]};
     
     UITabBarAppearance *tabBarAppearance = [[UITabBarAppearance alloc] init];
     [tabBarAppearance configureWithOpaqueBackground];
