@@ -1,0 +1,34 @@
+{
+	"manifest_version": 2,
+	"default_locale": "en",
+
+	"name": "RebornTube",
+	"description": "Allows you to open YouTube links in RebornTube",
+	"version": "1.0",
+
+	"icons": {
+		"48": "images/reborntube.png",
+		"96": "images/reborntube.png",
+		"128": "images/reborntube.png",
+		"256": "images/reborntube.png",
+		"512": "images/reborntube.png"
+	},
+
+	"background": {
+        "scripts": [ "background.js" ],
+        "persistent": false
+    },
+
+	"browser_action": {
+		"default_icon": {
+			"16": "images/reborntube.png",
+			"19": "images/reborntube.png",
+			"32": "images/reborntube.png",
+			"38": "images/reborntube.png",
+			"48": "images/reborntube.png",
+			"72": "images/reborntube.png"
+		}
+	},
+
+	"permissions": [ "https://m.youtube.com/*" ]
+}

@@ -1,11 +1,27 @@
+// Main
+
 #import "AppDelegate.h"
+
+// Classes
+
 #import "AppColours.h"
 #import "AppFonts.h"
+#import "AppHistory.h"
+#import "YouTubeLoader.h"
+
+// Controllers
+
 #import "../Controllers/Home/HomeViewController.h"
 #import "../Controllers/Subscriptions/SubscriptionsViewController.h"
 #import "../Controllers/History/HistoryViewController.h"
 #import "../Controllers/Playlists/PlaylistsViewController.h"
 #import "../Controllers/Downloads/DownloadsViewController.h"
+#import "../Controllers/Player/PlayerViewController.h"
+#import "../Controllers/Player/VLCPlayerViewController.h"
+
+// Views
+
+#import "../Views/MainPopupView.h"
 
 @implementation AppDelegate
 
@@ -62,6 +78,91 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options {
+    NSString *returnURL = [NSString stringWithFormat:@"%@", url];
+    NSString *regexString = @"((?<=(v|V)/)|(?<=be/)|(?<=(\\?|\\&)v=)|(?<=embed/))([\\w-]++)";
+    NSRegularExpression *regExp = [NSRegularExpression regularExpressionWithPattern:regexString options:NSRegularExpressionCaseInsensitive error:nil];
+	NSArray *array = [regExp matchesInString:returnURL options:0 range:NSMakeRange(0, returnURL.length)];
+    if (array.count > 0) {
+        NSTextCheckingResult *result = array.firstObject;
+		NSString *videoID = [returnURL substringWithRange:result.range];
+
+        [AppHistory init:videoID];
+        NSDictionary *loaderDictionary = [YouTubeLoader init:videoID];
+
+        if (loaderDictionary == nil) {
+            (void)[[MainPopupView alloc] initWithFrame:CGRectZero:@"Video Unsupported":1];
+        } else {
+            UIViewController *topViewController = [[[[UIApplication sharedApplication] windows] firstObject] rootViewController];
+            while (true) {
+                if (topViewController.presentedViewController) {
+                    topViewController = topViewController.presentedViewController;
+                } else if ([topViewController isKindOfClass:[UINavigationController class]]) {
+                    UINavigationController *nav = (UINavigationController *)topViewController;
+                    topViewController = nav.topViewController;
+                } else if ([topViewController isKindOfClass:[UITabBarController class]]) {
+                    UITabBarController *tab = (UITabBarController *)topViewController;
+                    topViewController = tab.selectedViewController;
+                } else {
+                    break;
+                }
+            }
+            
+            UIAlertController *alertPlayerOptions = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+            [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"AVPlayer" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                PlayerViewController *playerViewController = [[PlayerViewController alloc] init];
+                playerViewController.videoID = loaderDictionary[@"videoID"];
+                playerViewController.videoURL = loaderDictionary[@"streamURL"];
+                playerViewController.videoLive = [loaderDictionary[@"videoLive"] boolValue];
+                playerViewController.videoTitle = loaderDictionary[@"videoTitle"];
+                playerViewController.videoAuthor = loaderDictionary[@"videoAuthor"];
+                playerViewController.videoLength = loaderDictionary[@"videoLength"];
+                playerViewController.videoArtwork = loaderDictionary[@"videoArtwork"];
+                playerViewController.videoViewCount = loaderDictionary[@"videoViewCount"];
+                playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
+                playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
+                playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
+                UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
+                playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+                [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
+            }]];
+
+            [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"VLC (Experimental)" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                VLCPlayerViewController *playerViewController = [[VLCPlayerViewController alloc] init];
+                playerViewController.videoID = loaderDictionary[@"videoID"];
+                playerViewController.videoURL = loaderDictionary[@"videoURL"];
+                playerViewController.audioURL = loaderDictionary[@"audioURL"];
+                playerViewController.streamURL = loaderDictionary[@"streamURL"];
+                playerViewController.videoLive = [loaderDictionary[@"videoLive"] boolValue];
+                playerViewController.videoTitle = loaderDictionary[@"videoTitle"];
+                playerViewController.videoAuthor = loaderDictionary[@"videoAuthor"];
+                playerViewController.videoLength = loaderDictionary[@"videoLength"];
+                playerViewController.videoArtwork = loaderDictionary[@"videoArtwork"];
+                playerViewController.videoViewCount = loaderDictionary[@"videoViewCount"];
+                playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
+                playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
+                playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
+                UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
+                playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
+                [topViewController presentViewController:playerViewControllerView animated:YES completion:nil];
+            }]];
+
+            [alertPlayerOptions addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+            }]];
+
+            [alertPlayerOptions setModalPresentationStyle:UIModalPresentationPopover];
+            UIPopoverPresentationController *popPresenter = [alertPlayerOptions popoverPresentationController];
+            popPresenter.sourceView = topViewController.view;
+            popPresenter.sourceRect = topViewController.view.bounds;
+            popPresenter.permittedArrowDirections = 0;
+            
+            [topViewController presentViewController:alertPlayerOptions animated:YES completion:nil];
+        }
+    }
     return YES;
 }
 
