@@ -139,7 +139,6 @@
 - (void)overlaySetup {
 	// Overlay Left
 	overlayLeftView = [[UIView alloc] init];
-	overlayLeftView.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 	overlayLeftView.clipsToBounds = YES;
 	overlayLeftView.userInteractionEnabled = YES;
 	UITapGestureRecognizer *overlayLeftViewSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTap:)];
@@ -150,14 +149,12 @@
 	[overlayLeftView addGestureRecognizer:overlayLeftViewDoubleTap];
 
 	overlayLeftViewShadow = [[UIView alloc] init];
-	overlayLeftViewShadow.frame = CGRectMake(0, 0, overlayLeftView.bounds.size.width, overlayLeftView.bounds.size.height);
 	overlayLeftViewShadow.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
 	[overlayLeftView addSubview:overlayLeftViewShadow];
 
 	collapseImage = [[UIImageView alloc] init];
 	NSString *collapseImagePath = [playerAssetsBundle pathForResource:@"collapse" ofType:@"png"];
 	collapseImage.image = [[UIImage imageWithContentsOfFile:collapseImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-	collapseImage.frame = CGRectMake(10, 10, 24, 24);
 	collapseImage.tintColor = [UIColor whiteColor];
 	collapseImage.userInteractionEnabled = YES;
 	UITapGestureRecognizer *collapseViewTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(collapseTap:)];
@@ -166,7 +163,6 @@
 	[overlayLeftView addSubview:collapseImage];
 
 	videoTimeLabel = [[UILabel alloc] init];
-	videoTimeLabel.frame = CGRectMake(10, overlayLeftView.bounds.size.height - 25, 80, 15);
 	videoTimeLabel.textAlignment = NSTextAlignmentCenter;
 	videoTimeLabel.textColor = [UIColor whiteColor];
 	videoTimeLabel.numberOfLines = 1;
@@ -176,7 +172,6 @@
 
 	// Overlay Middle
 	overlayMiddleView = [[UIView alloc] init];
-	overlayMiddleView.frame = CGRectMake(self.view.bounds.size.width / 3, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 	overlayMiddleView.clipsToBounds = YES;
 	overlayMiddleView.userInteractionEnabled = YES;
 	UITapGestureRecognizer *overlayMiddleViewSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTap:)];
@@ -184,14 +179,12 @@
 	[overlayMiddleView addGestureRecognizer:overlayMiddleViewSingleTap];
 
 	overlayMiddleViewShadow = [[UIView alloc] init];
-	overlayMiddleViewShadow.frame = CGRectMake(0, 0, overlayMiddleView.bounds.size.width, overlayMiddleView.bounds.size.height);
 	overlayMiddleViewShadow.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
 	[overlayMiddleView addSubview:overlayMiddleViewShadow];
 
 	playImage = [[UIImageView alloc] init];
 	NSString *playImagePath = [playerAssetsBundle pathForResource:@"play" ofType:@"png"];
 	playImage.image = [[UIImage imageWithContentsOfFile:playImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-	playImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 	playImage.alpha = 0.0;
 	playImage.tintColor = [UIColor whiteColor];
 	playImage.userInteractionEnabled = YES;
@@ -203,7 +196,6 @@
 	pauseImage = [[UIImageView alloc] init];
 	NSString *pauseImagePath = [playerAssetsBundle pathForResource:@"pause" ofType:@"png"];
 	pauseImage.image = [[UIImage imageWithContentsOfFile:pauseImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-	pauseImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 	pauseImage.alpha = 0.0;
 	pauseImage.tintColor = [UIColor whiteColor];
 	pauseImage.userInteractionEnabled = YES;
@@ -215,7 +207,6 @@
 	restartImage = [[UIImageView alloc] init];
 	NSString *restartImagePath = [playerAssetsBundle pathForResource:@"restart" ofType:@"png"];
 	restartImage.image = [[UIImage imageWithContentsOfFile:restartImagePath] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-	restartImage.frame = CGRectMake((overlayMiddleView.bounds.size.width / 2) - 24, (overlayMiddleView.bounds.size.height / 2) - 24, 48, 48);
 	restartImage.alpha = 0.0;
 	restartImage.tintColor = [UIColor whiteColor];
 	restartImage.userInteractionEnabled = YES;
@@ -226,7 +217,6 @@
 
 	// Overlay Right
 	overlayRightView = [[UIView alloc] init];
-	overlayRightView.frame = CGRectMake((self.view.bounds.size.width / 3) * 2, boundsWindow.safeAreaInsets.top, self.view.bounds.size.width / 3, self.view.bounds.size.width * 9 / 16);
 	overlayRightView.clipsToBounds = YES;
 	overlayRightView.userInteractionEnabled = YES;
 	UITapGestureRecognizer *overlayRightViewSingleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(overlayTap:)];
@@ -237,12 +227,10 @@
 	[overlayRightView addGestureRecognizer:overlayRightViewDoubleTap];
 
 	overlayRightViewShadow = [[UIView alloc] init];
-	overlayRightViewShadow.frame = CGRectMake(0, 0, overlayRightView.bounds.size.width, overlayRightView.bounds.size.height);
 	overlayRightViewShadow.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
 	[overlayRightView addSubview:overlayRightViewShadow];
 
 	playbackModeSwitch = [[UISwitch alloc] init];
-	playbackModeSwitch.frame = CGRectMake(overlayRightView.bounds.size.width - 61, 10, 0, 0);
 	[playbackModeSwitch addTarget:self action:@selector(togglePlaybackMode:) forControlEvents:UIControlEventValueChanged];
 	[overlayRightView addSubview:playbackModeSwitch];
 
@@ -268,7 +256,6 @@
 
 - (void)sliderSetup {
 	progressSlider = [[UISlider alloc] init];
-	progressSlider.frame = CGRectMake(0, boundsWindow.safeAreaInsets.top + (self.view.bounds.size.width * 9 / 16), self.view.bounds.size.width, 15);
 	NSString *sliderThumbPath = [playerAssetsBundle pathForResource:@"sliderthumb" ofType:@"png"];
 	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateNormal];
 	[progressSlider setThumbImage:[UIImage imageWithContentsOfFile:sliderThumbPath] forState:UIControlStateHighlighted];
