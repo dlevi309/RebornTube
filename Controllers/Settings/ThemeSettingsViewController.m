@@ -23,7 +23,17 @@
 	self.title = @"Theme";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
 
-    UIBarButtonItem *applyButton = [[UIBarButtonItem alloc] initWithTitle:@"Apply" style:UIBarButtonItemStylePlain target:self action:@selector(apply)];
+    UILabel *applyLabel = [[UILabel alloc] init];
+	applyLabel.text = @"Apply";
+	applyLabel.textColor = [UIColor systemBlueColor];
+	applyLabel.numberOfLines = 1;
+	[applyLabel setFont:[AppFonts mainFont:applyLabel.font.pointSize]];
+	applyLabel.adjustsFontSizeToFitWidth = YES;
+	applyLabel.userInteractionEnabled = YES;
+	UITapGestureRecognizer *applyTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(apply:)];
+	applyTap.numberOfTapsRequired = 1;
+	[applyLabel addGestureRecognizer:applyTap];
+    UIBarButtonItem *applyButton = [[UIBarButtonItem alloc] initWithCustomView:applyLabel];
     self.navigationItem.rightBarButtonItem = applyButton;
 
     if (@available(iOS 15.0, *)) {
@@ -103,7 +113,7 @@
 
 @implementation ThemeSettingsViewController (Privates)
 
-- (void)apply {
+- (void)apply:(UITapGestureRecognizer *)recognizer {
     exit(0); 
 }
 

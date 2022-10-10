@@ -26,7 +26,17 @@
 	self.title = @"Settings";
     self.view.backgroundColor = [AppColours mainBackgroundColour];
 
-    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+    UILabel *doneLabel = [[UILabel alloc] init];
+	doneLabel.text = @"Done";
+	doneLabel.textColor = [UIColor systemBlueColor];
+	doneLabel.numberOfLines = 1;
+	[doneLabel setFont:[AppFonts mainFont:doneLabel.font.pointSize]];
+	doneLabel.adjustsFontSizeToFitWidth = YES;
+	doneLabel.userInteractionEnabled = YES;
+	UITapGestureRecognizer *doneTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(done:)];
+	doneTap.numberOfTapsRequired = 1;
+	[doneLabel addGestureRecognizer:doneTap];
+    UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithCustomView:doneLabel];
     self.navigationItem.leftBarButtonItem = doneButton;
 
     if (@available(iOS 15.0, *)) {
@@ -252,7 +262,7 @@
 
 @implementation SettingsViewController (Privates)
 
-- (void)done {
+- (void)done:(UITapGestureRecognizer *)recognizer {
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
