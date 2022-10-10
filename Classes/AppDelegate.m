@@ -31,22 +31,27 @@
     HomeViewController *homeViewController = [[HomeViewController alloc] init];
     UINavigationController *homeNavViewController = [[UINavigationController alloc] initWithRootViewController:homeViewController];
     homeNavViewController.tabBarItem.title = @"Home";
+    homeNavViewController.tabBarItem.image = [UIImage systemImageNamed:@"house"];
 
     SubscriptionsViewController *subscriptionsViewController = [[SubscriptionsViewController alloc] init];
     UINavigationController *subscriptionsNavViewController = [[UINavigationController alloc] initWithRootViewController:subscriptionsViewController];
     subscriptionsNavViewController.tabBarItem.title = @"Subscriptions";
+    subscriptionsNavViewController.tabBarItem.image = [UIImage systemImageNamed:@"rectangle.stack.badge.person.crop"];
 
     HistoryViewController *historyViewController = [[HistoryViewController alloc] init];
     UINavigationController *historyNavViewController = [[UINavigationController alloc] initWithRootViewController:historyViewController];
     historyNavViewController.tabBarItem.title = @"History";
+    historyNavViewController.tabBarItem.image = [UIImage systemImageNamed:@"clock.arrow.circlepath"];
 
     PlaylistsViewController *playlistsViewController = [[PlaylistsViewController alloc] init];
     UINavigationController *playlistsNavViewController = [[UINavigationController alloc] initWithRootViewController:playlistsViewController];
     playlistsNavViewController.tabBarItem.title = @"Playlists";
+    playlistsNavViewController.tabBarItem.image = [UIImage systemImageNamed:@"music.note.list"];
 
     DownloadsViewController *downloadsViewController = [[DownloadsViewController alloc] init];
     UINavigationController *downloadsNavViewController = [[UINavigationController alloc] initWithRootViewController:downloadsViewController];
     downloadsNavViewController.tabBarItem.title = @"Downloads";
+    downloadsNavViewController.tabBarItem.image = [UIImage systemImageNamed:@"arrow.down.circle"];
 
     self.tabBarController.viewControllers = [NSArray arrayWithObjects:homeNavViewController, subscriptionsNavViewController, historyNavViewController, playlistsNavViewController, downloadsNavViewController, nil];
 
