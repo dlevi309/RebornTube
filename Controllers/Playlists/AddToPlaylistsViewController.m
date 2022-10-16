@@ -87,9 +87,7 @@
 }
 
 - (void)viewDidLoad {
-    if (@available(iOS 13.0, *)) {
-        self.modalInPresentation = YES;
-    }
+    self.modalInPresentation = YES;
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
