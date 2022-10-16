@@ -117,10 +117,14 @@
     mediaPlayer.drawable = vlcView;
 
     if (!self.videoLive) {
-		mediaPlayer.media = [VLCMedia mediaWithURL:self.videoURL];
+		VLCMedia *media = [[VLCMedia alloc] initWithURL:self.videoURL];
+		[media lengthWaitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3600]];
+		mediaPlayer.media = media;
 		[mediaPlayer addPlaybackSlave:self.audioURL type:VLCMediaPlaybackSlaveTypeAudio enforce:YES];
 	} else if (self.videoLive) {
-		mediaPlayer.media = [VLCMedia mediaWithURL:self.streamURL];
+		VLCMedia *media = [[VLCMedia alloc] initWithURL:self.streamURL];
+		[media lengthWaitUntilDate:[NSDate dateWithTimeIntervalSinceNow:3600]];
+		mediaPlayer.media = media;
 	}
 
 	videoImage = [[UIImageView alloc] init];
