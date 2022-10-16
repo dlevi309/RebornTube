@@ -23,6 +23,10 @@
 
 #import "../Views/MainPopupView.h"
 
+// Headers
+
+#import "../Headers/Imports.h"
+
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {

@@ -1,4 +1,4 @@
-TARGET := iphone:clang:15.5:13.0
+TARGET := iphone:clang:14.5:13.0
 INSTALL_TARGET_PROCESSES = RebornTube
 GO_EASY_ON_ME = 1
 
@@ -11,9 +11,8 @@ RebornTube_WEAK_FRAMEWORKS = AVFAudio
 RebornTube_EXTRA_FRAMEWORKS = MobileVLCKit ffmpegkit libavcodec libavdevice libavfilter libavformat libavutil libswresample libswscale
 RebornTube_LDFLAGS += -FResources/Frameworks -rpath @loader_path/Frameworks/
 RebornTube_LIBRARIES = bz2 c++ iconv xml2 z
-RebornTube_CFLAGS = -FResources/Frameworks -fobjc-arc -Wno-incomplete-implementation
+RebornTube_CFLAGS = -FResources/Frameworks -fobjc-arc -Wno-incomplete-implementation -Wno-unused-function
 ARCHS = arm64
 
 include $(THEOS_MAKE_PATH)/application.mk
-SUBPROJECTS += SafariExt
 include $(THEOS_MAKE_PATH)/aggregate.mk
