@@ -15,5 +15,5 @@ RebornTube_CFLAGS = -FResources/Frameworks -fobjc-arc -Wno-incomplete-implementa
 ARCHS = arm64
 
 include $(THEOS_MAKE_PATH)/application.mk
-SUBPROJECTS += SafariExt
+SUBPROJECTS += HSWidget SafariExt
 include $(THEOS_MAKE_PATH)/aggregate.mk
