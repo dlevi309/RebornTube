@@ -70,6 +70,10 @@
 	UILabel *videoInfoLabel;
 	UIScrollView *stackScrollView;
 	UIStepper *rateStepper;
+
+	// SponsorBlock
+	BOOL sponsorBlockEnabled;
+	NSDictionary *sponsorBlockValues;
 }
 - (void)keysSetup;
 - (void)playerSetup;
@@ -110,6 +114,8 @@
 	playerAssetsBundlePath = [[NSBundle mainBundle] pathForResource:@"PlayerAssets" ofType:@"bundle"];
 	playerAssetsBundle = [NSBundle bundleWithPath:playerAssetsBundlePath];
 	songInfo = [NSMutableDictionary new];
+	sponsorBlockEnabled = 0;
+	sponsorBlockValues = [[NSDictionary alloc] init];
 }
 
 - (void)playerSetup {
@@ -490,8 +496,8 @@
 		[playingInfoCenter setNowPlayingInfo:songInfo];
 	}
 
-	if ([NSJSONSerialization isValidJSONObject:self.sponsorBlockValues]) {
-		for (NSMutableDictionary *jsonDictionary in self.sponsorBlockValues) {
+	if (sponsorBlockEnabled == 1 && [NSJSONSerialization isValidJSONObject:sponsorBlockValues]) {
+		for (NSMutableDictionary *jsonDictionary in sponsorBlockValues) {
             if ([[jsonDictionary objectForKey:@"category"] isEqual:@"sponsor"] && [[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] && CMTimeGetSeconds(player.currentTime) >= [[jsonDictionary objectForKey:@"segment"][0] floatValue] && CMTimeGetSeconds(player.currentTime) <= [[jsonDictionary objectForKey:@"segment"][1] floatValue]) {
 				if ([[NSUserDefaults standardUserDefaults] integerForKey:@"kSponsorBlockSponsorSegmentedInt"] == 1) {
 					[player seekToTime:CMTimeMakeWithSeconds([[jsonDictionary objectForKey:@"segment"][1] floatValue] + 1, NSEC_PER_SEC) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
@@ -657,6 +663,19 @@
 				[player play];
 				player.rate = playbackRate;
 			}
+			NSString *options = @"[%22sponsor%22,%22selfpromo%22,%22interaction%22,%22intro%22,%22outro%22,%22preview%22,%22music_offtopic%22]";
+			NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"https://sponsor.ajay.app/api/skipSegments?videoID=%@&categories=%@", self.videoID, options]]];
+			[[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+				if (!error) {
+					NSDictionary *jsonResponse = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+					if ([NSJSONSerialization isValidJSONObject:jsonResponse]) {
+						sponsorBlockValues = jsonResponse;
+						sponsorBlockEnabled = 1;
+					} else {
+						sponsorBlockEnabled = 0;
+					}
+				}
+			}] resume];
         }
     } else if (object == player && [keyPath isEqualToString:@"timeControlStatus"]) {
         if (player.timeControlStatus == AVPlayerTimeControlStatusPlaying) {

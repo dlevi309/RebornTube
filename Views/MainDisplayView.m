@@ -162,7 +162,6 @@
             playerViewController.videoViewCount = loaderDictionary[@"videoViewCount"];
             playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
             playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
-            playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
             UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
             playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
             [mainViewController presentViewController:playerViewControllerView animated:YES completion:nil];
@@ -182,7 +181,6 @@
             playerViewController.videoViewCount = loaderDictionary[@"videoViewCount"];
             playerViewController.videoLikes = loaderDictionary[@"videoLikes"];
             playerViewController.videoDislikes = loaderDictionary[@"videoDislikes"];
-            playerViewController.sponsorBlockValues = loaderDictionary[@"sponsorBlockValues"];
             UINavigationController *playerViewControllerView = [[UINavigationController alloc] initWithRootViewController:playerViewController];
             playerViewControllerView.modalPresentationStyle = UIModalPresentationFullScreen;
             [mainViewController presentViewController:playerViewControllerView animated:YES completion:nil];

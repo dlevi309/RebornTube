@@ -103,8 +103,6 @@
         NSString *videoLikes = [formatter stringFromNumber:returnYouTubeDislikeRequest[@"likes"]];
         NSString *videoDislikes = [formatter stringFromNumber:returnYouTubeDislikeRequest[@"dislikes"]];
 
-        NSDictionary *sponsorBlockValues = [YouTubeExtractor sponsorBlockRequest:videoID];
-
         NSMutableDictionary *loaderDictionary = [[NSMutableDictionary alloc] init];
         [loaderDictionary setValue:videoID forKey:@"videoID"];
         [loaderDictionary setValue:videoURL forKey:@"videoURL"];
@@ -118,7 +116,6 @@
         [loaderDictionary setValue:videoViewCount forKey:@"videoViewCount"];
         [loaderDictionary setValue:videoLikes forKey:@"videoLikes"];
         [loaderDictionary setValue:videoDislikes forKey:@"videoDislikes"];
-        [loaderDictionary setValue:sponsorBlockValues forKey:@"sponsorBlockValues"];
         return [loaderDictionary copy];
     }
     return nil;
