@@ -17,10 +17,6 @@
 
 #import "../Playlists/AddToPlaylistsViewController.h"
 
-// Headers
-
-#import "../../Headers/Imports.h"
-
 // Interface
 
 @interface PlayerViewController ()

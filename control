@@ -1,9 +1,0 @@
-Package: h.lillie.reborntube
-Name: RebornTube
-Version: 1.0.0
-Architecture: iphoneos-arm
-Description: iOS YouTube Client
-Maintainer: Lillie
-Author: Lillie
-Section: Utilities
-Depends: firmware (>= 13.0)
