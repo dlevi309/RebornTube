@@ -11,7 +11,7 @@ RebornTube_WEAK_FRAMEWORKS = AVFAudio
 RebornTube_EXTRA_FRAMEWORKS = MobileVLCKit ffmpegkit libavcodec libavdevice libavfilter libavformat libavutil libswresample libswscale
 RebornTube_LDFLAGS += -FResources/Frameworks -rpath @loader_path/Frameworks/
 RebornTube_LIBRARIES = bz2 c++ iconv xml2 z
-RebornTube_CFLAGS = -FResources/Frameworks -fobjc-arc -Wno-incomplete-implementation
+RebornTube_CFLAGS = -FResources/Frameworks -fobjc-arc -Wno-deprecated-declarations
 ARCHS = arm64
 
 include $(THEOS_MAKE_PATH)/application.mk
