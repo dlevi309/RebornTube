@@ -30,7 +30,7 @@ struct SimpleEntry: TimelineEntry {
     let date: Date
 }
 
-struct FioreEntryView : View {
+struct RebornTubeEntryView : View {
     var entry: Provider.Entry
 
     var body: some View {
@@ -39,21 +39,21 @@ struct FioreEntryView : View {
 }
 
 @main
-struct Fiore: Widget {
-    let kind: String = "Fiore"
+struct RebornTube: Widget {
+    let kind: String = "RebornTube"
 
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: Provider()) { entry in
-            FioreEntryView(entry: entry)
+            RebornTubeEntryView(entry: entry)
         }
-        .configurationDisplayName("My Widget")
-        .description("This is an example widget.")
+        .configurationDisplayName("Now Playing")
+        .description("Shows what song is playing and the artwork.")
     }
 }
 
-struct Fiore_Previews: PreviewProvider {
+struct RebornTube_Previews: PreviewProvider {
     static var previews: some View {
-        FioreEntryView(entry: SimpleEntry(date: Date()))
+        RebornTubeEntryView(entry: SimpleEntry(date: Date()))
             .previewContext(WidgetPreviewContext(family: .systemSmall))
     }
 }
