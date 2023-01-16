@@ -1,26 +1,21 @@
-# Theos
-.theos
-packages/
-
 # macOS
 .DS_Store
-
-# Gradle Files
-.gradle/
-build/
-
-# Xcode
-*.pbxuser
-!default.pbxuser
-xcuserdata
-*.xccheckout
-*.xcuserstate
-
-# Carthage
-Carthage/
 
 # Local Configuration File
 local.properties
 
-# Log Files
+# Gradle
+.gradle/
+build/
+
+# IntelliJ
+*.iml
+.idea/
+
+# Android Studio Generated
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Logs
 *.log
