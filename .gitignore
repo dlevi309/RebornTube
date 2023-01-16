@@ -1,0 +1,26 @@
+# Theos
+.theos
+packages/
+
+# macOS
+.DS_Store
+
+# Gradle Files
+.gradle/
+build/
+
+# Xcode
+*.pbxuser
+!default.pbxuser
+xcuserdata
+*.xccheckout
+*.xcuserstate
+
+# Carthage
+Carthage/
+
+# Local Configuration File
+local.properties
+
+# Log Files
+*.log
