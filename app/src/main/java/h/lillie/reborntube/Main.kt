@@ -62,7 +62,7 @@ class Main : AppCompatActivity() {
     }
 
     private fun createPlayer(videoUrl: String) {
-        var videoView: VideoView = findViewById(R.id.videoView);
+        val videoView: VideoView = findViewById(R.id.videoView)
         val uri: Uri = Uri.parse(videoUrl)
         videoView.setVideoURI(uri)
 
