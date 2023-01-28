@@ -26,7 +26,7 @@ class Main : AppCompatActivity() {
         setContentView(R.layout.main)
         getDeviceInfo()
         setupUI()
-        getInfo()
+        getVideoInfo()
     }
 
     private fun getDeviceInfo() {
@@ -43,7 +43,7 @@ class Main : AppCompatActivity() {
         videoView.requestLayout()
     }
 
-    private fun getInfo() {
+    private fun getVideoInfo() {
         val body = """{
             "context": {
                 "client": {
