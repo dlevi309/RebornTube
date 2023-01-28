@@ -6,6 +6,8 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.MediaController
 import android.widget.VideoView
+import android.content.Context
+import android.content.ClipboardManager
 import androidx.appcompat.app.AppCompatActivity
 import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -26,7 +28,7 @@ class Main : AppCompatActivity() {
         setContentView(R.layout.main)
         getDeviceInfo()
         setupUI()
-        getVideoInfo()
+        getClipboardInfo()
     }
 
     private fun getDeviceInfo() {
@@ -43,7 +45,14 @@ class Main : AppCompatActivity() {
         videoView.requestLayout()
     }
 
-    private fun getVideoInfo() {
+    private fun getClipboardInfo() {
+        val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        val clipboardInfo = clipboardManager.primaryClip?.getItemAt(0)?.text.toString()
+        Log.d("Clipboard", clipboardInfo)
+        getVideoInfo(clipboardInfo)
+    }
+
+    private fun getVideoInfo(clipboardInfo: String) {
         val body = """{
             "context": {
                 "client": {
