@@ -70,10 +70,10 @@ class Main : AppCompatActivity() {
             },
             "contentCheckOk": true,
             "racyCheckOk": true,
-            "videoId": "ytWz0qVvBZ0"
-        }""".trimIndent()
+            "videoId": "p4Z96WwZrL0"
+        }"""
 
-        val requestBody = body.toRequestBody()
+        val requestBody = body.trimIndent().toRequestBody()
 
         val client: OkHttpClient = OkHttpClient.Builder()
             .build()
