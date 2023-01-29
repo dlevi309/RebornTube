@@ -6,8 +6,10 @@ import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.MediaController
 import android.widget.VideoView
+import android.widget.RelativeLayout
 import android.content.Context
 import android.content.ClipboardManager
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -20,8 +22,8 @@ import org.json.JSONObject
 
 class Main : AppCompatActivity() {
 
-    private var deviceHeight = 0;
-    private var deviceWidth = 0;
+    private var deviceHeight = 0
+    private var deviceWidth = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,9 +42,7 @@ class Main : AppCompatActivity() {
 
     private fun setupUI() {
         var videoView: VideoView = findViewById(R.id.videoView)
-        videoView.getLayoutParams().height = deviceWidth * 9 / 16
-        videoView.getLayoutParams().width = deviceWidth
-        videoView.requestLayout()
+        videoView.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
     }
 
     private fun getClipboardInfo() {
@@ -128,7 +128,7 @@ class Main : AppCompatActivity() {
 
                 GlobalScope.launch(Dispatchers.IO) {
                     withContext(Dispatchers.Main) {
-                        createPlayer(q720p)
+                        createPlayer(url)
                     }
                 }
             }
@@ -145,7 +145,7 @@ class Main : AppCompatActivity() {
         mediaController.setMediaPlayer(videoView)
 
         videoView.setMediaController(mediaController)
-        videoView.requestFocus()
+        videoView.visibility = View.VISIBLE
         videoView.start()
     }
 }
