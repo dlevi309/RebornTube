@@ -10,7 +10,6 @@ import android.widget.RelativeLayout
 import android.content.Context
 import android.content.ClipboardManager
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -40,7 +39,6 @@ class Main : AppCompatActivity() {
             getDeviceInfo()
             setupUI()
             getClipboardInfo()
-            // Toast.makeText(this, "test", Toast.LENGTH_SHORT).show()
         }
     }
 
