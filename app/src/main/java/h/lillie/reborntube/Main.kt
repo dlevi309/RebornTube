@@ -10,6 +10,7 @@ import android.widget.RelativeLayout
 import android.content.Context
 import android.content.ClipboardManager
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -22,15 +23,25 @@ import org.json.JSONObject
 
 class Main : AppCompatActivity() {
 
+    private var hasRan = 0
+
     private var deviceHeight = 0
     private var deviceWidth = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
-        getDeviceInfo()
-        setupUI()
-        getClipboardInfo()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasRan == 0) {
+            hasRan = 1
+            getDeviceInfo()
+            setupUI()
+            getClipboardInfo()
+            // Toast.makeText(this, "test", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun getDeviceInfo() {
@@ -49,7 +60,10 @@ class Main : AppCompatActivity() {
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipboardInfo = clipboardManager.primaryClip?.getItemAt(0)?.text.toString()
         Log.d("Clipboard", clipboardInfo)
-        getVideoInfo(clipboardInfo)
+        val youtubeRegex = Regex("^.*(?:(?:youtu\\.be\\/|v\\/|vi\\/|u\\/\\w\\/|embed\\/)|(?:(?:watch)?\\?v(?:i)?=|\\&v(?:i)?=))([^#\\&\\?]*).*")
+        val result = youtubeRegex.findAll(clipboardInfo).map { it.groupValues[1] }.joinToString()
+        Log.d("YouTube ID", result)
+        getVideoInfo(result)
     }
 
     private fun getVideoInfo(clipboardInfo: String) {
@@ -70,8 +84,8 @@ class Main : AppCompatActivity() {
             },
             "contentCheckOk": true,
             "racyCheckOk": true,
-            "videoId": "p4Z96WwZrL0"
-        }"""
+            "videoId":
+        """" + clipboardInfo + """"}"""
 
         val requestBody = body.trimIndent().toRequestBody()
 
