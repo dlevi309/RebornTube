@@ -11,21 +11,25 @@ import android.content.Context
 import android.content.ClipboardManager
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import android.app.AlertDialog
 import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.IOException
 import org.json.JSONObject
+import com.google.android.exoplayer2.*
+import org.videolan.libvlc.*
+import org.videolan.libvlc.util.VLCVideoLayout
 
 class Main : AppCompatActivity() {
 
     private var hasRan = 0
-
     private var deviceHeight = 0
     private var deviceWidth = 0
+
+    private lateinit var libVlc: LibVLC
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var videoLayout: VLCVideoLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +56,9 @@ class Main : AppCompatActivity() {
     private fun setupUI() {
         var videoView: VideoView = findViewById(R.id.videoView)
         videoView.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
+
+        videoLayout = findViewById(R.id.videoLayout)
+        videoLayout.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
     }
 
     private fun getClipboardInfo() {
@@ -140,14 +147,29 @@ class Main : AppCompatActivity() {
 
                 GlobalScope.launch(Dispatchers.IO) {
                     withContext(Dispatchers.Main) {
-                        createPlayer(url)
+                        showPopup(url)
                     }
                 }
             }
         })
     }
 
-    private fun createPlayer(videoUrl: String) {
+    private fun showPopup(videoUrl: String) {
+        val playerPopup = AlertDialog.Builder(this)
+        playerPopup.setTitle("Player")
+        playerPopup.setNeutralButton("Video Player") { dialog, which ->
+            createVideoPlayer(videoUrl)
+        }
+        playerPopup.setNegativeButton("Exo Player") { dialog, which ->
+            createExoPlayer(videoUrl)
+        }
+        playerPopup.setPositiveButton("VLC Player") { dialog, which ->
+            createVlcPlayer(videoUrl)
+        }
+        playerPopup.show()
+    }
+
+    private fun createVideoPlayer(videoUrl: String) {
         val videoView: VideoView = findViewById(R.id.videoView)
         val uri: Uri = Uri.parse(videoUrl)
         videoView.setVideoURI(uri)
@@ -159,5 +181,23 @@ class Main : AppCompatActivity() {
         videoView.setMediaController(mediaController)
         videoView.visibility = View.VISIBLE
         videoView.start()
+    }
+
+    private fun createExoPlayer(videoUrl: String) {
+    }
+
+    private fun createVlcPlayer(videoUrl: String) {
+        libVlc = LibVLC(this)
+        mediaPlayer = MediaPlayer(libVlc)
+        videoLayout = findViewById(R.id.videoLayout)
+        val uri: Uri = Uri.parse(videoUrl)
+
+        mediaPlayer.attachViews(videoLayout, null, false, false)
+
+        val media = Media(libVlc, uri)
+        mediaPlayer.media = media
+        media.release()
+        videoLayout.visibility = View.VISIBLE
+        mediaPlayer.play()
     }
 }
