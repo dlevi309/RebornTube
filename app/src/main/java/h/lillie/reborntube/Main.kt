@@ -50,8 +50,16 @@ class Main : AppCompatActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         when (newConfig.orientation) {
-            Configuration.ORIENTATION_PORTRAIT -> Log.d("Orientation", "Portrait")
-            Configuration.ORIENTATION_LANDSCAPE -> Log.d("Orientation", "Landscape")
+            Configuration.ORIENTATION_PORTRAIT -> {
+                Log.d("Orientation", "Portrait")
+                getDeviceInfo()
+                setupUI()
+            }
+            Configuration.ORIENTATION_LANDSCAPE -> {
+                Log.d("Orientation", "Landscape")
+                getDeviceInfo()
+                setupUI()
+            }
         }
     }
 
