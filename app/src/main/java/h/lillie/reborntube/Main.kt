@@ -12,6 +12,7 @@ import android.content.ClipboardManager
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.app.AlertDialog
+import android.content.res.Configuration
 import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
 import kotlinx.coroutines.*
@@ -43,6 +44,14 @@ class Main : AppCompatActivity() {
             getDeviceInfo()
             setupUI()
             getClipboardInfo()
+        }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        when (newConfig.orientation) {
+            Configuration.ORIENTATION_PORTRAIT -> Log.d("Orientation", "Portrait")
+            Configuration.ORIENTATION_LANDSCAPE -> Log.d("Orientation", "Landscape")
         }
     }
 
