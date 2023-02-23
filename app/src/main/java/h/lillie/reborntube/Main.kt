@@ -1,37 +1,21 @@
 package h.lillie.reborntube
 
-import android.net.Uri
+import android.content.Intent
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.util.Log
-import android.widget.MediaController
-import android.widget.VideoView
-import android.widget.RelativeLayout
 import android.content.Context
 import android.content.ClipboardManager
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.app.AlertDialog
-import android.content.res.Configuration
 import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
 import kotlinx.coroutines.*
 import java.io.IOException
 import org.json.JSONObject
-import com.google.android.exoplayer2.*
-import org.videolan.libvlc.*
-import org.videolan.libvlc.util.VLCVideoLayout
 
 class Main : AppCompatActivity() {
 
     private var hasRan = 0
-    private var deviceHeight = 0
-    private var deviceWidth = 0
-
-    private lateinit var libVlc: LibVLC
-    private lateinit var mediaPlayer: MediaPlayer
-    private lateinit var videoLayout: VLCVideoLayout
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
@@ -41,41 +25,8 @@ class Main : AppCompatActivity() {
         super.onWindowFocusChanged(hasFocus)
         if (hasRan == 0) {
             hasRan = 1
-            getDeviceInfo()
-            setupUI()
             getClipboardInfo()
         }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        when (newConfig.orientation) {
-            Configuration.ORIENTATION_PORTRAIT -> {
-                Log.d("Orientation", "Portrait")
-                getDeviceInfo()
-                setupUI()
-            }
-            Configuration.ORIENTATION_LANDSCAPE -> {
-                Log.d("Orientation", "Landscape")
-                getDeviceInfo()
-                setupUI()
-            }
-        }
-    }
-
-    private fun getDeviceInfo() {
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        deviceHeight = displayMetrics.heightPixels
-        deviceWidth = displayMetrics.widthPixels
-    }
-
-    private fun setupUI() {
-        var videoView: VideoView = findViewById(R.id.videoView)
-        videoView.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
-
-        videoLayout = findViewById(R.id.videoLayout)
-        videoLayout.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
     }
 
     private fun getClipboardInfo() {
@@ -83,9 +34,17 @@ class Main : AppCompatActivity() {
         val clipboardInfo = clipboardManager.primaryClip?.getItemAt(0)?.text.toString()
         Log.d("Clipboard", clipboardInfo)
         val youtubeRegex = Regex("^.*(?:(?:youtu\\.be\\/|v\\/|vi\\/|u\\/\\w\\/|embed\\/)|(?:(?:watch)?\\?v(?:i)?=|\\&v(?:i)?=))([^#\\&\\?]*).*")
-        val result = youtubeRegex.findAll(clipboardInfo).map { it.groupValues[1] }.joinToString()
-        Log.d("YouTube ID", result)
-        getVideoInfo(result)
+        val check = youtubeRegex.containsMatchIn(clipboardInfo)
+        if (check) {
+            val result = youtubeRegex.findAll(clipboardInfo).map { it.groupValues[1] }.joinToString()
+            Log.d("YouTube ID", result)
+            getVideoInfo(result)
+        } else {
+            val errorPopup = AlertDialog.Builder(this)
+            errorPopup.setTitle("Error")
+            errorPopup.setMessage("No YouTube video url found in clipboard, please close the app and copy a youtube video url to your clipboard before opening")
+            errorPopup.show()
+        }
     }
 
     private fun getVideoInfo(clipboardInfo: String) {
@@ -164,57 +123,12 @@ class Main : AppCompatActivity() {
 
                 GlobalScope.launch(Dispatchers.IO) {
                     withContext(Dispatchers.Main) {
-                        showPopup(url)
+                        val intent = Intent(this@Main, Player::class.java)
+                        intent.putExtra("url", url)
+                        startActivity(intent)
                     }
                 }
             }
         })
-    }
-
-    private fun showPopup(videoUrl: String) {
-        val playerPopup = AlertDialog.Builder(this)
-        playerPopup.setTitle("Player")
-        playerPopup.setNeutralButton("Video Player") { dialog, which ->
-            createVideoPlayer(videoUrl)
-        }
-        playerPopup.setNegativeButton("Exo Player") { dialog, which ->
-            createExoPlayer(videoUrl)
-        }
-        playerPopup.setPositiveButton("VLC Player") { dialog, which ->
-            createVlcPlayer(videoUrl)
-        }
-        playerPopup.show()
-    }
-
-    private fun createVideoPlayer(videoUrl: String) {
-        val videoView: VideoView = findViewById(R.id.videoView)
-        val uri: Uri = Uri.parse(videoUrl)
-        videoView.setVideoURI(uri)
-
-        val mediaController = MediaController(this)
-        mediaController.setAnchorView(videoView)
-        mediaController.setMediaPlayer(videoView)
-
-        videoView.setMediaController(mediaController)
-        videoView.visibility = View.VISIBLE
-        videoView.start()
-    }
-
-    private fun createExoPlayer(videoUrl: String) {
-    }
-
-    private fun createVlcPlayer(videoUrl: String) {
-        libVlc = LibVLC(this)
-        mediaPlayer = MediaPlayer(libVlc)
-        videoLayout = findViewById(R.id.videoLayout)
-        val uri: Uri = Uri.parse(videoUrl)
-
-        mediaPlayer.attachViews(videoLayout, null, false, false)
-
-        val media = Media(libVlc, uri)
-        mediaPlayer.media = media
-        media.release()
-        videoLayout.visibility = View.VISIBLE
-        mediaPlayer.play()
     }
 }
