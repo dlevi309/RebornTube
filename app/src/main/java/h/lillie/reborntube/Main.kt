@@ -90,42 +90,79 @@ class Main : AppCompatActivity() {
                 response.body.close()
                 response.close()
 
-                var url = ""
+                var videoUrl = ""
+                var audioUrl = ""
 
+                var q2160p = ""
+                var q1440p = ""
+                var q1080p = ""
                 var q720p = ""
                 var q480p = ""
                 var q360p = ""
                 var q240p = ""
+                var audioHigh = ""
+                var audioMedium = ""
+                var audioLow = ""
                 val jsonObject = JSONObject(responseBody)
-                val jsonArray = jsonObject.getJSONObject("streamingData").getJSONArray("formats")
+                val jsonArray = jsonObject.getJSONObject("streamingData").getJSONArray("adaptiveFormats")
                 for (i in 0 until jsonArray.length()) {
-                    val mimeType = jsonArray.getJSONObject(i).getString("mimeType")
-                    val height = jsonArray.getJSONObject(i).getString("height")
-                    val quality = jsonArray.getJSONObject(i).getString("quality")
-                    if (mimeType.contains("video/mp4") && height.contains("720") || mimeType.contains("video/mp4") && quality.contains("hd720")) {
-                        q720p = jsonArray.getJSONObject(i).getString("url")
+                    val mimeType = jsonArray.getJSONObject(i).optString("mimeType")
+                    val height = jsonArray.getJSONObject(i).optString("height")
+                    val quality = jsonArray.getJSONObject(i).optString("quality")
+                    val audioQuality = jsonArray.getJSONObject(i).optString("audioQuality")
+                    if (mimeType.contains("video/mp4") && height.contains("2160") || mimeType.contains("video/mp4") && quality.contains("hd2160")) {
+                        q2160p = jsonArray.getJSONObject(i).optString("url")
+                    } else if (mimeType.contains("video/mp4") && height.contains("1440") || mimeType.contains("video/mp4") && quality.contains("hd1440")) {
+                        q1440p = jsonArray.getJSONObject(i).optString("url")
+                    } else if (mimeType.contains("video/mp4") && height.contains("1080") || mimeType.contains("video/mp4") && quality.contains("hd1080")) {
+                        q1080p = jsonArray.getJSONObject(i).optString("url")
+                    } else if (mimeType.contains("video/mp4") && height.contains("720") || mimeType.contains("video/mp4") && quality.contains("hd720")) {
+                        q720p = jsonArray.getJSONObject(i).optString("url")
                     } else if (mimeType.contains("video/mp4") && height.contains("480") || mimeType.contains("video/mp4") && quality.contains("480p")) {
-                        q480p = jsonArray.getJSONObject(i).getString("url")
+                        q480p = jsonArray.getJSONObject(i).optString("url")
                     } else if (mimeType.contains("video/mp4") && height.contains("360") || mimeType.contains("video/mp4") && quality.contains("360p")) {
-                        q360p = jsonArray.getJSONObject(i).getString("url")
+                        q360p = jsonArray.getJSONObject(i).optString("url")
                     } else if (mimeType.contains("video/mp4") && height.contains("240") || mimeType.contains("video/mp4") && quality.contains("240p")) {
-                        q240p = jsonArray.getJSONObject(i).getString("url")
+                        q240p = jsonArray.getJSONObject(i).optString("url")
+                    } else if (mimeType.contains("audio/mp4") && audioQuality.contains("AUDIO_QUALITY_HIGH")) {
+                        audioHigh = jsonArray.getJSONObject(i).optString("url")
+                    } else if (mimeType.contains("audio/mp4") && audioQuality.contains("AUDIO_QUALITY_MEDIUM")) {
+                        audioMedium = jsonArray.getJSONObject(i).getString("url")
+                    } else if (mimeType.contains("audio/mp4") && audioQuality.contains("AUDIO_QUALITY_LOW")) {
+                        audioLow = jsonArray.getJSONObject(i).optString("url")
                     }
                 }
 
-                if (q720p != null) {
-                    url = q720p
-                } else if (q480p != null) {
-                    url = q480p
-                } else if (q360p != null) {
-                    url = q360p
-                } else if (q240p != null) {
-                    url = q240p
+                if (q2160p != "") {
+                    videoUrl = q2160p
+                } else if (q1440p != "") {
+                    videoUrl = q1440p
+                } else if (q1080p != "") {
+                    videoUrl = q1080p
+                } else if (q720p != "") {
+                    videoUrl = q720p
+                } else if (q480p != "") {
+                    videoUrl = q480p
+                } else if (q360p != "") {
+                    videoUrl = q360p
+                } else if (q240p != "") {
+                    videoUrl = q240p
+                }
+
+                if (audioHigh != "") {
+                    audioUrl = audioHigh
+                } else if (audioMedium != "") {
+                    audioUrl = audioMedium
+                } else if (audioLow != "") {
+                    audioUrl = audioLow
                 }
 
                 GlobalScope.launch(Dispatchers.IO) {
                     withContext(Dispatchers.Main) {
-                        showPopup(url)
+                        val intent = Intent(this@Main, Player::class.java)
+                        intent.putExtra("videoUrl", videoUrl)
+                        intent.putExtra("audioUrl", audioUrl)
+                        startActivity(intent)
                     }
                 }
             }
