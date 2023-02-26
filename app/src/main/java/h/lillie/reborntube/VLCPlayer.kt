@@ -8,21 +8,22 @@ import android.widget.RelativeLayout
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.content.res.Configuration
-import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.ui.StyledPlayerView
+import org.videolan.libvlc.*
+import org.videolan.libvlc.util.VLCVideoLayout
 
-class Player : AppCompatActivity() {
+class VLCPlayer : AppCompatActivity() {
 
     private var hasRan = 0
     private var deviceHeight = 0
     private var deviceWidth = 0
 
-    private lateinit var exoPlayer: ExoPlayer
-    private lateinit var playerView: StyledPlayerView
+    private lateinit var libVlc: LibVLC
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var videoLayout: VLCVideoLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.player)
+        setContentView(R.layout.vlcplayer)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -72,21 +73,22 @@ class Player : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        playerView = findViewById(R.id.playerView)
-        playerView.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
+        videoLayout = findViewById(R.id.videoLayout)
+        videoLayout.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
     }
 
     private fun createPlayer(videoUrl: String) {
-        exoPlayer = ExoPlayer.Builder(this).build()
-        playerView = findViewById(R.id.playerView)
-        playerView.visibility = View.VISIBLE
+        libVlc = LibVLC(this)
+        mediaPlayer = MediaPlayer(libVlc)
+        videoLayout = findViewById(R.id.videoLayout)
         val uri: Uri = Uri.parse(videoUrl)
 
-        val mediaItem: MediaItem = MediaItem.fromUri(uri)
-        exoPlayer.setMediaItem(mediaItem)
-        playerView.player = exoPlayer
+        mediaPlayer.attachViews(videoLayout, null, false, false)
 
-        exoPlayer.prepare()
-        exoPlayer.playWhenReady = true
+        val media = Media(libVlc, uri)
+        mediaPlayer.media = media
+        media.release()
+        videoLayout.visibility = View.VISIBLE
+        mediaPlayer.play()
     }
 }

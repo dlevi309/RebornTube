@@ -7,8 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".Player">
 
-    <com.google.android.exoplayer2.ui.StyledPlayerView
-        android:id="@+id/playerView"
+    <org.videolan.libvlc.util.VLCVideoLayout
+        android:id="@+id/videoLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone"

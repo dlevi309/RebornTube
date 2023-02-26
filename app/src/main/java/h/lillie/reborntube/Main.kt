@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.ClipboardManager
 import androidx.appcompat.app.AppCompatActivity
 import android.app.AlertDialog
+import android.widget.LinearLayout
 import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
 import kotlinx.coroutines.*
@@ -123,12 +124,33 @@ class Main : AppCompatActivity() {
 
                 GlobalScope.launch(Dispatchers.IO) {
                     withContext(Dispatchers.Main) {
-                        val intent = Intent(this@Main, Player::class.java)
-                        intent.putExtra("url", url)
-                        startActivity(intent)
+                        showPopup(url)
                     }
                 }
             }
         })
+    }
+
+    private fun showPopup(videoUrl: String) {
+        val playerPopup = AlertDialog.Builder(this).create()
+        playerPopup.setTitle("Player")
+        playerPopup.setButton(AlertDialog.BUTTON_POSITIVE, "Exo Player (Recommended)") { dialog, which ->
+            val intent = Intent(this@Main, Player::class.java)
+            intent.putExtra("url", videoUrl)
+            startActivity(intent)
+        }
+        playerPopup.setButton(AlertDialog.BUTTON_NEGATIVE, "VLC Player (Experimental)") { dialog, which ->
+            val intent = Intent(this@Main, VLCPlayer::class.java)
+            intent.putExtra("url", videoUrl)
+            startActivity(intent)
+        }
+        playerPopup.show()
+
+        val positiveButton = playerPopup.getButton(AlertDialog.BUTTON_POSITIVE)
+        val negativeButton = playerPopup.getButton(AlertDialog.BUTTON_NEGATIVE)
+        val layoutParams = positiveButton.layoutParams as LinearLayout.LayoutParams
+        layoutParams.weight = 10f
+        positiveButton.layoutParams = layoutParams
+        negativeButton.layoutParams = layoutParams
     }
 }
