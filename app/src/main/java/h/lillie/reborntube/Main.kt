@@ -24,7 +24,7 @@ class Main : AppCompatActivity() {
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if (hasRan == 0) {
+        if (hasFocus && hasRan == 0) {
             hasRan = 1
             getClipboardInfo()
         }
