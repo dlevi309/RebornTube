@@ -9,11 +9,13 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.content.res.Configuration
 import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.MediaItem.*
+import com.google.android.exoplayer2.source.*
+import com.google.android.exoplayer2.upstream.*
 import com.google.android.exoplayer2.ui.StyledPlayerView
 
 class Player : AppCompatActivity() {
 
-    private var hasRan = 0
     private var deviceHeight = 0
     private var deviceWidth = 0
 
@@ -23,17 +25,9 @@ class Player : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.player)
-    }
-
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus && hasRan == 0) {
-            hasRan = 1
-            getDeviceInfo()
-            setupUI()
-            val url = intent.getStringExtra("url").toString()
-            createPlayer(url)
-        }
+        getDeviceInfo()
+        setupUI()
+        createPlayer()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -71,16 +65,22 @@ class Player : AppCompatActivity() {
         playerView.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
     }
 
-    private fun createPlayer(videoUrl: String) {
+    private fun createPlayer() {
         exoPlayer = ExoPlayer.Builder(this).build()
         playerView = findViewById(R.id.playerView)
         playerView.visibility = View.VISIBLE
-        val uri: Uri = Uri.parse(videoUrl)
-
-        val mediaItem: MediaItem = MediaItem.fromUri(uri)
-        exoPlayer.setMediaItem(mediaItem)
         playerView.player = exoPlayer
 
+        val videoUrl = intent.getStringExtra("videoUrl").toString()
+        val audioUrl = intent.getStringExtra("audioUrl").toString()
+        val videoUri: Uri = Uri.parse(videoUrl)
+        val audioUri: Uri = Uri.parse(audioUrl)
+        val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
+        val videoSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory) .createMediaSource(fromUri(videoUri))
+        val audioSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(fromUri(audioUri))
+        val mergeSource: MediaSource = MergingMediaSource(videoSource, audioSource)
+
+        exoPlayer.addMediaSource(mergeSource)
         exoPlayer.prepare()
         exoPlayer.playWhenReady = true
     }
