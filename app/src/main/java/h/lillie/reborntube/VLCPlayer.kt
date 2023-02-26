@@ -33,7 +33,6 @@ class VLCPlayer : AppCompatActivity() {
             getDeviceInfo()
             setupUI()
             val url = intent.getStringExtra("url").toString()
-            Log.d("Url", url)
             createPlayer(url)
         }
     }
@@ -42,12 +41,10 @@ class VLCPlayer : AppCompatActivity() {
         super.onConfigurationChanged(newConfig)
         when (newConfig.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> {
-                Log.d("Orientation", "Portrait")
                 getDeviceInfo()
                 setupUI()
             }
             Configuration.ORIENTATION_LANDSCAPE -> {
-                Log.d("Orientation", "Landscape")
                 getDeviceInfo()
                 setupUI()
             }
@@ -62,11 +59,9 @@ class VLCPlayer : AppCompatActivity() {
         val orientation = getResources().getConfiguration().orientation
         when (orientation) {
             Configuration.ORIENTATION_PORTRAIT -> {
-                Log.d("Orientation", "Portrait")
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
             }
             Configuration.ORIENTATION_LANDSCAPE -> {
-                Log.d("Orientation", "Landscape")
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
             }
         }
