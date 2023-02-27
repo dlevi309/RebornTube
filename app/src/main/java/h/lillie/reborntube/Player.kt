@@ -111,6 +111,7 @@ class Player : AppCompatActivity() {
         val audioSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(fromUri(audioUri))
         val mergeSource: MediaSource = MergingMediaSource(videoSource, audioSource)
 
+        exoPlayer.repeatMode = REPEAT_MODE_ONE
         exoPlayer.addMediaSource(mergeSource)
         exoPlayer.prepare()
         exoPlayer.playWhenReady = true
