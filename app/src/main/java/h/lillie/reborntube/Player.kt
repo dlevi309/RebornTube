@@ -29,7 +29,16 @@ class Player : AppCompatActivity() {
         setContentView(R.layout.player)
         getDeviceInfo()
         setupUI()
+    }
+
+    override fun onStart() {
+        super.onStart()
         createPlayer()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        exoPlayer.release()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
