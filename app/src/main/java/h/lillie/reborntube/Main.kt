@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.ClipboardManager
 import androidx.appcompat.app.AppCompatActivity
 import android.app.AlertDialog
-import android.widget.LinearLayout
 import okhttp3.*
 import okhttp3.RequestBody.Companion.toRequestBody
 import kotlinx.coroutines.*
@@ -33,12 +32,10 @@ class Main : AppCompatActivity() {
     private fun getClipboardInfo() {
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipboardInfo = clipboardManager.primaryClip?.getItemAt(0)?.text.toString()
-        Log.d("Clipboard", clipboardInfo)
         val youtubeRegex = Regex("^.*(?:(?:youtu\\.be\\/|v\\/|vi\\/|u\\/\\w\\/|embed\\/)|(?:(?:watch)?\\?v(?:i)?=|\\&v(?:i)?=))([^#\\&\\?]*).*")
         val check = youtubeRegex.containsMatchIn(clipboardInfo)
         if (check) {
             val result = youtubeRegex.findAll(clipboardInfo).map { it.groupValues[1] }.joinToString()
-            Log.d("YouTube ID", result)
             getVideoInfo(result)
         } else {
             val errorPopup = AlertDialog.Builder(this)
@@ -67,12 +64,12 @@ class Main : AppCompatActivity() {
             },
             "contentCheckOk": true,
             "racyCheckOk": true,
-            "videoId": "$clipboardInfo"}"""
+            "videoId": "$clipboardInfo"
+        }"""
 
         val requestBody = body.trimIndent().toRequestBody()
 
-        val client: OkHttpClient = OkHttpClient.Builder()
-            .build()
+        val client: OkHttpClient = OkHttpClient.Builder().build()
 
         val request = Request.Builder()
             .method("POST", requestBody)
@@ -89,19 +86,19 @@ class Main : AppCompatActivity() {
                 response.body.close()
                 response.close()
 
-                var videoUrl = ""
-                var audioUrl = ""
+                var videoUrl = String()
+                var audioUrl = String()
 
-                var q2160p = ""
-                var q1440p = ""
-                var q1080p = ""
-                var q720p = ""
-                var q480p = ""
-                var q360p = ""
-                var q240p = ""
-                var audioHigh = ""
-                var audioMedium = ""
-                var audioLow = ""
+                var q2160p = String()
+                var q1440p = String()
+                var q1080p = String()
+                var q720p = String()
+                var q480p = String()
+                var q360p = String()
+                var q240p = String()
+                var audioHigh = String()
+                var audioMedium = String()
+                var audioLow = String()
                 val jsonObject = JSONObject(responseBody)
                 val jsonArray = jsonObject.getJSONObject("streamingData").getJSONArray("adaptiveFormats")
                 for (i in 0 until jsonArray.length()) {
@@ -132,27 +129,27 @@ class Main : AppCompatActivity() {
                     }
                 }
 
-                if (q2160p != "") {
+                if (q2160p != String()) {
                     videoUrl = q2160p
-                } else if (q1440p != "") {
+                } else if (q1440p != String()) {
                     videoUrl = q1440p
-                } else if (q1080p != "") {
+                } else if (q1080p != String()) {
                     videoUrl = q1080p
-                } else if (q720p != "") {
+                } else if (q720p != String()) {
                     videoUrl = q720p
-                } else if (q480p != "") {
+                } else if (q480p != String()) {
                     videoUrl = q480p
-                } else if (q360p != "") {
+                } else if (q360p != String()) {
                     videoUrl = q360p
-                } else if (q240p != "") {
+                } else if (q240p != String()) {
                     videoUrl = q240p
                 }
 
-                if (audioHigh != "") {
+                if (audioHigh != String()) {
                     audioUrl = audioHigh
-                } else if (audioMedium != "") {
+                } else if (audioMedium != String()) {
                     audioUrl = audioMedium
-                } else if (audioLow != "") {
+                } else if (audioLow != String()) {
                     audioUrl = audioLow
                 }
 
