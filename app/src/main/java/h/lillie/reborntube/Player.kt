@@ -3,7 +3,6 @@ package h.lillie.reborntube
 import android.net.Uri
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.widget.RelativeLayout
 import android.widget.Button
 import android.view.View
@@ -83,15 +82,15 @@ class Player : AppCompatActivity() {
 
         // Left Overlay
         var rewindButton: Button = findViewById(R.id.rewindButton)
-        rewindButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
+        // rewindButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         rewindButton.setOnClickListener {
             exoPlayer.seekBack()
         }
 
         // Middle Overlay
         var playButton: Button = findViewById(R.id.playButton)
-        playButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
-        playButton.x = deviceWidth / 3.toFloat()
+        // playButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
+        // playButton.x = deviceWidth / 3.toFloat()
         playButton.setOnClickListener {
             val playbackState = exoPlayer.getPlayWhenReady()
             if (playbackState) {
@@ -103,8 +102,8 @@ class Player : AppCompatActivity() {
 
         // Right Overlay
         var forwardButton: Button = findViewById(R.id.forwardButton)
-        forwardButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
-        forwardButton.x = (deviceWidth / 3) * 2.toFloat()
+        // forwardButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
+        // forwardButton.x = (deviceWidth / 3) * 2.toFloat()
         forwardButton.setOnClickListener {
             exoPlayer.seekForward()
         }
@@ -113,7 +112,7 @@ class Player : AppCompatActivity() {
     private fun createPlayer() {
         exoPlayer = ExoPlayer.Builder(this).build()
         playerView.visibility = View.VISIBLE
-        playerView.useController = false
+        // playerView.useController = false
         playerView.player = exoPlayer
 
         val videoUrl = intent.getStringExtra("videoUrl").toString()
