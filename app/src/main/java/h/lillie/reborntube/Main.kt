@@ -155,36 +155,28 @@ class Main : AppCompatActivity() {
 
                 GlobalScope.launch(Dispatchers.IO) {
                     withContext(Dispatchers.Main) {
-                        val intent = Intent(this@Main, Player::class.java)
-                        intent.putExtra("videoUrl", videoUrl)
-                        intent.putExtra("audioUrl", audioUrl)
-                        startActivity(intent)
+                        showPopup(videoUrl, audioUrl)
                     }
                 }
             }
         })
     }
 
-    private fun showPopup(videoUrl: String) {
+    private fun showPopup(videoUrl: String, audioUrl: String) {
         val playerPopup = AlertDialog.Builder(this).create()
         playerPopup.setTitle("Player")
         playerPopup.setButton(AlertDialog.BUTTON_POSITIVE, "Exo Player (Recommended)") { dialog, which ->
             val intent = Intent(this@Main, Player::class.java)
-            intent.putExtra("url", videoUrl)
+            intent.putExtra("videoUrl", videoUrl)
+            intent.putExtra("audioUrl", audioUrl)
             startActivity(intent)
         }
         playerPopup.setButton(AlertDialog.BUTTON_NEGATIVE, "VLC Player (Experimental)") { dialog, which ->
             val intent = Intent(this@Main, VLCPlayer::class.java)
-            intent.putExtra("url", videoUrl)
+            intent.putExtra("videoUrl", videoUrl)
+            intent.putExtra("audioUrl", audioUrl)
             startActivity(intent)
         }
         playerPopup.show()
-
-        val positiveButton = playerPopup.getButton(AlertDialog.BUTTON_POSITIVE)
-        val negativeButton = playerPopup.getButton(AlertDialog.BUTTON_NEGATIVE)
-        val layoutParams = positiveButton.layoutParams as LinearLayout.LayoutParams
-        layoutParams.weight = 10f
-        positiveButton.layoutParams = layoutParams
-        negativeButton.layoutParams = layoutParams
     }
 }

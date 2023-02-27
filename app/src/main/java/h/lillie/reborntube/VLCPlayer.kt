@@ -3,7 +3,6 @@ package h.lillie.reborntube
 import android.net.Uri
 import android.os.Bundle
 import android.util.DisplayMetrics
-import android.util.Log
 import android.widget.RelativeLayout
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +12,6 @@ import org.videolan.libvlc.util.VLCVideoLayout
 
 class VLCPlayer : AppCompatActivity() {
 
-    private var hasRan = 0
     private var deviceHeight = 0
     private var deviceWidth = 0
 
@@ -24,17 +22,18 @@ class VLCPlayer : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.vlcplayer)
+        getDeviceInfo()
+        setupUI()
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus && hasRan == 0) {
-            hasRan = 1
-            getDeviceInfo()
-            setupUI()
-            val url = intent.getStringExtra("url").toString()
-            createPlayer(url)
-        }
+    override fun onStart() {
+        super.onStart()
+        createPlayer()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mediaPlayer.release()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -49,6 +48,11 @@ class VLCPlayer : AppCompatActivity() {
                 setupUI()
             }
         }
+    }
+
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        this.enterPictureInPictureMode()
     }
 
     private fun getDeviceInfo() {
@@ -68,22 +72,26 @@ class VLCPlayer : AppCompatActivity() {
     }
 
     private fun setupUI() {
+        // Video Player
         videoLayout = findViewById(R.id.videoLayout)
         videoLayout.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
     }
 
-    private fun createPlayer(videoUrl: String) {
+    private fun createPlayer() {
         libVlc = LibVLC(this)
         mediaPlayer = MediaPlayer(libVlc)
-        videoLayout = findViewById(R.id.videoLayout)
-        val uri: Uri = Uri.parse(videoUrl)
+        videoLayout.visibility = View.VISIBLE
+
+        val videoUrl = intent.getStringExtra("videoUrl").toString()
+        val audioUrl = intent.getStringExtra("audioUrl").toString()
+        val videoUri: Uri = Uri.parse(videoUrl)
+        val audioUri: Uri = Uri.parse(audioUrl)
 
         mediaPlayer.attachViews(videoLayout, null, false, false)
 
-        val media = Media(libVlc, uri)
+        val media = Media(libVlc, videoUri)
         mediaPlayer.media = media
         media.release()
-        videoLayout.visibility = View.VISIBLE
         mediaPlayer.play()
     }
 }
