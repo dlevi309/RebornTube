@@ -107,7 +107,7 @@ class Player : AppCompatActivity() {
         val videoUri: Uri = Uri.parse(videoUrl)
         val audioUri: Uri = Uri.parse(audioUrl)
         val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
-        val videoSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory) .createMediaSource(fromUri(videoUri))
+        val videoSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(fromUri(videoUri))
         val audioSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(fromUri(audioUri))
         val mergeSource: MediaSource = MergingMediaSource(videoSource, audioSource)
 
