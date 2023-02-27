@@ -67,8 +67,7 @@ class Main : AppCompatActivity() {
             },
             "contentCheckOk": true,
             "racyCheckOk": true,
-            "videoId":
-        """" + clipboardInfo + """"}"""
+            "videoId": "$clipboardInfo"}"""
 
         val requestBody = body.trimIndent().toRequestBody()
 
