@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
 import android.widget.RelativeLayout
+import android.widget.Button
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.content.res.Configuration
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.MediaItem.*
 import com.google.android.exoplayer2.source.*
+import com.google.android.exoplayer2.Player.*
 import com.google.android.exoplayer2.upstream.*
 import com.google.android.exoplayer2.ui.StyledPlayerView
 
@@ -61,14 +63,43 @@ class Player : AppCompatActivity() {
     }
 
     private fun setupUI() {
+        // Video Player
         playerView = findViewById(R.id.playerView)
         playerView.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
+
+        // Left Overlay
+        var rewindButton: Button = findViewById(R.id.rewindButton)
+        rewindButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
+        rewindButton.setOnClickListener {
+            exoPlayer.seekBack()
+        }
+
+        // Middle Overlay
+        var playButton: Button = findViewById(R.id.playButton)
+        playButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
+        playButton.x = deviceWidth / 3.toFloat()
+        playButton.setOnClickListener {
+            val playbackState = exoPlayer.getPlayWhenReady()
+            if (playbackState) {
+                exoPlayer.pause()
+            } else if (!playbackState) {
+                exoPlayer.play()
+            }
+        }
+
+        // Right Overlay
+        var forwardButton: Button = findViewById(R.id.forwardButton)
+        forwardButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
+        forwardButton.x = (deviceWidth / 3) * 2.toFloat()
+        forwardButton.setOnClickListener {
+            exoPlayer.seekForward()
+        }
     }
 
     private fun createPlayer() {
         exoPlayer = ExoPlayer.Builder(this).build()
-        playerView = findViewById(R.id.playerView)
         playerView.visibility = View.VISIBLE
+        playerView.useController = false
         playerView.player = exoPlayer
 
         val videoUrl = intent.getStringExtra("videoUrl").toString()
