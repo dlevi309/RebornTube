@@ -46,6 +46,11 @@ class Player : AppCompatActivity() {
         }
     }
 
+    override fun onUserLeaveHint() {
+        super.onUserLeaveHint()
+        this.enterPictureInPictureMode()
+    }
+
     private fun getDeviceInfo() {
         val displayMetrics = DisplayMetrics()
         windowManager.defaultDisplay.getMetrics(displayMetrics)
