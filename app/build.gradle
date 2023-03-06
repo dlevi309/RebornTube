@@ -9,12 +9,10 @@ android {
 
     defaultConfig {
         applicationId "h.lillie.reborntube"
-        minSdk 24
+        minSdk 33
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
