@@ -38,4 +38,15 @@ class Extractor {
 
         return client.newCall(request).execute().body.string()
     }
+    fun sponsorBlockRequest(videoID: String) : String {
+        val categories = "[%22sponsor%22,%22selfpromo%22,%22interaction%22,%22intro%22,%22outro%22,%22preview%22,%22music_offtopic%22]"
+        val client: OkHttpClient = OkHttpClient.Builder().build()
+
+        val request = Request.Builder()
+            .method("GET", null)
+            .url("https://sponsor.ajay.app/api/skipSegments?videoID=$videoID&categories=$categories")
+            .build()
+
+        return client.newCall(request).execute().body.string()
+    }
 }

@@ -2,7 +2,6 @@ package h.lillie.reborntube
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.content.Context
 import android.content.ClipboardManager
 import androidx.appcompat.app.AppCompatActivity
@@ -36,11 +35,15 @@ class Main : AppCompatActivity() {
         val check = youtubeRegex.containsMatchIn(clipboardInfo)
         if (check) {
             val result = youtubeRegex.findAll(clipboardInfo).map { it.groupValues[1] }.joinToString()
+
             val extractor = Extractor()
+            val playerRequest = extractor.playerRequest(result)
+            val sponsorBlockRequest = extractor.sponsorBlockRequest(result)
+
             val loader = Loader()
-            val extractorInfo = extractor.playerRequest(result)
-            val loaderInfo = loader.init(extractorInfo)
-            showPopup(loaderInfo[0], loaderInfo[1])
+            val loaderInfo = loader.init(playerRequest)
+
+            showPopup(loaderInfo[0], loaderInfo[1], sponsorBlockRequest)
         } else {
             val errorPopup = AlertDialog.Builder(this)
             errorPopup.setTitle("Error")
@@ -50,19 +53,21 @@ class Main : AppCompatActivity() {
         }
     }
 
-    private fun showPopup(videoUrl: String, audioUrl: String) {
+    private fun showPopup(videoUrl: String, audioUrl: String, sponsorBlock: String) {
         val playerPopup = AlertDialog.Builder(this).create()
         playerPopup.setTitle("Player")
         playerPopup.setButton(AlertDialog.BUTTON_NEUTRAL, "Exo Player") { dialog, which ->
             val intent = Intent(this@Main, Player::class.java)
             intent.putExtra("videoUrl", videoUrl)
             intent.putExtra("audioUrl", audioUrl)
+            intent.putExtra("sponsorBlock", sponsorBlock)
             startActivity(intent)
         }
         playerPopup.setButton(AlertDialog.BUTTON_POSITIVE, "VLC Player") { dialog, which ->
             val intent = Intent(this@Main, VLCPlayer::class.java)
             intent.putExtra("videoUrl", videoUrl)
             intent.putExtra("audioUrl", audioUrl)
+            intent.putExtra("sponsorBlock", sponsorBlock)
             startActivity(intent)
         }
         playerPopup.show()

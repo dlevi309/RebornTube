@@ -13,6 +13,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.content.res.Configuration
 import org.videolan.libvlc.*
 import org.videolan.libvlc.util.VLCVideoLayout
+import java.io.IOException
+import org.json.JSONArray
+import java.util.concurrent.TimeUnit
 
 class VLCPlayer : AppCompatActivity() {
 
@@ -24,9 +27,12 @@ class VLCPlayer : AppCompatActivity() {
     private lateinit var mediaPlayerHandler: Handler
     private lateinit var videoLayout: VLCVideoLayout
 
+    private var sponsorBlockInfo = String()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.vlcplayer)
+        sponsorBlockInfo = intent.getStringExtra("sponsorBlock").toString()
         mediaPlayerHandler = Handler(Looper.getMainLooper())
         getDeviceInfo()
         setupUI()
@@ -49,7 +55,7 @@ class VLCPlayer : AppCompatActivity() {
         libVlc.release()
     }
 
-    override fun onPause() {
+    /* override fun onPause() {
         super.onPause()
         mediaPlayerHandler.removeCallbacks(mediaPlayerTask)
     }
@@ -57,7 +63,7 @@ class VLCPlayer : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         mediaPlayerHandler.post(mediaPlayerTask)
-    }
+    } */
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
@@ -148,11 +154,26 @@ class VLCPlayer : AppCompatActivity() {
         mediaPlayer.addSlave(1, audioUri, true)
         media.release()
         mediaPlayer.play()
+        mediaPlayerHandler.post(mediaPlayerTask)
     }
 
     private val mediaPlayerTask = object : Runnable {
         override fun run() {
             Log.d("Time", mediaPlayer.time.toString())
+            val jsonArray = JSONArray(sponsorBlockInfo)
+            for (i in 0 until jsonArray.length()) {
+                val category = jsonArray.getJSONObject(i).optString("category")
+                val segment = jsonArray.getJSONObject(i).getJSONArray("segment")
+                val segment0 = String.format("%.3d", segment[0])
+                val segment1 = String.format("%.3d", segment[1])
+                if (category.contains("sponsor") && mediaPlayer.time.toString() >= segment0 && mediaPlayer.time.toString() <= segment1) {
+                    try {
+                        mediaPlayer.setTime(segment1.toLong(), true)
+                    } catch (e: IOException) {
+                        Log.e("Error", e.toString())
+                    }
+                }
+            }
             mediaPlayerHandler.postDelayed(this, 1000)
         }
     }
