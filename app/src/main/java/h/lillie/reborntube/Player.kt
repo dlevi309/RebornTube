@@ -37,6 +37,11 @@ class Player : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+        exoPlayer.stop()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         exoPlayer.release()
     }
 

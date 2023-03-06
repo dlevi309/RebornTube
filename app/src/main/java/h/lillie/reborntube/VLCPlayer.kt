@@ -33,7 +33,14 @@ class VLCPlayer : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+        mediaPlayer.stop()
+        mediaPlayer.detachViews()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         mediaPlayer.release()
+        libVlc.release()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
