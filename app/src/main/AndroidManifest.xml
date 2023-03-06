@@ -12,7 +12,7 @@
         <activity
             android:name=".Main"
             android:exported="true"
-            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|navigation">
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -22,17 +22,7 @@
             android:name=".Player"
             android:exported="true"
             android:supportsPictureInPicture="true"
-            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|navigation">
-            <intent-filter>
-                <action android:name="android.intent.action.PLAYER" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".VLCPlayer"
-            android:exported="true"
-            android:supportsPictureInPicture="true"
-            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|navigation">
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout">
             <intent-filter>
                 <action android:name="android.intent.action.PLAYER" />
                 <category android:name="android.intent.category.LAUNCHER" />

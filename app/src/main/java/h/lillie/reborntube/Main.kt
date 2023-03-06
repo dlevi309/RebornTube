@@ -43,7 +43,11 @@ class Main : AppCompatActivity() {
             val loader = Loader()
             val loaderInfo = loader.init(playerRequest)
 
-            showPopup(loaderInfo[0], loaderInfo[1], sponsorBlockRequest)
+            val intent = Intent(this@Main, Player::class.java)
+            intent.putExtra("videoUrl", loaderInfo[0])
+            intent.putExtra("audioUrl", loaderInfo[1])
+            intent.putExtra("sponsorBlock", sponsorBlockRequest)
+            startActivity(intent)
         } else {
             val errorPopup = AlertDialog.Builder(this)
             errorPopup.setTitle("Error")
@@ -51,25 +55,5 @@ class Main : AppCompatActivity() {
             errorPopup.setCancelable(false)
             errorPopup.show()
         }
-    }
-
-    private fun showPopup(videoUrl: String, audioUrl: String, sponsorBlock: String) {
-        val playerPopup = AlertDialog.Builder(this).create()
-        playerPopup.setTitle("Player")
-        playerPopup.setButton(AlertDialog.BUTTON_NEUTRAL, "Exo Player") { dialog, which ->
-            val intent = Intent(this@Main, Player::class.java)
-            intent.putExtra("videoUrl", videoUrl)
-            intent.putExtra("audioUrl", audioUrl)
-            intent.putExtra("sponsorBlock", sponsorBlock)
-            startActivity(intent)
-        }
-        playerPopup.setButton(AlertDialog.BUTTON_POSITIVE, "VLC Player") { dialog, which ->
-            val intent = Intent(this@Main, VLCPlayer::class.java)
-            intent.putExtra("videoUrl", videoUrl)
-            intent.putExtra("audioUrl", audioUrl)
-            intent.putExtra("sponsorBlock", sponsorBlock)
-            startActivity(intent)
-        }
-        playerPopup.show()
     }
 }
