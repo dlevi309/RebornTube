@@ -2,6 +2,9 @@ package h.lillie.reborntube
 
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.util.DisplayMetrics
 import android.widget.RelativeLayout
 import android.widget.Button
@@ -18,11 +21,13 @@ class VLCPlayer : AppCompatActivity() {
 
     private lateinit var libVlc: LibVLC
     private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var mediaPlayerHandler: Handler
     private lateinit var videoLayout: VLCVideoLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.vlcplayer)
+        mediaPlayerHandler = Handler(Looper.getMainLooper())
         getDeviceInfo()
         setupUI()
     }
@@ -42,6 +47,16 @@ class VLCPlayer : AppCompatActivity() {
         super.onDestroy()
         mediaPlayer.release()
         libVlc.release()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mediaPlayerHandler.removeCallbacks(mediaPlayerTask)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mediaPlayerHandler.post(mediaPlayerTask)
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -133,5 +148,12 @@ class VLCPlayer : AppCompatActivity() {
         mediaPlayer.addSlave(1, audioUri, true)
         media.release()
         mediaPlayer.play()
+    }
+
+    private val mediaPlayerTask = object : Runnable {
+        override fun run() {
+            Log.d("Time", mediaPlayer.time.toString())
+            mediaPlayerHandler.postDelayed(this, 1000)
+        }
     }
 }
