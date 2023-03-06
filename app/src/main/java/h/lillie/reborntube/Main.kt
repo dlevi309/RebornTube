@@ -165,13 +165,13 @@ class Main : AppCompatActivity() {
     private fun showPopup(videoUrl: String, audioUrl: String) {
         val playerPopup = AlertDialog.Builder(this).create()
         playerPopup.setTitle("Player")
-        playerPopup.setButton(AlertDialog.BUTTON_POSITIVE, "Exo Player (Recommended)") { dialog, which ->
+        playerPopup.setButton(AlertDialog.BUTTON_NEUTRAL, "Exo Player") { dialog, which ->
             val intent = Intent(this@Main, Player::class.java)
             intent.putExtra("videoUrl", videoUrl)
             intent.putExtra("audioUrl", audioUrl)
             startActivity(intent)
         }
-        playerPopup.setButton(AlertDialog.BUTTON_NEGATIVE, "VLC Player (Experimental)") { dialog, which ->
+        playerPopup.setButton(AlertDialog.BUTTON_POSITIVE, "VLC Player") { dialog, which ->
             val intent = Intent(this@Main, VLCPlayer::class.java)
             intent.putExtra("videoUrl", videoUrl)
             intent.putExtra("audioUrl", audioUrl)
