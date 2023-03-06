@@ -5,14 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    tools:context=".Player">
+    tools:context=".VLCPlayer">
 
-    <org.videolan.libvlc.util.VLCVideoLayout
-        android:id="@+id/videoLayout"
+    <RelativeLayout
+        android:id="@+id/videoRelativeLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints">
+
+        <org.videolan.libvlc.util.VLCVideoLayout
+            android:id="@+id/videoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            tools:ignore="MissingConstraints" />
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/rewindButton"

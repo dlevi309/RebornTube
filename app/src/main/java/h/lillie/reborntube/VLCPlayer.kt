@@ -85,8 +85,8 @@ class VLCPlayer : AppCompatActivity() {
 
     private fun setupUI() {
         // Video Player
-        videoLayout = findViewById(R.id.videoLayout)
-        videoLayout.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
+        var videoRelativeLayout: RelativeLayout = findViewById(R.id.videoRelativeLayout)
+        videoRelativeLayout.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
 
         // Left Overlay
         var rewindButton: Button = findViewById(R.id.rewindButton)
@@ -118,6 +118,7 @@ class VLCPlayer : AppCompatActivity() {
     private fun createPlayer() {
         libVlc = LibVLC(this)
         mediaPlayer = MediaPlayer(libVlc)
+        videoLayout = findViewById(R.id.videoLayout)
         videoLayout.visibility = View.VISIBLE
 
         val videoUrl = intent.getStringExtra("videoUrl").toString()
