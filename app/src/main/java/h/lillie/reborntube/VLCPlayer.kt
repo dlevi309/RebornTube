@@ -47,6 +47,8 @@ class VLCPlayer : AppCompatActivity() {
                 getDeviceInfo()
                 setupUI()
             }
+            Configuration.ORIENTATION_SQUARE -> {}
+            Configuration.ORIENTATION_UNDEFINED -> {}
         }
     }
 
@@ -68,6 +70,8 @@ class VLCPlayer : AppCompatActivity() {
             Configuration.ORIENTATION_LANDSCAPE -> {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
             }
+            Configuration.ORIENTATION_SQUARE -> {}
+            Configuration.ORIENTATION_UNDEFINED -> {}
         }
     }
 
