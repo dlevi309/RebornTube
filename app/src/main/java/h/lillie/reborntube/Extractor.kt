@@ -4,7 +4,6 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 
-
 class Extractor {
     fun playerRequest(videoID: String) : String {
         val body = """{
@@ -38,6 +37,7 @@ class Extractor {
 
         return client.newCall(request).execute().body.string()
     }
+
     fun sponsorBlockRequest(videoID: String) : String {
         val categories = "[%22sponsor%22,%22selfpromo%22,%22interaction%22,%22intro%22,%22outro%22,%22preview%22,%22music_offtopic%22]"
         val client: OkHttpClient = OkHttpClient.Builder().build()
