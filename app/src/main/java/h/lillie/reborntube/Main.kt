@@ -7,23 +7,23 @@ import android.content.Context
 import android.content.ClipboardManager
 import androidx.appcompat.app.AppCompatActivity
 import android.app.AlertDialog
-import okhttp3.*
-import okhttp3.RequestBody.Companion.toRequestBody
-import kotlinx.coroutines.*
-import java.io.IOException
-import org.json.JSONObject
+import android.os.StrictMode
 
 class Main : AppCompatActivity() {
 
     private var hasRan = 0
+    private var hasCreated = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
+        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        StrictMode.setThreadPolicy(policy)
+        hasCreated = 1
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
-        if (hasFocus && hasRan == 0) {
+        if (hasFocus && hasRan == 0 && hasCreated == 1) {
             hasRan = 1
             getClipboardInfo()
         }
@@ -36,7 +36,11 @@ class Main : AppCompatActivity() {
         val check = youtubeRegex.containsMatchIn(clipboardInfo)
         if (check) {
             val result = youtubeRegex.findAll(clipboardInfo).map { it.groupValues[1] }.joinToString()
-            getVideoInfo(result)
+            val extractor = Extractor()
+            val loader = Loader()
+            val extractorInfo = extractor.playerRequest(result)
+            val loaderInfo = loader.init(extractorInfo)
+            showPopup(loaderInfo[0], loaderInfo[1])
         } else {
             val errorPopup = AlertDialog.Builder(this)
             errorPopup.setTitle("Error")
@@ -44,122 +48,6 @@ class Main : AppCompatActivity() {
             errorPopup.setCancelable(false)
             errorPopup.show()
         }
-    }
-
-    private fun getVideoInfo(clipboardInfo: String) {
-        val body = """{
-            "context": {
-                "client": {
-                    "hl": "en",
-                    "gl": "US",
-                    "clientName": "ANDROID",
-                    "clientVersion": "16.20",
-                    "playbackContext": {
-                        "contentPlaybackContext": {
-                            "signatureTimestamp": "sts",
-                            "html5Preference": "HTML5_PREF_WANTS"
-                        }
-                    }
-                }
-            },
-            "contentCheckOk": true,
-            "racyCheckOk": true,
-            "videoId": "$clipboardInfo"
-        }"""
-
-        val requestBody = body.trimIndent().toRequestBody()
-
-        val client: OkHttpClient = OkHttpClient.Builder().build()
-
-        val request = Request.Builder()
-            .method("POST", requestBody)
-            .url("https://www.youtube.com/youtubei/v1/player?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8&prettyPrint=false")
-            .build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: Call, e: IOException) {
-                Log.d("Failure", e.toString())
-            }
-
-            override fun onResponse(call: Call, response: Response) {
-                val responseBody = response.body.string()
-                response.body.close()
-                response.close()
-
-                var videoUrl = String()
-                var audioUrl = String()
-
-                var q2160p = String()
-                var q1440p = String()
-                var q1080p = String()
-                var q720p = String()
-                var q480p = String()
-                var q360p = String()
-                var q240p = String()
-                var audioHigh = String()
-                var audioMedium = String()
-                var audioLow = String()
-                val jsonObject = JSONObject(responseBody)
-                val jsonArray = jsonObject.getJSONObject("streamingData").getJSONArray("adaptiveFormats")
-                for (i in 0 until jsonArray.length()) {
-                    val mimeType = jsonArray.getJSONObject(i).optString("mimeType")
-                    val height = jsonArray.getJSONObject(i).optString("height")
-                    val quality = jsonArray.getJSONObject(i).optString("quality")
-                    val audioQuality = jsonArray.getJSONObject(i).optString("audioQuality")
-                    if (mimeType.contains("video/mp4") && height.contains("2160") || mimeType.contains("video/mp4") && quality.contains("hd2160")) {
-                        q2160p = jsonArray.getJSONObject(i).optString("url")
-                    } else if (mimeType.contains("video/mp4") && height.contains("1440") || mimeType.contains("video/mp4") && quality.contains("hd1440")) {
-                        q1440p = jsonArray.getJSONObject(i).optString("url")
-                    } else if (mimeType.contains("video/mp4") && height.contains("1080") || mimeType.contains("video/mp4") && quality.contains("hd1080")) {
-                        q1080p = jsonArray.getJSONObject(i).optString("url")
-                    } else if (mimeType.contains("video/mp4") && height.contains("720") || mimeType.contains("video/mp4") && quality.contains("hd720")) {
-                        q720p = jsonArray.getJSONObject(i).optString("url")
-                    } else if (mimeType.contains("video/mp4") && height.contains("480") || mimeType.contains("video/mp4") && quality.contains("480p")) {
-                        q480p = jsonArray.getJSONObject(i).optString("url")
-                    } else if (mimeType.contains("video/mp4") && height.contains("360") || mimeType.contains("video/mp4") && quality.contains("360p")) {
-                        q360p = jsonArray.getJSONObject(i).optString("url")
-                    } else if (mimeType.contains("video/mp4") && height.contains("240") || mimeType.contains("video/mp4") && quality.contains("240p")) {
-                        q240p = jsonArray.getJSONObject(i).optString("url")
-                    } else if (mimeType.contains("audio/mp4") && audioQuality.contains("AUDIO_QUALITY_HIGH")) {
-                        audioHigh = jsonArray.getJSONObject(i).optString("url")
-                    } else if (mimeType.contains("audio/mp4") && audioQuality.contains("AUDIO_QUALITY_MEDIUM")) {
-                        audioMedium = jsonArray.getJSONObject(i).getString("url")
-                    } else if (mimeType.contains("audio/mp4") && audioQuality.contains("AUDIO_QUALITY_LOW")) {
-                        audioLow = jsonArray.getJSONObject(i).optString("url")
-                    }
-                }
-
-                if (q2160p != String()) {
-                    videoUrl = q2160p
-                } else if (q1440p != String()) {
-                    videoUrl = q1440p
-                } else if (q1080p != String()) {
-                    videoUrl = q1080p
-                } else if (q720p != String()) {
-                    videoUrl = q720p
-                } else if (q480p != String()) {
-                    videoUrl = q480p
-                } else if (q360p != String()) {
-                    videoUrl = q360p
-                } else if (q240p != String()) {
-                    videoUrl = q240p
-                }
-
-                if (audioHigh != String()) {
-                    audioUrl = audioHigh
-                } else if (audioMedium != String()) {
-                    audioUrl = audioMedium
-                } else if (audioLow != String()) {
-                    audioUrl = audioLow
-                }
-
-                GlobalScope.launch(Dispatchers.IO) {
-                    withContext(Dispatchers.Main) {
-                        showPopup(videoUrl, audioUrl)
-                    }
-                }
-            }
-        })
     }
 
     private fun showPopup(videoUrl: String, audioUrl: String) {
