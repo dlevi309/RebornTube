@@ -93,8 +93,7 @@ class Player : AppCompatActivity() {
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         deviceHeight = displayMetrics.heightPixels
         deviceWidth = displayMetrics.widthPixels
-        val orientation = getResources().getConfiguration().orientation
-        when (orientation) {
+        when (resources.configuration.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
             }
@@ -123,10 +122,9 @@ class Player : AppCompatActivity() {
         playButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         playButton.x = deviceWidth / 3.toFloat()
         playButton.setOnClickListener {
-            val playbackState = exoPlayer.getPlayWhenReady()
-            if (playbackState) {
+            if (exoPlayer.playWhenReady) {
                 exoPlayer.pause()
-            } else if (!playbackState) {
+            } else if (!exoPlayer.playWhenReady) {
                 exoPlayer.play()
             }
         }
