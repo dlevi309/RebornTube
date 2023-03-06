@@ -115,7 +115,7 @@ class Player : AppCompatActivity() {
         val rewindButton: Button = findViewById(R.id.rewindButton)
         rewindButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         rewindButton.setOnClickListener {
-            exoPlayer.seekBack()
+            exoPlayer.seekTo(exoPlayer.currentPosition - TimeUnit.SECONDS.toMillis(10))
         }
 
         // Middle Overlay
@@ -136,7 +136,7 @@ class Player : AppCompatActivity() {
         forwardButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         forwardButton.x = (deviceWidth / 3) * 2.toFloat()
         forwardButton.setOnClickListener {
-            exoPlayer.seekForward()
+            exoPlayer.seekTo(exoPlayer.currentPosition + TimeUnit.SECONDS.toMillis(10))
         }
     }
 
