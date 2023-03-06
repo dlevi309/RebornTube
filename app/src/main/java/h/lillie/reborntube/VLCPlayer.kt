@@ -102,6 +102,7 @@ class VLCPlayer : AppCompatActivity() {
 
         val media = Media(libVlc, videoUri)
         mediaPlayer.media = media
+        mediaPlayer.addSlave(1, audioUri, true)
         media.release()
         mediaPlayer.play()
     }
