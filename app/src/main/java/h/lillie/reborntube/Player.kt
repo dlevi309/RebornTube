@@ -1,11 +1,12 @@
 package h.lillie.reborntube
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.util.DisplayMetrics
+import android.app.PictureInPictureParams
 import android.widget.RelativeLayout
 import android.widget.Button
 import android.view.View
@@ -67,6 +68,7 @@ class Player : AppCompatActivity() {
         exoPlayerHandler.post(exoPlayerTask)
     }
 
+    @SuppressLint("SwitchIntDef")
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         when (newConfig.orientation) {
@@ -78,21 +80,22 @@ class Player : AppCompatActivity() {
                 getDeviceInfo()
                 setupUI()
             }
-            Configuration.ORIENTATION_SQUARE -> {}
             Configuration.ORIENTATION_UNDEFINED -> {}
         }
     }
 
     override fun onUserLeaveHint() {
         super.onUserLeaveHint()
-        this.enterPictureInPictureMode()
+        val pictureInPictureParams: PictureInPictureParams = PictureInPictureParams.Builder()
+            .setAutoEnterEnabled(true)
+            .build()
+        this.enterPictureInPictureMode(pictureInPictureParams)
     }
 
+    @SuppressLint("SwitchIntDef")
     private fun getDeviceInfo() {
-        val displayMetrics = DisplayMetrics()
-        windowManager.defaultDisplay.getMetrics(displayMetrics)
-        deviceHeight = displayMetrics.heightPixels
-        deviceWidth = displayMetrics.widthPixels
+        deviceHeight = windowManager.currentWindowMetrics.bounds.height()
+        deviceWidth = windowManager.currentWindowMetrics.bounds.width()
         when (resources.configuration.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
@@ -100,7 +103,6 @@ class Player : AppCompatActivity() {
             Configuration.ORIENTATION_LANDSCAPE -> {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
             }
-            Configuration.ORIENTATION_SQUARE -> {}
             Configuration.ORIENTATION_UNDEFINED -> {}
         }
     }
