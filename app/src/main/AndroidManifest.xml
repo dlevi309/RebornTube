@@ -7,8 +7,7 @@
         android:icon="@mipmap/icon"
         android:label="RebornTube"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.NoActionBar"
-        tools:targetApi="33">
+        android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
             android:name=".Main"
             android:exported="true"
