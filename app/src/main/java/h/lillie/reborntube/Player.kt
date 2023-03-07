@@ -41,16 +41,7 @@ class Player : AppCompatActivity() {
         playerHandler = Handler(Looper.getMainLooper())
         getDeviceInfo()
         setupUI()
-    }
-
-    override fun onStart() {
-        super.onStart()
         createPlayer()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        player.stop()
     }
 
     override fun onDestroy() {
