@@ -112,6 +112,7 @@ class Player : AppCompatActivity() {
         rewindButton.setOnClickListener {
             player.seekTo(player.currentPosition - TimeUnit.SECONDS.toMillis(10))
         }
+        rewindButton.visibility = View.GONE
 
         // Middle Overlay
         val playButton: Button = findViewById(R.id.playButton)
@@ -124,6 +125,7 @@ class Player : AppCompatActivity() {
                 player.play()
             }
         }
+        playButton.visibility = View.GONE
 
         // Right Overlay
         val forwardButton: Button = findViewById(R.id.forwardButton)
@@ -132,13 +134,16 @@ class Player : AppCompatActivity() {
         forwardButton.setOnClickListener {
             player.seekTo(player.currentPosition + TimeUnit.SECONDS.toMillis(10))
         }
+        forwardButton.visibility = View.GONE
     }
 
     private fun createPlayer() {
         player = ExoPlayer.Builder(this).build()
         playerView = findViewById(R.id.playerView)
         playerView.visibility = View.VISIBLE
-        playerView.useController = false
+        // playerView.useController = false
+        playerView.setShowPreviousButton(false)
+        playerView.setShowNextButton(false)
         playerView.player = player
 
         val videoUrl = intent.getStringExtra("videoUrl").toString()
