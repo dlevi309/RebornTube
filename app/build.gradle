@@ -1,10 +1,10 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
 }
 
 android {
-    namespace 'h.lillie.reborntube'
+    namespace "h.lillie.reborntube"
     compileSdk 33
 
     defaultConfig {
@@ -18,7 +18,7 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt")
         }
     }
     compileOptions {
@@ -26,17 +26,51 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4'
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
-    implementation 'com.google.android.exoplayer:exoplayer:2.18.4'
+    // Other
+    implementation "androidx.core:core-ktx:1.9.0"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "com.google.android.material:material:1.8.0"
+    implementation "androidx.constraintlayout:constraintlayout:2.1.4"
+
+    // Kotlinx
+    def kotlinx_version = "1.6.4"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_version"
+
+    // OkHttp
+    def okhttp_version = "5.0.0-alpha.11"
+    implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
+
+    // ExoPlayer
+    def exoplayer_version = "2.18.4"
+    implementation "com.google.android.exoplayer:exoplayer:$exoplayer_version"
+
+    // Media
+    def media_version = "1.0.0-rc02"
+    implementation "androidx.media3:media3-exoplayer:$media_version"
+    implementation "androidx.media3:media3-exoplayer-dash:$media_version"
+    implementation "androidx.media3:media3-exoplayer-hls:$media_version"
+    implementation "androidx.media3:media3-exoplayer-rtsp:$media_version"
+    implementation "androidx.media3:media3-exoplayer-ima:$media_version"
+    implementation "androidx.media3:media3-datasource-cronet:$media_version"
+    implementation "androidx.media3:media3-datasource-okhttp:$media_version"
+    implementation "androidx.media3:media3-datasource-rtmp:$media_version"
+    implementation "androidx.media3:media3-ui:$media_version"
+    implementation "androidx.media3:media3-ui-leanback:$media_version"
+    implementation "androidx.media3:media3-session:$media_version"
+    implementation "androidx.media3:media3-extractor:$media_version"
+    implementation "androidx.media3:media3-cast:$media_version"
+    implementation "androidx.media3:media3-exoplayer-workmanager:$media_version"
+    implementation "androidx.media3:media3-transformer:$media_version"
+    implementation "androidx.media3:media3-test-utils:$media_version"
+    implementation "androidx.media3:media3-test-utils-robolectric:$media_version"
+    implementation "androidx.media3:media3-database:$media_version"
+    implementation "androidx.media3:media3-decoder:$media_version"
+    implementation "androidx.media3:media3-datasource:$media_version"
+    implementation "androidx.media3:media3-common:$media_version"
 }
