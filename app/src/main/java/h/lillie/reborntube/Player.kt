@@ -157,9 +157,9 @@ class Player : AppCompatActivity() {
         val mergeSource: MediaSource = MergingMediaSource(videoSource, audioSource)
 
         exoPlayer.repeatMode = REPEAT_MODE_ONE
-        exoPlayer.addMediaSource(mergeSource)
-        exoPlayer.prepare()
+        exoPlayer.setMediaSource(mergeSource)
         exoPlayer.playWhenReady = true
+        exoPlayer.prepare()
     }
 
     private val exoPlayerTask = object : Runnable {
