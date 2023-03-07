@@ -12,15 +12,12 @@ import android.widget.Button
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.content.res.Configuration
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.source.MediaSource
-import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import androidx.media3.exoplayer.source.MergingMediaSource
-import androidx.media3.datasource.DataSource
-import androidx.media3.datasource.DefaultHttpDataSource
-import androidx.media3.common.MediaItem.fromUri
-import androidx.media3.common.Player
-import androidx.media3.ui.PlayerView
+import com.google.android.exoplayer2.*
+import com.google.android.exoplayer2.MediaItem.*
+import com.google.android.exoplayer2.source.*
+import com.google.android.exoplayer2.Player.*
+import com.google.android.exoplayer2.upstream.*
+import com.google.android.exoplayer2.ui.StyledPlayerView
 import java.io.IOException
 import org.json.JSONArray
 import org.json.JSONException
@@ -31,9 +28,9 @@ class Player : AppCompatActivity() {
     private var deviceHeight = 0
     private var deviceWidth = 0
 
-    private lateinit var player: ExoPlayer
-    private lateinit var playerHandler: Handler
-    private lateinit var playerView: PlayerView
+    private lateinit var exoPlayer: ExoPlayer
+    private lateinit var exoPlayerHandler: Handler
+    private lateinit var playerView: StyledPlayerView
 
     private var sponsorBlockInfo = String()
 
@@ -41,7 +38,7 @@ class Player : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.player)
         sponsorBlockInfo = intent.getStringExtra("sponsorBlock").toString()
-        playerHandler = Handler(Looper.getMainLooper())
+        exoPlayerHandler = Handler(Looper.getMainLooper())
         getDeviceInfo()
         setupUI()
     }
@@ -53,22 +50,22 @@ class Player : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        player.stop()
+        exoPlayer.stop()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        player.release()
+        exoPlayer.release()
     }
 
     override fun onPause() {
         super.onPause()
-        playerHandler.removeCallbacks(playerTask)
+        exoPlayerHandler.removeCallbacks(exoPlayerTask)
     }
 
     override fun onResume() {
         super.onResume()
-        playerHandler.post(playerTask)
+        exoPlayerHandler.post(exoPlayerTask)
     }
 
     @SuppressLint("SwitchIntDef")
@@ -119,7 +116,7 @@ class Player : AppCompatActivity() {
         val rewindButton: Button = findViewById(R.id.rewindButton)
         rewindButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         rewindButton.setOnClickListener {
-            player.seekTo(player.currentPosition - TimeUnit.SECONDS.toMillis(10))
+            exoPlayer.seekTo(exoPlayer.currentPosition - TimeUnit.SECONDS.toMillis(10))
         }
 
         // Middle Overlay
@@ -127,10 +124,10 @@ class Player : AppCompatActivity() {
         playButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         playButton.x = deviceWidth / 3.toFloat()
         playButton.setOnClickListener {
-            if (player.playWhenReady) {
-                player.pause()
-            } else if (!player.playWhenReady) {
-                player.play()
+            if (exoPlayer.playWhenReady) {
+                exoPlayer.pause()
+            } else if (!exoPlayer.playWhenReady) {
+                exoPlayer.play()
             }
         }
 
@@ -139,17 +136,16 @@ class Player : AppCompatActivity() {
         forwardButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         forwardButton.x = (deviceWidth / 3) * 2.toFloat()
         forwardButton.setOnClickListener {
-            player.seekTo(player.currentPosition + TimeUnit.SECONDS.toMillis(10))
+            exoPlayer.seekTo(exoPlayer.currentPosition + TimeUnit.SECONDS.toMillis(10))
         }
     }
 
-    @SuppressLint("UnsafeOptInUsageError")
     private fun createPlayer() {
-        player = ExoPlayer.Builder(this).build()
+        exoPlayer = ExoPlayer.Builder(this).build()
         playerView = findViewById(R.id.playerView)
         playerView.visibility = View.VISIBLE
         playerView.useController = false
-        playerView.player = player
+        playerView.player = exoPlayer
 
         val videoUrl = intent.getStringExtra("videoUrl").toString()
         val audioUrl = intent.getStringExtra("audioUrl").toString()
@@ -160,13 +156,13 @@ class Player : AppCompatActivity() {
         val audioSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(fromUri(audioUri))
         val mergeSource: MediaSource = MergingMediaSource(videoSource, audioSource)
 
-        player.repeatMode = Player.REPEAT_MODE_ONE
-        player.setMediaSource(mergeSource)
-        player.playWhenReady = true
-        player.prepare()
+        exoPlayer.repeatMode = REPEAT_MODE_ONE
+        exoPlayer.setMediaSource(mergeSource)
+        exoPlayer.playWhenReady = true
+        exoPlayer.prepare()
     }
 
-    private val playerTask = object : Runnable {
+    private val exoPlayerTask = object : Runnable {
         override fun run() {
             try {
                 val jsonArray = JSONArray(sponsorBlockInfo)
@@ -175,10 +171,10 @@ class Player : AppCompatActivity() {
                     val segment = jsonArray.getJSONObject(i).getJSONArray("segment")
                     val segment0 = String.format("%.3f", segment[0].toString().toDouble()).replace(".", "").toFloat()
                     val segment1 = String.format("%.3f", segment[1].toString().toDouble()).replace(".", "").toFloat()
-                    if (category.contains("sponsor") && player.currentPosition.toString().toFloat() >= segment0 && player.currentPosition.toString().toFloat() <= (segment1 - 1)) {
-                        player.seekTo(segment1.toLong())
-                    } else if (category.contains("interaction") && player.currentPosition.toString().toFloat() >= segment0 && player.currentPosition.toString().toFloat() <= (segment1 - 1)) {
-                        player.seekTo(segment1.toLong())
+                    if (category.contains("sponsor") && exoPlayer.currentPosition.toString().toFloat() >= segment0 && exoPlayer.currentPosition.toString().toFloat() <= (segment1 - 1)) {
+                        exoPlayer.seekTo(segment1.toLong())
+                    } else if (category.contains("interaction") && exoPlayer.currentPosition.toString().toFloat() >= segment0 && exoPlayer.currentPosition.toString().toFloat() <= (segment1 - 1)) {
+                        exoPlayer.seekTo(segment1.toLong())
                     }
                 }
             } catch (e: IOException) {
@@ -186,7 +182,7 @@ class Player : AppCompatActivity() {
             } catch (e: JSONException) {
                 Log.e("JSONException", e.toString())
             }
-            playerHandler.postDelayed(this, 1000)
+            exoPlayerHandler.postDelayed(this, 1000)
         }
     }
 }

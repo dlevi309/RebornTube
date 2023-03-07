@@ -46,6 +46,10 @@ dependencies {
     def okhttp_version = "5.0.0-alpha.11"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
 
+    // ExoPlayer
+    def exoplayer_version = "2.18.4"
+    implementation "com.google.android.exoplayer:exoplayer:$exoplayer_version"
+
     // Media
     def media_version = "1.0.0-rc02"
     implementation "androidx.media3:media3-exoplayer:$media_version"
