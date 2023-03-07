@@ -1,6 +1,7 @@
 package h.lillie.reborntube
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -9,9 +10,11 @@ import android.util.Log
 import android.app.PictureInPictureParams
 import android.widget.RelativeLayout
 import android.widget.Button
+import android.view.KeyEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.content.res.Configuration
+import android.media.session.MediaSession
 import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.MediaItem.*
 import com.google.android.exoplayer2.source.*
@@ -31,6 +34,7 @@ class Player : AppCompatActivity() {
     private lateinit var player: ExoPlayer
     private lateinit var playerHandler: Handler
     private lateinit var playerView: StyledPlayerView
+    private lateinit var playerSession: MediaSession
 
     private var sponsorBlockInfo = String()
 
@@ -42,6 +46,7 @@ class Player : AppCompatActivity() {
         getDeviceInfo()
         setupUI()
         createPlayer()
+        createPlayerSession()
     }
 
     override fun onDestroy() {
@@ -151,6 +156,33 @@ class Player : AppCompatActivity() {
         player.setMediaSource(mergeSource)
         player.playWhenReady = true
         player.prepare()
+    }
+
+    private fun createPlayerSession() {
+        playerSession = MediaSession(this, "RebornTubePlayerSession")
+        val playerSessionCallback = object: MediaSession.Callback() {
+            override fun onMediaButtonEvent(intent: Intent) : Boolean {
+                val keyEvent : KeyEvent? = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT)
+                Log.d("KeyEvent", keyEvent.toString())
+                when (keyEvent?.keyCode) {
+                    KeyEvent.KEYCODE_MEDIA_PLAY -> {
+                        player.play()
+                    }
+                    KeyEvent.KEYCODE_MEDIA_PAUSE -> {
+                        player.pause()
+                    }
+                    KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
+                        player.seekToPrevious()
+                    }
+                    KeyEvent.KEYCODE_MEDIA_NEXT -> {
+                        player.seekToNext()
+                    }
+                }
+                return super.onMediaButtonEvent(intent)
+            }
+        }
+        playerSession.setCallback(playerSessionCallback)
+        playerSession.isActive = true
     }
 
     private val playerTask = object : Runnable {
