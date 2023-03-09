@@ -15,11 +15,14 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.content.res.Configuration
 import android.media.session.MediaSession
-import com.google.android.exoplayer2.*
-import com.google.android.exoplayer2.MediaItem.*
-import com.google.android.exoplayer2.source.*
-import com.google.android.exoplayer2.Player.*
-import com.google.android.exoplayer2.upstream.*
+import com.google.android.exoplayer2.ExoPlayer
+import com.google.android.exoplayer2.source.MediaSource
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.source.MergingMediaSource
+import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
+import com.google.android.exoplayer2.MediaItem.fromUri
+import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import java.io.IOException
 import org.json.JSONArray
@@ -155,7 +158,7 @@ class Player : AppCompatActivity() {
         val audioSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(fromUri(audioUri))
         val mergeSource: MediaSource = MergingMediaSource(videoSource, audioSource)
 
-        player.repeatMode = REPEAT_MODE_ONE
+        player.repeatMode = Player.REPEAT_MODE_ONE
         player.setMediaSource(mergeSource)
         player.playWhenReady = true
         player.prepare()
