@@ -1,70 +1,55 @@
 package h.lillie.reborntube
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.util.Log
 import android.app.PictureInPictureParams
 import android.widget.RelativeLayout
 import android.widget.Button
-import android.view.KeyEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.content.res.Configuration
-import android.media.session.MediaSession
-import com.google.android.exoplayer2.ExoPlayer
-import com.google.android.exoplayer2.source.MediaSource
-import com.google.android.exoplayer2.source.ProgressiveMediaSource
-import com.google.android.exoplayer2.source.MergingMediaSource
-import com.google.android.exoplayer2.upstream.DataSource
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
-import com.google.android.exoplayer2.MediaItem.fromUri
-import com.google.android.exoplayer2.Player
-import com.google.android.exoplayer2.ui.StyledPlayerView
-import java.io.IOException
-import org.json.JSONArray
-import org.json.JSONException
+import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
+import androidx.media3.ui.PlayerView
 import java.util.concurrent.TimeUnit
+import com.google.common.util.concurrent.MoreExecutors
 
 class Player : AppCompatActivity() {
 
     private var deviceHeight = 0
     private var deviceWidth = 0
 
-    private lateinit var player: ExoPlayer
-    private lateinit var playerHandler: Handler
-    private lateinit var playerView: StyledPlayerView
-    private lateinit var playerSession: MediaSession
+    private lateinit var playerView: PlayerView
+    private lateinit var playerController: MediaController
 
-    private var sponsorBlockInfo = String()
-
+    @SuppressLint("UnsafeOptInUsageError")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.player)
-        sponsorBlockInfo = Application.getSponsorBlockInfo()
-        playerHandler = Handler(Looper.getMainLooper())
         getDeviceInfo()
         setupUI()
-        createPlayer()
-        createPlayerSession()
+        val sessionToken = SessionToken(this, ComponentName(this, PlayerService::class.java))
+        val controllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
+        controllerFuture.addListener(
+            {
+                playerController = controllerFuture.get()
+
+                playerView = findViewById(R.id.playerView)
+                playerView.visibility = View.VISIBLE
+                playerView.useController = false
+                playerView.setShowPreviousButton(false)
+                playerView.setShowNextButton(false)
+                playerView.player = playerController
+            },
+            MoreExecutors.directExecutor()
+        )
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        player.release()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        playerHandler.removeCallbacks(playerTask)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        playerHandler.post(playerTask)
+        stopService(Intent(this, PlayerService::class.java))
     }
 
     @SuppressLint("SwitchIntDef")
@@ -113,106 +98,27 @@ class Player : AppCompatActivity() {
         val rewindButton: Button = findViewById(R.id.rewindButton)
         rewindButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         rewindButton.setOnClickListener {
-            player.seekTo(player.currentPosition - TimeUnit.SECONDS.toMillis(10))
+            playerController.seekTo(playerController.currentPosition - TimeUnit.SECONDS.toMillis(10))
         }
-        rewindButton.visibility = View.GONE
 
         // Middle Overlay
         val playButton: Button = findViewById(R.id.playButton)
         playButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         playButton.x = deviceWidth / 3.toFloat()
         playButton.setOnClickListener {
-            if (player.playWhenReady) {
-                player.pause()
-            } else if (!player.playWhenReady) {
-                player.play()
+            if (playerController.playWhenReady) {
+                playerController.pause()
+            } else if (!playerController.playWhenReady) {
+                playerController.play()
             }
         }
-        playButton.visibility = View.GONE
 
         // Right Overlay
         val forwardButton: Button = findViewById(R.id.forwardButton)
         forwardButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         forwardButton.x = (deviceWidth / 3) * 2.toFloat()
         forwardButton.setOnClickListener {
-            player.seekTo(player.currentPosition + TimeUnit.SECONDS.toMillis(10))
-        }
-        forwardButton.visibility = View.GONE
-    }
-
-    private fun createPlayer() {
-        player = ExoPlayer.Builder(this).build()
-        playerView = findViewById(R.id.playerView)
-        playerView.visibility = View.VISIBLE
-        // playerView.useController = false
-        playerView.setShowPreviousButton(false)
-        playerView.setShowNextButton(false)
-        playerView.player = player
-
-        val videoUrl = Application.getVideoURL()
-        val audioUrl = Application.getAudioURL()
-        val videoUri: Uri = Uri.parse(videoUrl)
-        val audioUri: Uri = Uri.parse(audioUrl)
-        val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
-        val videoSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(fromUri(videoUri))
-        val audioSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(fromUri(audioUri))
-        val mergeSource: MediaSource = MergingMediaSource(videoSource, audioSource)
-
-        player.repeatMode = Player.REPEAT_MODE_ONE
-        player.setMediaSource(mergeSource)
-        player.playWhenReady = true
-        player.prepare()
-    }
-
-    private fun createPlayerSession() {
-        playerSession = MediaSession(this, "RebornTubePlayerSession")
-        val playerSessionCallback = object: MediaSession.Callback() {
-            override fun onMediaButtonEvent(intent: Intent) : Boolean {
-                val keyEvent : KeyEvent? = intent.getParcelableExtra(Intent.EXTRA_KEY_EVENT)
-                Log.d("KeyEvent", keyEvent.toString())
-                when (keyEvent?.keyCode) {
-                    KeyEvent.KEYCODE_MEDIA_PLAY -> {
-                        player.play()
-                    }
-                    KeyEvent.KEYCODE_MEDIA_PAUSE -> {
-                        player.pause()
-                    }
-                    KeyEvent.KEYCODE_MEDIA_PREVIOUS -> {
-                        player.seekToPrevious()
-                    }
-                    KeyEvent.KEYCODE_MEDIA_NEXT -> {
-                        player.seekToNext()
-                    }
-                }
-                return super.onMediaButtonEvent(intent)
-            }
-        }
-        playerSession.setCallback(playerSessionCallback)
-        playerSession.isActive = true
-    }
-
-    private val playerTask = object : Runnable {
-        override fun run() {
-            try {
-                val jsonArray = JSONArray(sponsorBlockInfo)
-                for (i in 0 until jsonArray.length()) {
-                    val category = jsonArray.getJSONObject(i).optString("category")
-                    val segment = jsonArray.getJSONObject(i).getJSONArray("segment")
-                    val segment0 = String.format("%.3f", segment[0].toString().toDouble()).replace(".", "").toFloat()
-                    val segment1 = String.format("%.3f", segment[1].toString().toDouble()).replace(".", "").toFloat()
-                    if (category.contains("sponsor") && player.currentPosition.toString().toFloat() >= segment0 && player.currentPosition.toString().toFloat() <= (segment1 - 1)) {
-                        player.seekTo(segment1.toLong())
-                    } else if (category.contains("interaction") && player.currentPosition.toString().toFloat() >= segment0 && player.currentPosition.toString().toFloat() <= (segment1 - 1)) {
-                        player.seekTo(segment1.toLong())
-                    }
-                }
-                playerHandler.postDelayed(this, 1000)
-            } catch (e: IOException) {
-                Log.e("IOException", e.toString())
-                playerHandler.postDelayed(this, 1000)
-            } catch (e: JSONException) {
-                Log.e("JSONException", e.toString())
-            }
+            playerController.seekTo(playerController.currentPosition + TimeUnit.SECONDS.toMillis(10))
         }
     }
 }
