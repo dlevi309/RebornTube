@@ -206,12 +206,13 @@ class Player : AppCompatActivity() {
                         player.seekTo(segment1.toLong())
                     }
                 }
+                playerHandler.postDelayed(this, 1000)
             } catch (e: IOException) {
                 Log.e("IOException", e.toString())
+                playerHandler.postDelayed(this, 1000)
             } catch (e: JSONException) {
                 Log.e("JSONException", e.toString())
             }
-            playerHandler.postDelayed(this, 1000)
         }
     }
 }
