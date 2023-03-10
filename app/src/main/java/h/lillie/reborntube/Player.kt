@@ -7,8 +7,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.app.Notification
-import android.app.PendingIntent
 import android.app.PictureInPictureParams
 import android.widget.RelativeLayout
 import android.widget.Button
@@ -16,11 +14,6 @@ import android.view.KeyEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import android.content.res.Configuration
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.AdaptiveIconDrawable
-import androidx.core.graphics.drawable.toBitmap
 import android.media.session.MediaSession
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.source.MediaSource
@@ -31,7 +24,6 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSource
 import com.google.android.exoplayer2.MediaItem.fromUri
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.StyledPlayerView
-import com.google.android.exoplayer2.ui.PlayerNotificationManager
 import java.io.IOException
 import org.json.JSONArray
 import org.json.JSONException
@@ -46,7 +38,6 @@ class Player : AppCompatActivity() {
     private lateinit var playerHandler: Handler
     private lateinit var playerView: StyledPlayerView
     private lateinit var playerSession: MediaSession
-    private lateinit var playerNotificationManager: PlayerNotificationManager
 
     private var sponsorBlockInfo = String()
 
@@ -59,7 +50,6 @@ class Player : AppCompatActivity() {
         setupUI()
         createPlayer()
         createPlayerSession()
-        createPlayerNotification()
     }
 
     override fun onDestroy() {
@@ -201,64 +191,6 @@ class Player : AppCompatActivity() {
         playerSession.isActive = true
     }
 
-    private fun createPlayerNotification() {
-        val playerManagerAdapter = object : PlayerNotificationManager.MediaDescriptionAdapter {
-            override fun getCurrentContentTitle(player: Player): CharSequence {
-                return "RebornTube"
-            }
-
-            override fun createCurrentContentIntent(player: Player): PendingIntent? {
-                return null
-            }
-
-            override fun getCurrentContentText(player: Player): CharSequence {
-                return "Player"
-            }
-
-            override fun getCurrentLargeIcon(
-                player: Player,
-                callback: PlayerNotificationManager.BitmapCallback
-            ): Bitmap? {
-                val icon: Drawable = packageManager.getApplicationIcon("h.lillie.reborntube")
-                val bitmap: Bitmap = (icon as AdaptiveIconDrawable).toBitmap()
-                val canvas = Canvas(bitmap)
-                icon.setBounds(0, 0, canvas.width, canvas.height);
-                icon.draw(canvas);
-                return bitmap
-            }
-        }
-
-        val playerManagerListener = object : PlayerNotificationManager.NotificationListener {
-            override fun onNotificationPosted(
-                notificationId: Int,
-                notification: Notification,
-                ongoing: Boolean
-            ) {
-                if (ongoing) {
-                    Log.d("Ongoing", "True")
-                } else {
-                    Log.d("Ongoing", "False")
-                }
-                super.onNotificationPosted(notificationId, notification, ongoing)
-            }
-
-            override fun onNotificationCancelled(notificationId: Int, dismissedByUser: Boolean) {
-                Log.d("Notification","Cancelled")
-                super.onNotificationCancelled(notificationId, dismissedByUser)
-            }
-        }
-        playerNotificationManager = PlayerNotificationManager.Builder(this, 1, "0")
-            .setChannelNameResourceId(0)
-            .setChannelDescriptionResourceId(0)
-            .setMediaDescriptionAdapter(playerManagerAdapter)
-            .setNotificationListener(playerManagerListener)
-            .build()
-            .apply {
-                setSmallIcon(R.drawable.icon_background)
-                setPlayer(player)
-            }
-    }
-
     private val playerTask = object : Runnable {
         override fun run() {
             try {
@@ -274,13 +206,12 @@ class Player : AppCompatActivity() {
                         player.seekTo(segment1.toLong())
                     }
                 }
-                playerHandler.postDelayed(this, 1000)
             } catch (e: IOException) {
                 Log.e("IOException", e.toString())
-                playerHandler.postDelayed(this, 1000)
             } catch (e: JSONException) {
                 Log.e("JSONException", e.toString())
             }
+            playerHandler.postDelayed(this, 1000)
         }
     }
 }
