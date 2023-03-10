@@ -44,7 +44,7 @@ class Player : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.player)
-        sponsorBlockInfo = intent.getStringExtra("sponsorBlock").toString()
+        sponsorBlockInfo = Application.getSponsorBlockInfo()
         playerHandler = Handler(Looper.getMainLooper())
         getDeviceInfo()
         setupUI()
@@ -149,8 +149,8 @@ class Player : AppCompatActivity() {
         playerView.setShowNextButton(false)
         playerView.player = player
 
-        val videoUrl = intent.getStringExtra("videoUrl").toString()
-        val audioUrl = intent.getStringExtra("audioUrl").toString()
+        val videoUrl = Application.getVideoURL()
+        val audioUrl = Application.getAudioURL()
         val videoUri: Uri = Uri.parse(videoUrl)
         val audioUri: Uri = Uri.parse(audioUrl)
         val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()

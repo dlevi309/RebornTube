@@ -43,10 +43,11 @@ class Main : AppCompatActivity() {
             val loader = Loader()
             val loaderInfo = loader.init(playerRequest)
 
+            Application.setVideoURL(loaderInfo[0])
+            Application.setAudioURL(loaderInfo[1])
+            Application.setSponsorBlockInfo(sponsorBlockRequest)
+
             val intent = Intent(this@Main, Player::class.java)
-            intent.putExtra("videoUrl", loaderInfo[0])
-            intent.putExtra("audioUrl", loaderInfo[1])
-            intent.putExtra("sponsorBlock", sponsorBlockRequest)
             startActivity(intent)
         } else {
             val errorPopup = AlertDialog.Builder(this)
