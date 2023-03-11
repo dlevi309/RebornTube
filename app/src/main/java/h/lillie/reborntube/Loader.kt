@@ -6,6 +6,9 @@ class Loader {
     fun init(json: String) : Array<String> {
         var videoUrl = String()
         var audioUrl = String()
+        var artworkUrl = String()
+        var title = String()
+        var author = String()
 
         var q2160p = String()
         var q1440p = String()
@@ -71,6 +74,12 @@ class Loader {
             audioUrl = audioLow
         }
 
-        return arrayOf(videoUrl, audioUrl)
+        val artworkArray = jsonObject.getJSONObject("videoDetails").getJSONObject("thumbnail").getJSONArray("thumbnails")
+        artworkUrl = artworkArray.optString((artworkArray.length() - 1))
+
+        title = jsonObject.getJSONObject("videoDetails").optString("title")
+        author = jsonObject.getJSONObject("videoDetails").optString("author")
+
+        return arrayOf(videoUrl, audioUrl, artworkUrl, title, author)
     }
 }
