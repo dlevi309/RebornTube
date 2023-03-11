@@ -11,7 +11,8 @@ import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.exoplayer.source.MergingMediaSource
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultHttpDataSource
-import androidx.media3.common.MediaItem.fromUri
+import androidx.media3.common.MediaMetadata
+import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.MediaSessionService
 import androidx.media3.session.MediaSession
@@ -50,13 +51,39 @@ class PlayerService : MediaSessionService() {
     private fun createPlayer() {
         player = ExoPlayer.Builder(this).build()
 
+        val title = Application.getTitle()
+        val author = Application.getAuthor()
+
         val videoUrl = Application.getVideoURL()
         val audioUrl = Application.getAudioURL()
+        val artworkUrl = Application.getArtworkURL()
         val videoUri: Uri = Uri.parse(videoUrl)
         val audioUri: Uri = Uri.parse(audioUrl)
+        val artworkUri: Uri = Uri.parse(artworkUrl)
+
+        val videoMediaMetadata: MediaMetadata = MediaMetadata.Builder()
+            .setTitle(title)
+            .setArtist(author)
+            .setArtworkUri(artworkUri)
+            .build()
+        val videoMediaItem: MediaItem = MediaItem.Builder()
+            .setMediaMetadata(videoMediaMetadata)
+            .setUri(videoUri)
+            .build()
+
+        val audioMediaMetadata: MediaMetadata = MediaMetadata.Builder()
+            .setTitle(title)
+            .setArtist(author)
+            .setArtworkUri(artworkUri)
+            .build()
+        val audioMediaItem: MediaItem = MediaItem.Builder()
+            .setMediaMetadata(audioMediaMetadata)
+            .setUri(audioUri)
+            .build()
+
         val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
-        val videoSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(fromUri(videoUri))
-        val audioSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(fromUri(audioUri))
+        val videoSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(videoMediaItem)
+        val audioSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(audioMediaItem)
         val mergeSource: MediaSource = MergingMediaSource(videoSource, audioSource)
 
         player.repeatMode = Player.REPEAT_MODE_ONE

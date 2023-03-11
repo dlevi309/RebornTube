@@ -46,6 +46,9 @@ class Main : AppCompatActivity() {
             Application.setVideoURL(loaderInfo[0])
             Application.setAudioURL(loaderInfo[1])
             Application.setSponsorBlockInfo(sponsorBlockRequest)
+            Application.setArtworkURL(loaderInfo[2])
+            Application.setTitle(loaderInfo[3])
+            Application.setAuthor(loaderInfo[4])
 
             val intent = Intent(this@Main, Player::class.java)
             startActivity(intent)

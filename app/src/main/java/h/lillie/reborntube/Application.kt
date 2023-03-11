@@ -30,5 +30,32 @@ class Application : Application() {
         fun setSponsorBlockInfo(info: String) {
             sponsorBlockInfo = info
         }
+
+        // Artwork URL
+        private var artworkURL = String()
+        fun getArtworkURL() : String {
+            return artworkURL
+        }
+        fun setArtworkURL(url: String) {
+            artworkURL = url
+        }
+
+        // Title
+        private var title = String()
+        fun getTitle() : String {
+            return title
+        }
+        fun setTitle(url: String) {
+            title = url
+        }
+
+        // Author
+        private var author = String()
+        fun getAuthor() : String {
+            return author
+        }
+        fun setAuthor(url: String) {
+            author = url
+        }
     }
 }
