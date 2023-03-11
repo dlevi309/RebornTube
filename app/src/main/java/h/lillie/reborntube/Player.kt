@@ -38,7 +38,7 @@ class Player : AppCompatActivity() {
 
                 playerView = findViewById(R.id.playerView)
                 playerView.visibility = View.VISIBLE
-                playerView.useController = false
+                playerView.useController = true
                 playerView.setShowPreviousButton(false)
                 playerView.setShowNextButton(false)
                 playerView.player = playerController
@@ -94,7 +94,7 @@ class Player : AppCompatActivity() {
         val videoRelativeLayout: RelativeLayout = findViewById(R.id.videoRelativeLayout)
         videoRelativeLayout.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
 
-        // Left Overlay
+        /* // Left Overlay
         val rewindButton: Button = findViewById(R.id.rewindButton)
         rewindButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         rewindButton.setOnClickListener {
@@ -119,6 +119,6 @@ class Player : AppCompatActivity() {
         forwardButton.x = (deviceWidth / 3) * 2.toFloat()
         forwardButton.setOnClickListener {
             playerController.seekTo(playerController.currentPosition + TimeUnit.SECONDS.toMillis(10))
-        }
+        } */
     }
 }
