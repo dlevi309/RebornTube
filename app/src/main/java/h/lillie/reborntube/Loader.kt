@@ -75,7 +75,7 @@ class Loader {
         }
 
         val artworkArray = jsonObject.getJSONObject("videoDetails").getJSONObject("thumbnail").getJSONArray("thumbnails")
-        artworkUrl = artworkArray.optString((artworkArray.length() - 1))
+        artworkUrl = artworkArray.getJSONObject((artworkArray.length() - 1)).optString("url")
 
         title = jsonObject.getJSONObject("videoDetails").optString("title")
         author = jsonObject.getJSONObject("videoDetails").optString("author")
