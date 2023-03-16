@@ -33,7 +33,6 @@ class PlayerService : MediaSessionService() {
         sponsorBlockInfo = Application.getSponsorBlockInfo()
         playerHandler = Handler(Looper.getMainLooper())
         createPlayer()
-        createPlayerSession()
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession = playerSession
@@ -50,6 +49,7 @@ class PlayerService : MediaSessionService() {
     @SuppressLint("UnsafeOptInUsageError")
     private fun createPlayer() {
         player = ExoPlayer.Builder(this).build()
+        playerSession = MediaSession.Builder(this, player).build()
 
         val title = Application.getTitle()
         val author = Application.getAuthor()
@@ -91,10 +91,6 @@ class PlayerService : MediaSessionService() {
         player.playWhenReady = true
         player.prepare()
         playerHandler.post(playerTask)
-    }
-
-    private fun createPlayerSession() {
-        playerSession = MediaSession.Builder(this, player).build()
     }
 
     private val playerTask = object : Runnable {
