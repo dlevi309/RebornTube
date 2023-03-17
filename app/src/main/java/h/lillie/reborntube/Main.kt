@@ -31,7 +31,7 @@ class Main : AppCompatActivity() {
     private fun getClipboardInfo() {
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipboardInfo = clipboardManager.primaryClip?.getItemAt(0)?.text.toString()
-        val youtubeRegex = Regex("^.*(?:(?:youtu\\.be\\/|v\\/|vi\\/|u\\/\\w\\/|embed\\/)|(?:(?:watch)?\\?v(?:i)?=|\\&v(?:i)?=))([^#\\&\\?]*).*")
+        val youtubeRegex = Regex("^.*(?:(?:youtu\\.be\\/|v\\/|vi\\/|u\\/\\w\\/|embed\\/|shorts\\/)|(?:(?:watch)?\\?v(?:i)?=|\\&v(?:i)?=))([^#\\&\\?]*).*")
         val check = youtubeRegex.containsMatchIn(clipboardInfo)
         if (check) {
             val result = youtubeRegex.findAll(clipboardInfo).map { it.groupValues[1] }.joinToString()
