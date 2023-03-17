@@ -4,6 +4,9 @@ import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.app.PictureInPictureParams
 import android.widget.RelativeLayout
 import android.widget.Button
@@ -13,8 +16,11 @@ import android.content.res.Configuration
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import androidx.media3.ui.PlayerView
+import com.google.android.material.slider.LabelFormatter
 import java.util.concurrent.TimeUnit
 import com.google.common.util.concurrent.MoreExecutors
+import com.google.android.material.slider.Slider
+import java.io.IOException
 
 class Player : AppCompatActivity() {
 
@@ -23,11 +29,13 @@ class Player : AppCompatActivity() {
 
     private lateinit var playerView: PlayerView
     private lateinit var playerController: MediaController
+    private lateinit var playerSlider: Slider
+    private lateinit var playerSliderHandler: Handler
 
-    @SuppressLint("UnsafeOptInUsageError")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.player)
+        playerSliderHandler = Handler(Looper.getMainLooper())
         getDeviceInfo()
         setupUI()
         val sessionToken = SessionToken(this, ComponentName(this, PlayerService::class.java))
@@ -35,13 +43,8 @@ class Player : AppCompatActivity() {
         controllerFuture.addListener(
             {
                 playerController = controllerFuture.get()
-
-                playerView = findViewById(R.id.playerView)
-                playerView.visibility = View.VISIBLE
-                playerView.useController = true
-                playerView.setShowPreviousButton(false)
-                playerView.setShowNextButton(false)
-                playerView.player = playerController
+                createPlayer()
+                createPlayerSlider()
             },
             MoreExecutors.directExecutor()
         )
@@ -59,10 +62,12 @@ class Player : AppCompatActivity() {
             Configuration.ORIENTATION_PORTRAIT -> {
                 getDeviceInfo()
                 setupUI()
+                playerSlider.visibility = View.VISIBLE
             }
             Configuration.ORIENTATION_LANDSCAPE -> {
                 getDeviceInfo()
                 setupUI()
+                playerSlider.visibility = View.GONE
             }
         }
     }
@@ -94,7 +99,7 @@ class Player : AppCompatActivity() {
         val videoRelativeLayout: RelativeLayout = findViewById(R.id.videoRelativeLayout)
         videoRelativeLayout.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
 
-        /* // Left Overlay
+        // Left Overlay
         val rewindButton: Button = findViewById(R.id.rewindButton)
         rewindButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         rewindButton.setOnClickListener {
@@ -119,6 +124,45 @@ class Player : AppCompatActivity() {
         forwardButton.x = (deviceWidth / 3) * 2.toFloat()
         forwardButton.setOnClickListener {
             playerController.seekTo(playerController.currentPosition + TimeUnit.SECONDS.toMillis(10))
-        } */
+        }
+    }
+
+    private fun createPlayer() {
+        playerView = findViewById(R.id.playerView)
+        playerView.visibility = View.VISIBLE
+        playerView.useController = false
+        playerView.player = playerController
+    }
+
+    private fun createPlayerSlider() {
+        playerSlider = findViewById(R.id.playerSlider)
+        playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 0)
+        playerSlider.y = deviceWidth * 9 / 16.toFloat()
+        playerSlider.labelBehavior = LabelFormatter.LABEL_GONE
+        playerSlider.valueFrom = 0.toFloat()
+        playerSlider.addOnChangeListener { _, value, fromUser ->
+            val duration = playerController.duration.toFloat()
+            val position = playerController.currentPosition.toFloat()
+            if (fromUser && duration >= 0 && position >= 0) {
+                playerController.seekTo(value.toLong())
+            }
+        }
+        playerSliderHandler.post(playerSliderTask)
+    }
+
+    private val playerSliderTask = object : Runnable {
+        override fun run() {
+            try {
+                val duration = playerController.duration.toFloat()
+                val position = playerController.currentPosition.toFloat()
+                if (duration >= 0 && position >= 0) {
+                    playerSlider.valueTo = duration
+                    playerSlider.value = position
+                }
+            } catch (e: IOException) {
+                Log.e("IOException", e.toString())
+            }
+            playerSliderHandler.postDelayed(this, 1000)
+        }
     }
 }
