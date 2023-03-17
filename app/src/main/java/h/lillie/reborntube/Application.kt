@@ -45,8 +45,8 @@ class Application : Application() {
         fun getTitle() : String {
             return title
         }
-        fun setTitle(url: String) {
-            title = url
+        fun setTitle(info: String) {
+            title = info
         }
 
         // Author
@@ -54,8 +54,19 @@ class Application : Application() {
         fun getAuthor() : String {
             return author
         }
-        fun setAuthor(url: String) {
-            author = url
+        fun setAuthor(info: String) {
+            author = info
+        }
+
+        // Live
+        private var live : Boolean = false
+
+        fun getLive() : Boolean {
+            return live
+        }
+
+        fun setLive(info: Boolean) {
+            live = info
         }
     }
 }

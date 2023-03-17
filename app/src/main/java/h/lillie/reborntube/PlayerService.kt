@@ -9,6 +9,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.exoplayer.source.MergingMediaSource
+import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.common.MediaMetadata
@@ -57,37 +58,50 @@ class PlayerService : MediaSessionService() {
         val videoUrl = Application.getVideoURL()
         val audioUrl = Application.getAudioURL()
         val artworkUrl = Application.getArtworkURL()
-        val videoUri: Uri = Uri.parse(videoUrl)
-        val audioUri: Uri = Uri.parse(audioUrl)
         val artworkUri: Uri = Uri.parse(artworkUrl)
 
-        val videoMediaMetadata: MediaMetadata = MediaMetadata.Builder()
+        val isLive = Application.getLive()
+
+        val mediaMetadata: MediaMetadata = MediaMetadata.Builder()
             .setTitle(title)
             .setArtist(author)
             .setArtworkUri(artworkUri)
             .build()
-        val videoMediaItem: MediaItem = MediaItem.Builder()
-            .setMediaMetadata(videoMediaMetadata)
-            .setUri(videoUri)
-            .build()
 
-        val audioMediaMetadata: MediaMetadata = MediaMetadata.Builder()
-            .setTitle(title)
-            .setArtist(author)
-            .setArtworkUri(artworkUri)
-            .build()
-        val audioMediaItem: MediaItem = MediaItem.Builder()
-            .setMediaMetadata(audioMediaMetadata)
-            .setUri(audioUri)
-            .build()
+        if (!isLive) {
+            val videoUri: Uri = Uri.parse(videoUrl)
+            val audioUri: Uri = Uri.parse(audioUrl)
 
-        val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
-        val videoSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(videoMediaItem)
-        val audioSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(audioMediaItem)
-        val mergeSource: MediaSource = MergingMediaSource(videoSource, audioSource)
+            val videoMediaItem: MediaItem = MediaItem.Builder()
+                .setMediaMetadata(mediaMetadata)
+                .setUri(videoUri)
+                .build()
 
+            val audioMediaItem: MediaItem = MediaItem.Builder()
+                .setMediaMetadata(mediaMetadata)
+                .setUri(audioUri)
+                .build()
+
+            val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
+            val videoSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(videoMediaItem)
+            val audioSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(audioMediaItem)
+            val mergeSource: MediaSource = MergingMediaSource(videoSource, audioSource)
+
+            player.setMediaSource(mergeSource)
+        } else if (isLive) {
+            val videoUri: Uri = Uri.parse(videoUrl)
+
+            val videoMediaItem: MediaItem = MediaItem.Builder()
+                .setMediaMetadata(mediaMetadata)
+                .setUri(videoUri)
+                .build()
+
+            val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
+            val videoSource: MediaSource = HlsMediaSource.Factory(dataSourceFactory).createMediaSource(videoMediaItem)
+
+            player.setMediaSource(videoSource)
+        }
         player.repeatMode = Player.REPEAT_MODE_ONE
-        player.setMediaSource(mergeSource)
         player.playWhenReady = true
         player.prepare()
         playerHandler.post(playerTask)

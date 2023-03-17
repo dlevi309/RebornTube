@@ -31,7 +31,7 @@ class Main : AppCompatActivity() {
     private fun getClipboardInfo() {
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         val clipboardInfo = clipboardManager.primaryClip?.getItemAt(0)?.text.toString()
-        val youtubeRegex = Regex("^.*(?:(?:youtu\\.be\\/|v\\/|vi\\/|u\\/\\w\\/|embed\\/|shorts\\/)|(?:(?:watch)?\\?v(?:i)?=|\\&v(?:i)?=))([^#\\&\\?]*).*")
+        val youtubeRegex = Regex("^.*(?:(?:youtu\\.be\\/|v\\/|vi\\/|u\\/\\w\\/|embed\\/|shorts\\/|live\\/)|(?:(?:watch)?\\?v(?:i)?=|\\&v(?:i)?=))([^#\\&\\?]*).*")
         val check = youtubeRegex.containsMatchIn(clipboardInfo)
         if (check) {
             val result = youtubeRegex.findAll(clipboardInfo).map { it.groupValues[1] }.joinToString()
@@ -43,12 +43,13 @@ class Main : AppCompatActivity() {
             val loader = Loader()
             val loaderInfo = loader.init(playerRequest)
 
-            Application.setVideoURL(loaderInfo[0])
-            Application.setAudioURL(loaderInfo[1])
+            Application.setVideoURL(loaderInfo[0].toString())
+            Application.setAudioURL(loaderInfo[1].toString())
             Application.setSponsorBlockInfo(sponsorBlockRequest)
-            Application.setArtworkURL(loaderInfo[2])
-            Application.setTitle(loaderInfo[3])
-            Application.setAuthor(loaderInfo[4])
+            Application.setArtworkURL(loaderInfo[2].toString())
+            Application.setTitle(loaderInfo[3].toString())
+            Application.setAuthor(loaderInfo[4].toString())
+            Application.setLive(loaderInfo[5].toString().toBoolean())
 
             val intent = Intent(this@Main, Player::class.java)
             startActivity(intent)
