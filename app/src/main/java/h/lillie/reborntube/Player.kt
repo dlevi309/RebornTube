@@ -20,6 +20,8 @@ import com.google.android.material.slider.LabelFormatter
 import java.util.concurrent.TimeUnit
 import com.google.common.util.concurrent.MoreExecutors
 import com.google.android.material.slider.Slider
+import com.pedromassango.doubleclick.DoubleClick
+import com.pedromassango.doubleclick.DoubleClickListener
 import java.io.IOException
 
 class Player : AppCompatActivity() {
@@ -102,9 +104,13 @@ class Player : AppCompatActivity() {
         // Left Overlay
         val rewindButton: Button = findViewById(R.id.rewindButton)
         rewindButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
-        rewindButton.setOnClickListener {
-            playerController.seekTo(playerController.currentPosition - TimeUnit.SECONDS.toMillis(10))
-        }
+        rewindButton.setOnClickListener(DoubleClick(object : DoubleClickListener {
+            override fun onSingleClick(view: View) {
+            }
+            override fun onDoubleClick(view: View) {
+                playerController.seekTo(playerController.currentPosition - TimeUnit.SECONDS.toMillis(10))
+            }
+        }))
 
         // Middle Overlay
         val playButton: Button = findViewById(R.id.playButton)
@@ -122,9 +128,13 @@ class Player : AppCompatActivity() {
         val forwardButton: Button = findViewById(R.id.forwardButton)
         forwardButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         forwardButton.x = (deviceWidth / 3) * 2.toFloat()
-        forwardButton.setOnClickListener {
-            playerController.seekTo(playerController.currentPosition + TimeUnit.SECONDS.toMillis(10))
-        }
+        forwardButton.setOnClickListener(DoubleClick(object : DoubleClickListener {
+            override fun onSingleClick(view: View) {
+            }
+            override fun onDoubleClick(view: View) {
+                playerController.seekTo(playerController.currentPosition + TimeUnit.SECONDS.toMillis(10))
+            }
+        }))
     }
 
     private fun createPlayer() {

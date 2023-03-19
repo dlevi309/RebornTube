@@ -47,6 +47,10 @@ dependencies {
     def okhttp_version = "5.0.0-alpha.11"
     implementation "com.squareup.okhttp3:okhttp:$okhttp_version"
 
+    // DoubleClick
+    def doubleclick_version = "3.0"
+    implementation "com.github.pedromassango:doubleClick:$doubleclick_version"
+
     // Media
     def media_version = "1.0.0-rc02"
     implementation "androidx.media3:media3-exoplayer:$media_version"
