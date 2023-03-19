@@ -105,7 +105,9 @@ class PlayerService : MediaSessionService() {
         player.repeatMode = Player.REPEAT_MODE_ONE
         player.playWhenReady = true
         player.prepare()
-        playerHandler.post(playerTask)
+        if (!isLive) {
+            playerHandler.post(playerTask)
+        }
     }
 
     private val playerTask = object : Runnable {
