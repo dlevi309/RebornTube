@@ -8,7 +8,7 @@
         android:label="RebornTube"
         android:supportsRtl="true"
         android:name=".Application"
-        android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
             android:name=".Main"
             android:exported="true"
