@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.source.ProgressiveMediaSource
@@ -118,8 +119,10 @@ class PlayerService : MediaSessionService() {
                     val segment1 = String.format("%.3f", segment[1].toString().toDouble()).replace(".", "").toFloat()
                     if (category.contains("sponsor") && player.currentPosition.toString().toFloat() >= segment0 && player.currentPosition.toString().toFloat() <= (segment1 - 1)) {
                         player.seekTo(segment1.toLong())
+                        Toast.makeText(this@PlayerService, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
                     } else if (category.contains("interaction") && player.currentPosition.toString().toFloat() >= segment0 && player.currentPosition.toString().toFloat() <= (segment1 - 1)) {
                         player.seekTo(segment1.toLong())
+                        Toast.makeText(this@PlayerService, "Interaction Skipped", Toast.LENGTH_SHORT).show()
                     }
                 }
                 playerHandler.postDelayed(this, 1000)
