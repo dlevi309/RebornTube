@@ -27,6 +27,7 @@
         android:layout_height="0dp"
         android:layout_width="0dp"
         android:background="@android:color/transparent"
+        style="?android:attr/borderlessButtonStyle"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -34,6 +35,7 @@
         android:layout_height="0dp"
         android:layout_width="0dp"
         android:background="@android:color/transparent"
+        style="?android:attr/borderlessButtonStyle"
         tools:ignore="MissingConstraints" />
 
     <Button
@@ -41,7 +43,19 @@
         android:layout_height="0dp"
         android:layout_width="0dp"
         android:background="@android:color/transparent"
+        style="?android:attr/borderlessButtonStyle"
         tools:ignore="MissingConstraints" />
+
+    <ImageButton
+        android:id="@+id/playPauseRestartButton"
+        android:scaleType="fitCenter"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:background="@android:color/transparent"
+        android:visibility="gone"
+        android:elevation="999dp"
+        style="?android:attr/borderlessButtonStyle"
+        tools:ignore="ContentDescription, MissingConstraints" />
 
     <com.google.android.material.slider.Slider
         android:id="@+id/playerSlider"

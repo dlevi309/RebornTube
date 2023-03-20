@@ -10,7 +10,10 @@ import android.util.Log
 import android.app.PictureInPictureParams
 import android.widget.RelativeLayout
 import android.widget.Button
+import android.widget.ImageButton
 import android.view.View
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.content.res.Configuration
 import androidx.media3.session.MediaController
@@ -97,44 +100,78 @@ class Player : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        // Video Player
+        // Player
         val videoRelativeLayout: RelativeLayout = findViewById(R.id.videoRelativeLayout)
         videoRelativeLayout.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
 
-        // Left Overlay
+        // Overlay
         val rewindButton: Button = findViewById(R.id.rewindButton)
         rewindButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         rewindButton.setOnClickListener(DoubleClick(object : DoubleClickListener {
             override fun onSingleClick(view: View) {
+                changeOverlay()
             }
             override fun onDoubleClick(view: View) {
                 playerController.seekTo(playerController.currentPosition - TimeUnit.SECONDS.toMillis(10))
             }
         }))
 
-        // Middle Overlay
         val playButton: Button = findViewById(R.id.playButton)
         playButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         playButton.x = deviceWidth / 3.toFloat()
         playButton.setOnClickListener {
+            changeOverlay()
+        }
+
+        val forwardButton: Button = findViewById(R.id.forwardButton)
+        forwardButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
+        forwardButton.x = (deviceWidth / 3) * 2.toFloat()
+        forwardButton.setOnClickListener(DoubleClick(object : DoubleClickListener {
+            override fun onSingleClick(view: View) {
+                changeOverlay()
+            }
+            override fun onDoubleClick(view: View) {
+                playerController.seekTo(playerController.currentPosition + TimeUnit.SECONDS.toMillis(10))
+            }
+        }))
+
+        val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
+        playPauseRestartButton.layoutParams = RelativeLayout.LayoutParams(96, 96)
+        playPauseRestartButton.x = (deviceWidth / 2) - 48.toFloat()
+        playPauseRestartButton.y = ((deviceWidth * 9 / 16) / 2) - 48.toFloat()
+        playPauseRestartButton.setOnClickListener {
             if (playerController.playWhenReady) {
                 playerController.pause()
             } else if (!playerController.playWhenReady) {
                 playerController.play()
             }
         }
+    }
 
-        // Right Overlay
+    private fun changeOverlay() {
+        val rewindButton: Button = findViewById(R.id.rewindButton)
+        val playButton: Button = findViewById(R.id.playButton)
         val forwardButton: Button = findViewById(R.id.forwardButton)
-        forwardButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
-        forwardButton.x = (deviceWidth / 3) * 2.toFloat()
-        forwardButton.setOnClickListener(DoubleClick(object : DoubleClickListener {
-            override fun onSingleClick(view: View) {
-            }
-            override fun onDoubleClick(view: View) {
-                playerController.seekTo(playerController.currentPosition + TimeUnit.SECONDS.toMillis(10))
-            }
-        }))
+        val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
+
+        val rewindButtonDrawable: Drawable = rewindButton.background
+        val rewindButtonColorDrawable: ColorDrawable = rewindButtonDrawable as ColorDrawable
+        val playButtonDrawable: Drawable = playButton.background
+        val playButtonColorDrawable: ColorDrawable = playButtonDrawable as ColorDrawable
+        val forwardButtonDrawable: Drawable = forwardButton.background
+        val forwardButtonColorDrawable: ColorDrawable = forwardButtonDrawable as ColorDrawable
+
+        if (rewindButtonColorDrawable.color.toString() == "1073741824" && playButtonColorDrawable.color.toString() == "1073741824" && forwardButtonColorDrawable.color.toString() == "1073741824") {
+            rewindButton.setBackgroundColor(0x00000000)
+            playButton.setBackgroundColor(0x00000000)
+            forwardButton.setBackgroundColor(0x00000000)
+            playPauseRestartButton.visibility = View.GONE
+        } else {
+            rewindButton.setBackgroundColor(0x40000000)
+            playButton.setBackgroundColor(0x40000000)
+            forwardButton.setBackgroundColor(0x40000000)
+            playPauseRestartButton.visibility = View.VISIBLE
+        }
     }
 
     private fun createPlayer() {
@@ -163,6 +200,13 @@ class Player : AppCompatActivity() {
     private val playerSliderTask = object : Runnable {
         override fun run() {
             try {
+                val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
+                if (playerController.playWhenReady) {
+                    playPauseRestartButton.setImageResource(R.drawable.pause)
+                } else if (!playerController.playWhenReady) {
+                    playPauseRestartButton.setImageResource(R.drawable.play)
+                }
+
                 val duration = playerController.duration.toFloat()
                 val position = playerController.currentPosition.toFloat()
                 if (duration >= 0 && position >= 0) {
