@@ -32,10 +32,9 @@ class Player : Activity() {
     private var deviceHeight = 0
     private var deviceWidth = 0
 
-    private lateinit var playerView: PlayerView
     private lateinit var playerController: MediaController
-    private lateinit var playerSlider: Slider
     private lateinit var playerSliderHandler: Handler
+    private lateinit var playerSlider: Slider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -171,7 +170,9 @@ class Player : Activity() {
         val forwardButtonDrawable: Drawable = forwardButton.background
         val forwardButtonColorDrawable: ColorDrawable = forwardButtonDrawable as ColorDrawable
 
-        if (rewindButtonColorDrawable.color.toString() == "1073741824" && playButtonColorDrawable.color.toString() == "1073741824" && forwardButtonColorDrawable.color.toString() == "1073741824") {
+        val blackdimmed = applicationContext.getColor(R.color.blackdimmed)
+
+        if (rewindButtonColorDrawable.color == blackdimmed && playButtonColorDrawable.color == blackdimmed && forwardButtonColorDrawable.color == blackdimmed) {
             rewindButton.setBackgroundColor(0x00000000)
             playButton.setBackgroundColor(0x00000000)
             forwardButton.setBackgroundColor(0x00000000)
@@ -189,9 +190,9 @@ class Player : Activity() {
             playerSlider.thumbRadius = 0
             playerSlider.haloRadius = 0
         } else {
-            rewindButton.setBackgroundColor(0x40000000)
-            playButton.setBackgroundColor(0x40000000)
-            forwardButton.setBackgroundColor(0x40000000)
+            rewindButton.setBackgroundColor(blackdimmed)
+            playButton.setBackgroundColor(blackdimmed)
+            forwardButton.setBackgroundColor(blackdimmed)
             playPauseRestartButton.visibility = View.VISIBLE
             val playerSliderActiveColourList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
@@ -209,7 +210,7 @@ class Player : Activity() {
     }
 
     private fun createPlayer() {
-        playerView = findViewById(R.id.playerView)
+        val playerView: PlayerView = findViewById(R.id.playerView)
         playerView.player = playerController
         setPictureInPictureParams(
             PictureInPictureParams.Builder()
