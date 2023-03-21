@@ -3,6 +3,7 @@ package h.lillie.reborntube
 import android.annotation.SuppressLint
 import android.content.ComponentName
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -13,13 +14,13 @@ import android.widget.RelativeLayout
 import android.widget.Button
 import android.widget.ImageButton
 import android.view.View
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ColorDrawable
 import android.content.res.Configuration
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import androidx.media3.ui.PlayerView
-import com.google.android.material.slider.LabelFormatter
 import java.util.concurrent.TimeUnit
 import com.google.common.util.concurrent.MoreExecutors
 import com.google.android.material.slider.Slider
@@ -82,10 +83,14 @@ class Player : Activity() {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         if (isInPictureInPictureMode) {
             val videoOverlay: RelativeLayout = findViewById(R.id.videoOverlay)
+            val videoSlider: RelativeLayout = findViewById(R.id.videoSlider)
             videoOverlay.visibility = View.GONE
+            videoSlider.visibility = View.GONE
         } else {
             val videoOverlay: RelativeLayout = findViewById(R.id.videoOverlay)
+            val videoSlider: RelativeLayout = findViewById(R.id.videoSlider)
             videoOverlay.visibility = View.VISIBLE
+            videoSlider.visibility = View.VISIBLE
         }
     }
 
@@ -172,11 +177,35 @@ class Player : Activity() {
             playButton.setBackgroundColor(0x00000000)
             forwardButton.setBackgroundColor(0x00000000)
             playPauseRestartButton.visibility = View.GONE
+            val playerSliderActiveColourList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(Color.LTGRAY)
+            )
+            val playerSliderInactiveColourList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(Color.DKGRAY)
+            )
+            playerSlider.trackActiveTintList = playerSliderActiveColourList
+            playerSlider.trackInactiveTintList = playerSliderInactiveColourList
+            playerSlider.thumbRadius = 0
+            playerSlider.haloRadius = 0
         } else {
             rewindButton.setBackgroundColor(0x40000000)
             playButton.setBackgroundColor(0x40000000)
             forwardButton.setBackgroundColor(0x40000000)
             playPauseRestartButton.visibility = View.VISIBLE
+            val playerSliderActiveColourList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(Color.RED)
+            )
+            val playerSliderInactiveColourList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(Color.LTGRAY)
+            )
+            playerSlider.trackActiveTintList = playerSliderActiveColourList
+            playerSlider.trackInactiveTintList = playerSliderInactiveColourList
+            playerSlider.thumbRadius = 15
+            playerSlider.haloRadius = 15
         }
     }
 
@@ -193,10 +222,26 @@ class Player : Activity() {
     }
 
     private fun createPlayerSlider() {
-        playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 0)
-        playerSlider.y = deviceWidth * 9 / 16.toFloat()
-        playerSlider.labelBehavior = LabelFormatter.LABEL_GONE
+        playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth + 64, 0)
+        playerSlider.y = (deviceWidth * 9 / 16) - 64.toFloat()
         playerSlider.valueFrom = 0.toFloat()
+        val playerSliderActiveColourList = ColorStateList(
+            arrayOf(intArrayOf(android.R.attr.state_enabled)),
+            intArrayOf(Color.LTGRAY)
+        )
+        val playerSliderInactiveColourList = ColorStateList(
+            arrayOf(intArrayOf(android.R.attr.state_enabled)),
+            intArrayOf(Color.DKGRAY)
+        )
+        val playerSliderThumbColourList = ColorStateList(
+            arrayOf(intArrayOf(android.R.attr.state_enabled)),
+            intArrayOf(Color.RED)
+        )
+        playerSlider.trackActiveTintList = playerSliderActiveColourList
+        playerSlider.trackInactiveTintList = playerSliderInactiveColourList
+        playerSlider.thumbTintList = playerSliderThumbColourList
+        playerSlider.thumbRadius = 0
+        playerSlider.haloRadius = 0
         playerSlider.addOnChangeListener { _, value, fromUser ->
             val duration = playerController.duration.toFloat()
             val position = playerController.currentPosition.toFloat()

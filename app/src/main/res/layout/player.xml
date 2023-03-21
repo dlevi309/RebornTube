@@ -54,13 +54,26 @@
             android:background="@android:color/transparent"
             android:visibility="gone"
             android:elevation="999dp"
-            style="?android:attr/borderlessButtonStyle"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            style="?android:attr/borderlessButtonStyle" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/videoSlider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="-12dp"
+        android:layout_marginRight="-12dp"
+        tools:ignore="RtlHardcoded">
 
         <com.google.android.material.slider.Slider
             android:id="@+id/playerSlider"
             android:layout_height="0dp"
-            android:layout_width="0dp" />
+            android:layout_width="0dp"
+            app:trackHeight="3dp"
+            app:labelBehavior="gone" />
+
     </RelativeLayout>
 
 </RelativeLayout>
