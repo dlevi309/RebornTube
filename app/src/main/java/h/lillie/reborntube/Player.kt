@@ -14,7 +14,6 @@ import android.widget.RelativeLayout
 import android.widget.Button
 import android.widget.ImageButton
 import android.view.View
-import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ColorDrawable
 import android.content.res.Configuration
@@ -179,11 +178,11 @@ class Player : Activity() {
             playPauseRestartButton.visibility = View.GONE
             val playerSliderActiveColourList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
-                intArrayOf(Color.LTGRAY)
+                intArrayOf(applicationContext.getColor(R.color.lightgrey))
             )
             val playerSliderInactiveColourList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
-                intArrayOf(Color.DKGRAY)
+                intArrayOf(applicationContext.getColor(R.color.darkgrey))
             )
             playerSlider.trackActiveTintList = playerSliderActiveColourList
             playerSlider.trackInactiveTintList = playerSliderInactiveColourList
@@ -196,11 +195,11 @@ class Player : Activity() {
             playPauseRestartButton.visibility = View.VISIBLE
             val playerSliderActiveColourList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
-                intArrayOf(Color.RED)
+                intArrayOf(applicationContext.getColor(R.color.red))
             )
             val playerSliderInactiveColourList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
-                intArrayOf(Color.LTGRAY)
+                intArrayOf(applicationContext.getColor(R.color.lightgrey))
             )
             playerSlider.trackActiveTintList = playerSliderActiveColourList
             playerSlider.trackInactiveTintList = playerSliderInactiveColourList
@@ -211,7 +210,6 @@ class Player : Activity() {
 
     private fun createPlayer() {
         playerView = findViewById(R.id.playerView)
-        playerView.useController = false
         playerView.player = playerController
         setPictureInPictureParams(
             PictureInPictureParams.Builder()
@@ -224,24 +222,6 @@ class Player : Activity() {
     private fun createPlayerSlider() {
         playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth + 64, 0)
         playerSlider.y = (deviceWidth * 9 / 16) - 64.toFloat()
-        playerSlider.valueFrom = 0.toFloat()
-        val playerSliderActiveColourList = ColorStateList(
-            arrayOf(intArrayOf(android.R.attr.state_enabled)),
-            intArrayOf(Color.LTGRAY)
-        )
-        val playerSliderInactiveColourList = ColorStateList(
-            arrayOf(intArrayOf(android.R.attr.state_enabled)),
-            intArrayOf(Color.DKGRAY)
-        )
-        val playerSliderThumbColourList = ColorStateList(
-            arrayOf(intArrayOf(android.R.attr.state_enabled)),
-            intArrayOf(Color.RED)
-        )
-        playerSlider.trackActiveTintList = playerSliderActiveColourList
-        playerSlider.trackInactiveTintList = playerSliderInactiveColourList
-        playerSlider.thumbTintList = playerSliderThumbColourList
-        playerSlider.thumbRadius = 0
-        playerSlider.haloRadius = 0
         playerSlider.addOnChangeListener { _, value, fromUser ->
             val duration = playerController.duration.toFloat()
             val position = playerController.currentPosition.toFloat()

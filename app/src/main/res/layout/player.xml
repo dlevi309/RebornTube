@@ -16,7 +16,8 @@
         <androidx.media3.ui.PlayerView
             android:id="@+id/playerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            app:use_controller="false" />
 
     </RelativeLayout>
 
@@ -71,8 +72,14 @@
             android:id="@+id/playerSlider"
             android:layout_height="0dp"
             android:layout_width="0dp"
+            android:valueFrom="0"
             app:trackHeight="3dp"
-            app:labelBehavior="gone" />
+            app:labelBehavior="gone"
+            app:thumbColor="@color/red"
+            app:trackColorActive="@color/lightgrey"
+            app:trackColorInactive="@color/darkgrey"
+            app:thumbRadius="0dp"
+            app:haloRadius="0dp" />
 
     </RelativeLayout>
 
