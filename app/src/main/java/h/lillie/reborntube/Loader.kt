@@ -3,7 +3,7 @@ package h.lillie.reborntube
 import org.json.JSONObject
 
 class Loader {
-    fun init(json: String) : Array<Any> {
+    fun playerInit(json: String) : Array<Any> {
         val jsonObject = JSONObject(json)
 
         val artworkArray = jsonObject.getJSONObject("videoDetails").getJSONObject("thumbnail").getJSONArray("thumbnails")
@@ -82,5 +82,15 @@ class Loader {
 
             return arrayOf(videoUrl, audioUrl, artworkUrl, title, author, false)
         }
+    }
+
+    fun dislikesInit(json: String) : Array<Any> {
+        val jsonObject = JSONObject(json)
+
+        val viewCount = jsonObject.optInt("viewCount")
+        val likes = jsonObject.optInt("likes")
+        val dislikes = jsonObject.optInt("dislikes")
+
+        return arrayOf(viewCount, likes, dislikes)
     }
 }

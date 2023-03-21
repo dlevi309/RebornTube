@@ -60,13 +60,38 @@ class Application : Application() {
 
         // Live
         private var live : Boolean = false
-
         fun getLive() : Boolean {
             return live
         }
-
         fun setLive(info: Boolean) {
             live = info
+        }
+
+        // View Count
+        private var viewCount = String()
+        fun getViewCount() : String {
+            return viewCount
+        }
+        fun setViewCount(info: String) {
+            viewCount = info
+        }
+
+        // Likes
+        private var likes = String()
+        fun getLikes() : String {
+            return likes
+        }
+        fun setLikes(info: String) {
+            likes = info
+        }
+
+        // Dislikes
+        private var dislikes = String()
+        fun getDislikes() : String {
+            return dislikes
+        }
+        fun setDislikes(info: String) {
+            dislikes = info
         }
     }
 }
