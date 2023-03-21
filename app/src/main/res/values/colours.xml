@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="black40">#40000000</color>
+    <color name="blackdimmed">#40000000</color>
     <color name="red">#FFFF0000</color>
     <color name="lightgrey">#FFD3D3D3</color>
     <color name="darkgrey">#FF5A5A5A</color>
