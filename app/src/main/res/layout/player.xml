@@ -2,66 +2,64 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
     tools:context=".Player">
 
     <RelativeLayout
-        android:id="@+id/videoRelativeLayout"
+        android:id="@+id/videoPlayer"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        tools:ignore="MissingConstraints">
+        android:layout_height="0dp">
 
         <androidx.media3.ui.PlayerView
             android:id="@+id/playerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            tools:ignore="MissingConstraints" />
+            android:layout_height="match_parent" />
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/rewindButton"
-        android:layout_height="0dp"
-        android:layout_width="0dp"
-        android:background="@android:color/transparent"
-        style="?android:attr/borderlessButtonStyle"
-        tools:ignore="MissingConstraints" />
+    <RelativeLayout
+        android:id="@+id/videoOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/playButton"
-        android:layout_height="0dp"
-        android:layout_width="0dp"
-        android:background="@android:color/transparent"
-        style="?android:attr/borderlessButtonStyle"
-        tools:ignore="MissingConstraints" />
+        <Button
+            android:id="@+id/rewindButton"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:background="@android:color/transparent"
+            style="?android:attr/borderlessButtonStyle" />
 
-    <Button
-        android:id="@+id/forwardButton"
-        android:layout_height="0dp"
-        android:layout_width="0dp"
-        android:background="@android:color/transparent"
-        style="?android:attr/borderlessButtonStyle"
-        tools:ignore="MissingConstraints" />
+        <Button
+            android:id="@+id/playButton"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:background="@android:color/transparent"
+            style="?android:attr/borderlessButtonStyle" />
 
-    <ImageButton
-        android:id="@+id/playPauseRestartButton"
-        android:scaleType="fitCenter"
-        android:layout_height="0dp"
-        android:layout_width="0dp"
-        android:background="@android:color/transparent"
-        android:visibility="gone"
-        android:elevation="999dp"
-        style="?android:attr/borderlessButtonStyle"
-        tools:ignore="ContentDescription, MissingConstraints" />
+        <Button
+            android:id="@+id/forwardButton"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:background="@android:color/transparent"
+            style="?android:attr/borderlessButtonStyle" />
 
-    <com.google.android.material.slider.Slider
-        android:id="@+id/playerSlider"
-        android:layout_height="0dp"
-        android:layout_width="0dp"
-        android:theme="@style/Theme.MaterialComponents.NoActionBar"
-        tools:ignore="MissingConstraints" />
+        <ImageButton
+            android:id="@+id/playPauseRestartButton"
+            android:scaleType="fitCenter"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:background="@android:color/transparent"
+            android:visibility="gone"
+            android:elevation="999dp"
+            style="?android:attr/borderlessButtonStyle"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/playerSlider"
+            android:layout_height="0dp"
+            android:layout_width="0dp" />
+    </RelativeLayout>
 
 </RelativeLayout>
