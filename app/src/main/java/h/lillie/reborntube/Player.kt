@@ -41,6 +41,7 @@ class Player : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.player)
         playerSliderHandler = Handler(Looper.getMainLooper())
+        playerSlider = findViewById(R.id.playerSlider)
         getDeviceInfo()
         setupUI()
         val sessionToken = SessionToken(this, ComponentName(this, PlayerService::class.java))
@@ -67,12 +68,12 @@ class Player : AppCompatActivity() {
             Configuration.ORIENTATION_PORTRAIT -> {
                 getDeviceInfo()
                 setupUI()
-                playerSlider.visibility = View.VISIBLE
+                createPlayerSlider()
             }
             Configuration.ORIENTATION_LANDSCAPE -> {
                 getDeviceInfo()
                 setupUI()
-                playerSlider.visibility = View.GONE
+                createPlayerSlider()
             }
         }
     }
@@ -95,17 +96,19 @@ class Player : AppCompatActivity() {
         when (resources.configuration.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+                playerSlider.visibility = View.VISIBLE
             }
             Configuration.ORIENTATION_LANDSCAPE -> {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+                playerSlider.visibility = View.GONE
             }
         }
     }
 
     private fun setupUI() {
         // Player
-        val videoRelativeLayout: RelativeLayout = findViewById(R.id.videoRelativeLayout)
-        videoRelativeLayout.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
+        val videoPlayer: RelativeLayout = findViewById(R.id.videoPlayer)
+        videoPlayer.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
 
         // Overlay
         val rewindButton: Button = findViewById(R.id.rewindButton)
@@ -179,7 +182,6 @@ class Player : AppCompatActivity() {
 
     private fun createPlayer() {
         playerView = findViewById(R.id.playerView)
-        playerView.visibility = View.VISIBLE
         playerView.useController = false
         playerView.player = playerController
         setPictureInPictureParams(
@@ -191,7 +193,6 @@ class Player : AppCompatActivity() {
     }
 
     private fun createPlayerSlider() {
-        playerSlider = findViewById(R.id.playerSlider)
         playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 0)
         playerSlider.y = deviceWidth * 9 / 16.toFloat()
         playerSlider.labelBehavior = LabelFormatter.LABEL_GONE
