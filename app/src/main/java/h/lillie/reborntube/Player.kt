@@ -77,12 +77,15 @@ class Player : AppCompatActivity() {
         }
     }
 
-    override fun onUserLeaveHint() {
-        super.onUserLeaveHint()
-        val pictureInPictureParams: PictureInPictureParams = PictureInPictureParams.Builder()
-            .setAutoEnterEnabled(true)
-            .build()
-        this.enterPictureInPictureMode(pictureInPictureParams)
+    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
+        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        if (isInPictureInPictureMode) {
+            val videoOverlay: RelativeLayout = findViewById(R.id.videoOverlay)
+            videoOverlay.visibility = View.GONE
+        } else {
+            val videoOverlay: RelativeLayout = findViewById(R.id.videoOverlay)
+            videoOverlay.visibility = View.VISIBLE
+        }
     }
 
     @SuppressLint("SwitchIntDef")
@@ -179,6 +182,12 @@ class Player : AppCompatActivity() {
         playerView.visibility = View.VISIBLE
         playerView.useController = false
         playerView.player = playerController
+        setPictureInPictureParams(
+            PictureInPictureParams.Builder()
+                .setAutoEnterEnabled(true)
+                .setSeamlessResizeEnabled(true)
+                .build()
+        )
     }
 
     private fun createPlayerSlider() {
