@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.app.Activity
 import android.app.PictureInPictureParams
 import android.widget.RelativeLayout
 import android.widget.Button
@@ -14,7 +15,6 @@ import android.widget.ImageButton
 import android.view.View
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.content.res.Configuration
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
@@ -27,7 +27,7 @@ import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
 import java.io.IOException
 
-class Player : AppCompatActivity() {
+class Player : Activity() {
 
     private var deviceHeight = 0
     private var deviceWidth = 0

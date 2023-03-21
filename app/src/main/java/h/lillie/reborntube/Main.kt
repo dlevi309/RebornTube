@@ -4,11 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.content.Context
 import android.content.ClipboardManager
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity
 import android.app.AlertDialog
 import android.os.StrictMode
 
-class Main : AppCompatActivity() {
+class Main : Activity() {
 
     private var hasRan = 0
     private var hasCreated = 0
