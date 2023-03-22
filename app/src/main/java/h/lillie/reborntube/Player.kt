@@ -163,9 +163,15 @@ class Player : Activity() {
         }
 
         val videoSwitch: SwitchMaterial = findViewById(R.id.videoSwitch)
-        videoSwitch.layoutParams = RelativeLayout.LayoutParams(200, 108)
-        videoSwitch.x = deviceWidth - 200.toFloat()
-        videoSwitch.y = 50.toFloat()
+        videoSwitch.layoutParams = RelativeLayout.LayoutParams(200, 100)
+        if (orientation == 0) {
+            videoSwitch.x = deviceWidth - 210.toFloat()
+            videoSwitch.y = 10.toFloat()
+        }
+        if (orientation == 1) {
+            videoSwitch.x = deviceWidth - 310.toFloat()
+            videoSwitch.y = 50.toFloat()
+        }
         videoSwitch.setOnCheckedChangeListener { _, isChecked ->
             val playerView: PlayerView = findViewById(R.id.playerView)
             val playerImageView: ImageView = findViewById(R.id.playerImageView)
