@@ -82,6 +82,7 @@ class Player : Activity() {
     }
 
     @SuppressLint("SwitchIntDef")
+    @Suppress("Deprecation")
     private fun getDeviceInfo() {
         deviceHeight = windowManager.currentWindowMetrics.bounds.height()
         deviceWidth = windowManager.currentWindowMetrics.bounds.width()
