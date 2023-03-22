@@ -26,7 +26,7 @@ class PlayerService : MediaSessionService() {
 
     private lateinit var player: ExoPlayer
     private lateinit var playerHandler: Handler
-    private lateinit var playerSession: MediaSession
+    private var playerSession: MediaSession? = null
 
     private var sponsorBlockInfo = String()
 
@@ -37,14 +37,14 @@ class PlayerService : MediaSessionService() {
         createPlayer()
     }
 
-    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession = playerSession
+    override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = playerSession
 
     override fun onDestroy() {
         super.onDestroy()
-        playerSession.run {
+        playerSession?.run {
             player.release()
-            playerSession.release()
             release()
+            playerSession = null
         }
     }
 
