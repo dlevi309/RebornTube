@@ -74,15 +74,18 @@ class Player : Activity() {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         val videoOverlay: RelativeLayout = findViewById(R.id.videoOverlay)
         val videoSlider: RelativeLayout = findViewById(R.id.videoSlider)
+        val videoTitleLayout: RelativeLayout = findViewById(R.id.videoTitleLayout)
         val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
         if (isInPictureInPictureMode) {
-            videoOverlay.visibility = View.GONE
-            videoSlider.visibility = View.GONE
-            videoInfo.visibility = View.GONE
+            videoOverlay.alpha = 0.toFloat()
+            videoSlider.alpha = 0.toFloat()
+            videoTitleLayout.alpha = 0.toFloat()
+            videoInfo.alpha = 0.toFloat()
         } else {
-            videoOverlay.visibility = View.VISIBLE
-            videoSlider.visibility = View.VISIBLE
-            videoInfo.visibility = View.VISIBLE
+            videoOverlay.alpha = 1.toFloat()
+            videoSlider.alpha = 1.toFloat()
+            videoTitleLayout.alpha = 1.toFloat()
+            videoInfo.alpha = 1.toFloat()
         }
     }
 
