@@ -5,14 +5,14 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 
 class Extractor {
-    fun playerRequest(videoID: String) : String {
+    fun playerRequest(clientName: String, clientVersion: String, videoID: String) : String {
         val body = """{
             "context": {
                 "client": {
                     "hl": "en",
                     "gl": "US",
-                    "clientName": "ANDROID",
-                    "clientVersion": "16.20",
+                    "clientName": "$clientName",
+                    "clientVersion": "$clientVersion",
                     "playbackContext": {
                         "contentPlaybackContext": {
                             "signatureTimestamp": "sts",
