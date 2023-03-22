@@ -3,14 +3,16 @@ package h.lillie.reborntube
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import android.content.Context
 
 class Extractor {
-    fun playerRequest(clientName: String, clientVersion: String, videoID: String) : String {
+    fun playerRequest(context: Context, clientName: String, clientVersion: String, videoID: String) : String {
+        val countryCode = context.resources.configuration.locales.get(0).country
         val body = """{
             "context": {
                 "client": {
                     "hl": "en",
-                    "gl": "US",
+                    "gl": "$countryCode",
                     "clientName": "$clientName",
                     "clientVersion": "$clientVersion",
                     "playbackContext": {
@@ -38,12 +40,13 @@ class Extractor {
         return client.newCall(request).execute().body.string()
     }
 
-    fun browseRequest(clientName: String, clientVersion: String, browseID: String, params: String) : String {
+    fun browseRequest(context: Context, clientName: String, clientVersion: String, browseID: String, params: String) : String {
+        val countryCode = context.resources.configuration.locales.get(0).country
         val body = """{
             "context": {
                 "client": {
                     "hl": "en",
-                    "gl": "US",
+                    "gl": "$countryCode",
                     "clientName": "$clientName",
                     "clientVersion": "$clientVersion",
                     "playbackContext": {
@@ -72,12 +75,13 @@ class Extractor {
         return client.newCall(request).execute().body.string()
     }
 
-    fun searchRequest(clientName: String, clientVersion: String, query: String) : String {
+    fun searchRequest(context: Context, clientName: String, clientVersion: String, query: String) : String {
+        val countryCode = context.resources.configuration.locales.get(0).country
         val body = """{
             "context": {
                 "client": {
                     "hl": "en",
-                    "gl": "US",
+                    "gl": "$countryCode",
                     "clientName": "$clientName",
                     "clientVersion": "$clientVersion",
                     "playbackContext": {
