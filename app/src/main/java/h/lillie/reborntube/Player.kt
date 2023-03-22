@@ -13,6 +13,7 @@ import android.app.PictureInPictureParams
 import android.widget.RelativeLayout
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.view.View
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ColorDrawable
@@ -72,12 +73,15 @@ class Player : Activity() {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
         val videoOverlay: RelativeLayout = findViewById(R.id.videoOverlay)
         val videoSlider: RelativeLayout = findViewById(R.id.videoSlider)
+        val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
         if (isInPictureInPictureMode) {
             videoOverlay.visibility = View.GONE
             videoSlider.visibility = View.GONE
+            videoInfo.visibility = View.GONE
         } else {
             videoOverlay.visibility = View.VISIBLE
             videoSlider.visibility = View.VISIBLE
+            videoInfo.visibility = View.VISIBLE
         }
     }
 
@@ -89,18 +93,16 @@ class Player : Activity() {
         when (resources.configuration.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-                setupUI(0)
-                createPlayerSlider(0)
+                createUI(0)
             }
             Configuration.ORIENTATION_LANDSCAPE -> {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
-                setupUI(1)
-                createPlayerSlider(1)
+                createUI(1)
             }
         }
     }
 
-    private fun setupUI(orientation: Int) {
+    private fun createUI(orientation: Int) {
         // Player
         val videoPlayer: RelativeLayout = findViewById(R.id.videoPlayer)
         videoPlayer.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
@@ -150,6 +152,43 @@ class Player : Activity() {
             } else if (!playerController.playWhenReady) {
                 playerController.play()
             }
+        }
+
+        // Slider
+        playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth + 64, 0)
+        if (orientation == 0) {
+            playerSlider.y = (deviceWidth * 9 / 16) - 64.toFloat()
+            playerSlider.visibility = View.VISIBLE
+        } else if (orientation == 1) {
+            playerSlider.y = deviceHeight - 256.toFloat()
+            if (overlayVisible == 0) {
+                playerSlider.visibility = View.GONE
+            } else if (overlayVisible == 1) {
+                playerSlider.visibility = View.VISIBLE
+            }
+        }
+        playerSlider.addOnChangeListener { _, value, fromUser ->
+            val duration = playerController.duration.toFloat()
+            val position = playerController.currentPosition.toFloat()
+            if (fromUser && duration >= 0 && position >= 0) {
+                playerController.seekTo(value.toLong())
+            }
+        }
+
+        // Info
+        val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
+        val videoCountLikesDislikes: TextView = findViewById(R.id.videoCountLikesDislikes)
+        videoCountLikesDislikes.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 200)
+        videoCountLikesDislikes.y = (deviceWidth * 9 / 16) + 64.toFloat()
+        val viewCount = Application.getViewCount().toDouble()
+        val likes = Application.getLikes().toDouble()
+        val dislikes = Application.getDislikes().toDouble()
+        val info = "View Count: %,.0f\nLikes: %,.0f\nDislikes: %,.0f".format(viewCount, likes, dislikes)
+        videoCountLikesDislikes.text = info
+        if (orientation == 0) {
+            videoInfo.visibility = View.VISIBLE
+        } else if (orientation == 1) {
+            videoInfo.visibility = View.GONE
         }
     }
 
@@ -210,28 +249,6 @@ class Player : Activity() {
             playerSlider.trackInactiveTintList = playerSliderInactiveColourList
             playerSlider.thumbRadius = 15
             playerSlider.haloRadius = 15
-        }
-    }
-
-    private fun createPlayerSlider(orientation: Int) {
-        playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth + 64, 0)
-        if (orientation == 0) {
-            playerSlider.y = (deviceWidth * 9 / 16) - 64.toFloat()
-            playerSlider.visibility = View.VISIBLE
-        } else if (orientation == 1) {
-            playerSlider.y = deviceHeight - 256.toFloat()
-            if (overlayVisible == 0) {
-                playerSlider.visibility = View.GONE
-            } else if (overlayVisible == 1) {
-                playerSlider.visibility = View.VISIBLE
-            }
-        }
-        playerSlider.addOnChangeListener { _, value, fromUser ->
-            val duration = playerController.duration.toFloat()
-            val position = playerController.currentPosition.toFloat()
-            if (fromUser && duration >= 0 && position >= 0) {
-                playerController.seekTo(value.toLong())
-            }
         }
     }
 
