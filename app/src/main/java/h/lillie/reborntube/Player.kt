@@ -108,9 +108,9 @@ class Player : Activity() {
         videoPlayer.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
 
         // Overlay
-        val rewindButton: Button = findViewById(R.id.rewindButton)
-        rewindButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
-        rewindButton.setOnClickListener(DoubleClick(object : DoubleClickListener {
+        val leftView: View = findViewById(R.id.leftView)
+        leftView.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
+        leftView.setOnClickListener(DoubleClick(object : DoubleClickListener {
             override fun onSingleClick(view: View) {
                 changeOverlay(orientation)
             }
@@ -119,17 +119,17 @@ class Player : Activity() {
             }
         }))
 
-        val playButton: Button = findViewById(R.id.playButton)
-        playButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
-        playButton.x = deviceWidth / 3.toFloat()
-        playButton.setOnClickListener {
+        val middleView: View = findViewById(R.id.middleView)
+        middleView.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
+        middleView.x = deviceWidth / 3.toFloat()
+        middleView.setOnClickListener {
             changeOverlay(orientation)
         }
 
-        val forwardButton: Button = findViewById(R.id.forwardButton)
-        forwardButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
-        forwardButton.x = (deviceWidth / 3) * 2.toFloat()
-        forwardButton.setOnClickListener(DoubleClick(object : DoubleClickListener {
+        val rightView: View = findViewById(R.id.rightView)
+        rightView.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
+        rightView.x = (deviceWidth / 3) * 2.toFloat()
+        rightView.setOnClickListener(DoubleClick(object : DoubleClickListener {
             override fun onSingleClick(view: View) {
                 changeOverlay(orientation)
             }
@@ -211,26 +211,26 @@ class Player : Activity() {
     }
 
     private fun changeOverlay(orientation: Int) {
-        val rewindButton: Button = findViewById(R.id.rewindButton)
-        val playButton: Button = findViewById(R.id.playButton)
-        val forwardButton: Button = findViewById(R.id.forwardButton)
+        val leftView: View = findViewById(R.id.leftView)
+        val middleView: View = findViewById(R.id.middleView)
+        val rightView: View = findViewById(R.id.rightView)
         val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
         val videoTitle: TextView = findViewById(R.id.videoTitle)
 
-        val rewindButtonDrawable: Drawable = rewindButton.background
-        val rewindButtonColorDrawable: ColorDrawable = rewindButtonDrawable as ColorDrawable
-        val playButtonDrawable: Drawable = playButton.background
-        val playButtonColorDrawable: ColorDrawable = playButtonDrawable as ColorDrawable
-        val forwardButtonDrawable: Drawable = forwardButton.background
-        val forwardButtonColorDrawable: ColorDrawable = forwardButtonDrawable as ColorDrawable
+        val leftViewDrawable: Drawable = leftView.background
+        val leftViewColorDrawable: ColorDrawable = leftViewDrawable as ColorDrawable
+        val middleViewDrawable: Drawable = middleView.background
+        val middleViewColorDrawable: ColorDrawable = middleViewDrawable as ColorDrawable
+        val rightViewDrawable: Drawable = rightView.background
+        val rightViewColorDrawable: ColorDrawable = rightViewDrawable as ColorDrawable
 
         val blackDimmed = applicationContext.getColor(R.color.blackdimmed)
 
-        if (rewindButtonColorDrawable.color == blackDimmed && playButtonColorDrawable.color == blackDimmed && forwardButtonColorDrawable.color == blackDimmed) {
+        if (leftViewColorDrawable.color == blackDimmed && middleViewColorDrawable.color == blackDimmed && rightViewColorDrawable.color == blackDimmed) {
             overlayVisible = 0
-            rewindButton.setBackgroundColor(0x00000000)
-            playButton.setBackgroundColor(0x00000000)
-            forwardButton.setBackgroundColor(0x00000000)
+            leftView.setBackgroundColor(0x00000000)
+            middleView.setBackgroundColor(0x00000000)
+            rightView.setBackgroundColor(0x00000000)
             playPauseRestartButton.visibility = View.GONE
             val playerSliderActiveColourList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
@@ -253,9 +253,9 @@ class Player : Activity() {
             playerSlider.haloRadius = 0
         } else {
             overlayVisible = 1
-            rewindButton.setBackgroundColor(blackDimmed)
-            playButton.setBackgroundColor(blackDimmed)
-            forwardButton.setBackgroundColor(blackDimmed)
+            leftView.setBackgroundColor(blackDimmed)
+            middleView.setBackgroundColor(blackDimmed)
+            rightView.setBackgroundColor(blackDimmed)
             playPauseRestartButton.visibility = View.VISIBLE
             val playerSliderActiveColourList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),

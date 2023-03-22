@@ -26,26 +26,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/rewindButton"
+        <View
+            android:id="@+id/leftView"
             android:layout_height="0dp"
             android:layout_width="0dp"
-            android:background="@android:color/transparent"
-            style="?android:attr/borderlessButtonStyle" />
+            android:background="@android:color/transparent" />
 
-        <Button
-            android:id="@+id/playButton"
+        <View
+            android:id="@+id/middleView"
             android:layout_height="0dp"
             android:layout_width="0dp"
-            android:background="@android:color/transparent"
-            style="?android:attr/borderlessButtonStyle" />
+            android:background="@android:color/transparent" />
 
-        <Button
-            android:id="@+id/forwardButton"
+        <View
+            android:id="@+id/rightView"
             android:layout_height="0dp"
             android:layout_width="0dp"
-            android:background="@android:color/transparent"
-            style="?android:attr/borderlessButtonStyle" />
+            android:background="@android:color/transparent" />
 
         <ImageButton
             android:id="@+id/playPauseRestartButton"
@@ -56,8 +53,7 @@
             android:visibility="gone"
             android:elevation="999dp"
             android:tint="@color/white"
-            tools:ignore="ContentDescription, UseAppTint"
-            style="?android:attr/borderlessButtonStyle" />
+            tools:ignore="ContentDescription, UseAppTint" />
 
     </RelativeLayout>
 
