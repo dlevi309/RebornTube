@@ -55,7 +55,8 @@
             android:background="@android:color/transparent"
             android:visibility="gone"
             android:elevation="999dp"
-            tools:ignore="ContentDescription"
+            android:tint="@color/white"
+            tools:ignore="ContentDescription, UseAppTint"
             style="?android:attr/borderlessButtonStyle" />
 
     </RelativeLayout>
@@ -91,7 +92,8 @@
         <TextView
             android:id="@+id/videoCountLikesDislikes"
             android:layout_height="0dp"
-            android:layout_width="0dp" />
+            android:layout_width="0dp"
+            android:textColor="@color/white" />
 
     </RelativeLayout>
 
