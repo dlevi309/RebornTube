@@ -175,21 +175,39 @@ class Player : Activity() {
             }
         }
 
+        // Title
+        val videoTitle: TextView = findViewById(R.id.videoTitle)
+        val title = Application.getTitle()
+        videoTitle.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 50)
+        if (orientation == 0) {
+            videoTitle.y = (deviceWidth * 9 / 16) + 64.toFloat()
+            videoTitle.visibility = View.VISIBLE
+        } else if (orientation == 1) {
+            videoTitle.y = 50.toFloat()
+            if (overlayVisible == 0) {
+                videoTitle.visibility = View.GONE
+            } else if (overlayVisible == 1) {
+                videoTitle.visibility = View.VISIBLE
+            }
+        }
+        videoTitle.text = title
+
         // Info
         val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
-        val videoCountLikesDislikes: TextView = findViewById(R.id.videoCountLikesDislikes)
-        videoCountLikesDislikes.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 200)
-        videoCountLikesDislikes.y = (deviceWidth * 9 / 16) + 64.toFloat()
-        val viewCount = Application.getViewCount().toDouble()
-        val likes = Application.getLikes().toDouble()
-        val dislikes = Application.getDislikes().toDouble()
-        val info = "View Count: %,.0f\nLikes: %,.0f\nDislikes: %,.0f".format(viewCount, likes, dislikes)
-        videoCountLikesDislikes.text = info
         if (orientation == 0) {
             videoInfo.visibility = View.VISIBLE
         } else if (orientation == 1) {
             videoInfo.visibility = View.GONE
         }
+
+        val videoCountLikesDislikes: TextView = findViewById(R.id.videoCountLikesDislikes)
+        videoCountLikesDislikes.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 200)
+        videoCountLikesDislikes.y = (deviceWidth * 9 / 16) + 144.toFloat()
+        val viewCount = Application.getViewCount().toDouble()
+        val likes = Application.getLikes().toDouble()
+        val dislikes = Application.getDislikes().toDouble()
+        val info = "View Count: %,.0f\nLikes: %,.0f\nDislikes: %,.0f".format(viewCount, likes, dislikes)
+        videoCountLikesDislikes.text = info
     }
 
     private fun changeOverlay(orientation: Int) {
@@ -197,6 +215,7 @@ class Player : Activity() {
         val playButton: Button = findViewById(R.id.playButton)
         val forwardButton: Button = findViewById(R.id.forwardButton)
         val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
+        val videoTitle: TextView = findViewById(R.id.videoTitle)
 
         val rewindButtonDrawable: Drawable = rewindButton.background
         val rewindButtonColorDrawable: ColorDrawable = rewindButtonDrawable as ColorDrawable
@@ -222,8 +241,10 @@ class Player : Activity() {
                 intArrayOf(applicationContext.getColor(R.color.darkgrey))
             )
             if (orientation == 0) {
+                videoTitle.visibility = View.VISIBLE
                 playerSlider.visibility = View.VISIBLE
             } else if (orientation == 1) {
+                videoTitle.visibility = View.GONE
                 playerSlider.visibility = View.GONE
             }
             playerSlider.trackActiveTintList = playerSliderActiveColourList
@@ -244,6 +265,7 @@ class Player : Activity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.lightgrey))
             )
+            videoTitle.visibility = View.VISIBLE
             playerSlider.visibility = View.VISIBLE
             playerSlider.trackActiveTintList = playerSliderActiveColourList
             playerSlider.trackInactiveTintList = playerSliderInactiveColourList

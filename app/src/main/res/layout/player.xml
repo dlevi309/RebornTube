@@ -84,6 +84,12 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/videoTitle"
+        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:textColor="@color/white" />
+
     <RelativeLayout
         android:id="@+id/videoInfo"
         android:layout_width="match_parent"
