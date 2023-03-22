@@ -102,7 +102,6 @@ class PlayerService : MediaSessionService() {
 
             player.setMediaSource(videoSource)
         }
-        player.repeatMode = Player.REPEAT_MODE_ONE
         player.playWhenReady = true
         player.prepare()
         if (!isLive) {
@@ -113,6 +112,12 @@ class PlayerService : MediaSessionService() {
     private val playerTask = object : Runnable {
         override fun run() {
             try {
+                val loop = Application.getLoop()
+                if (!loop) {
+                    player.repeatMode = Player.REPEAT_MODE_OFF
+                } else if (loop) {
+                    player.repeatMode = Player.REPEAT_MODE_ONE
+                }
                 val jsonArray = JSONArray(sponsorBlockInfo)
                 for (i in 0 until jsonArray.length()) {
                     val category = jsonArray.getJSONObject(i).optString("category")
@@ -127,13 +132,12 @@ class PlayerService : MediaSessionService() {
                         Toast.makeText(this@PlayerService, "Interaction Skipped", Toast.LENGTH_SHORT).show()
                     }
                 }
-                playerHandler.postDelayed(this, 1000)
             } catch (e: IOException) {
                 Log.e("IOException", e.toString())
-                playerHandler.postDelayed(this, 1000)
             } catch (e: JSONException) {
                 Log.e("JSONException", e.toString())
             }
+            playerHandler.postDelayed(this, 1000)
         }
     }
 }

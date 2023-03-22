@@ -15,6 +15,7 @@ import android.widget.RelativeLayout
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import android.view.View
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ColorDrawable
@@ -208,6 +209,34 @@ class Player : Activity() {
         val dislikes = Application.getDislikes().toDouble()
         val info = "View Count: %,.0f\nLikes: %,.0f\nDislikes: %,.0f".format(viewCount, likes, dislikes)
         videoCountLikesDislikes.text = info
+
+        val videoLoop: Button = findViewById(R.id.videoLoop)
+        videoLoop.layoutParams = RelativeLayout.LayoutParams(200, 100)
+        videoLoop.y = (deviceWidth * 9 / 16) + 304.toFloat()
+        videoLoop.setOnClickListener {
+            val loop = Application.getLoop()
+            if (!loop) {
+                Application.setLoop(true)
+                Toast.makeText(this@Player, "Loop Enabled", Toast.LENGTH_SHORT).show()
+            } else if (loop) {
+                Application.setLoop(false)
+                Toast.makeText(this@Player, "Loop Disabled", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val videoShare: Button = findViewById(R.id.videoShare)
+        videoShare.layoutParams = RelativeLayout.LayoutParams(200, 100)
+        videoShare.x = 200.toFloat()
+        videoShare.y = (deviceWidth * 9 / 16) + 304.toFloat()
+        videoShare.setOnClickListener {
+            val videoID = Application.getVideoID()
+            val shareIntent: Intent = Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, "https://youtu.be/$videoID")
+                type = "text/plain"
+            }
+            startActivity(Intent.createChooser(shareIntent, null))
+        }
     }
 
     private fun changeOverlay(orientation: Int) {

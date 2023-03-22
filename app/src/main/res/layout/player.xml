@@ -97,6 +97,24 @@
             android:layout_width="0dp"
             android:textColor="@color/white" />
 
+        <Button
+            android:id="@+id/videoLoop"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:text="Loop"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/videoShare"
+            android:layout_height="0dp"
+            android:layout_width="0dp"
+            android:text="Share"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            tools:ignore="HardcodedText" />
+
     </RelativeLayout>
 
 </RelativeLayout>

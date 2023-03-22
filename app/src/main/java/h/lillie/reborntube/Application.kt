@@ -4,6 +4,15 @@ import android.app.Application
 
 class Application : Application() {
     companion object {
+        // Video ID
+        private var videoID = String()
+        fun getVideoID() : String {
+            return videoID
+        }
+        fun setVideoID(url: String) {
+            videoID = url
+        }
+
         // Video URL
         private var videoURL = String()
         fun getVideoURL() : String {
@@ -92,6 +101,15 @@ class Application : Application() {
         }
         fun setDislikes(info: String) {
             dislikes = info
+        }
+
+        // Loop
+        private var loop : Boolean = false
+        fun getLoop() : Boolean {
+            return loop
+        }
+        fun setLoop(info: Boolean) {
+            loop = info
         }
     }
 }

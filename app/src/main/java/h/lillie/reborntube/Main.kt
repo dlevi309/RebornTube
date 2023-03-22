@@ -45,6 +45,7 @@ class Main : Activity() {
             val loaderPlayerInfo = loader.playerInit(playerRequest)
             val loaderDislikesInfo = loader.dislikesInit(dislikesRequest)
 
+            Application.setVideoID(result)
             Application.setVideoURL(loaderPlayerInfo[0].toString())
             Application.setAudioURL(loaderPlayerInfo[1].toString())
             Application.setSponsorBlockInfo(sponsorBlockRequest)
