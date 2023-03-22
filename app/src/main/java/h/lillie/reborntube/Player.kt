@@ -298,7 +298,7 @@ class Player : Activity() {
 
                 val duration = playerController.duration.toFloat()
                 val position = playerController.currentPosition.toFloat()
-                if (duration >= 0 && position >= 0) {
+                if (duration >= 0 && position >= 0 && position <= duration) {
                     playerSlider.valueTo = duration
                     playerSlider.value = position
                 }
