@@ -119,10 +119,10 @@ class PlayerService : MediaSessionService() {
                     val segment = jsonArray.getJSONObject(i).getJSONArray("segment")
                     val segment0 = String.format("%.3f", segment[0].toString().toDouble()).replace(".", "").toFloat()
                     val segment1 = String.format("%.3f", segment[1].toString().toDouble()).replace(".", "").toFloat()
-                    if (category.contains("sponsor") && player.currentPosition.toString().toFloat() >= segment0 && player.currentPosition.toString().toFloat() <= (segment1 - 1)) {
+                    if (category.contains("sponsor") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
                         player.seekTo(segment1.toLong())
                         Toast.makeText(this@PlayerService, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
-                    } else if (category.contains("interaction") && player.currentPosition.toString().toFloat() >= segment0 && player.currentPosition.toString().toFloat() <= (segment1 - 1)) {
+                    } else if (category.contains("interaction") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
                         player.seekTo(segment1.toLong())
                         Toast.makeText(this@PlayerService, "Interaction Skipped", Toast.LENGTH_SHORT).show()
                     }
