@@ -25,6 +25,7 @@ import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import androidx.media3.ui.PlayerView
 import java.util.concurrent.TimeUnit
+import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -39,6 +40,7 @@ class Player : Activity() {
     private var deviceWidth = 0
     private var overlayVisible = 0
 
+    private lateinit var playerControllerFuture: ListenableFuture<MediaController>
     private lateinit var playerController: MediaController
     private lateinit var playerHandler: Handler
     private lateinit var playerSlider: Slider
@@ -50,10 +52,10 @@ class Player : Activity() {
         playerSlider = findViewById(R.id.playerSlider)
         getDeviceInfo()
         val sessionToken = SessionToken(this, ComponentName(this, PlayerService::class.java))
-        val controllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
-        controllerFuture.addListener(
+        playerControllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
+        playerControllerFuture.addListener(
             {
-                playerController = controllerFuture.get()
+                playerController = playerControllerFuture.get()
                 createPlayer()
             },
             MoreExecutors.directExecutor()
@@ -62,7 +64,9 @@ class Player : Activity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        stopService(Intent(this, PlayerService::class.java))
+        playerHandler.removeCallbacks(playerTask)
+        MediaController.releaseFuture(playerControllerFuture)
+        stopService(Intent(this@Player, PlayerService::class.java))
     }
 
     @SuppressLint("SwitchIntDef")

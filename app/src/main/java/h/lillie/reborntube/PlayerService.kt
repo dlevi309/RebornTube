@@ -42,6 +42,7 @@ class PlayerService : MediaSessionService() {
     override fun onDestroy() {
         super.onDestroy()
         playerSession?.run {
+            playerHandler.removeCallbacks(playerTask)
             player.release()
             release()
             playerSession = null
