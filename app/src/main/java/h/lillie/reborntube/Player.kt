@@ -31,25 +31,24 @@ class Player : Activity() {
 
     private var deviceHeight = 0
     private var deviceWidth = 0
+    private var overlayVisible = 0
 
     private lateinit var playerController: MediaController
-    private lateinit var playerSliderHandler: Handler
+    private lateinit var playerHandler: Handler
     private lateinit var playerSlider: Slider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.player)
-        playerSliderHandler = Handler(Looper.getMainLooper())
+        playerHandler = Handler(Looper.getMainLooper())
         playerSlider = findViewById(R.id.playerSlider)
         getDeviceInfo()
-        setupUI()
         val sessionToken = SessionToken(this, ComponentName(this, PlayerService::class.java))
         val controllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
         controllerFuture.addListener(
             {
                 playerController = controllerFuture.get()
                 createPlayer()
-                createPlayerSlider()
             },
             MoreExecutors.directExecutor()
         )
@@ -64,16 +63,8 @@ class Player : Activity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         when (newConfig.orientation) {
-            Configuration.ORIENTATION_PORTRAIT -> {
-                getDeviceInfo()
-                setupUI()
-                createPlayerSlider()
-            }
-            Configuration.ORIENTATION_LANDSCAPE -> {
-                getDeviceInfo()
-                setupUI()
-                createPlayerSlider()
-            }
+            Configuration.ORIENTATION_PORTRAIT -> getDeviceInfo()
+            Configuration.ORIENTATION_LANDSCAPE -> getDeviceInfo()
         }
     }
 
@@ -97,16 +88,18 @@ class Player : Activity() {
         when (resources.configuration.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
-                playerSlider.visibility = View.VISIBLE
+                setupUI(0)
+                createPlayerSlider(0)
             }
             Configuration.ORIENTATION_LANDSCAPE -> {
                 window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
-                playerSlider.visibility = View.GONE
+                setupUI(1)
+                createPlayerSlider(1)
             }
         }
     }
 
-    private fun setupUI() {
+    private fun setupUI(orientation: Int) {
         // Player
         val videoPlayer: RelativeLayout = findViewById(R.id.videoPlayer)
         videoPlayer.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
@@ -116,7 +109,7 @@ class Player : Activity() {
         rewindButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         rewindButton.setOnClickListener(DoubleClick(object : DoubleClickListener {
             override fun onSingleClick(view: View) {
-                changeOverlay()
+                changeOverlay(orientation)
             }
             override fun onDoubleClick(view: View) {
                 playerController.seekTo(playerController.currentPosition - TimeUnit.SECONDS.toMillis(10))
@@ -127,7 +120,7 @@ class Player : Activity() {
         playButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
         playButton.x = deviceWidth / 3.toFloat()
         playButton.setOnClickListener {
-            changeOverlay()
+            changeOverlay(orientation)
         }
 
         val forwardButton: Button = findViewById(R.id.forwardButton)
@@ -135,7 +128,7 @@ class Player : Activity() {
         forwardButton.x = (deviceWidth / 3) * 2.toFloat()
         forwardButton.setOnClickListener(DoubleClick(object : DoubleClickListener {
             override fun onSingleClick(view: View) {
-                changeOverlay()
+                changeOverlay(orientation)
             }
             override fun onDoubleClick(view: View) {
                 playerController.seekTo(playerController.currentPosition + TimeUnit.SECONDS.toMillis(10))
@@ -143,9 +136,13 @@ class Player : Activity() {
         }))
 
         val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
-        playPauseRestartButton.layoutParams = RelativeLayout.LayoutParams(96, 96)
-        playPauseRestartButton.x = (deviceWidth / 2) - 48.toFloat()
-        playPauseRestartButton.y = ((deviceWidth * 9 / 16) / 2) - 48.toFloat()
+        playPauseRestartButton.layoutParams = RelativeLayout.LayoutParams(108, 108)
+        playPauseRestartButton.x = (deviceWidth / 2) - 54.toFloat()
+        if (orientation == 0) {
+            playPauseRestartButton.y = ((deviceWidth * 9 / 16) / 2) - 54.toFloat()
+        } else if (orientation == 1) {
+            playPauseRestartButton.y = (deviceHeight / 2) - 54.toFloat()
+        }
         playPauseRestartButton.setOnClickListener {
             if (playerController.playWhenReady) {
                 playerController.pause()
@@ -155,7 +152,7 @@ class Player : Activity() {
         }
     }
 
-    private fun changeOverlay() {
+    private fun changeOverlay(orientation: Int) {
         val rewindButton: Button = findViewById(R.id.rewindButton)
         val playButton: Button = findViewById(R.id.playButton)
         val forwardButton: Button = findViewById(R.id.forwardButton)
@@ -168,9 +165,10 @@ class Player : Activity() {
         val forwardButtonDrawable: Drawable = forwardButton.background
         val forwardButtonColorDrawable: ColorDrawable = forwardButtonDrawable as ColorDrawable
 
-        val blackdimmed = applicationContext.getColor(R.color.blackdimmed)
+        val blackDimmed = applicationContext.getColor(R.color.blackdimmed)
 
-        if (rewindButtonColorDrawable.color == blackdimmed && playButtonColorDrawable.color == blackdimmed && forwardButtonColorDrawable.color == blackdimmed) {
+        if (rewindButtonColorDrawable.color == blackDimmed && playButtonColorDrawable.color == blackDimmed && forwardButtonColorDrawable.color == blackDimmed) {
+            overlayVisible = 0
             rewindButton.setBackgroundColor(0x00000000)
             playButton.setBackgroundColor(0x00000000)
             forwardButton.setBackgroundColor(0x00000000)
@@ -183,14 +181,20 @@ class Player : Activity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.darkgrey))
             )
+            if (orientation == 0) {
+                playerSlider.visibility = View.VISIBLE
+            } else if (orientation == 1) {
+                playerSlider.visibility = View.GONE
+            }
             playerSlider.trackActiveTintList = playerSliderActiveColourList
             playerSlider.trackInactiveTintList = playerSliderInactiveColourList
             playerSlider.thumbRadius = 0
             playerSlider.haloRadius = 0
         } else {
-            rewindButton.setBackgroundColor(blackdimmed)
-            playButton.setBackgroundColor(blackdimmed)
-            forwardButton.setBackgroundColor(blackdimmed)
+            overlayVisible = 1
+            rewindButton.setBackgroundColor(blackDimmed)
+            playButton.setBackgroundColor(blackDimmed)
+            forwardButton.setBackgroundColor(blackDimmed)
             playPauseRestartButton.visibility = View.VISIBLE
             val playerSliderActiveColourList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
@@ -200,10 +204,33 @@ class Player : Activity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.lightgrey))
             )
+            playerSlider.visibility = View.VISIBLE
             playerSlider.trackActiveTintList = playerSliderActiveColourList
             playerSlider.trackInactiveTintList = playerSliderInactiveColourList
             playerSlider.thumbRadius = 15
             playerSlider.haloRadius = 15
+        }
+    }
+
+    private fun createPlayerSlider(orientation: Int) {
+        playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth + 64, 0)
+        if (orientation == 0) {
+            playerSlider.y = (deviceWidth * 9 / 16) - 64.toFloat()
+            playerSlider.visibility = View.VISIBLE
+        } else if (orientation == 1) {
+            playerSlider.y = deviceHeight - 256.toFloat()
+            if (overlayVisible == 0) {
+                playerSlider.visibility = View.GONE
+            } else if (overlayVisible == 1) {
+                playerSlider.visibility = View.VISIBLE
+            }
+        }
+        playerSlider.addOnChangeListener { _, value, fromUser ->
+            val duration = playerController.duration.toFloat()
+            val position = playerController.currentPosition.toFloat()
+            if (fromUser && duration >= 0 && position >= 0) {
+                playerController.seekTo(value.toLong())
+            }
         }
     }
 
@@ -216,22 +243,10 @@ class Player : Activity() {
                 .setSeamlessResizeEnabled(true)
                 .build()
         )
+        playerHandler.post(playerTask)
     }
 
-    private fun createPlayerSlider() {
-        playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth + 64, 0)
-        playerSlider.y = (deviceWidth * 9 / 16) - 64.toFloat()
-        playerSlider.addOnChangeListener { _, value, fromUser ->
-            val duration = playerController.duration.toFloat()
-            val position = playerController.currentPosition.toFloat()
-            if (fromUser && duration >= 0 && position >= 0) {
-                playerController.seekTo(value.toLong())
-            }
-        }
-        playerSliderHandler.post(playerSliderTask)
-    }
-
-    private val playerSliderTask = object : Runnable {
+    private val playerTask = object : Runnable {
         override fun run() {
             try {
                 val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
@@ -250,7 +265,7 @@ class Player : Activity() {
             } catch (e: IOException) {
                 Log.e("IOException", e.toString())
             }
-            playerSliderHandler.postDelayed(this, 1000)
+            playerHandler.postDelayed(this, 1000)
         }
     }
 }
