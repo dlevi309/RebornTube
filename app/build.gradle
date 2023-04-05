@@ -54,7 +54,7 @@ dependencies {
     implementation "com.squareup.picasso:picasso:$picasso_version"
 
     // Media
-    def media_version = "1.0.0-rc02"
+    def media_version = "1.0.0"
     implementation "androidx.media3:media3-exoplayer:$media_version"
     implementation "androidx.media3:media3-exoplayer-dash:$media_version"
     implementation "androidx.media3:media3-exoplayer-hls:$media_version"
