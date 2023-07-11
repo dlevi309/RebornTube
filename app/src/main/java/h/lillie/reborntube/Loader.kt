@@ -10,6 +10,7 @@ class Loader {
         val artworkUrl = artworkArray.getJSONObject((artworkArray.length() - 1)).optString("url")
         val title = jsonObject.getJSONObject("videoDetails").optString("title")
         val author = jsonObject.getJSONObject("videoDetails").optString("author")
+        val viewCount = jsonObject.getJSONObject("videoDetails").optString("viewCount")
         val isLive = jsonObject.getJSONObject("videoDetails").optBoolean("isLive")
         if (isLive) {
             val dashUrl = jsonObject.getJSONObject("streamingData").optString("hlsManifestUrl")
@@ -80,17 +81,16 @@ class Loader {
                 audioUrl = audioLow
             }
 
-            return arrayOf(videoUrl, audioUrl, artworkUrl, title, author, false)
+            return arrayOf(videoUrl, audioUrl, artworkUrl, title, author, viewCount, false)
         }
     }
 
     fun dislikesInit(json: String) : Array<Any> {
         val jsonObject = JSONObject(json)
 
-        val viewCount = jsonObject.optInt("viewCount")
         val likes = jsonObject.optInt("likes")
         val dislikes = jsonObject.optInt("dislikes")
 
-        return arrayOf(viewCount, likes, dislikes)
+        return arrayOf(likes, dislikes)
     }
 }
