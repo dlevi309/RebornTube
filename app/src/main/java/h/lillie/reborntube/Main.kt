@@ -20,6 +20,12 @@ class Main : Activity() {
         hasCreated = 1
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        finish()
+        System.exit(0)
+    }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus && hasRan == 0 && hasCreated == 1) {
