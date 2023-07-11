@@ -30,17 +30,33 @@ class Main : Activity() {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus && hasRan == 0 && hasCreated == 1) {
             hasRan = 1
-            getClipboardInfo()
+            if (intent.action.equals(Intent.ACTION_SEND)) {
+                if (intent.type != null) {
+                    if (intent.type.toString().startsWith("text/")) {
+                        val receivedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+                        if (receivedText != null) {
+                            getInfo(receivedText)
+                            return
+                        }
+                    }
+                }
+            }
+            getInfo(null)
         }
     }
 
-    private fun getClipboardInfo() {
-        val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        val clipboardInfo = clipboardManager.primaryClip?.getItemAt(0)?.text.toString()
+    private fun getInfo(text: String?) {
+        var info = String()
+        if (text == null) {
+            val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            info = clipboardManager.primaryClip?.getItemAt(0)?.text.toString()
+        } else {
+            info = text
+        }
         val youtubeRegex = Regex("^.*(?:(?:youtu\\.be\\/|v\\/|vi\\/|u\\/\\w\\/|embed\\/|shorts\\/|live\\/)|(?:(?:watch)?\\?v(?:i)?=|\\&v(?:i)?=))([^#\\&\\?]*).*")
-        val check = youtubeRegex.containsMatchIn(clipboardInfo)
+        val check = youtubeRegex.containsMatchIn(info)
         if (check) {
-            val result = youtubeRegex.findAll(clipboardInfo).map { it.groupValues[1] }.joinToString()
+            val result = youtubeRegex.findAll(info).map { it.groupValues[1] }.joinToString()
 
             val extractor = Extractor()
             val playerRequest = extractor.playerRequest(applicationContext, result)
