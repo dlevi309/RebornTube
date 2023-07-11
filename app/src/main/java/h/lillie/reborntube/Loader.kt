@@ -14,7 +14,7 @@ class Loader {
         val isLive = jsonObject.getJSONObject("videoDetails").optBoolean("isLive")
         if (isLive) {
             val dashUrl = jsonObject.getJSONObject("streamingData").optString("hlsManifestUrl")
-            return arrayOf(dashUrl, "", artworkUrl, title, author, true)
+            return arrayOf(dashUrl, "", artworkUrl, title, author, viewCount, true)
         } else {
             var q2160p = String()
             var q1440p = String()
