@@ -29,6 +29,7 @@ import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.gson.Gson
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
 import com.squareup.picasso.Picasso
@@ -115,6 +116,10 @@ class Player : Activity() {
     }
 
     private fun createUI(orientation: Int) {
+        // Info
+        val gson = Gson()
+        val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
+
         // Player
         val videoPlayer: RelativeLayout = findViewById(R.id.videoPlayer)
         videoPlayer.layoutParams = RelativeLayout.LayoutParams(deviceWidth, deviceWidth * 9 / 16)
@@ -211,7 +216,7 @@ class Player : Activity() {
 
         // Title
         val videoTitle: TextView = findViewById(R.id.videoTitle)
-        val title = Application.getTitle()
+        val title = videoData.title
         videoTitle.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 50)
         if (orientation == 0) {
             videoTitle.y = (deviceWidth * 9 / 16) + 64.toFloat()
@@ -237,9 +242,9 @@ class Player : Activity() {
         val videoCountLikesDislikes: TextView = findViewById(R.id.videoCountLikesDislikes)
         videoCountLikesDislikes.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 200)
         videoCountLikesDislikes.y = (deviceWidth * 9 / 16) + 144.toFloat()
-        val viewCount = Application.getViewCount().toDouble()
-        val likes = Application.getLikes().toDouble()
-        val dislikes = Application.getDislikes().toDouble()
+        val viewCount = videoData.viewCount.toDouble()
+        val likes = videoData.likes.toDouble()
+        val dislikes = videoData.dislikes.toDouble()
         val info = "View Count: %,.0f\nLikes: %,.0f\nDislikes: %,.0f".format(viewCount, likes, dislikes)
         videoCountLikesDislikes.text = info
 
@@ -262,7 +267,7 @@ class Player : Activity() {
         videoShare.x = 200.toFloat()
         videoShare.y = (deviceWidth * 9 / 16) + 304.toFloat()
         videoShare.setOnClickListener {
-            val videoID = Application.getVideoID()
+            val videoID = videoData.videoID
             val shareIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, "https://youtu.be/$videoID")
@@ -341,7 +346,9 @@ class Player : Activity() {
 
     private fun createPlayer() {
         val playerImageView: ImageView = findViewById(R.id.playerImageView)
-        val artworkUrl = Application.getArtworkURL()
+        val gson = Gson()
+        val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
+        val artworkUrl = videoData.artworkURL
         val artworkUri: Uri = Uri.parse(artworkUrl)
         Picasso.get().load(artworkUri).into(playerImageView)
 

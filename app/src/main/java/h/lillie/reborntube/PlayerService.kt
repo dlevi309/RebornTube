@@ -18,6 +18,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.session.MediaSessionService
 import androidx.media3.session.MediaSession
+import com.google.gson.Gson
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.IOException
@@ -32,7 +33,9 @@ class PlayerService : MediaSessionService() {
 
     override fun onCreate() {
         super.onCreate()
-        sponsorBlockInfo = Application.getSponsorBlockInfo()
+        val gson = Gson()
+        val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
+        sponsorBlockInfo = videoData.sponsorBlockInfo
         playerHandler = Handler(Looper.getMainLooper())
         createPlayer()
     }
@@ -54,15 +57,17 @@ class PlayerService : MediaSessionService() {
         player = ExoPlayer.Builder(this).build()
         playerSession = MediaSession.Builder(this, player).build()
 
-        val title = Application.getTitle()
-        val author = Application.getAuthor()
+        val gson = Gson()
+        val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
+        val title = videoData.title
+        val author = videoData.author
 
-        val videoUrl = Application.getVideoURL()
-        val audioUrl = Application.getAudioURL()
-        val artworkUrl = Application.getArtworkURL()
+        val videoUrl = videoData.videoURL
+        val audioUrl = videoData.audioURL
+        val artworkUrl = videoData.artworkURL
         val artworkUri: Uri = Uri.parse(artworkUrl)
 
-        val isLive = Application.getLive()
+        val isLive = videoData.live
 
         val mediaMetadata: MediaMetadata = MediaMetadata.Builder()
             .setTitle(title)

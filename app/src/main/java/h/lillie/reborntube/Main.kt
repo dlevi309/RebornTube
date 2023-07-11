@@ -7,6 +7,7 @@ import android.content.ClipboardManager
 import android.app.Activity
 import android.app.AlertDialog
 import android.os.StrictMode
+import com.google.gson.Gson
 
 class Main : Activity() {
 
@@ -67,17 +68,20 @@ class Main : Activity() {
             val loaderPlayerInfo = loader.playerInit(playerRequest)
             val loaderDislikesInfo = loader.dislikesInit(dislikesRequest)
 
-            Application.setVideoID(result)
-            Application.setVideoURL(loaderPlayerInfo[0].toString())
-            Application.setAudioURL(loaderPlayerInfo[1].toString())
-            Application.setSponsorBlockInfo(sponsorBlockRequest)
-            Application.setArtworkURL(loaderPlayerInfo[2].toString())
-            Application.setTitle(loaderPlayerInfo[3].toString())
-            Application.setAuthor(loaderPlayerInfo[4].toString())
-            Application.setViewCount(loaderPlayerInfo[5].toString())
-            Application.setLive(loaderPlayerInfo[6].toString().toBoolean())
-            Application.setLikes(loaderDislikesInfo[0].toString())
-            Application.setDislikes(loaderDislikesInfo[1].toString())
+            val gson = Gson()
+            Application.setVideoData(gson.toJson(Data(
+                result,
+                loaderPlayerInfo[0].toString(),
+                loaderPlayerInfo[1].toString(),
+                sponsorBlockRequest,
+                loaderPlayerInfo[2].toString(),
+                loaderPlayerInfo[3].toString(),
+                loaderPlayerInfo[4].toString(),
+                loaderPlayerInfo[5].toString(),
+                loaderPlayerInfo[6].toString().toBoolean(),
+                loaderDislikesInfo[0].toString(),
+                loaderDislikesInfo[1].toString()
+            )))
 
             val intent = Intent(this@Main, Player::class.java)
             startActivity(intent)
