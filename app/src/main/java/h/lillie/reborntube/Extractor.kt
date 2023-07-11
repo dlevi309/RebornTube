@@ -6,25 +6,31 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import android.content.Context
 
 class Extractor {
-    fun playerRequest(context: Context, clientName: String, clientVersion: String, videoID: String) : String {
+    fun playerRequest(context: Context, videoID: String) : String {
         val countryCode = context.resources.configuration.locales.get(0).country
         val body = """{
             "context": {
                 "client": {
                     "hl": "en",
                     "gl": "$countryCode",
-                    "clientName": "$clientName",
-                    "clientVersion": "$clientVersion",
+                    "clientName": "IOS",
+                    "clientVersion": "18.17.2",
+                    "deviceModel": "iPhone14,3",
                     "playbackContext": {
                         "contentPlaybackContext": {
+                            "vis": 0,
+                            "splay": false,
+                            "autoCaptionsDefaultOn": false,
+                            "autonavState": "STATE_OFF",
                             "signatureTimestamp": "sts",
-                            "html5Preference": "HTML5_PREF_WANTS"
+                            "html5Preference": "HTML5_PREF_WANTS",
+                            "lactMilliseconds": "-1"
                         }
                     }
                 }
             },
-            "contentCheckOk": true,
-            "racyCheckOk": true,
+            "contentCheckOk": false,
+            "racyCheckOk": false,
             "videoId": "$videoID"
         }"""
 
@@ -34,21 +40,22 @@ class Extractor {
 
         val request = Request.Builder()
             .method("POST", requestBody)
-            .url("https://www.youtube.com/youtubei/v1/player?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8&prettyPrint=false")
+            .url("https://www.youtube.com/youtubei/v1/player?key=AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc&prettyPrint=false")
             .build()
 
         return client.newCall(request).execute().body.string()
     }
 
-    fun browseRequest(context: Context, clientName: String, clientVersion: String, browseID: String, params: String) : String {
+    fun browseRequest(context: Context, browseID: String, params: String) : String {
         val countryCode = context.resources.configuration.locales.get(0).country
         val body = """{
             "context": {
                 "client": {
                     "hl": "en",
                     "gl": "$countryCode",
-                    "clientName": "$clientName",
-                    "clientVersion": "$clientVersion",
+                    "clientName": "IOS",
+                    "clientVersion": "18.17.2",
+                    "deviceModel": "iPhone14,3",
                     "playbackContext": {
                         "contentPlaybackContext": {
                             "signatureTimestamp": "sts",
@@ -57,8 +64,8 @@ class Extractor {
                     }
                 }
             },
-            "contentCheckOk": true,
-            "racyCheckOk": true,
+            "contentCheckOk": false,
+            "racyCheckOk": false,
             "browseId": "$browseID",
             "params": "$params"
         }"""
@@ -69,21 +76,21 @@ class Extractor {
 
         val request = Request.Builder()
             .method("POST", requestBody)
-            .url("https://www.youtube.com/youtubei/v1/browse?key=AIzaSyAO_FJ2SlqU8Q4STEHLGCilw_Y9_11qcW8&prettyPrint=false")
+            .url("https://www.youtube.com/youtubei/v1/browse?key=AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc&prettyPrint=false")
             .build()
 
         return client.newCall(request).execute().body.string()
     }
 
-    fun searchRequest(context: Context, clientName: String, clientVersion: String, query: String) : String {
+    fun searchRequest(context: Context, query: String) : String {
         val countryCode = context.resources.configuration.locales.get(0).country
         val body = """{
             "context": {
                 "client": {
                     "hl": "en",
                     "gl": "$countryCode",
-                    "clientName": "$clientName",
-                    "clientVersion": "$clientVersion",
+                    "clientName": "WEB",
+                    "clientVersion": "2.20220801.00.00",
                     "playbackContext": {
                         "contentPlaybackContext": {
                             "signatureTimestamp": "sts",
@@ -92,8 +99,8 @@ class Extractor {
                     }
                 }
             },
-            "contentCheckOk": true,
-            "racyCheckOk": true,
+            "contentCheckOk": false,
+            "racyCheckOk": false,
             "query": "$query"
         }"""
 

@@ -37,7 +37,7 @@ class Main : Activity() {
             val result = youtubeRegex.findAll(clipboardInfo).map { it.groupValues[1] }.joinToString()
 
             val extractor = Extractor()
-            val playerRequest = extractor.playerRequest(applicationContext, "ANDROID", "16.20", result)
+            val playerRequest = extractor.playerRequest(applicationContext, result)
             val dislikesRequest = extractor.returnYouTubeDislikesRequest(result)
             val sponsorBlockRequest = extractor.sponsorBlockRequest(result)
 
