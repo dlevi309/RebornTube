@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/action_home"
+        android:title="Home"
+        android:icon="@drawable/home"
+        tools:ignore="HardcodedText" />
+
+    <item android:id="@+id/action_subscriptions"
+        android:title="Subscriptions"
+        android:icon="@drawable/subscriptions"
+        tools:ignore="HardcodedText" />
+
+    <item android:id="@+id/action_history"
+        android:title="History"
+        android:icon="@drawable/history"
+        tools:ignore="HardcodedText" />
+
+    <item android:id="@+id/action_playlists"
+        android:title="Playlists"
+        android:icon="@drawable/playlists"
+        tools:ignore="HardcodedText" />
+
+    <item android:id="@+id/action_downloads"
+        android:title="Downloads"
+        android:icon="@drawable/downloads"
+        tools:ignore="HardcodedText" />
+
+</menu>

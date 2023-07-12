@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.content.Context
 import android.content.ClipboardManager
 import android.app.Activity
-import android.app.AlertDialog
 import android.os.StrictMode
 import com.google.gson.Gson
 
@@ -85,12 +84,6 @@ class Main : Activity() {
 
             val intent = Intent(this@Main, Player::class.java)
             startActivity(intent)
-        } else {
-            val errorPopup = AlertDialog.Builder(this)
-            errorPopup.setTitle("Error")
-            errorPopup.setMessage("No YouTube video url found in clipboard, please close the app and copy a youtube video url to your clipboard before opening")
-            errorPopup.setCancelable(false)
-            errorPopup.show()
         }
     }
 }
