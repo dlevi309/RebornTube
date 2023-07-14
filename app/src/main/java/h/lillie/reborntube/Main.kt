@@ -7,6 +7,7 @@ import android.content.ClipboardManager
 import android.app.Activity
 import android.os.StrictMode
 import com.google.gson.Gson
+import kotlin.system.exitProcess
 
 class Main : Activity() {
 
@@ -23,7 +24,7 @@ class Main : Activity() {
     override fun onDestroy() {
         super.onDestroy()
         finish()
-        System.exit(0)
+        exitProcess(0)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
