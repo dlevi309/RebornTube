@@ -2,8 +2,7 @@ package h.lillie.reborntube
 
 data class Data(
     var videoID: String,
-    var videoURL: String,
-    var audioURL: String,
+    var hlsURL: String,
     var sponsorBlockInfo: String,
     var artworkURL: String,
     var title: String,

@@ -69,7 +69,6 @@ class Main : Activity() {
 
             val gson = Gson()
             Application.setVideoData(gson.toJson(Data(
-                result,
                 loaderPlayerInfo[0].toString(),
                 loaderPlayerInfo[1].toString(),
                 sponsorBlockRequest,

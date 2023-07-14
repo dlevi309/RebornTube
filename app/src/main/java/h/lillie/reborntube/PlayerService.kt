@@ -71,8 +71,7 @@ class PlayerService : MediaSessionService() {
         val title = videoData.title
         val author = videoData.author
 
-        val videoUrl = videoData.videoURL
-        val audioUrl = videoData.audioURL
+        val hlsUrl = videoData.hlsURL
         val artworkUrl = videoData.artworkURL
         val artworkUri: Uri = Uri.parse(artworkUrl)
 
@@ -84,39 +83,17 @@ class PlayerService : MediaSessionService() {
             .setArtworkUri(artworkUri)
             .build()
 
-        if (!isLive) {
-            val videoUri: Uri = Uri.parse(videoUrl)
-            val audioUri: Uri = Uri.parse(audioUrl)
+        val videoUri: Uri = Uri.parse(hlsUrl)
 
-            val videoMediaItem: MediaItem = MediaItem.Builder()
-                .setMediaMetadata(mediaMetadata)
-                .setUri(videoUri)
-                .build()
+        val videoMediaItem: MediaItem = MediaItem.Builder()
+            .setMediaMetadata(mediaMetadata)
+            .setUri(videoUri)
+            .build()
 
-            val audioMediaItem: MediaItem = MediaItem.Builder()
-                .setMediaMetadata(mediaMetadata)
-                .setUri(audioUri)
-                .build()
+        val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
+        val videoSource: MediaSource = HlsMediaSource.Factory(dataSourceFactory).createMediaSource(videoMediaItem)
 
-            val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
-            val videoSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(videoMediaItem)
-            val audioSource: MediaSource = ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(audioMediaItem)
-            val mergeSource: MediaSource = MergingMediaSource(videoSource, audioSource)
-
-            player.setMediaSource(mergeSource)
-        } else if (isLive) {
-            val videoUri: Uri = Uri.parse(videoUrl)
-
-            val videoMediaItem: MediaItem = MediaItem.Builder()
-                .setMediaMetadata(mediaMetadata)
-                .setUri(videoUri)
-                .build()
-
-            val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
-            val videoSource: MediaSource = HlsMediaSource.Factory(dataSourceFactory).createMediaSource(videoMediaItem)
-
-            player.setMediaSource(videoSource)
-        }
+        player.setMediaSource(videoSource)
         player.playWhenReady = true
         player.prepare()
         if (!isLive) {
