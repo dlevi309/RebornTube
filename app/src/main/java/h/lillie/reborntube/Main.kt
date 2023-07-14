@@ -4,20 +4,28 @@ import android.content.Intent
 import android.os.Bundle
 import android.content.Context
 import android.content.ClipboardManager
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.StrictMode
 import com.google.gson.Gson
 import kotlin.system.exitProcess
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.fragment.app.Fragment
 
-class Main : Activity() {
+class Main : AppCompatActivity() {
 
     private var hasRan = 0
     private var hasCreated = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
+
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
+
+        val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
+        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavigationViewListener)
+        supportFragmentManager.beginTransaction().replace(R.id.fragments, Fragments(0)).commit()
+
         hasCreated = 1
     }
 
@@ -44,6 +52,29 @@ class Main : Activity() {
             }
             getInfo(null)
         }
+    }
+
+    private val bottomNavigationViewListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        lateinit var selectedFragment: Fragment
+        when(item.itemId) {
+            R.id.action_home -> {
+                selectedFragment = Fragments(0)
+            }
+            R.id.action_subscriptions -> {
+                selectedFragment = Fragments(1)
+            }
+            R.id.action_history -> {
+                selectedFragment = Fragments(2)
+            }
+            R.id.action_playlists -> {
+                selectedFragment = Fragments(3)
+            }
+            R.id.action_downloads -> {
+                selectedFragment = Fragments(4)
+            }
+        }
+        supportFragmentManager.beginTransaction().replace(R.id.fragments, selectedFragment).commit()
+        true
     }
 
     private fun getInfo(text: String?) {

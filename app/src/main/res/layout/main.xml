@@ -8,7 +8,14 @@
     android:background="@android:color/black"
     tools:context=".Main">
 
+    <FrameLayout
+        android:id="@+id/fragments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomNavigationView" />
+
     <TextView
+        android:id="@+id/topTextView"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentTop="true"
@@ -26,18 +33,26 @@
         android:layout_height="56dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
+        android:layout_gravity="top"
         android:background="@color/darkgrey"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/topnavigationbar"
+        app:elevation="0dp"
+        app:itemIconTint="@color/lightgrey"
+        app:itemTextColor="@color/lightgrey"
         tools:ignore="RtlHardcoded" />
-    
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
         android:background="@color/darkgrey"
         app:labelVisibilityMode="labeled"
-        app:menu="@menu/bottomnavigationbar" />
+        app:menu="@menu/bottomnavigationbar"
+        app:elevation="0dp"
+        app:itemIconTint="@color/lightgrey"
+        app:itemTextColor="@color/lightgrey" />
 
 </RelativeLayout>
