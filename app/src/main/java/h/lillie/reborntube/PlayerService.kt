@@ -7,13 +7,8 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.LoadControl
-import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.source.MediaSource
-import androidx.media3.exoplayer.source.ProgressiveMediaSource
-import androidx.media3.exoplayer.source.MergingMediaSource
 import androidx.media3.exoplayer.hls.HlsMediaSource
-import androidx.media3.exoplayer.upstream.DefaultAllocator
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.common.MediaMetadata
@@ -57,13 +52,7 @@ class PlayerService : MediaSessionService() {
 
     @SuppressLint("UnsafeOptInUsageError")
     private fun createPlayer() {
-        val loadControl: LoadControl = DefaultLoadControl.Builder()
-            .setAllocator(DefaultAllocator(true, 16))
-            .setBufferDurationsMs(3000, 8000, 500, 1500)
-            .setTargetBufferBytes(-1)
-            .setPrioritizeTimeOverSizeThresholds(true)
-            .build()
-        player = ExoPlayer.Builder(this).setLoadControl(loadControl).build()
+        player = ExoPlayer.Builder(this).build()
         playerSession = MediaSession.Builder(this, player).build()
 
         val gson = Gson()
