@@ -10,7 +10,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import android.app.PictureInPictureParams
 import android.widget.RelativeLayout
 import android.widget.Button
@@ -35,7 +35,7 @@ import com.pedromassango.doubleclick.DoubleClickListener
 import com.squareup.picasso.Picasso
 import java.io.IOException
 
-class Player : Activity() {
+class Player : AppCompatActivity() {
 
     private var deviceHeight = 0
     private var deviceWidth = 0
