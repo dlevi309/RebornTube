@@ -58,8 +58,13 @@ class Extractor {
                     "deviceModel": "iPhone14,3",
                     "playbackContext": {
                         "contentPlaybackContext": {
+                            "vis": 0,
+                            "splay": false,
+                            "autoCaptionsDefaultOn": false,
+                            "autonavState": "STATE_OFF",
                             "signatureTimestamp": "sts",
-                            "html5Preference": "HTML5_PREF_WANTS"
+                            "html5Preference": "HTML5_PREF_WANTS",
+                            "lactMilliseconds": "-1"
                         }
                     }
                 }
@@ -93,8 +98,13 @@ class Extractor {
                     "clientVersion": "2.20220801.00.00",
                     "playbackContext": {
                         "contentPlaybackContext": {
+                            "vis": 0,
+                            "splay": false,
+                            "autoCaptionsDefaultOn": false,
+                            "autonavState": "STATE_OFF",
                             "signatureTimestamp": "sts",
-                            "html5Preference": "HTML5_PREF_WANTS"
+                            "html5Preference": "HTML5_PREF_WANTS",
+                            "lactMilliseconds": "-1"
                         }
                     }
                 }
