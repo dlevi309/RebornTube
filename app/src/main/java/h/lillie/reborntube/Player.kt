@@ -5,6 +5,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -19,6 +20,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import android.view.View
+import android.view.ViewGroup
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ColorDrawable
 import androidx.media3.session.MediaController
@@ -37,6 +39,7 @@ import java.io.IOException
 
 class Player : AppCompatActivity() {
 
+    private var deviceType: Boolean = false
     private var deviceHeight = 0
     private var deviceWidth = 0
     private var overlayVisible = 0
@@ -52,6 +55,12 @@ class Player : AppCompatActivity() {
         playerHandler = Handler(Looper.getMainLooper())
         playerSlider = findViewById(R.id.playerSlider)
         getDeviceInfo()
+        if (deviceType == true) {
+            val playerLayout: RelativeLayout = findViewById(R.id.playerLayout)
+            val params = playerLayout.layoutParams as ViewGroup.MarginLayoutParams
+            params.setMargins(38,26,38,26)
+            playerLayout.layoutParams = params
+        }
         val sessionToken = SessionToken(this, ComponentName(this, PlayerService::class.java))
         playerControllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
         playerControllerFuture.addListener(
@@ -101,6 +110,7 @@ class Player : AppCompatActivity() {
     @SuppressLint("SwitchIntDef")
     @Suppress("Deprecation")
     private fun getDeviceInfo() {
+        deviceType = packageManager.hasSystemFeature(PackageManager.FEATURE_TELEVISION) || packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
         deviceHeight = windowManager.currentWindowMetrics.bounds.height()
         deviceWidth = windowManager.currentWindowMetrics.bounds.width()
         when (resources.configuration.orientation) {

@@ -1,18 +1,21 @@
 package h.lillie.reborntube
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import android.view.View
 import android.widget.RelativeLayout
+import android.view.View
+import android.view.ViewGroup
 import com.google.gson.Gson
 import org.json.JSONObject
 
 class Search : AppCompatActivity() {
 
+    private var deviceType: Boolean = false
     private var deviceHeight = 0
     private var deviceWidth = 0
 
@@ -20,8 +23,12 @@ class Search : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.search)
         getDeviceInfo()
-
         val searchLayout: RelativeLayout = findViewById(R.id.searchLayout)
+        if (deviceType == true) {
+            val params = searchLayout.layoutParams as ViewGroup.MarginLayoutParams
+            params.setMargins(38,26,38,26)
+            searchLayout.layoutParams = params
+        }
 
         val searchBar: EditText = findViewById(R.id.searchBar)
         val searchBarButton: Button = findViewById(R.id.searchBarButton)
@@ -87,7 +94,9 @@ class Search : AppCompatActivity() {
         finish()
     }
 
+    @Suppress("Deprecation")
     private fun getDeviceInfo() {
+        deviceType = packageManager.hasSystemFeature(PackageManager.FEATURE_TELEVISION) || packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
         deviceHeight = windowManager.currentWindowMetrics.bounds.height()
         deviceWidth = windowManager.currentWindowMetrics.bounds.width()
     }

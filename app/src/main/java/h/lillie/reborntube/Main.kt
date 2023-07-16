@@ -4,21 +4,35 @@ import android.content.Intent
 import android.os.Bundle
 import android.content.Context
 import android.content.ClipboardManager
-import androidx.appcompat.app.AppCompatActivity
+import android.content.pm.PackageManager
+import android.widget.RelativeLayout
 import android.os.StrictMode
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.google.gson.Gson
 import kotlin.system.exitProcess
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.fragment.app.Fragment
 
 class Main : AppCompatActivity() {
 
     private var hasRan = 0
     private var hasCreated = 0
+
+    private var deviceType: Boolean = false
+    private var deviceHeight = 0
+    private var deviceWidth = 0
     @Suppress("Deprecation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
+        getDeviceInfo()
+        if (deviceType == true) {
+            val mainLayout: RelativeLayout = findViewById(R.id.mainLayout)
+            val params = mainLayout.layoutParams as ViewGroup.MarginLayoutParams
+            params.setMargins(38,26,38,26)
+            mainLayout.layoutParams = params
+        }
 
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
@@ -56,6 +70,13 @@ class Main : AppCompatActivity() {
             }
             getInfo(null)
         }
+    }
+
+    @Suppress("Deprecation")
+    private fun getDeviceInfo() {
+        deviceType = packageManager.hasSystemFeature(PackageManager.FEATURE_TELEVISION) || packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
+        deviceHeight = windowManager.currentWindowMetrics.bounds.height()
+        deviceWidth = windowManager.currentWindowMetrics.bounds.width()
     }
 
     @Suppress("Deprecation")
