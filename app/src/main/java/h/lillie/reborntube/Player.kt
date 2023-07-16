@@ -77,6 +77,7 @@ class Player : AppCompatActivity() {
         playerHandler.removeCallbacks(playerTask)
         MediaController.releaseFuture(playerControllerFuture)
         stopService(Intent(this@Player, PlayerService::class.java))
+        finish()
     }
 
     @SuppressLint("SwitchIntDef")
@@ -364,12 +365,14 @@ class Player : AppCompatActivity() {
 
         val playerView: PlayerView = findViewById(R.id.playerView)
         playerView.player = playerController
-        setPictureInPictureParams(
-            PictureInPictureParams.Builder()
-                .setAutoEnterEnabled(true)
-                .setSeamlessResizeEnabled(true)
-                .build()
-        )
+        if (deviceType == false) {
+            setPictureInPictureParams(
+                PictureInPictureParams.Builder()
+                    .setAutoEnterEnabled(true)
+                    .setSeamlessResizeEnabled(true)
+                    .build()
+            )
+        }
         playerHandler.post(playerTask)
     }
 
