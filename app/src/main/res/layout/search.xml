@@ -15,6 +15,7 @@
         android:background="@color/darkgrey"
         android:inputType="text"
         android:layout_alignParentTop="true"
+        android:nextFocusRight="@id/searchBarButton"
         tools:ignore="Autofill,LabelFor" />
 
     <Button
@@ -25,6 +26,22 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:text="Confirm"
+        android:nextFocusLeft="@id/searchBar"
         tools:ignore="HardcodedText,RtlHardcoded" />
+
+    <ScrollView
+        android:id="@+id/searchScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="56dp">
+
+        <LinearLayout
+            android:id="@+id/searchScrollLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clickable="false" />
+
+    </ScrollView>
 
 </RelativeLayout>
