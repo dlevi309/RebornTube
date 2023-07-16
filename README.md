@@ -1,2 +1,2 @@
 # RebornTube
-My in-dev Android YouTube client, originally made for iOS but now for Android
+My in-dev YouTube client for Android and Android TV (Chromecast, etc), originally made for iOS but now for Android
