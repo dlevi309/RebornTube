@@ -1,6 +1,5 @@
 package h.lillie.reborntube
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -88,7 +87,6 @@ class Search : AppCompatActivity() {
         finish()
     }
 
-    @SuppressLint("SwitchIntDef")
     private fun getDeviceInfo() {
         deviceHeight = windowManager.currentWindowMetrics.bounds.height()
         deviceWidth = windowManager.currentWindowMetrics.bounds.width()
