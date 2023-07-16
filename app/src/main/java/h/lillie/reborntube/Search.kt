@@ -47,6 +47,9 @@ class Search : AppCompatActivity() {
             val videoButton = View(applicationContext)
             videoButton.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 156)
             videoButton.y = 160f
+            videoButton.isFocusable = true
+            videoButton.isFocusableInTouchMode = true
+            videoButton.requestFocus()
             videoButton.setOnClickListener {
                 val playerRequest = extractor.playerRequest(applicationContext, videoID)
                 val dislikesRequest = extractor.returnYouTubeDislikesRequest(videoID)
