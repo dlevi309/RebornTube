@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/searchLayout"
+    tools:context=".Search">
+
+    <EditText
+        android:id="@+id/searchBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/darkgrey"
+        android:inputType="text"
+        android:layout_alignParentTop="true"
+        tools:ignore="Autofill,LabelFor" />
+
+    <Button
+        android:id="@+id/searchBarButton"
+        android:layout_width="156dp"
+        android:layout_height="56dp"
+        android:background="@color/darkgrey"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:text="Confirm"
+        tools:ignore="HardcodedText,RtlHardcoded" />
+
+</RelativeLayout>

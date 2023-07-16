@@ -15,12 +15,16 @@ class Main : AppCompatActivity() {
 
     private var hasRan = 0
     private var hasCreated = 0
+    @Suppress("Deprecation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
 
         val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
+
+        val topNavigationView: BottomNavigationView = findViewById(R.id.topNavigationView)
+        topNavigationView.setOnNavigationItemSelectedListener(topNavigationViewListener)
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavigationViewListener)
@@ -54,6 +58,20 @@ class Main : AppCompatActivity() {
         }
     }
 
+    @Suppress("Deprecation")
+    private val topNavigationViewListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
+        when(item.itemId) {
+            R.id.action_search -> {
+                val intent = Intent(this@Main, Search::class.java)
+                startActivity(intent)
+            }
+            R.id.action_settings -> {
+            }
+        }
+        true
+    }
+
+    @Suppress("Deprecation")
     private val bottomNavigationViewListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         lateinit var selectedFragment: Fragment
         when(item.itemId) {
