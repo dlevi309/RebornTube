@@ -86,15 +86,15 @@ class Player : AppCompatActivity() {
         val videoTitleLayout: RelativeLayout = findViewById(R.id.videoTitleLayout)
         val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
         if (isInPictureInPictureMode) {
-            videoOverlay.alpha = 0.toFloat()
-            videoSlider.alpha = 0.toFloat()
-            videoTitleLayout.alpha = 0.toFloat()
-            videoInfo.alpha = 0.toFloat()
+            videoOverlay.alpha = 0f
+            videoSlider.alpha = 0f
+            videoTitleLayout.alpha = 0f
+            videoInfo.alpha = 0f
         } else {
-            videoOverlay.alpha = 1.toFloat()
-            videoSlider.alpha = 1.toFloat()
-            videoTitleLayout.alpha = 1.toFloat()
-            videoInfo.alpha = 1.toFloat()
+            videoOverlay.alpha = 1f
+            videoSlider.alpha = 1f
+            videoTitleLayout.alpha = 1f
+            videoInfo.alpha = 1f
         }
     }
 
@@ -138,14 +138,14 @@ class Player : AppCompatActivity() {
 
         val middleView: View = findViewById(R.id.middleView)
         middleView.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
-        middleView.x = deviceWidth / 3.toFloat()
+        middleView.x = deviceWidth / 3f
         middleView.setOnClickListener {
             changeOverlay(orientation)
         }
 
         val rightView: View = findViewById(R.id.rightView)
         rightView.layoutParams = RelativeLayout.LayoutParams(deviceWidth / 3, deviceWidth * 9 / 16)
-        rightView.x = (deviceWidth / 3) * 2.toFloat()
+        rightView.x = (deviceWidth / 3) * 2f
         rightView.setOnClickListener(DoubleClick(object : DoubleClickListener {
             override fun onSingleClick(view: View) {
                 changeOverlay(orientation)
@@ -157,11 +157,11 @@ class Player : AppCompatActivity() {
 
         val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
         playPauseRestartButton.layoutParams = RelativeLayout.LayoutParams(108, 108)
-        playPauseRestartButton.x = (deviceWidth / 2) - 54.toFloat()
+        playPauseRestartButton.x = (deviceWidth / 2) - 54f
         if (orientation == 0) {
-            playPauseRestartButton.y = ((deviceWidth * 9 / 16) / 2) - 54.toFloat()
+            playPauseRestartButton.y = ((deviceWidth * 9 / 16) / 2) - 54f
         } else if (orientation == 1) {
-            playPauseRestartButton.y = (deviceHeight / 2) - 54.toFloat()
+            playPauseRestartButton.y = (deviceHeight / 2) - 54f
         }
         playPauseRestartButton.setOnClickListener {
             if (playerController.playWhenReady) {
@@ -174,12 +174,12 @@ class Player : AppCompatActivity() {
         val videoSwitch: SwitchMaterial = findViewById(R.id.videoSwitch)
         videoSwitch.layoutParams = RelativeLayout.LayoutParams(200, 100)
         if (orientation == 0) {
-            videoSwitch.x = deviceWidth - 210.toFloat()
-            videoSwitch.y = 10.toFloat()
+            videoSwitch.x = deviceWidth - 210f
+            videoSwitch.y = 10f
         }
         if (orientation == 1) {
-            videoSwitch.x = deviceWidth - 310.toFloat()
-            videoSwitch.y = 50.toFloat()
+            videoSwitch.x = deviceWidth - 310f
+            videoSwitch.y = 50f
         }
         videoSwitch.setOnCheckedChangeListener { _, isChecked ->
             val playerView: PlayerView = findViewById(R.id.playerView)
@@ -196,10 +196,10 @@ class Player : AppCompatActivity() {
         // Slider
         playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth + 64, 0)
         if (orientation == 0) {
-            playerSlider.y = (deviceWidth * 9 / 16) - 64.toFloat()
+            playerSlider.y = (deviceWidth * 9 / 16) - 64f
             playerSlider.visibility = View.VISIBLE
         } else if (orientation == 1) {
-            playerSlider.y = deviceHeight - 256.toFloat()
+            playerSlider.y = deviceHeight - 256f
             if (overlayVisible == 0) {
                 playerSlider.visibility = View.GONE
             } else if (overlayVisible == 1) {
@@ -219,10 +219,10 @@ class Player : AppCompatActivity() {
         val title = videoData.title
         videoTitle.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 50)
         if (orientation == 0) {
-            videoTitle.y = (deviceWidth * 9 / 16) + 64.toFloat()
+            videoTitle.y = (deviceWidth * 9 / 16) + 64f
             videoTitle.visibility = View.VISIBLE
         } else if (orientation == 1) {
-            videoTitle.y = 50.toFloat()
+            videoTitle.y = 50f
             if (overlayVisible == 0) {
                 videoTitle.visibility = View.GONE
             } else if (overlayVisible == 1) {
@@ -241,7 +241,7 @@ class Player : AppCompatActivity() {
 
         val videoCountLikesDislikes: TextView = findViewById(R.id.videoCountLikesDislikes)
         videoCountLikesDislikes.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 200)
-        videoCountLikesDislikes.y = (deviceWidth * 9 / 16) + 144.toFloat()
+        videoCountLikesDislikes.y = (deviceWidth * 9 / 16) + 144f
         val viewCount = videoData.viewCount.toDouble()
         val likes = videoData.likes.toDouble()
         val dislikes = videoData.dislikes.toDouble()
@@ -250,7 +250,7 @@ class Player : AppCompatActivity() {
 
         val videoLoop: Button = findViewById(R.id.videoLoop)
         videoLoop.layoutParams = RelativeLayout.LayoutParams(200, 100)
-        videoLoop.y = (deviceWidth * 9 / 16) + 304.toFloat()
+        videoLoop.y = (deviceWidth * 9 / 16) + 304f
         videoLoop.setOnClickListener {
             val loop = Application.getLoop()
             if (!loop) {
@@ -264,8 +264,8 @@ class Player : AppCompatActivity() {
 
         val videoShare: Button = findViewById(R.id.videoShare)
         videoShare.layoutParams = RelativeLayout.LayoutParams(200, 100)
-        videoShare.x = 200.toFloat()
-        videoShare.y = (deviceWidth * 9 / 16) + 304.toFloat()
+        videoShare.x = 220f
+        videoShare.y = (deviceWidth * 9 / 16) + 304f
         videoShare.setOnClickListener {
             val videoID = videoData.videoID
             val shareIntent: Intent = Intent().apply {
