@@ -66,6 +66,7 @@ class Main : AppCompatActivity() {
                 startActivity(intent)
             }
             R.id.action_settings -> {
+                getInfo("https://youtu.be/kSOEbBTvU7Q")
             }
         }
         true
