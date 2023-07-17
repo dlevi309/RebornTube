@@ -77,6 +77,7 @@ class Player : AppCompatActivity() {
         playerHandler.removeCallbacks(playerTask)
         MediaController.releaseFuture(playerControllerFuture)
         stopService(Intent(this@Player, PlayerService::class.java))
+        finish()
     }
 
     @SuppressLint("SwitchIntDef")

@@ -166,6 +166,11 @@ class Search : AppCompatActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        finish()
+    }
+
     @Suppress("Deprecation")
     private fun getDeviceInfo() {
         deviceType = packageManager.hasSystemFeature(PackageManager.FEATURE_TELEVISION) || packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
