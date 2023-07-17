@@ -76,7 +76,13 @@ class Player : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         finish()
+        Application.setLoop(false)
+        if (deviceType == false) {
+            Application.setVideoData("")
+        }
         playerHandler.removeCallbacks(playerTask)
+        playerHandler.removeCallbacksAndMessages(null)
+        playerController.release()
         MediaController.releaseFuture(playerControllerFuture)
         stopService(Intent(this@Player, PlayerService::class.java))
     }
