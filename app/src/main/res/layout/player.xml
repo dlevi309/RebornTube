@@ -40,19 +40,25 @@
             android:id="@+id/leftView"
             android:layout_height="0dp"
             android:layout_width="0dp"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:nextFocusUp="@id/videoSwitch"
+            android:nextFocusDown="@id/playPauseRestartButton" />
 
         <View
             android:id="@+id/middleView"
             android:layout_height="0dp"
             android:layout_width="0dp"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:nextFocusUp="@id/videoSwitch"
+            android:nextFocusDown="@id/playPauseRestartButton" />
 
         <View
             android:id="@+id/rightView"
             android:layout_height="0dp"
             android:layout_width="0dp"
-            android:background="@android:color/transparent" />
+            android:background="@android:color/transparent"
+            android:nextFocusUp="@id/videoSwitch"
+            android:nextFocusDown="@id/playPauseRestartButton" />
 
         <ImageButton
             android:id="@+id/playPauseRestartButton"
@@ -63,13 +69,16 @@
             android:visibility="gone"
             android:elevation="999dp"
             android:tint="@color/white"
+            android:nextFocusUp="@id/middleView"
+            android:nextFocusDown="@id/playerSlider"
             tools:ignore="ContentDescription, UseAppTint" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/videoSwitch"
             android:layout_height="0dp"
             android:layout_width="0dp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:nextFocusDown="@id/middleView" />
 
     </RelativeLayout>
 
@@ -92,7 +101,8 @@
             app:trackColorActive="@color/lightgrey"
             app:trackColorInactive="@color/darkgrey"
             app:thumbRadius="0dp"
-            app:haloRadius="0dp" />
+            app:haloRadius="0dp"
+            android:nextFocusUp="@id/playPauseRestartButton" />
 
     </RelativeLayout>
 
