@@ -2,15 +2,12 @@ package h.lillie.reborntube
 
 import android.content.Intent
 import android.os.Bundle
-import android.content.Context
-import android.content.ClipboardManager
 import android.content.pm.PackageManager
 import android.widget.RelativeLayout
 import android.os.StrictMode
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.google.gson.Gson
 import kotlin.system.exitProcess
 import com.google.android.material.bottomnavigation.BottomNavigationView
 

@@ -35,6 +35,16 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".TVPlayer"
+            android:exported="true"
+            android:supportsPictureInPicture="false"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout">
+            <intent-filter>
+                <action android:name="android.intent.action.PLAYER" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".Player"
             android:exported="true"
             android:supportsPictureInPicture="true"

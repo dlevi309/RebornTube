@@ -1,7 +1,6 @@
 package h.lillie.reborntube
 
 import android.annotation.SuppressLint
-import android.content.ComponentName
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
@@ -12,7 +11,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import android.app.PictureInPictureParams
 import android.widget.RelativeLayout
 import android.widget.Button
 import android.widget.ImageButton
@@ -23,36 +21,47 @@ import android.view.View
 import android.view.ViewGroup
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ColorDrawable
-import androidx.media3.session.MediaController
-import androidx.media3.session.SessionToken
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.MediaSource
+import androidx.media3.exoplayer.hls.HlsMediaSource
+import androidx.media3.datasource.DataSource
+import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.common.MediaMetadata
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerView
 import java.util.concurrent.TimeUnit
-import com.google.common.util.concurrent.ListenableFuture
-import com.google.common.util.concurrent.MoreExecutors
 import com.google.android.material.slider.Slider
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.Gson
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
 import com.squareup.picasso.Picasso
+import org.json.JSONArray
+import org.json.JSONException
 import java.io.IOException
 
-class Player : AppCompatActivity() {
+class TVPlayer : AppCompatActivity() {
 
     private var deviceType: Boolean = false
     private var deviceHeight = 0
     private var deviceWidth = 0
     private var overlayVisible = 0
     private var onStopCalled: Boolean = false
+    private var sponsorBlockInfo = String()
 
-    private lateinit var playerControllerFuture: ListenableFuture<MediaController>
-    private lateinit var playerController: MediaController
+    private lateinit var player: ExoPlayer
     private lateinit var playerHandler: Handler
     private lateinit var playerSlider: Slider
+    private var playerSession: MediaSession? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.player)
+        val gson = Gson()
+        val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
+        sponsorBlockInfo = videoData.sponsorBlockInfo
         playerHandler = Handler(Looper.getMainLooper())
         playerSlider = findViewById(R.id.playerSlider)
         getDeviceInfo()
@@ -62,15 +71,7 @@ class Player : AppCompatActivity() {
             params.setMargins(38,26,38,26)
             playerLayout.layoutParams = params
         }
-        val sessionToken = SessionToken(this, ComponentName(this, PlayerService::class.java))
-        playerControllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
-        playerControllerFuture.addListener(
-            {
-                playerController = playerControllerFuture.get()
-                createPlayer()
-            },
-            MoreExecutors.directExecutor()
-        )
+        createPlayer()
     }
 
     override fun onDestroy() {
@@ -78,11 +79,13 @@ class Player : AppCompatActivity() {
         finish()
         Application.setLoop(false)
         Application.setVideoData("")
-        playerHandler.removeCallbacks(playerTask)
-        playerHandler.removeCallbacksAndMessages(null)
-        playerController.release()
-        MediaController.releaseFuture(playerControllerFuture)
-        stopService(Intent(this@Player, PlayerService::class.java))
+        playerSession?.run {
+            playerHandler.removeCallbacks(playerTask)
+            playerHandler.removeCallbacksAndMessages(null)
+            player.release()
+            release()
+            playerSession = null
+        }
     }
 
     override fun onResume() {
@@ -101,28 +104,6 @@ class Player : AppCompatActivity() {
         when (newConfig.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> getDeviceInfo()
             Configuration.ORIENTATION_LANDSCAPE -> getDeviceInfo()
-        }
-    }
-
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        val videoOverlay: RelativeLayout = findViewById(R.id.videoOverlay)
-        val videoSlider: RelativeLayout = findViewById(R.id.videoSlider)
-        val videoTitleLayout: RelativeLayout = findViewById(R.id.videoTitleLayout)
-        val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
-        if (isInPictureInPictureMode) {
-            videoOverlay.alpha = 0f
-            videoSlider.alpha = 0f
-            videoTitleLayout.alpha = 0f
-            videoInfo.alpha = 0f
-        } else {
-            videoOverlay.alpha = 1f
-            videoSlider.alpha = 1f
-            videoTitleLayout.alpha = 1f
-            videoInfo.alpha = 1f
-            if (onStopCalled) {
-                finish()
-            }
         }
     }
 
@@ -161,7 +142,7 @@ class Player : AppCompatActivity() {
                 changeOverlay(orientation)
             }
             override fun onDoubleClick(view: View) {
-                playerController.seekTo(playerController.currentPosition - TimeUnit.SECONDS.toMillis(10))
+                player.seekTo(player.currentPosition - TimeUnit.SECONDS.toMillis(10))
             }
         }))
 
@@ -180,7 +161,7 @@ class Player : AppCompatActivity() {
                 changeOverlay(orientation)
             }
             override fun onDoubleClick(view: View) {
-                playerController.seekTo(playerController.currentPosition + TimeUnit.SECONDS.toMillis(10))
+                player.seekTo(player.currentPosition + TimeUnit.SECONDS.toMillis(10))
             }
         }))
 
@@ -193,10 +174,10 @@ class Player : AppCompatActivity() {
             playPauseRestartButton.y = (deviceHeight / 2) - 54f
         }
         playPauseRestartButton.setOnClickListener {
-            if (playerController.playWhenReady) {
-                playerController.pause()
-            } else if (!playerController.playWhenReady) {
-                playerController.play()
+            if (player.playWhenReady) {
+                player.pause()
+            } else if (!player.playWhenReady) {
+                player.play()
             }
         }
 
@@ -236,10 +217,10 @@ class Player : AppCompatActivity() {
             }
         }
         playerSlider.addOnChangeListener { _, value, fromUser ->
-            val duration = playerController.duration.toFloat()
-            val position = playerController.currentPosition.toFloat()
+            val duration = player.duration.toFloat()
+            val position = player.currentPosition.toFloat()
             if (fromUser && duration >= 0 && position >= 0) {
-                playerController.seekTo(value.toLong())
+                player.seekTo(value.toLong())
             }
         }
 
@@ -284,10 +265,10 @@ class Player : AppCompatActivity() {
             val loop = Application.getLoop()
             if (!loop) {
                 Application.setLoop(true)
-                Toast.makeText(this@Player, "Loop Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@TVPlayer, "Loop Enabled", Toast.LENGTH_SHORT).show()
             } else if (loop) {
                 Application.setLoop(false)
-                Toast.makeText(this@Player, "Loop Disabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@TVPlayer, "Loop Disabled", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -373,6 +354,7 @@ class Player : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("UnsafeOptInUsageError")
     private fun createPlayer() {
         val playerImageView: ImageView = findViewById(R.id.playerImageView)
         val gson = Gson()
@@ -381,14 +363,35 @@ class Player : AppCompatActivity() {
         val artworkUri: Uri = Uri.parse(artworkUrl)
         Picasso.get().load(artworkUri).into(playerImageView)
 
+        player = ExoPlayer.Builder(this).build()
+        playerSession = MediaSession.Builder(this, player).build()
+
+        val title = videoData.title
+        val author = videoData.author
+        val hlsUrl = videoData.hlsURL
+
+        val mediaMetadata: MediaMetadata = MediaMetadata.Builder()
+            .setTitle(title)
+            .setArtist(author)
+            .setArtworkUri(artworkUri)
+            .build()
+
+        val videoUri: Uri = Uri.parse(hlsUrl)
+
+        val videoMediaItem: MediaItem = MediaItem.Builder()
+            .setMediaMetadata(mediaMetadata)
+            .setUri(videoUri)
+            .build()
+
+        val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
+        val videoSource: MediaSource = HlsMediaSource.Factory(dataSourceFactory).createMediaSource(videoMediaItem)
+
+        player.setMediaSource(videoSource)
+        player.playWhenReady = true
+        player.prepare()
+
         val playerView: PlayerView = findViewById(R.id.playerView)
-        playerView.player = playerController
-        setPictureInPictureParams(
-            PictureInPictureParams.Builder()
-                .setAutoEnterEnabled(true)
-                .setSeamlessResizeEnabled(true)
-                .build()
-        )
+        playerView.player = player
         playerHandler.post(playerTask)
     }
 
@@ -396,20 +399,43 @@ class Player : AppCompatActivity() {
         override fun run() {
             try {
                 val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
-                if (playerController.playWhenReady) {
+                if (player.playWhenReady) {
                     playPauseRestartButton.setImageResource(R.drawable.pause)
-                } else if (!playerController.playWhenReady) {
+                } else if (!player.playWhenReady) {
                     playPauseRestartButton.setImageResource(R.drawable.play)
                 }
 
-                val duration = playerController.duration.toFloat()
-                val position = playerController.currentPosition.toFloat()
+                val duration = player.duration.toFloat()
+                val position = player.currentPosition.toFloat()
                 if (duration >= 0 && position >= 0 && position <= duration) {
                     playerSlider.valueTo = duration
                     playerSlider.value = position
                 }
+
+                val loop = Application.getLoop()
+                if (!loop) {
+                    player.repeatMode = Player.REPEAT_MODE_OFF
+                } else if (loop) {
+                    player.repeatMode = Player.REPEAT_MODE_ONE
+                }
+                val jsonArray = JSONArray(sponsorBlockInfo)
+                for (i in 0 until jsonArray.length()) {
+                    val category = jsonArray.getJSONObject(i).optString("category")
+                    val segment = jsonArray.getJSONObject(i).getJSONArray("segment")
+                    val segment0 = String.format("%.3f", segment[0].toString().toDouble()).replace(".", "").toFloat()
+                    val segment1 = String.format("%.3f", segment[1].toString().toDouble()).replace(".", "").toFloat()
+                    if (category.contains("sponsor") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
+                        player.seekTo(segment1.toLong())
+                        Toast.makeText(this@TVPlayer, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
+                    } else if (category.contains("interaction") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
+                        player.seekTo(segment1.toLong())
+                        Toast.makeText(this@TVPlayer, "Interaction Skipped", Toast.LENGTH_SHORT).show()
+                    }
+                }
             } catch (e: IOException) {
                 Log.e("IOException", e.toString())
+            } catch (e: JSONException) {
+                Log.e("JSONException", e.toString())
             }
             playerHandler.postDelayed(this, 1000)
         }
