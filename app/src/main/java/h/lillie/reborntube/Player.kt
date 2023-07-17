@@ -43,6 +43,7 @@ class Player : AppCompatActivity() {
     private var deviceHeight = 0
     private var deviceWidth = 0
     private var overlayVisible = 0
+    private var onStopCalled: Boolean = false
 
     private lateinit var playerControllerFuture: ListenableFuture<MediaController>
     private lateinit var playerController: MediaController
@@ -74,10 +75,20 @@ class Player : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        finish()
         playerHandler.removeCallbacks(playerTask)
         MediaController.releaseFuture(playerControllerFuture)
         stopService(Intent(this@Player, PlayerService::class.java))
-        finish()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        onStopCalled = false
+    }
+
+    override fun onStop() {
+        super.onStop()
+        onStopCalled = true
     }
 
     @SuppressLint("SwitchIntDef")
@@ -105,6 +116,9 @@ class Player : AppCompatActivity() {
             videoSlider.alpha = 1f
             videoTitleLayout.alpha = 1f
             videoInfo.alpha = 1f
+            if (onStopCalled) {
+                finish()
+            }
         }
     }
 
