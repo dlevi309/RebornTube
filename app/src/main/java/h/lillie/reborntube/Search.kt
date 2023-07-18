@@ -2,11 +2,14 @@ package h.lillie.reborntube
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.RelativeLayout
 import android.widget.LinearLayout
@@ -15,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Gravity
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
@@ -113,20 +117,73 @@ class Search : AppCompatActivity() {
                 for (i in 0 until searchContents.length()) {
                     try {
                         val searchRelativeView = RelativeLayout(applicationContext)
-                        searchRelativeView.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 156)
+                        searchRelativeView.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 200)
                         searchRelativeView.setBackgroundColor(applicationContext.getColor(R.color.darkgrey))
 
                         val videoID: String = searchContents.getJSONObject(x).getJSONObject("videoRenderer").optString("videoId").toString()
                         val videoTitle: String = searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("title").getJSONArray("runs").getJSONObject(0).optString("text").toString()
+                        val videoArtworkArray = searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("thumbnail").getJSONArray("thumbnails")
+                        val videoArtworkUrl: String = videoArtworkArray.getJSONObject((videoArtworkArray.length() - 1)).optString("url").toString()
+                        val videoAuthor: String = searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("longBylineText").getJSONArray("runs").getJSONObject(0).optString("text").toString()
+                        val videoTime: String = searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("lengthText").optString("simpleText").toString()
+                        var videoViewCount = String()
+                        if (searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("viewCountText").optString("simpleText").toString() != null) {
+                            videoViewCount = searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("viewCountText").optString("simpleText").toString()
+                        } else if (searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("viewCountText").getJSONArray("runs").length() >= 1) {
+                            videoViewCount = searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("viewCountText").getJSONArray("runs").getJSONObject(0).optString("text").toString() + searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("viewCountText").getJSONArray("runs").getJSONObject(1).optString("text").toString()
+                        }
+
+                        val videoImageView = ImageView(applicationContext)
+                        videoImageView.layoutParams = LinearLayout.LayoutParams(180, 160)
+                        videoImageView.scaleType = ImageView.ScaleType.FIT_XY
+                        val artworkUri: Uri = Uri.parse(videoArtworkUrl)
+                        Picasso.get().load(artworkUri).into(videoImageView)
+
+                        val videoTimeTextView = TextView(applicationContext)
+                        videoTimeTextView.layoutParams = LinearLayout.LayoutParams(70, 30)
+                        videoTimeTextView.x = 110f
+                        videoTimeTextView.y = 130f
+                        videoTimeTextView.text = videoTime
+                        videoTimeTextView.gravity = Gravity.CENTER
+                        videoTimeTextView.setTextColor(applicationContext.getColor(R.color.white))
+                        videoTimeTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
+                        videoTimeTextView.setBackgroundColor(applicationContext.getColor(R.color.black))
+                        videoTimeTextView.alpha = 0.4f
 
                         val videoTitleTextView = TextView(applicationContext)
-                        videoTitleTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth, 156)
+                        videoTitleTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 190, 160)
+                        videoTitleTextView.x = 190f
                         videoTitleTextView.text = videoTitle
                         videoTitleTextView.gravity = Gravity.CENTER_VERTICAL
                         videoTitleTextView.setTextColor(applicationContext.getColor(R.color.white))
 
+                        val videoViewCountAuthorTextView = TextView(applicationContext)
+                        videoViewCountAuthorTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 80, 40)
+                        videoViewCountAuthorTextView.y = 160f
+                        videoViewCountAuthorTextView.text = "$videoViewCount - $videoAuthor"
+                        videoViewCountAuthorTextView.gravity = Gravity.CENTER_VERTICAL
+                        videoViewCountAuthorTextView.setTextColor(applicationContext.getColor(R.color.white))
+                        videoViewCountAuthorTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
+
+                        val videoMenuTextView = TextView(applicationContext)
+                        videoMenuTextView.layoutParams = LinearLayout.LayoutParams(80, 40)
+                        videoMenuTextView.x = deviceWidth - 80f
+                        videoMenuTextView.y = 160f
+                        videoMenuTextView.text = "•••"
+                        videoMenuTextView.gravity = Gravity.CENTER
+                        videoMenuTextView.setTextColor(applicationContext.getColor(R.color.white))
+                        videoMenuTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
+                        videoMenuTextView.setOnClickListener {
+                            val shareIntent: Intent = Intent().apply {
+                                action = Intent.ACTION_SEND
+                                putExtra(Intent.EXTRA_TEXT, "https://youtu.be/$videoID")
+                                type = "text/plain"
+                            }
+                            startActivity(Intent.createChooser(shareIntent, null))
+                        }
+
                         val videoButton = View(applicationContext)
-                        videoButton.layoutParams = LinearLayout.LayoutParams(deviceWidth, 156)
+                        videoButton.layoutParams = LinearLayout.LayoutParams(deviceWidth, 200)
                         videoButton.setOnClickListener {
                             val playerRequest = extractor.playerRequest(applicationContext, videoID)
                             val dislikesRequest = extractor.returnYouTubeDislikesRequest(videoID)
@@ -158,8 +215,12 @@ class Search : AppCompatActivity() {
                                 startActivity(intent)
                             }
                         }
+                        searchRelativeView.addView(videoImageView)
+                        searchRelativeView.addView(videoTimeTextView)
                         searchRelativeView.addView(videoTitleTextView)
+                        searchRelativeView.addView(videoViewCountAuthorTextView)
                         searchRelativeView.addView(videoButton)
+                        searchRelativeView.addView(videoMenuTextView)
 
                         val spaceView = Space(applicationContext)
                         spaceView.minimumHeight = 4
