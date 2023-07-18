@@ -88,8 +88,13 @@ class Search : AppCompatActivity() {
                         loaderDislikesInfo[1].toString()
                     )))
 
-                    val intent = Intent(this@Search, Player::class.java)
-                    startActivity(intent)
+                    if (deviceType == false) {
+                        val intent = Intent(this@Search, Player::class.java)
+                        startActivity(intent)
+                    } else if (deviceType == true) {
+                        val intent = Intent(this@Search, TVPlayer::class.java)
+                        startActivity(intent)
+                    }
                 }
                 searchRelativeView.addView(videoTitleTextView)
                 searchRelativeView.addView(videoButton)
