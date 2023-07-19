@@ -215,9 +215,21 @@ class Player : AppCompatActivity() {
             if (!isChecked) {
                 playerView.visibility = View.VISIBLE
                 playerImageView.visibility = View.GONE
+                setPictureInPictureParams(
+                    PictureInPictureParams.Builder()
+                        .setAutoEnterEnabled(true)
+                        .setSeamlessResizeEnabled(true)
+                        .build()
+                )
             } else if (isChecked) {
                 playerView.visibility = View.GONE
                 playerImageView.visibility = View.VISIBLE
+                setPictureInPictureParams(
+                    PictureInPictureParams.Builder()
+                        .setAutoEnterEnabled(false)
+                        .setSeamlessResizeEnabled(true)
+                        .build()
+                )
             }
         }
 
