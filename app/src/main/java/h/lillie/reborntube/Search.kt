@@ -56,20 +56,68 @@ class Search : AppCompatActivity() {
                 val jsonObject = JSONObject(playerRequest)
 
                 val searchRelativeView = RelativeLayout(applicationContext)
-                searchRelativeView.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 156)
+                searchRelativeView.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 200)
                 searchRelativeView.setBackgroundColor(applicationContext.getColor(R.color.darkgrey))
 
                 val videoID: String = jsonObject.getJSONObject("videoDetails").optString("videoId").toString()
                 val videoTitle: String = jsonObject.getJSONObject("videoDetails").optString("title").toString()
+                val videoArtworkArray = jsonObject.getJSONObject("videoDetails").getJSONObject("thumbnail").getJSONArray("thumbnails")
+                val videoArtworkUrl = videoArtworkArray.getJSONObject((videoArtworkArray.length() - 1)).optString("url")
+                val videoAuthor: String = jsonObject.getJSONObject("videoDetails").optString("author").toString()
+                val videoTime: Int = jsonObject.getJSONObject("videoDetails").optString("lengthSeconds").toString().toInt()
+                val videoViewCount: Double = jsonObject.getJSONObject("videoDetails").optString("viewCount").toString().toDouble()
+
+                val videoImageView = ImageView(applicationContext)
+                videoImageView.layoutParams = LinearLayout.LayoutParams(180, 160)
+                videoImageView.scaleType = ImageView.ScaleType.FIT_XY
+                val artworkUri: Uri = Uri.parse(videoArtworkUrl)
+                Picasso.get().load(artworkUri).into(videoImageView)
+
+                val videoTimeTextView = TextView(applicationContext)
+                videoTimeTextView.layoutParams = LinearLayout.LayoutParams(70, 30)
+                videoTimeTextView.x = 110f
+                videoTimeTextView.y = 130f
+                videoTimeTextView.text = String.format("%02d:%02d:%02d", videoTime / 3600, (videoTime % 3600) / 60, videoTime % 60);
+                videoTimeTextView.gravity = Gravity.CENTER
+                videoTimeTextView.setTextColor(applicationContext.getColor(R.color.white))
+                videoTimeTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
+                videoTimeTextView.setBackgroundColor(applicationContext.getColor(R.color.black))
+                videoTimeTextView.alpha = 0.4f
 
                 val videoTitleTextView = TextView(applicationContext)
-                videoTitleTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth, 156)
+                videoTitleTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 190, 160)
+                videoTitleTextView.x = 190f
                 videoTitleTextView.text = videoTitle
                 videoTitleTextView.gravity = Gravity.CENTER_VERTICAL
                 videoTitleTextView.setTextColor(applicationContext.getColor(R.color.white))
 
+                val videoViewCountAuthorTextView = TextView(applicationContext)
+                videoViewCountAuthorTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 80, 40)
+                videoViewCountAuthorTextView.y = 160f
+                videoViewCountAuthorTextView.text = String.format("%,.0f views - $videoAuthor", videoViewCount)
+                videoViewCountAuthorTextView.gravity = Gravity.CENTER_VERTICAL
+                videoViewCountAuthorTextView.setTextColor(applicationContext.getColor(R.color.white))
+                videoViewCountAuthorTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
+
+                val videoMenuTextView = TextView(applicationContext)
+                videoMenuTextView.layoutParams = LinearLayout.LayoutParams(80, 40)
+                videoMenuTextView.x = deviceWidth - 80f
+                videoMenuTextView.y = 160f
+                videoMenuTextView.text = "•••"
+                videoMenuTextView.gravity = Gravity.CENTER
+                videoMenuTextView.setTextColor(applicationContext.getColor(R.color.white))
+                videoMenuTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
+                videoMenuTextView.setOnClickListener {
+                    val shareIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, "https://youtu.be/$videoID")
+                        type = "text/plain"
+                    }
+                    startActivity(Intent.createChooser(shareIntent, null))
+                }
+
                 val videoButton = View(applicationContext)
-                videoButton.layoutParams = LinearLayout.LayoutParams(deviceWidth, 156)
+                videoButton.layoutParams = LinearLayout.LayoutParams(deviceWidth, 200)
                 videoButton.setOnClickListener {
                     val dislikesRequest = extractor.returnYouTubeDislikesRequest(videoID)
                     val sponsorBlockRequest = extractor.sponsorBlockRequest(videoID)
@@ -100,8 +148,12 @@ class Search : AppCompatActivity() {
                         startActivity(intent)
                     }
                 }
+                searchRelativeView.addView(videoImageView)
+                searchRelativeView.addView(videoTimeTextView)
                 searchRelativeView.addView(videoTitleTextView)
+                searchRelativeView.addView(videoViewCountAuthorTextView)
                 searchRelativeView.addView(videoButton)
+                searchRelativeView.addView(videoMenuTextView)
 
                 val spaceView = Space(applicationContext)
                 spaceView.minimumHeight = 4
@@ -160,7 +212,7 @@ class Search : AppCompatActivity() {
                         val videoViewCountAuthorTextView = TextView(applicationContext)
                         videoViewCountAuthorTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 80, 40)
                         videoViewCountAuthorTextView.y = 160f
-                        videoViewCountAuthorTextView.text = "$videoViewCount - $videoAuthor"
+                        videoViewCountAuthorTextView.text = String.format("$videoViewCount - $videoAuthor")
                         videoViewCountAuthorTextView.gravity = Gravity.CENTER_VERTICAL
                         videoViewCountAuthorTextView.setTextColor(applicationContext.getColor(R.color.white))
                         videoViewCountAuthorTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
