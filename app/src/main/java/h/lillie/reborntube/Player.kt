@@ -75,7 +75,6 @@ class Player : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        finish()
         Application.setLoop(false)
         Application.setVideoData("")
         playerHandler.removeCallbacks(playerTask)

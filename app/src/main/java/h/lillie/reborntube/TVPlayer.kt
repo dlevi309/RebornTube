@@ -76,7 +76,6 @@ class TVPlayer : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        finish()
         Application.setLoop(false)
         Application.setVideoData("")
         playerSession?.run {

@@ -42,7 +42,6 @@ class Main : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        finish()
         exitProcess(0)
     }
 
