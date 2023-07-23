@@ -37,7 +37,7 @@ class Main : AppCompatActivity() {
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavigationViewListener)
-        supportFragmentManager.beginTransaction().replace(R.id.fragments, Fragments(0)).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragments, Home()).commit()
     }
 
     override fun onDestroy() {
@@ -70,7 +70,7 @@ class Main : AppCompatActivity() {
         lateinit var selectedFragment: Fragment
         when(item.itemId) {
             R.id.action_home -> {
-                selectedFragment = Fragments(0)
+                selectedFragment = Home()
             }
             R.id.action_subscriptions -> {
                 selectedFragment = Fragments(1)

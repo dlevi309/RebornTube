@@ -1,15 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/black"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="56dp"
+    android:id="@+id/homeLayout"
     tools:context=".Fragments">
 
-    <TextView
+    <ScrollView
+        android:id="@+id/homeScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Home"
-        tools:ignore="HardcodedText" />
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/homeScrollLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:clickable="false" />
+
+    </ScrollView>
 
 </FrameLayout>

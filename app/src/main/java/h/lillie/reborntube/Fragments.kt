@@ -8,9 +8,6 @@ import android.view.ViewGroup
 
 class Fragments(private val tab: Int) : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        if (tab == 0) {
-            return inflater.inflate(R.layout.home, container, false)
-        }
         if (tab == 1) {
             return inflater.inflate(R.layout.subscriptions, container, false)
         }
