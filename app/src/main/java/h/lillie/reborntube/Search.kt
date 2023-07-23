@@ -165,24 +165,23 @@ class Search : AppCompatActivity() {
 
                 val searchContents: JSONArray = jsonObject.getJSONObject("contents").getJSONObject("twoColumnSearchResultsRenderer").getJSONObject("primaryContents").getJSONObject("sectionListRenderer").getJSONArray("contents").getJSONObject(0).getJSONObject("itemSectionRenderer").getJSONArray("contents")
 
-                var x = 0
                 for (i in 0 until searchContents.length()) {
                     try {
                         val searchRelativeView = RelativeLayout(applicationContext)
                         searchRelativeView.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 200)
                         searchRelativeView.setBackgroundColor(applicationContext.getColor(R.color.darkgrey))
 
-                        val videoID: String = searchContents.getJSONObject(x).getJSONObject("videoRenderer").optString("videoId").toString()
-                        val videoTitle: String = searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("title").getJSONArray("runs").getJSONObject(0).optString("text").toString()
-                        val videoArtworkArray = searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("thumbnail").getJSONArray("thumbnails")
+                        val videoID: String = searchContents.getJSONObject(i).getJSONObject("videoRenderer").optString("videoId").toString()
+                        val videoTitle: String = searchContents.getJSONObject(i).getJSONObject("videoRenderer").getJSONObject("title").getJSONArray("runs").getJSONObject(0).optString("text").toString()
+                        val videoArtworkArray = searchContents.getJSONObject(i).getJSONObject("videoRenderer").getJSONObject("thumbnail").getJSONArray("thumbnails")
                         val videoArtworkUrl: String = videoArtworkArray.getJSONObject((videoArtworkArray.length() - 1)).optString("url").toString()
-                        val videoAuthor: String = searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("longBylineText").getJSONArray("runs").getJSONObject(0).optString("text").toString()
-                        val videoTime: String = searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("lengthText").optString("simpleText").toString()
+                        val videoAuthor: String = searchContents.getJSONObject(i).getJSONObject("videoRenderer").getJSONObject("longBylineText").getJSONArray("runs").getJSONObject(0).optString("text").toString()
+                        val videoTime: String = searchContents.getJSONObject(i).getJSONObject("videoRenderer").getJSONObject("lengthText").optString("simpleText").toString()
                         var videoViewCount = String()
-                        if (searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("viewCountText").optString("simpleText").toString() != null) {
-                            videoViewCount = searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("viewCountText").optString("simpleText").toString()
-                        } else if (searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("viewCountText").getJSONArray("runs").length() >= 1) {
-                            videoViewCount = searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("viewCountText").getJSONArray("runs").getJSONObject(0).optString("text").toString() + searchContents.getJSONObject(x).getJSONObject("videoRenderer").getJSONObject("viewCountText").getJSONArray("runs").getJSONObject(1).optString("text").toString()
+                        if (searchContents.getJSONObject(i).getJSONObject("videoRenderer").getJSONObject("viewCountText").optString("simpleText").toString() != null) {
+                            videoViewCount = searchContents.getJSONObject(i).getJSONObject("videoRenderer").getJSONObject("viewCountText").optString("simpleText").toString()
+                        } else if (searchContents.getJSONObject(i).getJSONObject("videoRenderer").getJSONObject("viewCountText").getJSONArray("runs").length() >= 1) {
+                            videoViewCount = searchContents.getJSONObject(i).getJSONObject("videoRenderer").getJSONObject("viewCountText").getJSONArray("runs").getJSONObject(0).optString("text").toString() + searchContents.getJSONObject(i).getJSONObject("videoRenderer").getJSONObject("viewCountText").getJSONArray("runs").getJSONObject(1).optString("text").toString()
                         }
 
                         val videoImageView = ImageView(applicationContext)
@@ -283,7 +282,6 @@ class Search : AppCompatActivity() {
                     } catch (e: JSONException) {
                         Log.e("JSONException", e.toString())
                     }
-                    x += 1
                 }
             }
         }
