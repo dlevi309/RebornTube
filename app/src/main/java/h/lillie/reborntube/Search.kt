@@ -141,10 +141,10 @@ class Search : AppCompatActivity() {
                     )))
 
                     if (deviceType == false) {
-                        val intent = Intent(this@Search, Player::class.java)
+                        val intent = Intent(applicationContext, Player::class.java)
                         startActivity(intent)
                     } else if (deviceType == true) {
-                        val intent = Intent(this@Search, TVPlayer::class.java)
+                        val intent = Intent(applicationContext, TVPlayer::class.java)
                         startActivity(intent)
                     }
                 }
@@ -259,10 +259,10 @@ class Search : AppCompatActivity() {
                             )))
 
                             if (deviceType == false) {
-                                val intent = Intent(this@Search, Player::class.java)
+                                val intent = Intent(applicationContext, Player::class.java)
                                 startActivity(intent)
                             } else if (deviceType == true) {
-                                val intent = Intent(this@Search, TVPlayer::class.java)
+                                val intent = Intent(applicationContext, TVPlayer::class.java)
                                 startActivity(intent)
                             }
                         }
