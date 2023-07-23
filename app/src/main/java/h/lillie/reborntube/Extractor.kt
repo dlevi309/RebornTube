@@ -6,7 +6,7 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import android.content.Context
 
 class Extractor {
-    fun playerRequest(context: Context, videoID: String) : String {
+    fun playerRequest(context: Context, videoID: String?) : String {
         val countryCode = context.resources.configuration.locales.get(0).country
         val body = """{
             "context": {
@@ -46,7 +46,7 @@ class Extractor {
         return client.newCall(request).execute().body.string()
     }
 
-    fun browseRequest(context: Context, browseID: String, params: String) : String {
+    fun browseRequest(context: Context, browseID: String?, params: String?) : String {
         val countryCode = context.resources.configuration.locales.get(0).country
         val body = """{
             "context": {
@@ -87,7 +87,7 @@ class Extractor {
         return client.newCall(request).execute().body.string()
     }
 
-    fun searchRequest(context: Context, query: String) : String {
+    fun searchRequest(context: Context, query: String?) : String {
         val countryCode = context.resources.configuration.locales.get(0).country
         val body = """{
             "context": {
@@ -126,7 +126,7 @@ class Extractor {
         return client.newCall(request).execute().body.string()
     }
 
-    fun returnYouTubeDislikesRequest(videoID: String) : String {
+    fun returnYouTubeDislikesRequest(videoID: String?) : String {
         val client: OkHttpClient = OkHttpClient.Builder().build()
 
         val request = Request.Builder()
@@ -137,7 +137,7 @@ class Extractor {
         return client.newCall(request).execute().body.string()
     }
 
-    fun sponsorBlockRequest(videoID: String) : String {
+    fun sponsorBlockRequest(videoID: String?) : String {
         val categories = "[%22sponsor%22,%22selfpromo%22,%22interaction%22,%22intro%22,%22outro%22,%22preview%22,%22music_offtopic%22]"
         val client: OkHttpClient = OkHttpClient.Builder().build()
 
