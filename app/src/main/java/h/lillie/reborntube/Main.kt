@@ -56,7 +56,7 @@ class Main : AppCompatActivity() {
     private val topNavigationViewListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when(item.itemId) {
             R.id.action_search -> {
-                val intent = Intent(applicationContext, Search::class.java)
+                val intent = Intent(this@Main, Search::class.java)
                 startActivity(intent)
             }
             R.id.action_settings -> {

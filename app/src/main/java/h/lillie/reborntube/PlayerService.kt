@@ -13,7 +13,6 @@ import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
 import androidx.media3.session.MediaSessionService
 import androidx.media3.session.MediaSession
 import com.google.gson.Gson
@@ -103,10 +102,10 @@ class PlayerService : MediaSessionService() {
                     val segment1 = String.format("%.3f", segment[1].toString().toDouble()).replace(".", "").toFloat()
                     if (category.contains("sponsor") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
                         player.seekTo(segment1.toLong())
-                        Toast.makeText(applicationContext, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@PlayerService, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
                     } else if (category.contains("interaction") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
                         player.seekTo(segment1.toLong())
-                        Toast.makeText(applicationContext, "Interaction Skipped", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@PlayerService, "Interaction Skipped", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: IOException) {

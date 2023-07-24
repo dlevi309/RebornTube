@@ -82,7 +82,7 @@ class Player : AppCompatActivity() {
         playerController.stop()
         playerController.release()
         MediaController.releaseFuture(playerControllerFuture)
-        stopService(Intent(applicationContext, PlayerService::class.java))
+        stopService(Intent(this@Player, PlayerService::class.java))
     }
 
     override fun onResume() {
@@ -299,10 +299,10 @@ class Player : AppCompatActivity() {
         videoLoop.setOnClickListener {
             if (playerController.repeatMode == Player.REPEAT_MODE_OFF) {
                 playerController.repeatMode = Player.REPEAT_MODE_ONE
-                Toast.makeText(applicationContext, "Loop Enabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Player, "Loop Enabled", Toast.LENGTH_SHORT).show()
             } else if (playerController.repeatMode == Player.REPEAT_MODE_ONE) {
                 playerController.repeatMode = Player.REPEAT_MODE_OFF
-                Toast.makeText(applicationContext, "Loop Disabled", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@Player, "Loop Disabled", Toast.LENGTH_SHORT).show()
             }
         }
 

@@ -365,10 +365,10 @@ class TVPlayer : AppCompatActivity() {
                     val segment1 = String.format("%.3f", segment[1].toString().toDouble()).replace(".", "").toFloat()
                     if (category.contains("sponsor") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
                         player.seekTo(segment1.toLong())
-                        Toast.makeText(applicationContext, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@TVPlayer, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
                     } else if (category.contains("interaction") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
                         player.seekTo(segment1.toLong())
-                        Toast.makeText(applicationContext, "Interaction Skipped", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@TVPlayer, "Interaction Skipped", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: IOException) {

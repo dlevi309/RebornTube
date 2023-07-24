@@ -119,32 +119,14 @@ class Search : AppCompatActivity() {
                 val videoButton = View(applicationContext)
                 videoButton.layoutParams = LinearLayout.LayoutParams(deviceWidth, 200)
                 videoButton.setOnClickListener {
-                    val dislikesRequest = extractor.returnYouTubeDislikesRequest(videoID)
-                    val sponsorBlockRequest = extractor.sponsorBlockRequest(videoID)
-
                     val loader = Loader()
-                    val loaderPlayerInfo = loader.playerInit(playerRequest)
-                    val loaderDislikesInfo = loader.dislikesInit(dislikesRequest)
-
-                    val gson = Gson()
-                    Application.setVideoData(gson.toJson(Data(
-                        loaderPlayerInfo[0].toString(),
-                        loaderPlayerInfo[1].toString(),
-                        sponsorBlockRequest,
-                        loaderPlayerInfo[2].toString(),
-                        loaderPlayerInfo[3].toString(),
-                        loaderPlayerInfo[4].toString(),
-                        loaderPlayerInfo[5].toString(),
-                        loaderPlayerInfo[6].toString().toBoolean(),
-                        loaderDislikesInfo[0].toString(),
-                        loaderDislikesInfo[1].toString()
-                    )))
+                    loader.playerInit(applicationContext, videoID)
 
                     if (deviceType == false) {
-                        val intent = Intent(applicationContext, Player::class.java)
+                        val intent = Intent(this@Search, Player::class.java)
                         startActivity(intent)
                     } else if (deviceType == true) {
-                        val intent = Intent(applicationContext, TVPlayer::class.java)
+                        val intent = Intent(this@Search, TVPlayer::class.java)
                         startActivity(intent)
                     }
                 }
@@ -236,33 +218,14 @@ class Search : AppCompatActivity() {
                         val videoButton = View(applicationContext)
                         videoButton.layoutParams = LinearLayout.LayoutParams(deviceWidth, 200)
                         videoButton.setOnClickListener {
-                            val playerRequest = extractor.playerRequest(applicationContext, videoID)
-                            val dislikesRequest = extractor.returnYouTubeDislikesRequest(videoID)
-                            val sponsorBlockRequest = extractor.sponsorBlockRequest(videoID)
-
                             val loader = Loader()
-                            val loaderPlayerInfo = loader.playerInit(playerRequest)
-                            val loaderDislikesInfo = loader.dislikesInit(dislikesRequest)
-
-                            val gson = Gson()
-                            Application.setVideoData(gson.toJson(Data(
-                                loaderPlayerInfo[0].toString(),
-                                loaderPlayerInfo[1].toString(),
-                                sponsorBlockRequest,
-                                loaderPlayerInfo[2].toString(),
-                                loaderPlayerInfo[3].toString(),
-                                loaderPlayerInfo[4].toString(),
-                                loaderPlayerInfo[5].toString(),
-                                loaderPlayerInfo[6].toString().toBoolean(),
-                                loaderDislikesInfo[0].toString(),
-                                loaderDislikesInfo[1].toString()
-                            )))
+                            loader.playerInit(applicationContext, videoID)
 
                             if (deviceType == false) {
-                                val intent = Intent(applicationContext, Player::class.java)
+                                val intent = Intent(this@Search, Player::class.java)
                                 startActivity(intent)
                             } else if (deviceType == true) {
-                                val intent = Intent(applicationContext, TVPlayer::class.java)
+                                val intent = Intent(this@Search, TVPlayer::class.java)
                                 startActivity(intent)
                             }
                         }
