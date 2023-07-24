@@ -29,7 +29,7 @@ class Main : AppCompatActivity() {
             mainLayout.layoutParams = params
         }
 
-        val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+        val policy = StrictMode.ThreadPolicy.Builder().permitNetwork().build()
         StrictMode.setThreadPolicy(policy)
 
         val topNavigationView: BottomNavigationView = findViewById(R.id.topNavigationView)
