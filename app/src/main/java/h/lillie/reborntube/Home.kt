@@ -16,12 +16,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.view.Gravity
-import com.google.gson.Gson
 import com.squareup.picasso.Picasso
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Home : Fragment() {
     private var deviceType: Boolean = false
@@ -110,15 +113,19 @@ class Home : Fragment() {
                     val videoButton = View(applicationContext)
                     videoButton.layoutParams = LinearLayout.LayoutParams(deviceWidth, 200)
                     videoButton.setOnClickListener {
-                        val loader = Loader()
-                        loader.playerInit(applicationContext, videoID)
+                        CoroutineScope(Dispatchers.Main).launch {
+                            withContext(Dispatchers.IO) {
+                                val loader = Loader()
+                                loader.playerInit(applicationContext, videoID)
 
-                        if (deviceType == false) {
-                            val intent = Intent(applicationContext, Player::class.java)
-                            startActivity(intent)
-                        } else if (deviceType == true) {
-                            val intent = Intent(applicationContext, TVPlayer::class.java)
-                            startActivity(intent)
+                                if (deviceType == false) {
+                                    val intent = Intent(applicationContext, Player::class.java)
+                                    startActivity(intent)
+                                } else if (deviceType == true) {
+                                    val intent = Intent(applicationContext, TVPlayer::class.java)
+                                    startActivity(intent)
+                                }
+                            }
                         }
                     }
                     homeRelativeView.addView(videoImageView)
