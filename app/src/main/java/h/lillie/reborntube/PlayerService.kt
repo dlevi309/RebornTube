@@ -44,7 +44,9 @@ class PlayerService : MediaSessionService() {
         playerSession?.run {
             playerHandler.removeCallbacks(playerTask)
             playerHandler.removeCallbacksAndMessages(null)
-            player.stop()
+            if (player.isPlaying) {
+                player.stop()
+            }
             player.release()
             release()
             playerSession = null

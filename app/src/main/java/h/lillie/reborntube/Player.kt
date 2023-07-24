@@ -63,8 +63,8 @@ class Player : AppCompatActivity() {
             params.setMargins(38,26,38,26)
             playerLayout.layoutParams = params
         }
-        val sessionToken = SessionToken(this, ComponentName(this, PlayerService::class.java))
-        playerControllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
+        val sessionToken = SessionToken(this@Player, ComponentName(this@Player, PlayerService::class.java))
+        playerControllerFuture = MediaController.Builder(this@Player, sessionToken).buildAsync()
         playerControllerFuture.addListener(
             {
                 playerController = playerControllerFuture.get()
@@ -79,7 +79,9 @@ class Player : AppCompatActivity() {
         Application.setVideoData("")
         playerHandler.removeCallbacks(playerTask)
         playerHandler.removeCallbacksAndMessages(null)
-        playerController.stop()
+        if (playerController.isPlaying) {
+            playerController.stop()
+        }
         playerController.release()
         MediaController.releaseFuture(playerControllerFuture)
         stopService(Intent(this@Player, PlayerService::class.java))
@@ -193,9 +195,9 @@ class Player : AppCompatActivity() {
             playPauseRestartButton.y = (deviceHeight / 2) - 54f
         }
         playPauseRestartButton.setOnClickListener {
-            if (playerController.playWhenReady) {
+            if (playerController.isPlaying) {
                 playerController.pause()
-            } else if (!playerController.playWhenReady) {
+            } else if (!playerController.isPlaying) {
                 playerController.play()
             }
         }
@@ -207,7 +209,7 @@ class Player : AppCompatActivity() {
             videoSwitch.y = 10f
         }
         if (orientation == 1) {
-            videoSwitch.x = deviceWidth - 310f
+            videoSwitch.x = deviceWidth - 374f
             videoSwitch.y = 50f
         }
         videoSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -239,12 +241,15 @@ class Player : AppCompatActivity() {
         }
 
         // Slider
-        playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth + 64, 0)
         if (orientation == 0) {
+            playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 0)
+            playerSlider.x = 0f
             playerSlider.y = (deviceWidth * 9 / 16) - 64f
             playerSlider.visibility = View.VISIBLE
         } else if (orientation == 1) {
-            playerSlider.y = deviceHeight - 256f
+            playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth - 256, 0)
+            playerSlider.x = 32f
+            playerSlider.y = deviceHeight - 192f
             if (overlayVisible == 0) {
                 playerSlider.visibility = View.GONE
             } else if (overlayVisible == 1) {
@@ -261,12 +266,13 @@ class Player : AppCompatActivity() {
 
         // Title
         val videoTitle: TextView = findViewById(R.id.videoTitle)
-        val title = videoData.title
         videoTitle.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 50)
         if (orientation == 0) {
+            videoTitle.x = 32f
             videoTitle.y = (deviceWidth * 9 / 16) + 64f
             videoTitle.visibility = View.VISIBLE
         } else if (orientation == 1) {
+            videoTitle.x = 64f
             videoTitle.y = 50f
             if (overlayVisible == 0) {
                 videoTitle.visibility = View.GONE
@@ -274,10 +280,11 @@ class Player : AppCompatActivity() {
                 videoTitle.visibility = View.VISIBLE
             }
         }
-        videoTitle.text = title
+        videoTitle.text = videoData.title
 
         // Info
         val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
+        videoInfo.y = (deviceWidth * 9 / 16) + 144f
         if (orientation == 0) {
             videoInfo.visibility = View.VISIBLE
         } else if (orientation == 1) {
@@ -285,17 +292,9 @@ class Player : AppCompatActivity() {
         }
 
         val videoCountLikesDislikes: TextView = findViewById(R.id.videoCountLikesDislikes)
-        videoCountLikesDislikes.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 200)
-        videoCountLikesDislikes.y = (deviceWidth * 9 / 16) + 144f
-        val viewCount = videoData.viewCount.toDouble()
-        val likes = videoData.likes.toDouble()
-        val dislikes = videoData.dislikes.toDouble()
-        val info = "View Count: %,.0f\nLikes: %,.0f\nDislikes: %,.0f".format(viewCount, likes, dislikes)
-        videoCountLikesDislikes.text = info
+        videoCountLikesDislikes.text = String.format("View Count: %,.0f\nLikes: %,.0f\nDislikes: %,.0f", videoData.viewCount.toDouble(), videoData.likes.toDouble(), videoData.dislikes.toDouble())
 
         val videoLoop: Button = findViewById(R.id.videoLoop)
-        videoLoop.layoutParams = RelativeLayout.LayoutParams(200, 100)
-        videoLoop.y = (deviceWidth * 9 / 16) + 304f
         videoLoop.setOnClickListener {
             if (playerController.repeatMode == Player.REPEAT_MODE_OFF) {
                 playerController.repeatMode = Player.REPEAT_MODE_ONE
@@ -307,9 +306,6 @@ class Player : AppCompatActivity() {
         }
 
         val videoShare: Button = findViewById(R.id.videoShare)
-        videoShare.layoutParams = RelativeLayout.LayoutParams(200, 100)
-        videoShare.x = 220f
-        videoShare.y = (deviceWidth * 9 / 16) + 304f
         videoShare.setOnClickListener {
             val videoID = videoData.videoID
             val shareIntent: Intent = Intent().apply {
@@ -413,10 +409,14 @@ class Player : AppCompatActivity() {
         override fun run() {
             try {
                 val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
-                if (playerController.playWhenReady) {
+                if (playerController.isPlaying) {
                     playPauseRestartButton.setImageResource(R.drawable.pause)
-                } else if (!playerController.playWhenReady) {
-                    playPauseRestartButton.setImageResource(R.drawable.play)
+                } else if (!playerController.isPlaying) {
+                    if (playerController.playbackState == Player.STATE_ENDED) {
+                        playPauseRestartButton.setImageResource(R.drawable.restart)
+                    } else {
+                        playPauseRestartButton.setImageResource(R.drawable.play)
+                    }
                 }
 
                 val duration = playerController.duration.toFloat()
