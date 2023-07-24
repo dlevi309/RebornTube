@@ -12,14 +12,5 @@ class Application : Application() {
         fun setVideoData(info: String) {
             videoData = info
         }
-
-        // Loop
-        private var loop : Boolean = false
-        fun getLoop() : Boolean {
-            return loop
-        }
-        fun setLoop(info: Boolean) {
-            loop = info
-        }
     }
 }

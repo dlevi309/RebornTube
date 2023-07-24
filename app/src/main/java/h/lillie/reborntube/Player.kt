@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ColorDrawable
+import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
 import androidx.media3.ui.PlayerView
@@ -75,13 +76,13 @@ class Player : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Application.setLoop(false)
         Application.setVideoData("")
         playerHandler.removeCallbacks(playerTask)
         playerHandler.removeCallbacksAndMessages(null)
+        playerController.stop()
         playerController.release()
         MediaController.releaseFuture(playerControllerFuture)
-        stopService(Intent(this@Player, PlayerService::class.java))
+        stopService(Intent(applicationContext, PlayerService::class.java))
     }
 
     override fun onResume() {
@@ -292,13 +293,12 @@ class Player : AppCompatActivity() {
         videoLoop.layoutParams = RelativeLayout.LayoutParams(200, 100)
         videoLoop.y = (deviceWidth * 9 / 16) + 304f
         videoLoop.setOnClickListener {
-            val loop = Application.getLoop()
-            if (!loop) {
-                Application.setLoop(true)
-                Toast.makeText(this@Player, "Loop Enabled", Toast.LENGTH_SHORT).show()
-            } else if (loop) {
-                Application.setLoop(false)
-                Toast.makeText(this@Player, "Loop Disabled", Toast.LENGTH_SHORT).show()
+            if (playerController.repeatMode == Player.REPEAT_MODE_OFF) {
+                playerController.repeatMode = Player.REPEAT_MODE_ONE
+                Toast.makeText(applicationContext, "Loop Enabled", Toast.LENGTH_SHORT).show()
+            } else if (playerController.repeatMode == Player.REPEAT_MODE_ONE) {
+                playerController.repeatMode = Player.REPEAT_MODE_OFF
+                Toast.makeText(applicationContext, "Loop Disabled", Toast.LENGTH_SHORT).show()
             }
         }
 

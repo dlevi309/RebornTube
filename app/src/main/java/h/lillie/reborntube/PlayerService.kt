@@ -45,6 +45,7 @@ class PlayerService : MediaSessionService() {
         playerSession?.run {
             playerHandler.removeCallbacks(playerTask)
             playerHandler.removeCallbacksAndMessages(null)
+            player.stop()
             player.release()
             release()
             playerSession = null
@@ -94,12 +95,6 @@ class PlayerService : MediaSessionService() {
     private val playerTask = object : Runnable {
         override fun run() {
             try {
-                val loop = Application.getLoop()
-                if (!loop) {
-                    player.repeatMode = Player.REPEAT_MODE_OFF
-                } else if (loop) {
-                    player.repeatMode = Player.REPEAT_MODE_ONE
-                }
                 val jsonArray = JSONArray(sponsorBlockInfo)
                 for (i in 0 until jsonArray.length()) {
                     val category = jsonArray.getJSONObject(i).optString("category")
@@ -108,10 +103,10 @@ class PlayerService : MediaSessionService() {
                     val segment1 = String.format("%.3f", segment[1].toString().toDouble()).replace(".", "").toFloat()
                     if (category.contains("sponsor") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
                         player.seekTo(segment1.toLong())
-                        Toast.makeText(this@PlayerService, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
                     } else if (category.contains("interaction") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
                         player.seekTo(segment1.toLong())
-                        Toast.makeText(this@PlayerService, "Interaction Skipped", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "Interaction Skipped", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: IOException) {

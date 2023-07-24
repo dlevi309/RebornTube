@@ -76,11 +76,11 @@ class TVPlayer : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Application.setLoop(false)
         Application.setVideoData("")
         playerSession?.run {
             playerHandler.removeCallbacks(playerTask)
             playerHandler.removeCallbacksAndMessages(null)
+            player.stop()
             player.release()
             release()
             playerSession = null
@@ -261,13 +261,12 @@ class TVPlayer : AppCompatActivity() {
         videoLoop.layoutParams = RelativeLayout.LayoutParams(200, 100)
         videoLoop.y = (deviceWidth * 9 / 16) + 304f
         videoLoop.setOnClickListener {
-            val loop = Application.getLoop()
-            if (!loop) {
-                Application.setLoop(true)
-                Toast.makeText(this@TVPlayer, "Loop Enabled", Toast.LENGTH_SHORT).show()
-            } else if (loop) {
-                Application.setLoop(false)
-                Toast.makeText(this@TVPlayer, "Loop Disabled", Toast.LENGTH_SHORT).show()
+            if (player.repeatMode == Player.REPEAT_MODE_OFF) {
+                player.repeatMode = Player.REPEAT_MODE_ONE
+                Toast.makeText(applicationContext, "Loop Enabled", Toast.LENGTH_SHORT).show()
+            } else if (player.repeatMode == Player.REPEAT_MODE_ONE) {
+                player.repeatMode = Player.REPEAT_MODE_OFF
+                Toast.makeText(applicationContext, "Loop Disabled", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -411,12 +410,6 @@ class TVPlayer : AppCompatActivity() {
                     playerSlider.value = position
                 }
 
-                val loop = Application.getLoop()
-                if (!loop) {
-                    player.repeatMode = Player.REPEAT_MODE_OFF
-                } else if (loop) {
-                    player.repeatMode = Player.REPEAT_MODE_ONE
-                }
                 val jsonArray = JSONArray(sponsorBlockInfo)
                 for (i in 0 until jsonArray.length()) {
                     val category = jsonArray.getJSONObject(i).optString("category")
@@ -425,10 +418,10 @@ class TVPlayer : AppCompatActivity() {
                     val segment1 = String.format("%.3f", segment[1].toString().toDouble()).replace(".", "").toFloat()
                     if (category.contains("sponsor") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
                         player.seekTo(segment1.toLong())
-                        Toast.makeText(this@TVPlayer, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
                     } else if (category.contains("interaction") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
                         player.seekTo(segment1.toLong())
-                        Toast.makeText(this@TVPlayer, "Interaction Skipped", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, "Interaction Skipped", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: IOException) {
