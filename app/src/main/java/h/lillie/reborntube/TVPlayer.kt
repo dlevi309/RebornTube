@@ -1,7 +1,6 @@
 package h.lillie.reborntube
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.pm.PackageManager
@@ -12,7 +11,6 @@ import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.RelativeLayout
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -28,7 +26,6 @@ import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerView
 import java.util.concurrent.TimeUnit
@@ -48,7 +45,6 @@ class TVPlayer : AppCompatActivity() {
     private var deviceHeight = 0
     private var deviceWidth = 0
     private var overlayVisible = 0
-    private var onStopCalled: Boolean = false
     private var sponsorBlockInfo = String()
 
     private lateinit var player: ExoPlayer
@@ -58,7 +54,7 @@ class TVPlayer : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.player)
+        setContentView(R.layout.tvplayer)
         val gson = Gson()
         val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
         sponsorBlockInfo = videoData.sponsorBlockInfo
@@ -87,14 +83,9 @@ class TVPlayer : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        onStopCalled = false
-    }
-
     override fun onStop() {
         super.onStop()
-        onStopCalled = true
+        finish()
     }
 
     @SuppressLint("SwitchIntDef")
@@ -239,50 +230,6 @@ class TVPlayer : AppCompatActivity() {
             }
         }
         videoTitle.text = title
-
-        // Info
-        val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
-        if (orientation == 0) {
-            videoInfo.visibility = View.VISIBLE
-        } else if (orientation == 1) {
-            videoInfo.visibility = View.GONE
-        }
-
-        val videoCountLikesDislikes: TextView = findViewById(R.id.videoCountLikesDislikes)
-        videoCountLikesDislikes.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 200)
-        videoCountLikesDislikes.y = (deviceWidth * 9 / 16) + 144f
-        val viewCount = videoData.viewCount.toDouble()
-        val likes = videoData.likes.toDouble()
-        val dislikes = videoData.dislikes.toDouble()
-        val info = "View Count: %,.0f\nLikes: %,.0f\nDislikes: %,.0f".format(viewCount, likes, dislikes)
-        videoCountLikesDislikes.text = info
-
-        val videoLoop: Button = findViewById(R.id.videoLoop)
-        videoLoop.layoutParams = RelativeLayout.LayoutParams(200, 100)
-        videoLoop.y = (deviceWidth * 9 / 16) + 304f
-        videoLoop.setOnClickListener {
-            if (player.repeatMode == Player.REPEAT_MODE_OFF) {
-                player.repeatMode = Player.REPEAT_MODE_ONE
-                Toast.makeText(applicationContext, "Loop Enabled", Toast.LENGTH_SHORT).show()
-            } else if (player.repeatMode == Player.REPEAT_MODE_ONE) {
-                player.repeatMode = Player.REPEAT_MODE_OFF
-                Toast.makeText(applicationContext, "Loop Disabled", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        val videoShare: Button = findViewById(R.id.videoShare)
-        videoShare.layoutParams = RelativeLayout.LayoutParams(200, 100)
-        videoShare.x = 220f
-        videoShare.y = (deviceWidth * 9 / 16) + 304f
-        videoShare.setOnClickListener {
-            val videoID = videoData.videoID
-            val shareIntent: Intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, "https://youtu.be/$videoID")
-                type = "text/plain"
-            }
-            startActivity(Intent.createChooser(shareIntent, null))
-        }
     }
 
     private fun changeOverlay(orientation: Int) {
