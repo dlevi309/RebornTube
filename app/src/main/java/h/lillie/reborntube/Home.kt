@@ -75,8 +75,7 @@ class Home : Fragment() {
                     videoTimeTextView.gravity = Gravity.CENTER
                     videoTimeTextView.setTextColor(applicationContext.getColor(R.color.white))
                     videoTimeTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
-                    videoTimeTextView.setBackgroundColor(applicationContext.getColor(R.color.black))
-                    videoTimeTextView.alpha = 0.4f
+                    videoTimeTextView.setBackgroundColor(applicationContext.getColor(R.color.blackdimmed))
 
                     val videoTitleTextView = TextView(applicationContext)
                     videoTitleTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 190, 160)
