@@ -73,6 +73,14 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinx_coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinx_coroutines_version"
 
+    // ExoPlayer
+    def exoplayer_version = "2.19.0"
+    implementation "com.google.android.exoplayer:exoplayer:$exoplayer_version"
+
+    // VLC
+    def vlc_version = "4.0.0-eap12"
+    implementation "org.videolan.android:libvlc-all:$vlc_version"
+
     // Media
     def media_version = "1.1.0"
     implementation "androidx.media3:media3-exoplayer:$media_version"
