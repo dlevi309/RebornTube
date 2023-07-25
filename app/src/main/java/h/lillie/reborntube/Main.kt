@@ -1,11 +1,13 @@
 package h.lillie.reborntube
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.content.pm.PackageManager
 import android.widget.RelativeLayout
 import android.os.StrictMode
 import android.view.ViewGroup
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import kotlin.system.exitProcess
@@ -38,6 +40,14 @@ class Main : AppCompatActivity() {
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavigationViewListener)
         supportFragmentManager.beginTransaction().replace(R.id.fragments, Home()).commit()
+
+        val model: String = android.os.Build.MODEL
+        val manufacturer: String = android.os.Build.MANUFACTURER
+        Log.d("Model", model)
+        Log.d("Manufacturer", manufacturer)
+        if (!manufacturer.contains("Google") && !model.contains("Pixel")) {
+            showDevicePopup()
+        }
     }
 
     override fun onDestroy() {
@@ -50,6 +60,15 @@ class Main : AppCompatActivity() {
         deviceType = packageManager.hasSystemFeature(PackageManager.FEATURE_TELEVISION) || packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
         deviceHeight = windowManager.currentWindowMetrics.bounds.height()
         deviceWidth = windowManager.currentWindowMetrics.bounds.width()
+    }
+
+    private fun showDevicePopup() {
+        val devicePopup = AlertDialog.Builder(this).create()
+        devicePopup.setTitle("Notice")
+        devicePopup.setMessage("Please know your device maybe unsupported as per it has been untested by the developer")
+        devicePopup.setButton(AlertDialog.BUTTON_POSITIVE, "Okay") { _, _ ->
+        }
+        devicePopup.show()
     }
 
     @Suppress("Deprecation")
