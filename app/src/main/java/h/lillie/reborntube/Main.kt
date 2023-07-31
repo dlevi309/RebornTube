@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.widget.RelativeLayout
 import android.os.StrictMode
 import android.view.ViewGroup
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import kotlin.system.exitProcess
@@ -42,10 +41,14 @@ class Main : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.fragments, Home()).commit()
 
         val model: String = android.os.Build.MODEL
-        val manufacturer: String = android.os.Build.MANUFACTURER
-        Log.d("Model", model)
-        Log.d("Manufacturer", manufacturer)
-        if (!manufacturer.contains("Google") && !model.contains("Pixel")) {
+        var showDevicePopupCheck: Boolean = true
+        val devices: Array<String> = arrayOf("Pixel", "Chromecast")
+        for (device in devices) {
+            if (model.contains(device)) {
+                showDevicePopupCheck = false
+            }
+        }
+        if (showDevicePopupCheck) {
             showDevicePopup()
         }
     }
