@@ -22,7 +22,7 @@ class Main : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
         getDeviceInfo()
-        if (deviceType == true) {
+        if (deviceType) {
             val mainLayout: RelativeLayout = findViewById(R.id.mainLayout)
             val params = mainLayout.layoutParams as ViewGroup.MarginLayoutParams
             params.setMargins(38,26,38,26)
