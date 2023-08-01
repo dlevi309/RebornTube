@@ -9,7 +9,6 @@ import android.os.StrictMode
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import kotlin.system.exitProcess
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class Main : AppCompatActivity() {
@@ -55,7 +54,7 @@ class Main : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        exitProcess(0)
+        finishAffinity()
     }
 
     @Suppress("Deprecation")
