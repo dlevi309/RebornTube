@@ -1,4 +1,13 @@
 # RebornTube
-My in-dev YouTube client for Android (11-14), Android TV (11-14) and Chromecast (Google TV, 11-14), originally made for iOS but now for Android
+My in-dev YouTube client for Android, Android TV and Chromecast (Google TV), supports Android 11-14, originally made for iOS but now for Android
 
-Please know this is primarily developed using a Google Pixel 6a (Android 14) and Chromecast 4k (Android 12), compatibility with other Android devices maybe unknown
+Physical Tested Devices:
+- Google Pixel 6a (Android 14)
+- Google Chromecast 4k (Android 12)
+
+Virtual Tested Devices:
+- Google Pixel 6a (Android 14)
+- Google Pixel 7 (Android 14)
+- Google Pixel 7 Pro (Android 14)
+- Google Pixel XL (Android 14)
+- Television 1080p (Android 11)
