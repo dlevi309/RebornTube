@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MainTheme" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:fontFamily">@font/opensans_regular</item>
+        <item name="fontFamily">@font/opensans_regular</item>
+    </style>
+</resources>
