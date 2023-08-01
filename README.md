@@ -6,8 +6,6 @@ Physical Tested Devices:
 - Google Chromecast 4k (Android 12)
 
 Virtual Tested Devices:
-- Google Pixel 6a (Android 13)
-- Google Pixel 7 (Android 14)
 - Google Pixel 7 Pro (Android 14)
 - Google Pixel XL (Android 14)
 - Television 1080p (Android 11)
