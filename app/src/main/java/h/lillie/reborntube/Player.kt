@@ -393,6 +393,7 @@ class Player : AppCompatActivity() {
         Picasso.get().load(artworkUri).into(playerImageView)
 
         val playerView: PlayerView = findViewById(R.id.playerView)
+        playerView.keepScreenOn = true
         playerView.player = playerController
         if (android.os.Build.VERSION.SDK_INT >= 31) {
             setPictureInPictureParams(

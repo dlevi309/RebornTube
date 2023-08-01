@@ -336,6 +336,7 @@ class TVPlayer : AppCompatActivity() {
         player.prepare()
 
         val playerView: PlayerView = findViewById(R.id.playerView)
+        playerView.keepScreenOn = true
         playerView.player = player
         playerHandler.post(playerTask)
     }
