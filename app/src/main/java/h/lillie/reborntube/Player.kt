@@ -57,7 +57,7 @@ class Player : AppCompatActivity() {
         playerHandler = Handler(Looper.getMainLooper())
         playerSlider = findViewById(R.id.playerSlider)
         getDeviceInfo()
-        if (deviceType == true) {
+        if (deviceType) {
             val playerLayout: RelativeLayout = findViewById(R.id.playerLayout)
             val params = playerLayout.layoutParams as ViewGroup.MarginLayoutParams
             params.setMargins(38,26,38,26)
@@ -77,6 +77,9 @@ class Player : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Application.setVideoData("")
+        val playerView: PlayerView = findViewById(R.id.playerView)
+        playerView.keepScreenOn = false
+        playerView.player = null
         playerHandler.removeCallbacks(playerTask)
         playerHandler.removeCallbacksAndMessages(null)
         if (playerController.isPlaying) {
@@ -149,6 +152,7 @@ class Player : AppCompatActivity() {
     private fun createUI(orientation: Int) {
         // Info
         val gson = Gson()
+        val converter = Converter()
         val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
 
         // Player
@@ -244,7 +248,7 @@ class Player : AppCompatActivity() {
         if (orientation == 0) {
             playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 0)
             playerSlider.x = 0f
-            playerSlider.y = (deviceWidth * 9 / 16) - 64f
+            playerSlider.y = (deviceWidth * 9 / 16).toFloat() - converter.dpToPx(this@Player,24f)
             playerSlider.visibility = View.VISIBLE
         } else if (orientation == 1) {
             playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth - 256, 0)
@@ -268,8 +272,8 @@ class Player : AppCompatActivity() {
         val videoTitle: TextView = findViewById(R.id.videoTitle)
         videoTitle.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 50)
         if (orientation == 0) {
-            videoTitle.x = 32f
-            videoTitle.y = (deviceWidth * 9 / 16) + 64f
+            videoTitle.x = converter.dpToPx(this@Player, 16f)
+            videoTitle.y = (deviceWidth * 9 / 16) + converter.dpToPx(this@Player,32f)
             videoTitle.visibility = View.VISIBLE
         } else if (orientation == 1) {
             videoTitle.x = 64f
@@ -284,7 +288,7 @@ class Player : AppCompatActivity() {
 
         // Info
         val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
-        videoInfo.y = (deviceWidth * 9 / 16) + 144f
+        videoInfo.y = (deviceWidth * 9 / 16) + converter.dpToPx(this@Player,72f)
         if (orientation == 0) {
             videoInfo.visibility = View.VISIBLE
         } else if (orientation == 1) {

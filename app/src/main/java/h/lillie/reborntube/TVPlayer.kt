@@ -54,14 +54,14 @@ class TVPlayer : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.tvplayer)
+        setContentView(R.layout.player)
         val gson = Gson()
         val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
         sponsorBlockInfo = videoData.sponsorBlockInfo
         playerHandler = Handler(Looper.getMainLooper())
         playerSlider = findViewById(R.id.playerSlider)
         getDeviceInfo()
-        if (deviceType == true) {
+        if (deviceType) {
             val playerLayout: RelativeLayout = findViewById(R.id.playerLayout)
             val params = playerLayout.layoutParams as ViewGroup.MarginLayoutParams
             params.setMargins(38,26,38,26)
@@ -73,6 +73,9 @@ class TVPlayer : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         Application.setVideoData("")
+        val playerView: PlayerView = findViewById(R.id.playerView)
+        playerView.keepScreenOn = false
+        playerView.player = null
         playerSession?.run {
             playerHandler.removeCallbacks(playerTask)
             playerHandler.removeCallbacksAndMessages(null)
@@ -230,6 +233,10 @@ class TVPlayer : AppCompatActivity() {
             }
         }
         videoTitle.text = title
+
+        // Info
+        val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
+        videoInfo.visibility = View.GONE
     }
 
     private fun changeOverlay(orientation: Int) {

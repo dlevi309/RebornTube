@@ -39,6 +39,7 @@ class PlayerService : MediaSessionService() {
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? = playerSession
 
+    @SuppressLint("UnsafeOptInUsageError")
     override fun onDestroy() {
         super.onDestroy()
         playerSession?.run {
@@ -50,6 +51,7 @@ class PlayerService : MediaSessionService() {
             player.release()
             release()
             playerSession = null
+            clearListener()
         }
     }
 

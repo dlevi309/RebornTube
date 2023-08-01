@@ -120,36 +120,35 @@
         android:id="@+id/videoInfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="32px"
-        tools:ignore="PxUsage,RtlHardcoded">
+        android:layout_marginLeft="16dp"
+        tools:ignore="RtlHardcoded">
 
         <TextView
             android:id="@+id/videoCountLikesDislikes"
-            android:layout_height="200px"
+            android:layout_height="200dp"
             android:layout_width="match_parent"
-            android:textColor="@color/white"
-            tools:ignore="PxUsage" />
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/videoLoop"
-            android:layout_height="100px"
-            android:layout_width="200px"
-            android:layout_marginTop="160px"
+            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:layout_marginTop="80dp"
             android:text="Loop"
             android:textColor="@color/white"
             android:textAllCaps="false"
-            tools:ignore="HardcodedText,PxUsage" />
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/videoShare"
-            android:layout_height="100px"
-            android:layout_width="200px"
-            android:layout_marginLeft="220px"
-            android:layout_marginTop="160px"
+            android:layout_height="40dp"
+            android:layout_width="80dp"
+            android:layout_marginLeft="90dp"
+            android:layout_marginTop="80dp"
             android:text="Share"
             android:textColor="@color/white"
             android:textAllCaps="false"
-            tools:ignore="HardcodedText,PxUsage,RtlHardcoded" />
+            tools:ignore="HardcodedText,RtlHardcoded" />
 
     </RelativeLayout>
 
