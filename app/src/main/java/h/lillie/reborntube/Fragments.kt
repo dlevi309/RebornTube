@@ -5,21 +5,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 
 class Fragments(private val tab: Int) : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view: View = inflater.inflate(R.layout.fragments, container, false)
+        val textView: TextView = view.findViewById(R.id.fragmentsTextView)
         if (tab == 1) {
-            return inflater.inflate(R.layout.subscriptions, container, false)
+            textView.text = "Subscriptions"
         }
         if (tab == 2) {
-            return inflater.inflate(R.layout.history, container, false)
+            textView.text = "History"
         }
         if (tab == 3) {
-            return inflater.inflate(R.layout.playlists, container, false)
+            textView.text = "Playlists"
         }
         if (tab == 4) {
-            return inflater.inflate(R.layout.downloads, container, false)
+            textView.text = "Downloads"
         }
-        return null
+        return view
     }
 }
