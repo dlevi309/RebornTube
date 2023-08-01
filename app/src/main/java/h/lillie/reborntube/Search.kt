@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -37,7 +38,7 @@ class Search : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.search)
         getDeviceInfo()
-        if (deviceType == true) {
+        if (deviceType) {
             val searchLayout: RelativeLayout = findViewById(R.id.searchLayout)
             val params = searchLayout.layoutParams as ViewGroup.MarginLayoutParams
             params.setMargins(38,26,38,26)
@@ -48,6 +49,9 @@ class Search : AppCompatActivity() {
 
         val searchBar: EditText = findViewById(R.id.searchBar)
         val searchBarButton: Button = findViewById(R.id.searchBarButton)
+        if (deviceType) {
+            searchBarButton.setBackgroundResource(R.drawable.tvbutton)
+        }
         searchBarButton.setOnClickListener {
             searchScrollView.removeAllViews()
             val extractor = Extractor()
@@ -81,6 +85,7 @@ class Search : AppCompatActivity() {
                 videoTimeTextView.x = 110f
                 videoTimeTextView.y = 130f
                 videoTimeTextView.text = String.format("%02d:%02d:%02d", videoTime / 3600, (videoTime % 3600) / 60, videoTime % 60);
+                videoTimeTextView.typeface = ResourcesCompat.getFont(this@Search, R.font.opensans_regular)
                 videoTimeTextView.gravity = Gravity.CENTER
                 videoTimeTextView.setTextColor(applicationContext.getColor(R.color.white))
                 videoTimeTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
@@ -90,13 +95,19 @@ class Search : AppCompatActivity() {
                 videoTitleTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 190, 160)
                 videoTitleTextView.x = 190f
                 videoTitleTextView.text = videoTitle
+                videoTitleTextView.typeface = ResourcesCompat.getFont(this@Search, R.font.opensans_regular)
                 videoTitleTextView.gravity = Gravity.CENTER_VERTICAL
                 videoTitleTextView.setTextColor(applicationContext.getColor(R.color.white))
 
                 val videoViewCountAuthorTextView = TextView(applicationContext)
-                videoViewCountAuthorTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 80, 40)
+                if (!deviceType) {
+                    videoViewCountAuthorTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 80, 40)
+                } else if (deviceType) {
+                    videoViewCountAuthorTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth, 40)
+                }
                 videoViewCountAuthorTextView.y = 160f
                 videoViewCountAuthorTextView.text = String.format("%,.0f views - $videoAuthor", videoViewCount)
+                videoViewCountAuthorTextView.typeface = ResourcesCompat.getFont(this@Search, R.font.opensans_regular)
                 videoViewCountAuthorTextView.gravity = Gravity.CENTER_VERTICAL
                 videoViewCountAuthorTextView.setTextColor(applicationContext.getColor(R.color.white))
                 videoViewCountAuthorTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
@@ -106,6 +117,7 @@ class Search : AppCompatActivity() {
                 videoMenuTextView.x = deviceWidth - 80f
                 videoMenuTextView.y = 160f
                 videoMenuTextView.text = "•••"
+                videoMenuTextView.typeface = ResourcesCompat.getFont(this@Search, R.font.opensans_regular)
                 videoMenuTextView.gravity = Gravity.CENTER
                 videoMenuTextView.setTextColor(applicationContext.getColor(R.color.white))
                 videoMenuTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
@@ -120,16 +132,19 @@ class Search : AppCompatActivity() {
 
                 val videoButton = View(applicationContext)
                 videoButton.layoutParams = LinearLayout.LayoutParams(deviceWidth, 200)
+                if (deviceType) {
+                    videoButton.setBackgroundResource(R.drawable.tvbutton)
+                }
                 videoButton.setOnClickListener {
                     CoroutineScope(Dispatchers.Main).launch {
                         withContext(Dispatchers.IO) {
                             val loader = Loader()
                             loader.playerInit(applicationContext, videoID)
 
-                            if (deviceType == false) {
+                            if (!deviceType) {
                                 val intent = Intent(this@Search, Player::class.java)
                                 startActivity(intent)
-                            } else if (deviceType == true) {
+                            } else if (deviceType) {
                                 val intent = Intent(this@Search, TVPlayer::class.java)
                                 startActivity(intent)
                             }
@@ -141,7 +156,9 @@ class Search : AppCompatActivity() {
                 searchRelativeView.addView(videoTitleTextView)
                 searchRelativeView.addView(videoViewCountAuthorTextView)
                 searchRelativeView.addView(videoButton)
-                searchRelativeView.addView(videoMenuTextView)
+                if (!deviceType) {
+                    searchRelativeView.addView(videoMenuTextView)
+                }
 
                 val spaceView = Space(applicationContext)
                 spaceView.minimumHeight = 4
@@ -183,6 +200,7 @@ class Search : AppCompatActivity() {
                         videoTimeTextView.x = 110f
                         videoTimeTextView.y = 130f
                         videoTimeTextView.text = videoTime
+                        videoTimeTextView.typeface = ResourcesCompat.getFont(this@Search, R.font.opensans_regular)
                         videoTimeTextView.gravity = Gravity.CENTER
                         videoTimeTextView.setTextColor(applicationContext.getColor(R.color.white))
                         videoTimeTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
@@ -192,13 +210,19 @@ class Search : AppCompatActivity() {
                         videoTitleTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 190, 160)
                         videoTitleTextView.x = 190f
                         videoTitleTextView.text = videoTitle
+                        videoTitleTextView.typeface = ResourcesCompat.getFont(this@Search, R.font.opensans_regular)
                         videoTitleTextView.gravity = Gravity.CENTER_VERTICAL
                         videoTitleTextView.setTextColor(applicationContext.getColor(R.color.white))
 
                         val videoViewCountAuthorTextView = TextView(applicationContext)
-                        videoViewCountAuthorTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 80, 40)
+                        if (!deviceType) {
+                            videoViewCountAuthorTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 80, 40)
+                        } else if (deviceType) {
+                            videoViewCountAuthorTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth, 40)
+                        }
                         videoViewCountAuthorTextView.y = 160f
                         videoViewCountAuthorTextView.text = String.format("$videoViewCount - $videoAuthor")
+                        videoViewCountAuthorTextView.typeface = ResourcesCompat.getFont(this@Search, R.font.opensans_regular)
                         videoViewCountAuthorTextView.gravity = Gravity.CENTER_VERTICAL
                         videoViewCountAuthorTextView.setTextColor(applicationContext.getColor(R.color.white))
                         videoViewCountAuthorTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
@@ -208,6 +232,7 @@ class Search : AppCompatActivity() {
                         videoMenuTextView.x = deviceWidth - 80f
                         videoMenuTextView.y = 160f
                         videoMenuTextView.text = "•••"
+                        videoMenuTextView.typeface = ResourcesCompat.getFont(this@Search, R.font.opensans_regular)
                         videoMenuTextView.gravity = Gravity.CENTER
                         videoMenuTextView.setTextColor(applicationContext.getColor(R.color.white))
                         videoMenuTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
@@ -222,16 +247,19 @@ class Search : AppCompatActivity() {
 
                         val videoButton = View(applicationContext)
                         videoButton.layoutParams = LinearLayout.LayoutParams(deviceWidth, 200)
+                        if (deviceType) {
+                            videoButton.setBackgroundResource(R.drawable.tvbutton)
+                        }
                         videoButton.setOnClickListener {
                             CoroutineScope(Dispatchers.Main).launch {
                                 withContext(Dispatchers.IO) {
                                     val loader = Loader()
                                     loader.playerInit(applicationContext, videoID)
 
-                                    if (deviceType == false) {
+                                    if (!deviceType) {
                                         val intent = Intent(this@Search, Player::class.java)
                                         startActivity(intent)
-                                    } else if (deviceType == true) {
+                                    } else if (deviceType) {
                                         val intent = Intent(this@Search, TVPlayer::class.java)
                                         startActivity(intent)
                                     }
@@ -243,7 +271,9 @@ class Search : AppCompatActivity() {
                         searchRelativeView.addView(videoTitleTextView)
                         searchRelativeView.addView(videoViewCountAuthorTextView)
                         searchRelativeView.addView(videoButton)
-                        searchRelativeView.addView(videoMenuTextView)
+                        if (!deviceType) {
+                            searchRelativeView.addView(videoMenuTextView)
+                        }
 
                         val spaceView = Space(applicationContext)
                         spaceView.minimumHeight = 4

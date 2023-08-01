@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
 import androidx.fragment.app.Fragment
+import androidx.core.content.res.ResourcesCompat
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.RelativeLayout
@@ -72,6 +73,7 @@ class Home : Fragment() {
                     videoTimeTextView.x = 110f
                     videoTimeTextView.y = 130f
                     videoTimeTextView.text = videoTime
+                    videoTimeTextView.typeface = ResourcesCompat.getFont(applicationContext, R.font.opensans_regular)
                     videoTimeTextView.gravity = Gravity.CENTER
                     videoTimeTextView.setTextColor(applicationContext.getColor(R.color.white))
                     videoTimeTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
@@ -81,13 +83,19 @@ class Home : Fragment() {
                     videoTitleTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 190, 160)
                     videoTitleTextView.x = 190f
                     videoTitleTextView.text = videoTitle
+                    videoTitleTextView.typeface = ResourcesCompat.getFont(applicationContext, R.font.opensans_regular)
                     videoTitleTextView.gravity = Gravity.CENTER_VERTICAL
                     videoTitleTextView.setTextColor(applicationContext.getColor(R.color.white))
 
                     val videoViewCountAuthorTextView = TextView(applicationContext)
-                    videoViewCountAuthorTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 80, 40)
+                    if (!deviceType) {
+                        videoViewCountAuthorTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth - 80, 40)
+                    } else if (deviceType) {
+                        videoViewCountAuthorTextView.layoutParams = LinearLayout.LayoutParams(deviceWidth, 40)
+                    }
                     videoViewCountAuthorTextView.y = 160f
                     videoViewCountAuthorTextView.text = String.format("$videoViewCount - $videoAuthor")
+                    videoViewCountAuthorTextView.typeface = ResourcesCompat.getFont(applicationContext, R.font.opensans_regular)
                     videoViewCountAuthorTextView.gravity = Gravity.CENTER_VERTICAL
                     videoViewCountAuthorTextView.setTextColor(applicationContext.getColor(R.color.white))
                     videoViewCountAuthorTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
@@ -97,6 +105,7 @@ class Home : Fragment() {
                     videoMenuTextView.x = deviceWidth - 80f
                     videoMenuTextView.y = 160f
                     videoMenuTextView.text = "•••"
+                    videoMenuTextView.typeface = ResourcesCompat.getFont(applicationContext, R.font.opensans_regular)
                     videoMenuTextView.gravity = Gravity.CENTER
                     videoMenuTextView.setTextColor(applicationContext.getColor(R.color.white))
                     videoMenuTextView.setAutoSizeTextTypeUniformWithConfiguration(1, 18, 1, TypedValue.COMPLEX_UNIT_DIP)
@@ -111,16 +120,19 @@ class Home : Fragment() {
 
                     val videoButton = View(applicationContext)
                     videoButton.layoutParams = LinearLayout.LayoutParams(deviceWidth, 200)
+                    if (deviceType) {
+                        videoButton.setBackgroundResource(R.drawable.tvbutton)
+                    }
                     videoButton.setOnClickListener {
                         CoroutineScope(Dispatchers.Main).launch {
                             withContext(Dispatchers.IO) {
                                 val loader = Loader()
                                 loader.playerInit(applicationContext, videoID)
 
-                                if (deviceType == false) {
+                                if (!deviceType) {
                                     val intent = Intent(applicationContext, Player::class.java)
                                     startActivity(intent)
-                                } else if (deviceType == true) {
+                                } else if (deviceType) {
                                     val intent = Intent(applicationContext, TVPlayer::class.java)
                                     startActivity(intent)
                                 }
@@ -132,7 +144,9 @@ class Home : Fragment() {
                     homeRelativeView.addView(videoTitleTextView)
                     homeRelativeView.addView(videoViewCountAuthorTextView)
                     homeRelativeView.addView(videoButton)
-                    homeRelativeView.addView(videoMenuTextView)
+                    if (!deviceType) {
+                        homeRelativeView.addView(videoMenuTextView)
+                    }
 
                     val spaceView = Space(applicationContext)
                     spaceView.minimumHeight = 4
