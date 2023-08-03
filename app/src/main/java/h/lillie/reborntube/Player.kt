@@ -270,13 +270,13 @@ class Player : AppCompatActivity() {
 
         // Title
         val videoTitle: TextView = findViewById(R.id.videoTitle)
-        videoTitle.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 50)
+        videoTitle.layoutParams = RelativeLayout.LayoutParams(deviceWidth - converter.dpToPx(this@Player, 32f).toInt(), converter.dpToPx(this@Player,50f).toInt())
         if (orientation == 0) {
             videoTitle.x = converter.dpToPx(this@Player, 16f)
             videoTitle.y = (deviceWidth * 9 / 16) + converter.dpToPx(this@Player,32f)
             videoTitle.visibility = View.VISIBLE
         } else if (orientation == 1) {
-            videoTitle.x = 64f
+            videoTitle.x = converter.dpToPx(this@Player, 32f)
             videoTitle.y = 50f
             if (overlayVisible == 0) {
                 videoTitle.visibility = View.GONE
@@ -288,7 +288,7 @@ class Player : AppCompatActivity() {
 
         // Info
         val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
-        videoInfo.y = (deviceWidth * 9 / 16) + converter.dpToPx(this@Player,72f)
+        videoInfo.y = (deviceWidth * 9 / 16) + converter.dpToPx(this@Player,84f)
         if (orientation == 0) {
             videoInfo.visibility = View.VISIBLE
         } else if (orientation == 1) {
