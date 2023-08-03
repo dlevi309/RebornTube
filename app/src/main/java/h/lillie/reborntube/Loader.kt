@@ -15,13 +15,13 @@ class Loader {
         val dislikesObject = JSONObject(dislikesRequest)
 
         val artworkArray = playerObject.getJSONObject("videoDetails").getJSONObject("thumbnail").getJSONArray("thumbnails")
-        val artworkUrl = artworkArray.getJSONObject((artworkArray.length() - 1)).optString("url")
-        val videoID = playerObject.getJSONObject("videoDetails").optString("videoId")
-        val title = playerObject.getJSONObject("videoDetails").optString("title")
-        val author = playerObject.getJSONObject("videoDetails").optString("author")
-        val viewCount = playerObject.getJSONObject("videoDetails").optString("viewCount")
+        val artworkUrl = artworkArray.getJSONObject((artworkArray.length() - 1)).optString("url").toString()
+        val videoID = playerObject.getJSONObject("videoDetails").optString("videoId").toString()
+        val title = playerObject.getJSONObject("videoDetails").optString("title").toString()
+        val author = playerObject.getJSONObject("videoDetails").optString("author").toString()
+        val viewCount = playerObject.getJSONObject("videoDetails").optString("viewCount").toString()
         val isLive = playerObject.getJSONObject("videoDetails").optBoolean("isLive")
-        val hlsUrl = playerObject.getJSONObject("streamingData").optString("hlsManifestUrl")
+        val hlsUrl = playerObject.getJSONObject("streamingData").optString("hlsManifestUrl").toString()
 
         val likes = dislikesObject.optInt("likes")
         val dislikes = dislikesObject.optInt("dislikes")
@@ -32,14 +32,14 @@ class Loader {
         }
 
         val gson = Gson()
-        Application.setVideoData(gson.toJson(Data(
-            videoID.toString(),
-            hlsUrl.toString(),
+        Application.setVideoData(gson.toJson(VideoData(
+            videoID,
+            hlsUrl,
             sponsorBlockRequest,
-            artworkUrl.toString(),
-            title.toString(),
-            author.toString(),
-            viewCount.toString(),
+            artworkUrl,
+            title,
+            author,
+            viewCount,
             live.toString().toBoolean(),
             likes.toString(),
             dislikes.toString()

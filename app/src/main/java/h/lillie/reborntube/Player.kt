@@ -153,7 +153,7 @@ class Player : AppCompatActivity() {
         // Info
         val gson = Gson()
         val converter = Converter()
-        val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
+        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
 
         // Player
         val videoPlayer: RelativeLayout = findViewById(R.id.videoPlayer)
@@ -391,7 +391,7 @@ class Player : AppCompatActivity() {
     private fun createPlayer() {
         val playerImageView: ImageView = findViewById(R.id.playerImageView)
         val gson = Gson()
-        val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
+        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
         val artworkUrl = videoData.artworkURL
         val artworkUri: Uri = Uri.parse(artworkUrl)
         Picasso.get().load(artworkUri).into(playerImageView)

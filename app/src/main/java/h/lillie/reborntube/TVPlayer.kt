@@ -56,7 +56,7 @@ class TVPlayer : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.player)
         val gson = Gson()
-        val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
+        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
         sponsorBlockInfo = videoData.sponsorBlockInfo
         playerHandler = Handler(Looper.getMainLooper())
         playerSlider = findViewById(R.id.playerSlider)
@@ -121,7 +121,7 @@ class TVPlayer : AppCompatActivity() {
     private fun createUI(orientation: Int) {
         // Info
         val gson = Gson()
-        val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
+        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
 
         // Player
         val videoPlayer: RelativeLayout = findViewById(R.id.videoPlayer)
@@ -310,7 +310,7 @@ class TVPlayer : AppCompatActivity() {
     private fun createPlayer() {
         val playerImageView: ImageView = findViewById(R.id.playerImageView)
         val gson = Gson()
-        val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
+        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
         val artworkUrl = videoData.artworkURL
         val artworkUri: Uri = Uri.parse(artworkUrl)
         Picasso.get().load(artworkUri).into(playerImageView)

@@ -31,7 +31,7 @@ class PlayerService : MediaSessionService() {
     override fun onCreate() {
         super.onCreate()
         val gson = Gson()
-        val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
+        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
         sponsorBlockInfo = videoData.sponsorBlockInfo
         playerHandler = Handler(Looper.getMainLooper())
         createPlayer()
@@ -61,7 +61,7 @@ class PlayerService : MediaSessionService() {
         playerSession = MediaSession.Builder(this, player).build()
 
         val gson = Gson()
-        val videoData = gson.fromJson(Application.getVideoData(), Data::class.java)
+        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
         val title = videoData.title
         val author = videoData.author
 

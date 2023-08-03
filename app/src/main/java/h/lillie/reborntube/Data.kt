@@ -1,6 +1,6 @@
 package h.lillie.reborntube
 
-data class Data(
+data class VideoData(
     var videoID: String,
     var hlsURL: String,
     var sponsorBlockInfo: String,
