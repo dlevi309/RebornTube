@@ -12,3 +12,13 @@ data class Data(
     var likes: String,
     var dislikes: String
 )
+
+data class VideoViewData(
+    var videoID: String?,
+    var title: String?,
+    var artworkURL: String?,
+    var author: String?,
+    var time: String?,
+    var viewCount: Double?,
+    var viewCountString: String?
+)

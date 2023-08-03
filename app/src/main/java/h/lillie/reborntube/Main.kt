@@ -37,7 +37,7 @@ class Main : AppCompatActivity() {
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
         bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavigationViewListener)
-        supportFragmentManager.beginTransaction().replace(R.id.fragments, Home()).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.fragments, Home(this@Main)).commit()
 
         val model: String = android.os.Build.MODEL
         var showDevicePopupCheck: Boolean = true
@@ -91,7 +91,7 @@ class Main : AppCompatActivity() {
         lateinit var selectedFragment: Fragment
         when(item.itemId) {
             R.id.action_home -> {
-                selectedFragment = Home()
+                selectedFragment = Home(this@Main)
             }
             R.id.action_subscriptions -> {
                 selectedFragment = Fragments(1)
