@@ -12,7 +12,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.RelativeLayout
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import android.view.View
@@ -30,11 +29,9 @@ import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerView
 import java.util.concurrent.TimeUnit
 import com.google.android.material.slider.Slider
-import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.Gson
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
-import com.squareup.picasso.Picasso
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.IOException
@@ -174,28 +171,6 @@ class TVPlayer : AppCompatActivity() {
             }
         }
 
-        val videoSwitch: SwitchMaterial = findViewById(R.id.videoSwitch)
-        videoSwitch.layoutParams = RelativeLayout.LayoutParams(200, 100)
-        if (orientation == 0) {
-            videoSwitch.x = deviceWidth - 210f
-            videoSwitch.y = 10f
-        }
-        if (orientation == 1) {
-            videoSwitch.x = deviceWidth - 310f
-            videoSwitch.y = 50f
-        }
-        videoSwitch.setOnCheckedChangeListener { _, isChecked ->
-            val playerView: PlayerView = findViewById(R.id.playerView)
-            val playerImageView: ImageView = findViewById(R.id.playerImageView)
-            if (!isChecked) {
-                playerView.visibility = View.VISIBLE
-                playerImageView.visibility = View.GONE
-            } else if (isChecked) {
-                playerView.visibility = View.GONE
-                playerImageView.visibility = View.VISIBLE
-            }
-        }
-
         // Slider
         playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth + 64, 0)
         if (orientation == 0) {
@@ -245,7 +220,6 @@ class TVPlayer : AppCompatActivity() {
         val rightView: View = findViewById(R.id.rightView)
         val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
         val videoTitle: TextView = findViewById(R.id.videoTitle)
-        val videoSwitch: SwitchMaterial = findViewById(R.id.videoSwitch)
 
         val leftViewDrawable: Drawable = leftView.background
         val leftViewColorDrawable: ColorDrawable = leftViewDrawable as ColorDrawable
@@ -262,7 +236,6 @@ class TVPlayer : AppCompatActivity() {
             middleView.setBackgroundColor(0x00000000)
             rightView.setBackgroundColor(0x00000000)
             playPauseRestartButton.visibility = View.GONE
-            videoSwitch.visibility = View.GONE
             val playerSliderActiveColourList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.lightgrey))
@@ -288,7 +261,6 @@ class TVPlayer : AppCompatActivity() {
             middleView.setBackgroundColor(blackDimmed)
             rightView.setBackgroundColor(blackDimmed)
             playPauseRestartButton.visibility = View.VISIBLE
-            videoSwitch.visibility = View.VISIBLE
             val playerSliderActiveColourList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.red))
@@ -308,12 +280,10 @@ class TVPlayer : AppCompatActivity() {
 
     @SuppressLint("UnsafeOptInUsageError")
     private fun createPlayer() {
-        val playerImageView: ImageView = findViewById(R.id.playerImageView)
         val gson = Gson()
         val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
         val artworkUrl = videoData.artworkURL
         val artworkUri: Uri = Uri.parse(artworkUrl)
-        Picasso.get().load(artworkUri).into(playerImageView)
 
         player = ExoPlayer.Builder(this).build()
         playerSession = MediaSession.Builder(this, player).build()

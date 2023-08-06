@@ -20,15 +20,6 @@
             android:layout_height="match_parent"
             app:use_controller="false" />
 
-        <ImageView
-            android:id="@+id/playerImageView"
-            android:scaleType="centerCrop"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:visibility="gone"
-            tools:ignore="ContentDescription" />
-
     </RelativeLayout>
 
     <RelativeLayout
@@ -41,7 +32,6 @@
             android:layout_height="0dp"
             android:layout_width="0dp"
             android:background="@android:color/transparent"
-            android:nextFocusUp="@id/videoSwitch"
             android:nextFocusDown="@id/playPauseRestartButton" />
 
         <View
@@ -49,7 +39,6 @@
             android:layout_height="0dp"
             android:layout_width="0dp"
             android:background="@android:color/transparent"
-            android:nextFocusUp="@id/videoSwitch"
             android:nextFocusDown="@id/playPauseRestartButton" />
 
         <View
@@ -57,7 +46,6 @@
             android:layout_height="0dp"
             android:layout_width="0dp"
             android:background="@android:color/transparent"
-            android:nextFocusUp="@id/videoSwitch"
             android:nextFocusDown="@id/playPauseRestartButton" />
 
         <ImageButton
@@ -72,13 +60,6 @@
             android:nextFocusUp="@id/middleView"
             android:nextFocusDown="@id/playerSlider"
             tools:ignore="ContentDescription, UseAppTint" />
-
-        <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/videoSwitch"
-            android:layout_height="0dp"
-            android:layout_width="0dp"
-            android:visibility="gone"
-            android:nextFocusDown="@id/middleView" />
 
     </RelativeLayout>
 

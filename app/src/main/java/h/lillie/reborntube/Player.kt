@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,7 +15,6 @@ import android.app.PictureInPictureParams
 import android.widget.RelativeLayout
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import android.view.View
@@ -31,11 +29,9 @@ import java.util.concurrent.TimeUnit
 import com.google.common.util.concurrent.ListenableFuture
 import com.google.common.util.concurrent.MoreExecutors
 import com.google.android.material.slider.Slider
-import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.gson.Gson
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
-import com.squareup.picasso.Picasso
 import java.io.IOException
 
 class Player : AppCompatActivity() {
@@ -206,44 +202,6 @@ class Player : AppCompatActivity() {
             }
         }
 
-        val videoSwitch: SwitchMaterial = findViewById(R.id.videoSwitch)
-        videoSwitch.layoutParams = RelativeLayout.LayoutParams(200, 100)
-        if (orientation == 0) {
-            videoSwitch.x = deviceWidth - 210f
-            videoSwitch.y = 10f
-        }
-        if (orientation == 1) {
-            videoSwitch.x = deviceWidth - 374f
-            videoSwitch.y = 50f
-        }
-        videoSwitch.setOnCheckedChangeListener { _, isChecked ->
-            val playerView: PlayerView = findViewById(R.id.playerView)
-            val playerImageView: ImageView = findViewById(R.id.playerImageView)
-            if (!isChecked) {
-                playerView.visibility = View.VISIBLE
-                playerImageView.visibility = View.GONE
-                if (android.os.Build.VERSION.SDK_INT >= 31) {
-                    setPictureInPictureParams(
-                        PictureInPictureParams.Builder()
-                            .setAutoEnterEnabled(true)
-                            .setSeamlessResizeEnabled(true)
-                            .build()
-                    )
-                }
-            } else if (isChecked) {
-                playerView.visibility = View.GONE
-                playerImageView.visibility = View.VISIBLE
-                if (android.os.Build.VERSION.SDK_INT >= 31) {
-                    setPictureInPictureParams(
-                        PictureInPictureParams.Builder()
-                            .setAutoEnterEnabled(false)
-                            .setSeamlessResizeEnabled(true)
-                            .build()
-                    )
-                }
-            }
-        }
-
         // Slider
         if (orientation == 0) {
             playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 0)
@@ -327,7 +285,6 @@ class Player : AppCompatActivity() {
         val rightView: View = findViewById(R.id.rightView)
         val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
         val videoTitle: TextView = findViewById(R.id.videoTitle)
-        val videoSwitch: SwitchMaterial = findViewById(R.id.videoSwitch)
 
         val leftViewDrawable: Drawable = leftView.background
         val leftViewColorDrawable: ColorDrawable = leftViewDrawable as ColorDrawable
@@ -344,7 +301,6 @@ class Player : AppCompatActivity() {
             middleView.setBackgroundColor(0x00000000)
             rightView.setBackgroundColor(0x00000000)
             playPauseRestartButton.visibility = View.GONE
-            videoSwitch.visibility = View.GONE
             val playerSliderActiveColourList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.lightgrey))
@@ -370,7 +326,6 @@ class Player : AppCompatActivity() {
             middleView.setBackgroundColor(blackDimmed)
             rightView.setBackgroundColor(blackDimmed)
             playPauseRestartButton.visibility = View.VISIBLE
-            videoSwitch.visibility = View.VISIBLE
             val playerSliderActiveColourList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.red))
@@ -389,13 +344,6 @@ class Player : AppCompatActivity() {
     }
 
     private fun createPlayer() {
-        val playerImageView: ImageView = findViewById(R.id.playerImageView)
-        val gson = Gson()
-        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
-        val artworkUrl = videoData.artworkURL
-        val artworkUri: Uri = Uri.parse(artworkUrl)
-        Picasso.get().load(artworkUri).into(playerImageView)
-
         val playerView: PlayerView = findViewById(R.id.playerView)
         playerView.keepScreenOn = true
         playerView.player = playerController
