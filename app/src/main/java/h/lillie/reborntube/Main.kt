@@ -52,6 +52,13 @@ class Main : AppCompatActivity() {
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (deviceType) {
+            finish()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         finishAffinity()

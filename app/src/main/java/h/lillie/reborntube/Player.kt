@@ -70,6 +70,19 @@ class Player : AppCompatActivity() {
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+        onStopCalled = false
+    }
+
+    override fun onStop() {
+        super.onStop()
+        onStopCalled = true
+        if (deviceType) {
+            finish()
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         Application.setVideoData("")
@@ -84,16 +97,6 @@ class Player : AppCompatActivity() {
         playerController.release()
         MediaController.releaseFuture(playerControllerFuture)
         stopService(Intent(this@Player, PlayerService::class.java))
-    }
-
-    override fun onResume() {
-        super.onResume()
-        onStopCalled = false
-    }
-
-    override fun onStop() {
-        super.onStop()
-        onStopCalled = true
     }
 
     @SuppressLint("SwitchIntDef")

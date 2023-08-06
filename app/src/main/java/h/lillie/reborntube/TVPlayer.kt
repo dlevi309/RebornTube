@@ -67,6 +67,12 @@ class TVPlayer : AppCompatActivity() {
         createPlayer()
     }
 
+    override fun onStop() {
+        super.onStop()
+        if (deviceType) {
+            finish()
+        }
+    }
     override fun onDestroy() {
         super.onDestroy()
         Application.setVideoData("")
@@ -81,11 +87,6 @@ class TVPlayer : AppCompatActivity() {
             release()
             playerSession = null
         }
-    }
-
-    override fun onStop() {
-        super.onStop()
-        finish()
     }
 
     @SuppressLint("SwitchIntDef")
