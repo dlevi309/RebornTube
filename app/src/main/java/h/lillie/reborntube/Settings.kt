@@ -2,18 +2,9 @@ package h.lillie.reborntube
 
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TableLayout
-import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.view.ViewGroup
-import com.google.gson.Gson
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
-import java.io.IOException
 
 class Settings : AppCompatActivity() {
 
@@ -26,7 +17,7 @@ class Settings : AppCompatActivity() {
         setContentView(R.layout.settings)
         getDeviceInfo()
         if (deviceType) {
-            val settingsLayout: TableLayout = findViewById(R.id.settingsLayout)
+            val settingsLayout: ScrollView = findViewById(R.id.settingsLayout)
             val params = settingsLayout.layoutParams as ViewGroup.MarginLayoutParams
             params.setMargins(38,26,38,26)
             settingsLayout.layoutParams = params
