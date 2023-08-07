@@ -1,9 +1,11 @@
 package h.lillie.reborntube.settings
 
-import android.content.pm.PackageManager
+import android.content.Intent
 import android.os.Bundle
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ScrollView
+import android.widget.TableRow
 import android.view.ViewGroup
 import h.lillie.reborntube.R
 
@@ -22,6 +24,11 @@ class Settings : AppCompatActivity() {
             val params = settingsLayout.layoutParams as ViewGroup.MarginLayoutParams
             params.setMargins(38,26,38,26)
             settingsLayout.layoutParams = params
+        }
+
+        val backgroundModeSettingsRow: TableRow = findViewById(R.id.backgroundModeSettingsRow)
+        backgroundModeSettingsRow.setOnClickListener {
+            startActivity(Intent(this@Settings, BackgroundModeSettings::class.java))
         }
     }
 

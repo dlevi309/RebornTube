@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.pm.PackageManager
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -76,6 +77,11 @@ class Player : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val backgroundMode: Int = preferences.getInt("RTBackgroundMode", 0)
+        if (backgroundMode == 0 && onStopCalled) {
+            playerController.play()
+        }
         onStopCalled = false
     }
 
@@ -84,6 +90,11 @@ class Player : AppCompatActivity() {
         onStopCalled = true
         if (deviceType) {
             finish()
+        }
+        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val backgroundMode: Int = preferences.getInt("RTBackgroundMode", 0)
+        if (backgroundMode == 0 && onStopCalled) {
+            playerController.pause()
         }
     }
 
@@ -354,7 +365,10 @@ class Player : AppCompatActivity() {
         val playerView: PlayerView = findViewById(R.id.playerView)
         playerView.keepScreenOn = true
         playerView.player = playerController
-        if (android.os.Build.VERSION.SDK_INT >= 31) {
+
+        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val backgroundMode: Int = preferences.getInt("RTBackgroundMode", 0)
+        if (android.os.Build.VERSION.SDK_INT >= 31 && backgroundMode == 2) {
             setPictureInPictureParams(
                 PictureInPictureParams.Builder()
                     .setAutoEnterEnabled(true)
