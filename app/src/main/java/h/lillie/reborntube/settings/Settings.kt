@@ -1,10 +1,11 @@
-package h.lillie.reborntube
+package h.lillie.reborntube.settings
 
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ScrollView
 import android.view.ViewGroup
+import h.lillie.reborntube.R
 
 class Settings : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package h.lillie.reborntube
+package h.lillie.reborntube.views
 
 import android.content.Context
 import android.content.Intent
@@ -15,6 +15,11 @@ import android.view.View
 import android.view.Gravity
 import com.squareup.picasso.Picasso
 import com.google.gson.Gson
+import h.lillie.reborntube.Loader
+import h.lillie.reborntube.R
+import h.lillie.reborntube.VideoViewData
+import h.lillie.reborntube.player.Player
+import h.lillie.reborntube.player.TVPlayer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

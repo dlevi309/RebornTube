@@ -1,4 +1,4 @@
-package h.lillie.reborntube
+package h.lillie.reborntube.player
 
 import android.annotation.SuppressLint
 import android.net.Uri
@@ -16,6 +16,8 @@ import androidx.media3.common.MediaItem
 import androidx.media3.session.MediaSessionService
 import androidx.media3.session.MediaSession
 import com.google.gson.Gson
+import h.lillie.reborntube.Application
+import h.lillie.reborntube.VideoData
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.IOException

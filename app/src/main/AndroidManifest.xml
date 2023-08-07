@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Settings"
+            android:name=".settings.Settings"
             android:exported="true"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout">
             <intent-filter>
@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TVPlayer"
+            android:name=".player.TVPlayer"
             android:exported="true"
             android:supportsPictureInPicture="false"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout">
@@ -54,7 +54,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Player"
+            android:name=".player.Player"
             android:exported="true"
             android:supportsPictureInPicture="true"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout">
@@ -64,7 +64,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".PlayerService"
+            android:name=".player.PlayerService"
             android:exported="true"
             android:foregroundServiceType="mediaPlayback">
             <intent-filter>

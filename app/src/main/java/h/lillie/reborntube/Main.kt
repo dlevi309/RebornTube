@@ -10,6 +10,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import h.lillie.reborntube.fragments.Fragments
+import h.lillie.reborntube.fragments.Home
+import h.lillie.reborntube.settings.Settings
 
 class Main : AppCompatActivity() {
 

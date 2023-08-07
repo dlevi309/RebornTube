@@ -10,6 +10,7 @@ import android.widget.RelativeLayout
 import android.widget.LinearLayout
 import android.view.ViewGroup
 import com.google.gson.Gson
+import h.lillie.reborntube.views.VideoView
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject

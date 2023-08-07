@@ -1,19 +1,16 @@
-package h.lillie.reborntube
+package h.lillie.reborntube.player
 
 import android.annotation.SuppressLint
-import android.content.ComponentName
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import android.app.PictureInPictureParams
 import android.widget.RelativeLayout
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
@@ -21,35 +18,46 @@ import android.view.View
 import android.view.ViewGroup
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ColorDrawable
-import androidx.media3.common.Player
-import androidx.media3.session.MediaController
-import androidx.media3.session.SessionToken
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.MediaSource
+import androidx.media3.exoplayer.hls.HlsMediaSource
+import androidx.media3.datasource.DataSource
+import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.common.MediaMetadata
+import androidx.media3.common.MediaItem
+import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerView
 import java.util.concurrent.TimeUnit
-import com.google.common.util.concurrent.ListenableFuture
-import com.google.common.util.concurrent.MoreExecutors
 import com.google.android.material.slider.Slider
 import com.google.gson.Gson
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
+import h.lillie.reborntube.Application
+import h.lillie.reborntube.R
+import h.lillie.reborntube.VideoData
+import org.json.JSONArray
+import org.json.JSONException
 import java.io.IOException
 
-class Player : AppCompatActivity() {
+class TVPlayer : AppCompatActivity() {
 
     private var deviceType: Boolean = false
     private var deviceHeight = 0
     private var deviceWidth = 0
     private var overlayVisible = 0
-    private var onStopCalled: Boolean = false
+    private var sponsorBlockInfo = String()
 
-    private lateinit var playerControllerFuture: ListenableFuture<MediaController>
-    private lateinit var playerController: MediaController
+    private lateinit var player: ExoPlayer
     private lateinit var playerHandler: Handler
     private lateinit var playerSlider: Slider
+    private var playerSession: MediaSession? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.player)
+        val gson = Gson()
+        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
+        sponsorBlockInfo = videoData.sponsorBlockInfo
         playerHandler = Handler(Looper.getMainLooper())
         playerSlider = findViewById(R.id.playerSlider)
         getDeviceInfo()
@@ -59,44 +67,29 @@ class Player : AppCompatActivity() {
             params.setMargins(38,26,38,26)
             playerLayout.layoutParams = params
         }
-        val sessionToken = SessionToken(this@Player, ComponentName(this@Player, PlayerService::class.java))
-        playerControllerFuture = MediaController.Builder(this@Player, sessionToken).buildAsync()
-        playerControllerFuture.addListener(
-            {
-                playerController = playerControllerFuture.get()
-                createPlayer()
-            },
-            MoreExecutors.directExecutor()
-        )
-    }
-
-    override fun onResume() {
-        super.onResume()
-        onStopCalled = false
+        createPlayer()
     }
 
     override fun onStop() {
         super.onStop()
-        onStopCalled = true
         if (deviceType) {
             finish()
         }
     }
-
     override fun onDestroy() {
         super.onDestroy()
         Application.setVideoData("")
         val playerView: PlayerView = findViewById(R.id.playerView)
         playerView.keepScreenOn = false
         playerView.player = null
-        playerHandler.removeCallbacks(playerTask)
-        playerHandler.removeCallbacksAndMessages(null)
-        if (playerController.isPlaying) {
-            playerController.stop()
+        playerSession?.run {
+            playerHandler.removeCallbacks(playerTask)
+            playerHandler.removeCallbacksAndMessages(null)
+            player.stop()
+            player.release()
+            release()
+            playerSession = null
         }
-        playerController.release()
-        MediaController.releaseFuture(playerControllerFuture)
-        stopService(Intent(this@Player, PlayerService::class.java))
     }
 
     @SuppressLint("SwitchIntDef")
@@ -105,28 +98,6 @@ class Player : AppCompatActivity() {
         when (newConfig.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> getDeviceInfo()
             Configuration.ORIENTATION_LANDSCAPE -> getDeviceInfo()
-        }
-    }
-
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        val videoOverlay: RelativeLayout = findViewById(R.id.videoOverlay)
-        val videoSlider: RelativeLayout = findViewById(R.id.videoSlider)
-        val videoTitleLayout: RelativeLayout = findViewById(R.id.videoTitleLayout)
-        val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
-        if (isInPictureInPictureMode) {
-            videoOverlay.alpha = 0f
-            videoSlider.alpha = 0f
-            videoTitleLayout.alpha = 0f
-            videoInfo.alpha = 0f
-        } else {
-            videoOverlay.alpha = 1f
-            videoSlider.alpha = 1f
-            videoTitleLayout.alpha = 1f
-            videoInfo.alpha = 1f
-            if (onStopCalled) {
-                finish()
-            }
         }
     }
 
@@ -151,7 +122,6 @@ class Player : AppCompatActivity() {
     private fun createUI(orientation: Int) {
         // Info
         val gson = Gson()
-        val converter = Converter()
         val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
 
         // Player
@@ -166,7 +136,7 @@ class Player : AppCompatActivity() {
                 changeOverlay(orientation)
             }
             override fun onDoubleClick(view: View) {
-                playerController.seekTo(playerController.currentPosition - TimeUnit.SECONDS.toMillis(10))
+                player.seekTo(player.currentPosition - TimeUnit.SECONDS.toMillis(10))
             }
         }))
 
@@ -185,7 +155,7 @@ class Player : AppCompatActivity() {
                 changeOverlay(orientation)
             }
             override fun onDoubleClick(view: View) {
-                playerController.seekTo(playerController.currentPosition + TimeUnit.SECONDS.toMillis(10))
+                player.seekTo(player.currentPosition + TimeUnit.SECONDS.toMillis(10))
             }
         }))
 
@@ -198,23 +168,20 @@ class Player : AppCompatActivity() {
             playPauseRestartButton.y = (deviceHeight / 2) - 54f
         }
         playPauseRestartButton.setOnClickListener {
-            if (playerController.isPlaying) {
-                playerController.pause()
-            } else if (!playerController.isPlaying) {
-                playerController.play()
+            if (player.playWhenReady) {
+                player.pause()
+            } else if (!player.playWhenReady) {
+                player.play()
             }
         }
 
         // Slider
+        playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth + 64, 0)
         if (orientation == 0) {
-            playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 0)
-            playerSlider.x = 0f
-            playerSlider.y = (deviceWidth * 9 / 16).toFloat() - converter.dpToPx(this@Player,24f)
+            playerSlider.y = (deviceWidth * 9 / 16) - 64f
             playerSlider.visibility = View.VISIBLE
         } else if (orientation == 1) {
-            playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth - 256, 0)
-            playerSlider.x = 32f
-            playerSlider.y = deviceHeight - 192f
+            playerSlider.y = deviceHeight - 256f
             if (overlayVisible == 0) {
                 playerSlider.visibility = View.GONE
             } else if (overlayVisible == 1) {
@@ -222,22 +189,21 @@ class Player : AppCompatActivity() {
             }
         }
         playerSlider.addOnChangeListener { _, value, fromUser ->
-            val duration = playerController.duration.toFloat()
-            val position = playerController.currentPosition.toFloat()
+            val duration = player.duration.toFloat()
+            val position = player.currentPosition.toFloat()
             if (fromUser && duration >= 0 && position >= 0) {
-                playerController.seekTo(value.toLong())
+                player.seekTo(value.toLong())
             }
         }
 
         // Title
         val videoTitle: TextView = findViewById(R.id.videoTitle)
-        videoTitle.layoutParams = RelativeLayout.LayoutParams(deviceWidth - converter.dpToPx(this@Player, 32f).toInt(), converter.dpToPx(this@Player,50f).toInt())
+        val title = videoData.title
+        videoTitle.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 50)
         if (orientation == 0) {
-            videoTitle.x = converter.dpToPx(this@Player, 16f)
-            videoTitle.y = (deviceWidth * 9 / 16) + converter.dpToPx(this@Player,32f)
+            videoTitle.y = (deviceWidth * 9 / 16) + 64f
             videoTitle.visibility = View.VISIBLE
         } else if (orientation == 1) {
-            videoTitle.x = converter.dpToPx(this@Player, 32f)
             videoTitle.y = 50f
             if (overlayVisible == 0) {
                 videoTitle.visibility = View.GONE
@@ -245,41 +211,11 @@ class Player : AppCompatActivity() {
                 videoTitle.visibility = View.VISIBLE
             }
         }
-        videoTitle.text = videoData.title
+        videoTitle.text = title
 
         // Info
         val videoInfo: RelativeLayout = findViewById(R.id.videoInfo)
-        videoInfo.y = (deviceWidth * 9 / 16) + converter.dpToPx(this@Player,84f)
-        if (orientation == 0) {
-            videoInfo.visibility = View.VISIBLE
-        } else if (orientation == 1) {
-            videoInfo.visibility = View.GONE
-        }
-
-        val videoCountLikesDislikes: TextView = findViewById(R.id.videoCountLikesDislikes)
-        videoCountLikesDislikes.text = String.format("View Count: %,.0f\nLikes: %,.0f\nDislikes: %,.0f", videoData.viewCount.toDouble(), videoData.likes.toDouble(), videoData.dislikes.toDouble())
-
-        val videoLoop: Button = findViewById(R.id.videoLoop)
-        videoLoop.setOnClickListener {
-            if (playerController.repeatMode == Player.REPEAT_MODE_OFF) {
-                playerController.repeatMode = Player.REPEAT_MODE_ONE
-                Toast.makeText(this@Player, "Loop Enabled", Toast.LENGTH_SHORT).show()
-            } else if (playerController.repeatMode == Player.REPEAT_MODE_ONE) {
-                playerController.repeatMode = Player.REPEAT_MODE_OFF
-                Toast.makeText(this@Player, "Loop Disabled", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        val videoShare: Button = findViewById(R.id.videoShare)
-        videoShare.setOnClickListener {
-            val videoID = videoData.videoID
-            val shareIntent: Intent = Intent().apply {
-                action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_TEXT, "https://youtu.be/$videoID")
-                type = "text/plain"
-            }
-            startActivity(Intent.createChooser(shareIntent, null))
-        }
+        videoInfo.visibility = View.GONE
     }
 
     private fun changeOverlay(orientation: Int) {
@@ -346,18 +282,43 @@ class Player : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("UnsafeOptInUsageError")
     private fun createPlayer() {
+        val gson = Gson()
+        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
+        val artworkUrl = videoData.artworkURL
+        val artworkUri: Uri = Uri.parse(artworkUrl)
+
+        player = ExoPlayer.Builder(this).build()
+        playerSession = MediaSession.Builder(this, player).build()
+
+        val title = videoData.title
+        val author = videoData.author
+        val hlsUrl = videoData.hlsURL
+
+        val mediaMetadata: MediaMetadata = MediaMetadata.Builder()
+            .setTitle(title)
+            .setArtist(author)
+            .setArtworkUri(artworkUri)
+            .build()
+
+        val videoUri: Uri = Uri.parse(hlsUrl)
+
+        val videoMediaItem: MediaItem = MediaItem.Builder()
+            .setMediaMetadata(mediaMetadata)
+            .setUri(videoUri)
+            .build()
+
+        val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
+        val videoSource: MediaSource = HlsMediaSource.Factory(dataSourceFactory).createMediaSource(videoMediaItem)
+
+        player.setMediaSource(videoSource)
+        player.playWhenReady = true
+        player.prepare()
+
         val playerView: PlayerView = findViewById(R.id.playerView)
         playerView.keepScreenOn = true
-        playerView.player = playerController
-        if (android.os.Build.VERSION.SDK_INT >= 31) {
-            setPictureInPictureParams(
-                PictureInPictureParams.Builder()
-                    .setAutoEnterEnabled(true)
-                    .setSeamlessResizeEnabled(true)
-                    .build()
-            )
-        }
+        playerView.player = player
         playerHandler.post(playerTask)
     }
 
@@ -365,24 +326,37 @@ class Player : AppCompatActivity() {
         override fun run() {
             try {
                 val playPauseRestartButton: ImageButton = findViewById(R.id.playPauseRestartButton)
-                if (playerController.isPlaying) {
+                if (player.playWhenReady) {
                     playPauseRestartButton.setImageResource(R.drawable.pause)
-                } else if (!playerController.isPlaying) {
-                    if (playerController.playbackState == Player.STATE_ENDED) {
-                        playPauseRestartButton.setImageResource(R.drawable.restart)
-                    } else {
-                        playPauseRestartButton.setImageResource(R.drawable.play)
-                    }
+                } else if (!player.playWhenReady) {
+                    playPauseRestartButton.setImageResource(R.drawable.play)
                 }
 
-                val duration = playerController.duration.toFloat()
-                val position = playerController.currentPosition.toFloat()
+                val duration = player.duration.toFloat()
+                val position = player.currentPosition.toFloat()
                 if (duration >= 0 && position >= 0 && position <= duration) {
                     playerSlider.valueTo = duration
                     playerSlider.value = position
                 }
+
+                val jsonArray = JSONArray(sponsorBlockInfo)
+                for (i in 0 until jsonArray.length()) {
+                    val category = jsonArray.getJSONObject(i).optString("category")
+                    val segment = jsonArray.getJSONObject(i).getJSONArray("segment")
+                    val segment0 = String.format("%.3f", segment[0].toString().toDouble()).replace(".", "").toFloat()
+                    val segment1 = String.format("%.3f", segment[1].toString().toDouble()).replace(".", "").toFloat()
+                    if (category.contains("sponsor") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
+                        player.seekTo(segment1.toLong())
+                        Toast.makeText(this@TVPlayer, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
+                    } else if (category.contains("interaction") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
+                        player.seekTo(segment1.toLong())
+                        Toast.makeText(this@TVPlayer, "Interaction Skipped", Toast.LENGTH_SHORT).show()
+                    }
+                }
             } catch (e: IOException) {
                 Log.e("IOException", e.toString())
+            } catch (e: JSONException) {
+                Log.e("JSONException", e.toString())
             }
             playerHandler.postDelayed(this, 1000)
         }

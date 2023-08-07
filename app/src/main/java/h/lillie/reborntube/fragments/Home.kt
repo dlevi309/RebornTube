@@ -1,4 +1,4 @@
-package h.lillie.reborntube
+package h.lillie.reborntube.fragments
 
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -10,6 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import com.google.gson.Gson
+import h.lillie.reborntube.Extractor
+import h.lillie.reborntube.R
+import h.lillie.reborntube.views.VideoView
+import h.lillie.reborntube.VideoViewData
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
