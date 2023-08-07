@@ -102,11 +102,9 @@ class VideoView {
                     loader.playerInit(applicationContext, videoInfo.videoID)
 
                     if (!deviceType) {
-                        val intent = Intent(applicationContext, Player::class.java)
-                        activity.startActivity(intent)
+                        activity.startActivity(Intent(applicationContext, Player::class.java))
                     } else if (deviceType) {
-                        val intent = Intent(applicationContext, TVPlayer::class.java)
-                        activity.startActivity(intent)
+                        activity.startActivity(Intent(applicationContext, TVPlayer::class.java))
                     }
                 }
             }
