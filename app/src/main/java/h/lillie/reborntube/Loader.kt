@@ -9,7 +9,7 @@ class Loader {
         val extractor = Extractor()
         val playerRequest = extractor.playerRequest(context, urlID)
         val dislikesRequest = extractor.returnYouTubeDislikesRequest(urlID)
-        val sponsorBlockRequest = extractor.sponsorBlockRequest(urlID)
+        val sponsorBlockRequest = extractor.sponsorBlockRequest(context, urlID)
 
         val playerObject = JSONObject(playerRequest)
         val dislikesObject = JSONObject(dislikesRequest)
