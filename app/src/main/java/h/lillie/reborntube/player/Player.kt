@@ -94,7 +94,7 @@ class Player : AppCompatActivity() {
         val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
         val backgroundMode: Int = preferences.getInt("RTBackgroundMode", 0)
         if (backgroundMode == 0 && onStopCalled) {
-            playerController.pause()
+            playerController.stop()
         }
     }
 
@@ -106,9 +106,7 @@ class Player : AppCompatActivity() {
         playerView.player = null
         playerHandler.removeCallbacks(playerTask)
         playerHandler.removeCallbacksAndMessages(null)
-        if (playerController.isPlaying) {
-            playerController.stop()
-        }
+        playerController.stop()
         playerController.release()
         MediaController.releaseFuture(playerControllerFuture)
         stopService(Intent(this@Player, PlayerService::class.java))
