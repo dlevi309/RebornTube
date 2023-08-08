@@ -26,6 +26,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:text="Confirm"
+        android:textAllCaps="false"
         android:nextFocusLeft="@id/searchBar"
         tools:ignore="HardcodedText,RtlHardcoded" />
 
