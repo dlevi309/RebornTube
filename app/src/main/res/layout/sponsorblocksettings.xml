@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/sponsorBlockSettingsLayout"
+    tools:context=".settings.SponsorBlockSettings">
+
+    <TableLayout
+        android:background="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:stretchColumns="1">
+
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="40dp">
+            <TextView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="Source"
+                android:textColor="@color/white"
+                tools:ignore="HardcodedText" />
+        </TableRow>
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp">
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/sourceMaterialButtonToggleGroup"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+                <Button
+                    android:id="@+id/sourceMainButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="195dp"
+                    android:text="Main"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText" />
+                <Button
+                    android:id="@+id/sourceMirrorButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="195dp"
+                    android:text="Mirror"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+        </TableRow>
+
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:minHeight="40dp">
+            <TextView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="Sponsor"
+                android:textColor="@color/white"
+                tools:ignore="HardcodedText" />
+        </TableRow>
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp">
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/sponsorMaterialButtonToggleGroup"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+                <Button
+                    android:id="@+id/sponsorDisableButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Disable"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/sponsorAutoSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Auto Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/sponsorManualSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Manual Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+        </TableRow>
+
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:minHeight="40dp">
+            <TextView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="Selfpromo"
+                android:textColor="@color/white"
+                tools:ignore="HardcodedText" />
+        </TableRow>
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp">
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/selfpromoMaterialButtonToggleGroup"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+                <Button
+                    android:id="@+id/selfpromoDisableButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Disable"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/selfpromoAutoSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Auto Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/selfpromoManualSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Manual Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+        </TableRow>
+
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:minHeight="40dp">
+            <TextView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="Interaction"
+                android:textColor="@color/white"
+                tools:ignore="HardcodedText" />
+        </TableRow>
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp">
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/interactionMaterialButtonToggleGroup"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+                <Button
+                    android:id="@+id/interactionDisableButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Disable"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/interactionAutoSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Auto Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/interactionManualSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Manual Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+        </TableRow>
+
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:minHeight="40dp">
+            <TextView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="Intro"
+                android:textColor="@color/white"
+                tools:ignore="HardcodedText" />
+        </TableRow>
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp">
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/introMaterialButtonToggleGroup"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+                <Button
+                    android:id="@+id/introDisableButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Disable"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/introAutoSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Auto Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/introManualSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Manual Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+        </TableRow>
+
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:minHeight="40dp">
+            <TextView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="Outro"
+                android:textColor="@color/white"
+                tools:ignore="HardcodedText" />
+        </TableRow>
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp">
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/outroMaterialButtonToggleGroup"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+                <Button
+                    android:id="@+id/outroDisableButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Disable"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/outroAutoSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Auto Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/outroManualSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Manual Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+        </TableRow>
+
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:minHeight="40dp">
+            <TextView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="Preview"
+                android:textColor="@color/white"
+                tools:ignore="HardcodedText" />
+        </TableRow>
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp">
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/previewMaterialButtonToggleGroup"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+                <Button
+                    android:id="@+id/previewDisableButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Disable"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/previewAutoSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Auto Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/previewManualSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Manual Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+        </TableRow>
+
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:minHeight="40dp">
+            <TextView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:gravity="center"
+                android:text="Music_offtopic"
+                android:textColor="@color/white"
+                tools:ignore="HardcodedText" />
+        </TableRow>
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp">
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/musicofftopicMaterialButtonToggleGroup"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+                <Button
+                    android:id="@+id/musicofftopicDisableButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Disable"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/musicofftopicAutoSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Auto Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/musicofftopicManualSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Manual Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+        </TableRow>
+    </TableLayout>
+</ScrollView>

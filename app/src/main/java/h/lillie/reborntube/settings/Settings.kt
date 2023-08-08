@@ -30,6 +30,11 @@ class Settings : AppCompatActivity() {
         backgroundModeSettingsRow.setOnClickListener {
             startActivity(Intent(this@Settings, BackgroundModeSettings::class.java))
         }
+
+        val sponsorBlockSettingsRow: TableRow = findViewById(R.id.sponsorBlockSettingsRow)
+        sponsorBlockSettingsRow.setOnClickListener {
+            startActivity(Intent(this@Settings, SponsorBlockSettings::class.java))
+        }
     }
 
     override fun onStop() {

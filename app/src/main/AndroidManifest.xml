@@ -53,6 +53,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".settings.SponsorBlockSettings"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout">
+            <intent-filter>
+                <action android:name="android.intent.action.SPONSORBLOCKSETTINGS" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".player.TVPlayer"
             android:exported="true"
             android:supportsPictureInPicture="false"
