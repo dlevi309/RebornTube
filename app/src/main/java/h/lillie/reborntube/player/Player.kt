@@ -222,7 +222,7 @@ class Player : AppCompatActivity() {
         if (orientation == 0) {
             playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth, 0)
             playerSlider.x = 0f
-            playerSlider.y = (deviceWidth * 9 / 16).toFloat() - converter.dpToPx(this@Player,24f)
+            playerSlider.y = (deviceWidth * 9 / 16).toFloat() - converter.dpToPx(this@Player,22f)
             playerSlider.visibility = View.VISIBLE
         } else if (orientation == 1) {
             playerSlider.layoutParams = RelativeLayout.LayoutParams(deviceWidth - 256, 0)
