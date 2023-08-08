@@ -1,6 +1,7 @@
 package h.lillie.reborntube.player
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.pm.PackageManager
@@ -21,10 +22,12 @@ import android.graphics.drawable.ColorDrawable
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.hls.HlsMediaSource
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.MediaItem
+import androidx.media3.common.C
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.PlayerView
 import java.util.concurrent.TimeUnit
@@ -289,7 +292,17 @@ class TVPlayer : AppCompatActivity() {
         val artworkUrl = videoData.artworkURL
         val artworkUri: Uri = Uri.parse(artworkUrl)
 
-        player = ExoPlayer.Builder(this).build()
+        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val enableCaptions: Boolean = preferences.getBoolean("RTEnableCaptions", false)
+
+        val videoTrackSelector: DefaultTrackSelector = DefaultTrackSelector(this@TVPlayer)
+        if (!enableCaptions) {
+            videoTrackSelector.parameters = DefaultTrackSelector.Parameters.Builder(this@TVPlayer).setRendererDisabled(C.TRACK_TYPE_VIDEO, true).setPreferredTextLanguage("en").build()
+        } else if (enableCaptions) {
+            videoTrackSelector.parameters = DefaultTrackSelector.Parameters.Builder(this@TVPlayer).setRendererDisabled(C.TRACK_TYPE_VIDEO, false).setPreferredTextLanguage("en").build()
+        }
+
+        player = ExoPlayer.Builder(this).setTrackSelector(videoTrackSelector).build()
         playerSession = MediaSession.Builder(this, player).build()
 
         val title = videoData.title

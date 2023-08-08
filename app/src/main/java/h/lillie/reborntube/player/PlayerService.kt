@@ -1,6 +1,7 @@
 package h.lillie.reborntube.player
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
@@ -9,10 +10,12 @@ import android.widget.Toast
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.MediaSource
 import androidx.media3.exoplayer.hls.HlsMediaSource
+import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.datasource.DataSource
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.common.MediaMetadata
 import androidx.media3.common.MediaItem
+import androidx.media3.common.C
 import androidx.media3.session.MediaSessionService
 import androidx.media3.session.MediaSession
 import com.google.gson.Gson
@@ -57,7 +60,17 @@ class PlayerService : MediaSessionService() {
 
     @SuppressLint("UnsafeOptInUsageError")
     private fun createPlayer() {
-        player = ExoPlayer.Builder(this).build()
+        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val enableCaptions: Boolean = preferences.getBoolean("RTEnableCaptions", false)
+
+        val videoTrackSelector: DefaultTrackSelector = DefaultTrackSelector(this@PlayerService)
+        if (!enableCaptions) {
+            videoTrackSelector.parameters = DefaultTrackSelector.Parameters.Builder(this@PlayerService).setRendererDisabled(C.TRACK_TYPE_VIDEO, true).setPreferredTextLanguage("en").build()
+        } else if (enableCaptions) {
+            videoTrackSelector.parameters = DefaultTrackSelector.Parameters.Builder(this@PlayerService).setRendererDisabled(C.TRACK_TYPE_VIDEO, false).setPreferredTextLanguage("en").build()
+        }
+
+        player = ExoPlayer.Builder(this).setTrackSelector(videoTrackSelector).build()
         playerSession = MediaSession.Builder(this, player).build()
 
         val gson = Gson()

@@ -1,12 +1,14 @@
 package h.lillie.reborntube.settings
 
-import android.content.Intent
 import android.os.Bundle
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ScrollView
 import android.widget.TableRow
 import android.view.ViewGroup
+import com.google.android.material.switchmaterial.SwitchMaterial
 import h.lillie.reborntube.R
 
 class Settings : AppCompatActivity() {
@@ -34,6 +36,22 @@ class Settings : AppCompatActivity() {
         val sponsorBlockSettingsRow: TableRow = findViewById(R.id.sponsorBlockSettingsRow)
         sponsorBlockSettingsRow.setOnClickListener {
             startActivity(Intent(this@Settings, SponsorBlockSettings::class.java))
+        }
+
+        val enableCaptionsSwitch: SwitchMaterial = findViewById(R.id.enableCaptionsSwitch)
+        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val enableCaptions: Boolean = preferences.getBoolean("RTEnableCaptions", false)
+        if (!enableCaptions) {
+            enableCaptionsSwitch.isChecked = false
+        } else if (enableCaptions) {
+            enableCaptionsSwitch.isChecked = true
+        }
+        enableCaptionsSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (!isChecked) {
+                preferences.edit().putBoolean("RTEnableCaptions", false).apply()
+            } else if (isChecked) {
+                preferences.edit().putBoolean("RTEnableCaptions", true).apply()
+            }
         }
     }
 
