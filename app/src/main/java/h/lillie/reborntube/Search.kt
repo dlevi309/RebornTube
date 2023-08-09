@@ -113,6 +113,9 @@ class Search : AppCompatActivity() {
                         }
                     }
                 }
+                if (deviceType) {
+                    searchScrollView.requestFocus()
+                }
                 return@OnKeyListener true
             }
             return@OnKeyListener false

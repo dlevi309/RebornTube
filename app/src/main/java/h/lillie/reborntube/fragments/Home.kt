@@ -68,6 +68,9 @@ class Home(private val appCompatActivity: AppCompatActivity) : Fragment() {
                     Log.e("JSONException", e.toString())
                 }
             }
+            if (deviceType) {
+                homeScrollView.requestFocus()
+            }
         }
 
         return view
