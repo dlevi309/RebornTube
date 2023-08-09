@@ -6,6 +6,8 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ScrollView
 import android.widget.CheckBox
+import android.widget.TableRow
+import android.view.View
 import android.view.ViewGroup
 import h.lillie.reborntube.R
 
@@ -24,6 +26,11 @@ class BackgroundModeSettings : AppCompatActivity() {
             val params = backgroundModeSettingsLayout.layoutParams as ViewGroup.MarginLayoutParams
             params.setMargins(38,26,38,26)
             backgroundModeSettingsLayout.layoutParams = params
+        }
+
+        if (android.os.Build.VERSION.SDK_INT < 31) {
+            val pipTableRow: TableRow = findViewById(R.id.pipTableRow)
+            pipTableRow.visibility = View.GONE
         }
 
         val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
