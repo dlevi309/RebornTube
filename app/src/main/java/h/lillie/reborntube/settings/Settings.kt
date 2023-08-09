@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ScrollView
 import android.widget.TableRow
+import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.switchmaterial.SwitchMaterial
 import h.lillie.reborntube.R
@@ -29,6 +30,9 @@ class Settings : AppCompatActivity() {
         }
 
         val backgroundModeSettingsRow: TableRow = findViewById(R.id.backgroundModeSettingsRow)
+        if (deviceType) {
+            backgroundModeSettingsRow.visibility = View.GONE
+        }
         backgroundModeSettingsRow.setOnClickListener {
             startActivity(Intent(this@Settings, BackgroundModeSettings::class.java))
         }
