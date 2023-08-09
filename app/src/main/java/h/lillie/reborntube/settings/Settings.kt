@@ -37,14 +37,17 @@ class Settings : AppCompatActivity() {
             startActivity(Intent(this@Settings, BackgroundModeSettings::class.java))
         }
 
-        val sponsorBlockSettingsRow: TableRow = findViewById(R.id.sponsorBlockSettingsRow)
+        /* val sponsorBlockSettingsRow: TableRow = findViewById(R.id.sponsorBlockSettingsRow)
         sponsorBlockSettingsRow.setOnClickListener {
             startActivity(Intent(this@Settings, SponsorBlockSettings::class.java))
-        }
+        } */
 
         val enableCaptionsSwitch: SwitchMaterial = findViewById(R.id.enableCaptionsSwitch)
         val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
         val enableCaptions: Boolean = preferences.getBoolean("RTEnableCaptions", false)
+        if (deviceType) {
+            enableCaptionsSwitch.requestFocus()
+        }
         if (!enableCaptions) {
             enableCaptionsSwitch.isChecked = false
         } else if (enableCaptions) {
