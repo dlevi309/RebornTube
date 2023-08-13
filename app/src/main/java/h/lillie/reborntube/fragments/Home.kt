@@ -76,12 +76,11 @@ class Home(private val appCompatActivity: AppCompatActivity) : Fragment() {
         return view
     }
 
-    @Suppress("Deprecation")
     private fun getDeviceInfo() {
         val packageManager = context?.packageManager
         val windowManager = activity?.windowManager
         if (packageManager != null) {
-            deviceType = packageManager.hasSystemFeature(PackageManager.FEATURE_TELEVISION) || packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
+            deviceType = packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
         }
         if (windowManager != null) {
             deviceHeight = windowManager.currentWindowMetrics.bounds.height()

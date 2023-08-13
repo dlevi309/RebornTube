@@ -122,9 +122,8 @@ class Search : AppCompatActivity() {
         })
     }
 
-    @Suppress("Deprecation")
     private fun getDeviceInfo() {
-        deviceType = packageManager.hasSystemFeature(PackageManager.FEATURE_TELEVISION) || packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
+        deviceType = packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
         deviceHeight = windowManager.currentWindowMetrics.bounds.height()
         deviceWidth = windowManager.currentWindowMetrics.bounds.width()
     }

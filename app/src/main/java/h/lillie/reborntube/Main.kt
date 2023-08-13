@@ -20,7 +20,6 @@ class Main : AppCompatActivity() {
     private var deviceHeight = 0
     private var deviceWidth = 0
 
-    @Suppress("Deprecation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
@@ -36,10 +35,42 @@ class Main : AppCompatActivity() {
         StrictMode.setThreadPolicy(policy)
 
         val topNavigationView: BottomNavigationView = findViewById(R.id.topNavigationView)
-        topNavigationView.setOnNavigationItemSelectedListener(topNavigationViewListener)
+        topNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.action_search -> {
+                    startActivity(Intent(this@Main, Search::class.java))
+                }
+                R.id.action_settings -> {
+                    startActivity(Intent(this@Main, Settings::class.java))
+                }
+            }
+            return@setOnItemSelectedListener true
+        }
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottomNavigationView)
-        bottomNavigationView.setOnNavigationItemSelectedListener(bottomNavigationViewListener)
+        bottomNavigationView.setOnItemSelectedListener {
+            lateinit var selectedFragment: Fragment
+            when (it.itemId) {
+                R.id.action_home -> {
+                    selectedFragment = Home(this@Main)
+                }
+                R.id.action_subscriptions -> {
+                    selectedFragment = Fragments(1)
+                }
+                R.id.action_history -> {
+                    selectedFragment = Fragments(2)
+                }
+                R.id.action_playlists -> {
+                    selectedFragment = Fragments(3)
+                }
+                R.id.action_downloads -> {
+                    selectedFragment = Fragments(4)
+                }
+            }
+            supportFragmentManager.beginTransaction().replace(R.id.fragments, selectedFragment).commit()
+            return@setOnItemSelectedListener true
+        }
+
         supportFragmentManager.beginTransaction().replace(R.id.fragments, Home(this@Main)).commit()
 
         val model: String = android.os.Build.MODEL
@@ -60,9 +91,8 @@ class Main : AppCompatActivity() {
         finishAffinity()
     }
 
-    @Suppress("Deprecation")
     private fun getDeviceInfo() {
-        deviceType = packageManager.hasSystemFeature(PackageManager.FEATURE_TELEVISION) || packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
+        deviceType = packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
         deviceHeight = windowManager.currentWindowMetrics.bounds.height()
         deviceWidth = windowManager.currentWindowMetrics.bounds.width()
     }
@@ -74,42 +104,5 @@ class Main : AppCompatActivity() {
         devicePopup.setButton(AlertDialog.BUTTON_POSITIVE, "Okay") { _, _ ->
         }
         devicePopup.show()
-    }
-
-    @Suppress("Deprecation")
-    private val topNavigationViewListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when(item.itemId) {
-            R.id.action_search -> {
-                startActivity(Intent(this@Main, Search::class.java))
-            }
-            R.id.action_settings -> {
-                startActivity(Intent(this@Main, Settings::class.java))
-            }
-        }
-        true
-    }
-
-    @Suppress("Deprecation")
-    private val bottomNavigationViewListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        lateinit var selectedFragment: Fragment
-        when(item.itemId) {
-            R.id.action_home -> {
-                selectedFragment = Home(this@Main)
-            }
-            R.id.action_subscriptions -> {
-                selectedFragment = Fragments(1)
-            }
-            R.id.action_history -> {
-                selectedFragment = Fragments(2)
-            }
-            R.id.action_playlists -> {
-                selectedFragment = Fragments(3)
-            }
-            R.id.action_downloads -> {
-                selectedFragment = Fragments(4)
-            }
-        }
-        supportFragmentManager.beginTransaction().replace(R.id.fragments, selectedFragment).commit()
-        true
     }
 }
