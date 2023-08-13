@@ -20,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.ColorDrawable
 import androidx.media3.common.Player
@@ -144,18 +145,19 @@ class Player : AppCompatActivity() {
     }
 
     @SuppressLint("SwitchIntDef")
-    @Suppress("Deprecation")
     private fun getDeviceInfo() {
         deviceType = packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK)
         deviceHeight = windowManager.currentWindowMetrics.bounds.height()
         deviceWidth = windowManager.currentWindowMetrics.bounds.width()
         when (resources.configuration.orientation) {
             Configuration.ORIENTATION_PORTRAIT -> {
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_VISIBLE
+                window.insetsController?.show(WindowInsets.Type.statusBars())
+                window.insetsController?.show(WindowInsets.Type.systemBars())
                 createUI(0)
             }
             Configuration.ORIENTATION_LANDSCAPE -> {
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
+                window.insetsController?.hide(WindowInsets.Type.statusBars())
+                window.insetsController?.hide(WindowInsets.Type.systemBars())
                 createUI(1)
             }
         }
