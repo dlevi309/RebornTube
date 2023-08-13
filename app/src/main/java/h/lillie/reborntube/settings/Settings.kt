@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ScrollView
+import android.widget.TableLayout
 import android.widget.TableRow
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,20 @@ class Settings : AppCompatActivity() {
             settingsLayout.layoutParams = params
         }
 
+        val settingsTableLayout: TableLayout = findViewById(R.id.settingsTableLayout)
+        if (deviceType) {
+            settingsTableLayout.setBackgroundColor(applicationContext.getColor(R.color.darkgrey))
+        } else if (!deviceType) {
+            settingsTableLayout.setBackgroundColor(applicationContext.getColor(R.color.black))
+        }
+
+        val themeSettingsRow: TableRow = findViewById(R.id.themeSettingsRow)
+        if (deviceType) {
+            themeSettingsRow.setBackgroundResource(R.drawable.tvbutton)
+        }
+        themeSettingsRow.setOnClickListener {}
+        themeSettingsRow.requestFocus()
+
         val backgroundModeSettingsRow: TableRow = findViewById(R.id.backgroundModeSettingsRow)
         if (deviceType) {
             backgroundModeSettingsRow.visibility = View.GONE
@@ -38,6 +53,9 @@ class Settings : AppCompatActivity() {
         }
 
         val sponsorBlockSettingsRow: TableRow = findViewById(R.id.sponsorBlockSettingsRow)
+        if (deviceType) {
+            sponsorBlockSettingsRow.setBackgroundResource(R.drawable.tvbutton)
+        }
         sponsorBlockSettingsRow.setOnClickListener {
             startActivity(Intent(this@Settings, SponsorBlockSettings::class.java))
         }
@@ -57,6 +75,24 @@ class Settings : AppCompatActivity() {
                 preferences.edit().putBoolean("RTEnableCaptions", true).apply()
             }
         }
+
+        val clearHistorySettingsRow: TableRow = findViewById(R.id.clearHistorySettingsRow)
+        if (deviceType) {
+            clearHistorySettingsRow.setBackgroundResource(R.drawable.tvbutton)
+        }
+        clearHistorySettingsRow.setOnClickListener {}
+
+        val creditsSettingsRow: TableRow = findViewById(R.id.creditsSettingsRow)
+        if (deviceType) {
+            creditsSettingsRow.setBackgroundResource(R.drawable.tvbutton)
+        }
+        creditsSettingsRow.setOnClickListener {}
+
+        val opensourceLibrariesSettingsRow: TableRow = findViewById(R.id.opensourceLibrariesSettingsRow)
+        if (deviceType) {
+            opensourceLibrariesSettingsRow.setBackgroundResource(R.drawable.tvbutton)
+        }
+        opensourceLibrariesSettingsRow.setOnClickListener {}
     }
 
     override fun onStop() {

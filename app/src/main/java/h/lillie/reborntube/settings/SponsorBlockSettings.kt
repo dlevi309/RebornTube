@@ -74,6 +74,7 @@ class SponsorBlockSettings : AppCompatActivity() {
             )
             preferences.edit().putInt("RTSponsorBlockSource", 1).apply()
         }
+        sourceMainButton.requestFocus()
 
         // Sponsor
         val sponsorDisableButton: Button = findViewById(R.id.sponsorDisableButton)
