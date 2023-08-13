@@ -621,7 +621,7 @@ class SponsorBlockSettings : AppCompatActivity() {
             preferences.edit().putInt("RTSponsorBlockPreview", 2).apply()
         }
 
-        // Musicofftopic
+        // Music_offtopic
         val musicofftopicDisableButton: Button = findViewById(R.id.musicofftopicDisableButton)
         val musicofftopicAutoSkipButton: Button = findViewById(R.id.musicofftopicAutoSkipButton)
         val musicofftopicManualSkipButton: Button = findViewById(R.id.musicofftopicManualSkipButton)
