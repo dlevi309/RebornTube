@@ -112,17 +112,54 @@ class PlayerService : MediaSessionService() {
         override fun run() {
             try {
                 val jsonArray = JSONArray(sponsorBlockInfo)
+                val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
                 for (i in 0 until jsonArray.length()) {
                     val category = jsonArray.getJSONObject(i).optString("category")
                     val segment = jsonArray.getJSONObject(i).getJSONArray("segment")
                     val segment0 = String.format("%.3f", segment[0].toString().toDouble()).replace(".", "").toFloat()
                     val segment1 = String.format("%.3f", segment[1].toString().toDouble()).replace(".", "").toFloat()
                     if (category.contains("sponsor") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
-                        player.seekTo(segment1.toLong())
-                        Toast.makeText(this@PlayerService, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
+                        val sponsorBlockSponsor: Int = preferences.getInt("RTSponsorBlockSponsor", 0)
+                        if (sponsorBlockSponsor == 1) {
+                            player.seekTo(segment1.toLong())
+                            Toast.makeText(this@PlayerService, "Sponsor Skipped", Toast.LENGTH_SHORT).show()
+                        }
+                    } else if (category.contains("selfpromo") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
+                        val selfpromoBlockSelfpromo: Int = preferences.getInt("RTSponsorBlockSelfpromo", 0)
+                        if (selfpromoBlockSelfpromo == 1) {
+                            player.seekTo(segment1.toLong())
+                            Toast.makeText(this@PlayerService, "Selfpromo Skipped", Toast.LENGTH_SHORT).show()
+                        }
                     } else if (category.contains("interaction") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
-                        player.seekTo(segment1.toLong())
-                        Toast.makeText(this@PlayerService, "Interaction Skipped", Toast.LENGTH_SHORT).show()
+                        val interactionBlockInteraction: Int = preferences.getInt("RTSponsorBlockInteraction", 0)
+                        if (interactionBlockInteraction == 1) {
+                            player.seekTo(segment1.toLong())
+                            Toast.makeText(this@PlayerService, "Interaction Skipped", Toast.LENGTH_SHORT).show()
+                        }
+                    } else if (category.contains("intro") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
+                        val introBlockIntro: Int = preferences.getInt("RTSponsorBlockIntro", 0)
+                        if (introBlockIntro == 1) {
+                            player.seekTo(segment1.toLong())
+                            Toast.makeText(this@PlayerService, "Intro Skipped", Toast.LENGTH_SHORT).show()
+                        }
+                    } else if (category.contains("outro") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
+                        val outroBlockOutro: Int = preferences.getInt("RTSponsorBlockOutro", 0)
+                        if (outroBlockOutro == 1) {
+                            player.seekTo(segment1.toLong())
+                            Toast.makeText(this@PlayerService, "Outro Skipped", Toast.LENGTH_SHORT).show()
+                        }
+                    } else if (category.contains("preview") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
+                        val previewBlockPreview: Int = preferences.getInt("RTSponsorBlockPreview", 0)
+                        if (previewBlockPreview == 1) {
+                            player.seekTo(segment1.toLong())
+                            Toast.makeText(this@PlayerService, "Preview Skipped", Toast.LENGTH_SHORT).show()
+                        }
+                    } else if (category.contains("music_offtopic") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
+                        val musicofftopicBlockMusicofftopic: Int = preferences.getInt("RTSponsorBlockMusicofftopic", 0)
+                        if (musicofftopicBlockMusicofftopic == 1) {
+                            player.seekTo(segment1.toLong())
+                            Toast.makeText(this@PlayerService, "Music_offtopic Skipped", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             } catch (e: IOException) {
