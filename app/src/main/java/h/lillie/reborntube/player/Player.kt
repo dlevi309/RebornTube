@@ -33,7 +33,6 @@ import com.google.android.material.slider.Slider
 import com.google.gson.Gson
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
-import h.lillie.reborntube.Application
 import h.lillie.reborntube.Converter
 import h.lillie.reborntube.R
 import h.lillie.reborntube.VideoData
@@ -100,7 +99,6 @@ class Player : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Application.setVideoData("")
         val playerView: PlayerView = findViewById(R.id.playerView)
         playerView.keepScreenOn = false
         playerView.player = null
@@ -166,7 +164,8 @@ class Player : AppCompatActivity() {
         // Info
         val gson = Gson()
         val converter = Converter()
-        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
+        val dataPreferences = getSharedPreferences("RTData", 0)
+        val videoData = gson.fromJson(dataPreferences.getString("RTVideoData", ""), VideoData::class.java)
 
         // Player
         val videoPlayer: RelativeLayout = findViewById(R.id.videoPlayer)

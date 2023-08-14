@@ -35,7 +35,6 @@ import com.google.android.material.slider.Slider
 import com.google.gson.Gson
 import com.pedromassango.doubleclick.DoubleClick
 import com.pedromassango.doubleclick.DoubleClickListener
-import h.lillie.reborntube.Application
 import h.lillie.reborntube.R
 import h.lillie.reborntube.VideoData
 import org.json.JSONArray
@@ -59,7 +58,8 @@ class TVPlayer : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.player)
         val gson = Gson()
-        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
+        val dataPreferences = getSharedPreferences("RTData", 0)
+        val videoData = gson.fromJson(dataPreferences.getString("RTVideoData", ""), VideoData::class.java)
         sponsorBlockInfo = videoData.sponsorBlockInfo
         playerHandler = Handler(Looper.getMainLooper())
         playerSlider = findViewById(R.id.playerSlider)
@@ -81,7 +81,6 @@ class TVPlayer : AppCompatActivity() {
     }
     override fun onDestroy() {
         super.onDestroy()
-        Application.setVideoData("")
         val playerView: PlayerView = findViewById(R.id.playerView)
         playerView.keepScreenOn = false
         playerView.player = null
@@ -126,7 +125,8 @@ class TVPlayer : AppCompatActivity() {
     private fun createUI(orientation: Int) {
         // Info
         val gson = Gson()
-        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
+        val dataPreferences = getSharedPreferences("RTData", 0)
+        val videoData = gson.fromJson(dataPreferences.getString("RTVideoData", ""), VideoData::class.java)
 
         // Player
         val videoPlayer: RelativeLayout = findViewById(R.id.videoPlayer)
@@ -289,7 +289,8 @@ class TVPlayer : AppCompatActivity() {
     @SuppressLint("UnsafeOptInUsageError")
     private fun createPlayer() {
         val gson = Gson()
-        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
+        val dataPreferences = getSharedPreferences("RTData", 0)
+        val videoData = gson.fromJson(dataPreferences.getString("RTVideoData", ""), VideoData::class.java)
         val artworkUrl = videoData.artworkURL
         val artworkUri: Uri = Uri.parse(artworkUrl)
 

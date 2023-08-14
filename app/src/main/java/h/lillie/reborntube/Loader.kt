@@ -32,7 +32,8 @@ class Loader {
         }
 
         val gson = Gson()
-        Application.setVideoData(gson.toJson(VideoData(
+        val preferences = context.getSharedPreferences("RTData", 0)
+        preferences.edit().putString("RTVideoData", gson.toJson(VideoData(
             videoID,
             hlsUrl,
             sponsorBlockRequest,
@@ -43,6 +44,6 @@ class Loader {
             live.toString().toBoolean(),
             likes.toString(),
             dislikes.toString()
-        )))
+        ))).apply()
     }
 }

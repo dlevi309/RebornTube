@@ -18,7 +18,6 @@ import androidx.media3.common.C
 import androidx.media3.session.MediaSessionService
 import androidx.media3.session.MediaSession
 import com.google.gson.Gson
-import h.lillie.reborntube.Application
 import h.lillie.reborntube.VideoData
 import org.json.JSONArray
 import org.json.JSONException
@@ -35,7 +34,8 @@ class PlayerService : MediaSessionService() {
     override fun onCreate() {
         super.onCreate()
         val gson = Gson()
-        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
+        val dataPreferences = getSharedPreferences("RTData", 0)
+        val videoData = gson.fromJson(dataPreferences.getString("RTVideoData", ""), VideoData::class.java)
         sponsorBlockInfo = videoData.sponsorBlockInfo
         playerHandler = Handler(Looper.getMainLooper())
         createPlayer()
@@ -73,7 +73,8 @@ class PlayerService : MediaSessionService() {
         playerSession = MediaSession.Builder(this, player).build()
 
         val gson = Gson()
-        val videoData = gson.fromJson(Application.getVideoData(), VideoData::class.java)
+        val dataPreferences = getSharedPreferences("RTData", 0)
+        val videoData = gson.fromJson(dataPreferences.getString("RTVideoData", ""), VideoData::class.java)
         val title = videoData.title
         val author = videoData.author
 

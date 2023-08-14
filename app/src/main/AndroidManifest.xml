@@ -12,7 +12,6 @@
         android:icon="@mipmap/icon"
         android:label="RebornTube"
         android:supportsRtl="true"
-        android:name=".Application"
         android:theme="@style/MainTheme"
         tools:ignore="MissingTvBanner">
         <activity
