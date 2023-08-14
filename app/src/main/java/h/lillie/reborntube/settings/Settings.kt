@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.ScrollView
+import android.widget.RelativeLayout
 import android.widget.TableLayout
 import android.widget.TableRow
 import android.view.View
@@ -23,7 +23,7 @@ class Settings : AppCompatActivity() {
         setContentView(R.layout.settings)
         getDeviceInfo()
         if (deviceType) {
-            val settingsLayout: ScrollView = findViewById(R.id.settingsLayout)
+            val settingsLayout: RelativeLayout = findViewById(R.id.settingsLayout)
             val params = settingsLayout.layoutParams as ViewGroup.MarginLayoutParams
             params.setMargins(38,26,38,26)
             settingsLayout.layoutParams = params

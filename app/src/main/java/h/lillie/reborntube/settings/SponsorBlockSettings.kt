@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.ScrollView
+import android.widget.RelativeLayout
 import android.widget.Button
 import android.view.ViewGroup
 import h.lillie.reborntube.R
@@ -20,7 +20,7 @@ class SponsorBlockSettings : AppCompatActivity() {
         setContentView(R.layout.sponsorblocksettings)
         getDeviceInfo()
         if (deviceType) {
-            val sponsorBlockSettingsLayout: ScrollView = findViewById(R.id.sponsorBlockSettingsLayout)
+            val sponsorBlockSettingsLayout: RelativeLayout = findViewById(R.id.sponsorBlockSettingsLayout)
             val params = sponsorBlockSettingsLayout.layoutParams as ViewGroup.MarginLayoutParams
             params.setMargins(38,26,38,26)
             sponsorBlockSettingsLayout.layoutParams = params

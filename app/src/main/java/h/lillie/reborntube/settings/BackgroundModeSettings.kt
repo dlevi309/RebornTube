@@ -3,7 +3,7 @@ package h.lillie.reborntube.settings
 import android.os.Bundle
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
-import android.widget.ScrollView
+import android.widget.RelativeLayout
 import android.widget.CheckBox
 import android.widget.TableRow
 import android.view.View
@@ -21,7 +21,7 @@ class BackgroundModeSettings : AppCompatActivity() {
         setContentView(R.layout.backgroundmodesettings)
         getDeviceInfo()
         if (deviceType) {
-            val backgroundModeSettingsLayout: ScrollView = findViewById(R.id.backgroundModeSettingsLayout)
+            val backgroundModeSettingsLayout: RelativeLayout = findViewById(R.id.backgroundModeSettingsLayout)
             val params = backgroundModeSettingsLayout.layoutParams as ViewGroup.MarginLayoutParams
             params.setMargins(38,26,38,26)
             backgroundModeSettingsLayout.layoutParams = params
