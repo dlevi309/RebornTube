@@ -406,6 +406,62 @@
                 android:layout_height="match_parent"
                 android:layout_width="match_parent"
                 android:gravity="center"
+                android:text="Filler Tangent/Jokes"
+                android:textColor="@color/white"
+                tools:ignore="HardcodedText" />
+        </TableRow>
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="50dp">
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/fillerMaterialButtonToggleGroup"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
+                <Button
+                    android:id="@+id/fillerDisableButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Disable"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/fillerAutoSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Auto Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+                <Button
+                    android:id="@+id/fillerManualSkipButton"
+                    android:layout_height="wrap_content"
+                    android:layout_width="130dp"
+                    android:text="Manual Skip"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:visibility="gone"
+                    tools:ignore="HardcodedText"
+                    style="?attr/materialButtonOutlinedStyle" />
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+        </TableRow>
+
+        <TableRow
+            android:background="@color/darkgrey"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:minHeight="40dp">
+            <TextView
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:gravity="center"
                 android:text="Music_offtopic"
                 android:textColor="@color/white"
                 tools:ignore="HardcodedText" />

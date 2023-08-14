@@ -397,6 +397,12 @@ class TVPlayer : AppCompatActivity() {
                             player.seekTo(segment1.toLong())
                             Toast.makeText(this@TVPlayer, "Preview Skipped", Toast.LENGTH_SHORT).show()
                         }
+                    } else if (category.contains("filler") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
+                        val fillerBlockFiller: Int = settingsPreferences.getInt("RTSponsorBlockFiller", 0)
+                        if (fillerBlockFiller == 1) {
+                            player.seekTo(segment1.toLong())
+                            Toast.makeText(this@TVPlayer, "Filler Tangent/Jokes Skipped", Toast.LENGTH_SHORT).show()
+                        }
                     } else if (category.contains("music_offtopic") && player.currentPosition >= segment0 && player.currentPosition <= (segment1 - 1)) {
                         val musicofftopicBlockMusicofftopic: Int = settingsPreferences.getInt("RTSponsorBlockMusicofftopic", 0)
                         if (musicofftopicBlockMusicofftopic == 1) {

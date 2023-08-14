@@ -621,6 +621,97 @@ class SponsorBlockSettings : AppCompatActivity() {
             settingsPreferences.edit().putInt("RTSponsorBlockPreview", 2).apply()
         }
 
+        // Filler
+        val fillerDisableButton: Button = findViewById(R.id.fillerDisableButton)
+        val fillerAutoSkipButton: Button = findViewById(R.id.fillerAutoSkipButton)
+        val fillerManualSkipButton: Button = findViewById(R.id.fillerManualSkipButton)
+        val fillerBlockFiller: Int = settingsPreferences.getInt("RTSponsorBlockFiller", 0)
+        if (fillerBlockFiller == 0) {
+            fillerDisableButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.lightgrey))
+            )
+            fillerAutoSkipButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.transparent))
+            )
+            fillerManualSkipButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.transparent))
+            )
+        } else if (fillerBlockFiller == 1) {
+            fillerDisableButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.transparent))
+            )
+            fillerAutoSkipButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.lightgrey))
+            )
+            fillerManualSkipButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.transparent))
+            )
+        } else if (fillerBlockFiller == 2) {
+            fillerDisableButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.transparent))
+            )
+            fillerAutoSkipButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.transparent))
+            )
+            fillerManualSkipButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.lightgrey))
+            )
+        }
+        fillerDisableButton.setOnClickListener {
+            fillerDisableButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.lightgrey))
+            )
+            fillerAutoSkipButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.transparent))
+            )
+            fillerManualSkipButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.transparent))
+            )
+            settingsPreferences.edit().putInt("RTSponsorBlockFiller", 0).apply()
+        }
+        fillerAutoSkipButton.setOnClickListener {
+            fillerDisableButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.transparent))
+            )
+            fillerAutoSkipButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.lightgrey))
+            )
+            fillerManualSkipButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.transparent))
+            )
+            settingsPreferences.edit().putInt("RTSponsorBlockFiller", 1).apply()
+        }
+        fillerManualSkipButton.setOnClickListener {
+            fillerDisableButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.transparent))
+            )
+            fillerAutoSkipButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.transparent))
+            )
+            fillerManualSkipButton.backgroundTintList = ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_enabled)),
+                intArrayOf(applicationContext.getColor(R.color.lightgrey))
+            )
+            settingsPreferences.edit().putInt("RTSponsorBlockFiller", 2).apply()
+        }
+
         // Music_offtopic
         val musicofftopicDisableButton: Button = findViewById(R.id.musicofftopicDisableButton)
         val musicofftopicAutoSkipButton: Button = findViewById(R.id.musicofftopicAutoSkipButton)
