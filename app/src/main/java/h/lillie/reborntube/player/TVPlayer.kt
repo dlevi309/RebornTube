@@ -1,7 +1,6 @@
 package h.lillie.reborntube.player
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.pm.PackageManager
@@ -294,7 +293,7 @@ class TVPlayer : AppCompatActivity() {
         val artworkUrl = videoData.artworkURL
         val artworkUri: Uri = Uri.parse(artworkUrl)
 
-        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val preferences = getSharedPreferences("RTSettings", 0)
         val enableCaptions: Boolean = preferences.getBoolean("RTEnableCaptions", false)
 
         val videoTrackSelector: DefaultTrackSelector = DefaultTrackSelector(this@TVPlayer)
@@ -355,7 +354,7 @@ class TVPlayer : AppCompatActivity() {
                 }
 
                 val jsonArray = JSONArray(sponsorBlockInfo)
-                val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+                val preferences = getSharedPreferences("RTSettings", 0)
                 for (i in 0 until jsonArray.length()) {
                     val category = jsonArray.getJSONObject(i).optString("category")
                     val segment = jsonArray.getJSONObject(i).getJSONArray("segment")

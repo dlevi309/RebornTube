@@ -2,7 +2,6 @@ package h.lillie.reborntube.settings
 
 import android.os.Bundle
 import android.content.pm.PackageManager
-import android.content.Context
 import android.content.res.ColorStateList
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ScrollView
@@ -27,7 +26,7 @@ class SponsorBlockSettings : AppCompatActivity() {
             sponsorBlockSettingsLayout.layoutParams = params
         }
 
-        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val preferences = getSharedPreferences("RTSettings", 0)
 
         // Source
         val sourceMainButton: Button = findViewById(R.id.sourceMainButton)

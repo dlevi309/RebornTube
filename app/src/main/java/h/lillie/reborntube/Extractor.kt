@@ -142,7 +142,7 @@ class Extractor {
         val client: OkHttpClient = OkHttpClient.Builder().build()
 
         var url: String = String()
-        val preferences = context.getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val preferences = context.getSharedPreferences("RTSettings", 0)
         val sponsorBlockSource: Int = preferences.getInt("RTSponsorBlockSource", 0)
         if (sponsorBlockSource == 0) {
             url = "https://sponsor.ajay.app/api/skipSegments?videoID=$videoID&categories=$categories"

@@ -1,7 +1,6 @@
 package h.lillie.reborntube.player
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
@@ -60,7 +59,7 @@ class PlayerService : MediaSessionService() {
 
     @SuppressLint("UnsafeOptInUsageError")
     private fun createPlayer() {
-        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val preferences = getSharedPreferences("RTSettings", 0)
         val enableCaptions: Boolean = preferences.getBoolean("RTEnableCaptions", false)
 
         val videoTrackSelector: DefaultTrackSelector = DefaultTrackSelector(this@PlayerService)
@@ -112,7 +111,7 @@ class PlayerService : MediaSessionService() {
         override fun run() {
             try {
                 val jsonArray = JSONArray(sponsorBlockInfo)
-                val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+                val preferences = getSharedPreferences("RTSettings", 0)
                 for (i in 0 until jsonArray.length()) {
                     val category = jsonArray.getJSONObject(i).optString("category")
                     val segment = jsonArray.getJSONObject(i).getJSONArray("segment")

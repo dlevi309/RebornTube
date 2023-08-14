@@ -1,7 +1,6 @@
 package h.lillie.reborntube.settings
 
 import android.os.Bundle
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
@@ -61,7 +60,7 @@ class Settings : AppCompatActivity() {
         }
 
         val enableCaptionsSwitch: SwitchMaterial = findViewById(R.id.enableCaptionsSwitch)
-        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val preferences = getSharedPreferences("RTSettings", 0)
         val enableCaptions: Boolean = preferences.getBoolean("RTEnableCaptions", false)
         if (!enableCaptions) {
             enableCaptionsSwitch.isChecked = false

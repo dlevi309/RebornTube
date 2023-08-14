@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.pm.PackageManager
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -78,7 +77,7 @@ class Player : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val preferences = getSharedPreferences("RTSettings", 0)
         val backgroundMode: Int = preferences.getInt("RTBackgroundMode", 0)
         if (backgroundMode == 0 && onStopCalled) {
             playerController.play()
@@ -92,7 +91,7 @@ class Player : AppCompatActivity() {
         if (deviceType) {
             finish()
         }
-        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val preferences = getSharedPreferences("RTSettings", 0)
         val backgroundMode: Int = preferences.getInt("RTBackgroundMode", 0)
         if (backgroundMode == 0 && onStopCalled) {
             playerController.stop()
@@ -366,7 +365,7 @@ class Player : AppCompatActivity() {
         playerView.keepScreenOn = true
         playerView.player = playerController
 
-        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val preferences = getSharedPreferences("RTSettings", 0)
         val backgroundMode: Int = preferences.getInt("RTBackgroundMode", 0)
         if (android.os.Build.VERSION.SDK_INT >= 31 && backgroundMode == 2) {
             setPictureInPictureParams(

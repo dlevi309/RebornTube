@@ -2,7 +2,6 @@ package h.lillie.reborntube.settings
 
 import android.os.Bundle
 import android.content.pm.PackageManager
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.ScrollView
 import android.widget.CheckBox
@@ -33,7 +32,7 @@ class BackgroundModeSettings : AppCompatActivity() {
             pipTableRow.visibility = View.GONE
         }
 
-        val preferences = getSharedPreferences("RTSettings", Context.MODE_PRIVATE)
+        val preferences = getSharedPreferences("RTSettings", 0)
 
         val noneCheckBox: CheckBox = findViewById(R.id.noneCheckBox)
         val bgPlaybackCheckBox: CheckBox = findViewById(R.id.bgPlaybackCheckBox)
