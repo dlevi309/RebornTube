@@ -32,8 +32,8 @@ class Loader {
         }
 
         val gson = Gson()
-        val preferences = context.getSharedPreferences("RTData", 0)
-        preferences.edit().putString("RTVideoData", gson.toJson(VideoData(
+        val dataPreferences = context.getSharedPreferences("RTData", 0)
+        dataPreferences.edit().putString("RTVideoData", gson.toJson(VideoData(
             videoID,
             hlsUrl,
             sponsorBlockRequest,
