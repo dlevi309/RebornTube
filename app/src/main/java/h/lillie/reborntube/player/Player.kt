@@ -76,8 +76,8 @@ class Player : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        val preferences = getSharedPreferences("RTSettings", 0)
-        val backgroundMode: Int = preferences.getInt("RTBackgroundMode", 0)
+        val settingsPreferences = getSharedPreferences("RTSettings", 0)
+        val backgroundMode: Int = settingsPreferences.getInt("RTBackgroundMode", 0)
         if (backgroundMode == 0 && onStopCalled) {
             playerController.play()
         }
@@ -90,8 +90,8 @@ class Player : AppCompatActivity() {
         if (deviceType) {
             finish()
         }
-        val preferences = getSharedPreferences("RTSettings", 0)
-        val backgroundMode: Int = preferences.getInt("RTBackgroundMode", 0)
+        val settingsPreferences = getSharedPreferences("RTSettings", 0)
+        val backgroundMode: Int = settingsPreferences.getInt("RTBackgroundMode", 0)
         if (backgroundMode == 0 && onStopCalled) {
             playerController.stop()
         }
@@ -364,8 +364,8 @@ class Player : AppCompatActivity() {
         playerView.keepScreenOn = true
         playerView.player = playerController
 
-        val preferences = getSharedPreferences("RTSettings", 0)
-        val backgroundMode: Int = preferences.getInt("RTBackgroundMode", 0)
+        val settingsPreferences = getSharedPreferences("RTSettings", 0)
+        val backgroundMode: Int = settingsPreferences.getInt("RTBackgroundMode", 0)
         if (android.os.Build.VERSION.SDK_INT >= 31 && backgroundMode == 2) {
             setPictureInPictureParams(
                 PictureInPictureParams.Builder()

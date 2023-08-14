@@ -60,8 +60,8 @@ class Settings : AppCompatActivity() {
         }
 
         val enableCaptionsSwitch: SwitchMaterial = findViewById(R.id.enableCaptionsSwitch)
-        val preferences = getSharedPreferences("RTSettings", 0)
-        val enableCaptions: Boolean = preferences.getBoolean("RTEnableCaptions", false)
+        val settingsPreferences = getSharedPreferences("RTSettings", 0)
+        val enableCaptions: Boolean = settingsPreferences.getBoolean("RTEnableCaptions", false)
         if (!enableCaptions) {
             enableCaptionsSwitch.isChecked = false
         } else if (enableCaptions) {
@@ -69,9 +69,9 @@ class Settings : AppCompatActivity() {
         }
         enableCaptionsSwitch.setOnCheckedChangeListener { _, isChecked ->
             if (!isChecked) {
-                preferences.edit().putBoolean("RTEnableCaptions", false).apply()
+                settingsPreferences.edit().putBoolean("RTEnableCaptions", false).apply()
             } else if (isChecked) {
-                preferences.edit().putBoolean("RTEnableCaptions", true).apply()
+                settingsPreferences.edit().putBoolean("RTEnableCaptions", true).apply()
             }
         }
 

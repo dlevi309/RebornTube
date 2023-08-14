@@ -26,12 +26,12 @@ class SponsorBlockSettings : AppCompatActivity() {
             sponsorBlockSettingsLayout.layoutParams = params
         }
 
-        val preferences = getSharedPreferences("RTSettings", 0)
+        val settingsPreferences = getSharedPreferences("RTSettings", 0)
 
         // Source
         val sourceMainButton: Button = findViewById(R.id.sourceMainButton)
         val sourceMirrorButton: Button = findViewById(R.id.sourceMirrorButton)
-        val sponsorBlockSource: Int = preferences.getInt("RTSponsorBlockSource", 0)
+        val sponsorBlockSource: Int = settingsPreferences.getInt("RTSponsorBlockSource", 0)
         if (sponsorBlockSource == 0) {
             sourceMainButton.backgroundTintList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
@@ -60,7 +60,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockSource", 0).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockSource", 0).apply()
         }
         sourceMirrorButton.setOnClickListener {
             sourceMainButton.backgroundTintList = ColorStateList(
@@ -71,7 +71,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.lightgrey))
             )
-            preferences.edit().putInt("RTSponsorBlockSource", 1).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockSource", 1).apply()
         }
         sourceMainButton.requestFocus()
 
@@ -79,7 +79,7 @@ class SponsorBlockSettings : AppCompatActivity() {
         val sponsorDisableButton: Button = findViewById(R.id.sponsorDisableButton)
         val sponsorAutoSkipButton: Button = findViewById(R.id.sponsorAutoSkipButton)
         val sponsorManualSkipButton: Button = findViewById(R.id.sponsorManualSkipButton)
-        val sponsorBlockSponsor: Int = preferences.getInt("RTSponsorBlockSponsor", 0)
+        val sponsorBlockSponsor: Int = settingsPreferences.getInt("RTSponsorBlockSponsor", 0)
         if (sponsorBlockSponsor == 0) {
             sponsorDisableButton.backgroundTintList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
@@ -133,7 +133,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockSponsor", 0).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockSponsor", 0).apply()
         }
         sponsorAutoSkipButton.setOnClickListener {
             sponsorDisableButton.backgroundTintList = ColorStateList(
@@ -148,7 +148,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockSponsor", 1).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockSponsor", 1).apply()
         }
         sponsorManualSkipButton.setOnClickListener {
             sponsorDisableButton.backgroundTintList = ColorStateList(
@@ -163,14 +163,14 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.lightgrey))
             )
-            preferences.edit().putInt("RTSponsorBlockSponsor", 2).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockSponsor", 2).apply()
         }
 
         // Selfpromo
         val selfpromoDisableButton: Button = findViewById(R.id.selfpromoDisableButton)
         val selfpromoAutoSkipButton: Button = findViewById(R.id.selfpromoAutoSkipButton)
         val selfpromoManualSkipButton: Button = findViewById(R.id.selfpromoManualSkipButton)
-        val selfpromoBlockSelfpromo: Int = preferences.getInt("RTSponsorBlockSelfpromo", 0)
+        val selfpromoBlockSelfpromo: Int = settingsPreferences.getInt("RTSponsorBlockSelfpromo", 0)
         if (selfpromoBlockSelfpromo == 0) {
             selfpromoDisableButton.backgroundTintList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
@@ -224,7 +224,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockSelfpromo", 0).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockSelfpromo", 0).apply()
         }
         selfpromoAutoSkipButton.setOnClickListener {
             selfpromoDisableButton.backgroundTintList = ColorStateList(
@@ -239,7 +239,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockSelfpromo", 1).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockSelfpromo", 1).apply()
         }
         selfpromoManualSkipButton.setOnClickListener {
             selfpromoDisableButton.backgroundTintList = ColorStateList(
@@ -254,14 +254,14 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.lightgrey))
             )
-            preferences.edit().putInt("RTSponsorBlockSelfpromo", 2).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockSelfpromo", 2).apply()
         }
 
         // Interaction
         val interactionDisableButton: Button = findViewById(R.id.interactionDisableButton)
         val interactionAutoSkipButton: Button = findViewById(R.id.interactionAutoSkipButton)
         val interactionManualSkipButton: Button = findViewById(R.id.interactionManualSkipButton)
-        val interactionBlockInteraction: Int = preferences.getInt("RTSponsorBlockInteraction", 0)
+        val interactionBlockInteraction: Int = settingsPreferences.getInt("RTSponsorBlockInteraction", 0)
         if (interactionBlockInteraction == 0) {
             interactionDisableButton.backgroundTintList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
@@ -315,7 +315,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockInteraction", 0).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockInteraction", 0).apply()
         }
         interactionAutoSkipButton.setOnClickListener {
             interactionDisableButton.backgroundTintList = ColorStateList(
@@ -330,7 +330,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockInteraction", 1).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockInteraction", 1).apply()
         }
         interactionManualSkipButton.setOnClickListener {
             interactionDisableButton.backgroundTintList = ColorStateList(
@@ -345,14 +345,14 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.lightgrey))
             )
-            preferences.edit().putInt("RTSponsorBlockInteraction", 2).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockInteraction", 2).apply()
         }
 
         // Intro
         val introDisableButton: Button = findViewById(R.id.introDisableButton)
         val introAutoSkipButton: Button = findViewById(R.id.introAutoSkipButton)
         val introManualSkipButton: Button = findViewById(R.id.introManualSkipButton)
-        val introBlockIntro: Int = preferences.getInt("RTSponsorBlockIntro", 0)
+        val introBlockIntro: Int = settingsPreferences.getInt("RTSponsorBlockIntro", 0)
         if (introBlockIntro == 0) {
             introDisableButton.backgroundTintList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
@@ -406,7 +406,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockIntro", 0).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockIntro", 0).apply()
         }
         introAutoSkipButton.setOnClickListener {
             introDisableButton.backgroundTintList = ColorStateList(
@@ -421,7 +421,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockIntro", 1).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockIntro", 1).apply()
         }
         introManualSkipButton.setOnClickListener {
             introDisableButton.backgroundTintList = ColorStateList(
@@ -436,14 +436,14 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.lightgrey))
             )
-            preferences.edit().putInt("RTSponsorBlockIntro", 2).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockIntro", 2).apply()
         }
 
         // Outro
         val outroDisableButton: Button = findViewById(R.id.outroDisableButton)
         val outroAutoSkipButton: Button = findViewById(R.id.outroAutoSkipButton)
         val outroManualSkipButton: Button = findViewById(R.id.outroManualSkipButton)
-        val outroBlockOutro: Int = preferences.getInt("RTSponsorBlockOutro", 0)
+        val outroBlockOutro: Int = settingsPreferences.getInt("RTSponsorBlockOutro", 0)
         if (outroBlockOutro == 0) {
             outroDisableButton.backgroundTintList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
@@ -497,7 +497,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockOutro", 0).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockOutro", 0).apply()
         }
         outroAutoSkipButton.setOnClickListener {
             outroDisableButton.backgroundTintList = ColorStateList(
@@ -512,7 +512,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockOutro", 1).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockOutro", 1).apply()
         }
         outroManualSkipButton.setOnClickListener {
             outroDisableButton.backgroundTintList = ColorStateList(
@@ -527,14 +527,14 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.lightgrey))
             )
-            preferences.edit().putInt("RTSponsorBlockOutro", 2).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockOutro", 2).apply()
         }
 
         // Preview
         val previewDisableButton: Button = findViewById(R.id.previewDisableButton)
         val previewAutoSkipButton: Button = findViewById(R.id.previewAutoSkipButton)
         val previewManualSkipButton: Button = findViewById(R.id.previewManualSkipButton)
-        val previewBlockPreview: Int = preferences.getInt("RTSponsorBlockPreview", 0)
+        val previewBlockPreview: Int = settingsPreferences.getInt("RTSponsorBlockPreview", 0)
         if (previewBlockPreview == 0) {
             previewDisableButton.backgroundTintList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
@@ -588,7 +588,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockPreview", 0).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockPreview", 0).apply()
         }
         previewAutoSkipButton.setOnClickListener {
             previewDisableButton.backgroundTintList = ColorStateList(
@@ -603,7 +603,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockPreview", 1).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockPreview", 1).apply()
         }
         previewManualSkipButton.setOnClickListener {
             previewDisableButton.backgroundTintList = ColorStateList(
@@ -618,14 +618,14 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.lightgrey))
             )
-            preferences.edit().putInt("RTSponsorBlockPreview", 2).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockPreview", 2).apply()
         }
 
         // Music_offtopic
         val musicofftopicDisableButton: Button = findViewById(R.id.musicofftopicDisableButton)
         val musicofftopicAutoSkipButton: Button = findViewById(R.id.musicofftopicAutoSkipButton)
         val musicofftopicManualSkipButton: Button = findViewById(R.id.musicofftopicManualSkipButton)
-        val musicofftopicBlockMusicofftopic: Int = preferences.getInt("RTSponsorBlockMusicofftopic", 0)
+        val musicofftopicBlockMusicofftopic: Int = settingsPreferences.getInt("RTSponsorBlockMusicofftopic", 0)
         if (musicofftopicBlockMusicofftopic == 0) {
             musicofftopicDisableButton.backgroundTintList = ColorStateList(
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
@@ -679,7 +679,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockMusicofftopic", 0).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockMusicofftopic", 0).apply()
         }
         musicofftopicAutoSkipButton.setOnClickListener {
             musicofftopicDisableButton.backgroundTintList = ColorStateList(
@@ -694,7 +694,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.transparent))
             )
-            preferences.edit().putInt("RTSponsorBlockMusicofftopic", 1).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockMusicofftopic", 1).apply()
         }
         musicofftopicManualSkipButton.setOnClickListener {
             musicofftopicDisableButton.backgroundTintList = ColorStateList(
@@ -709,7 +709,7 @@ class SponsorBlockSettings : AppCompatActivity() {
                 arrayOf(intArrayOf(android.R.attr.state_enabled)),
                 intArrayOf(applicationContext.getColor(R.color.lightgrey))
             )
-            preferences.edit().putInt("RTSponsorBlockMusicofftopic", 2).apply()
+            settingsPreferences.edit().putInt("RTSponsorBlockMusicofftopic", 2).apply()
         }
     }
 

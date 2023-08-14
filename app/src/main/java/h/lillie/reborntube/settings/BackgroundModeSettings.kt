@@ -32,13 +32,13 @@ class BackgroundModeSettings : AppCompatActivity() {
             pipTableRow.visibility = View.GONE
         }
 
-        val preferences = getSharedPreferences("RTSettings", 0)
+        val settingsPreferences = getSharedPreferences("RTSettings", 0)
 
         val noneCheckBox: CheckBox = findViewById(R.id.noneCheckBox)
         val bgPlaybackCheckBox: CheckBox = findViewById(R.id.bgPlaybackCheckBox)
         val pipCheckBox: CheckBox = findViewById(R.id.pipCheckBox)
 
-        val backgroundMode: Int = preferences.getInt("RTBackgroundMode", 0)
+        val backgroundMode: Int = settingsPreferences.getInt("RTBackgroundMode", 0)
         if (backgroundMode == 0) {
             noneCheckBox.isChecked = true
             bgPlaybackCheckBox.isChecked = false
@@ -56,19 +56,19 @@ class BackgroundModeSettings : AppCompatActivity() {
             noneCheckBox.isChecked = true
             bgPlaybackCheckBox.isChecked = false
             pipCheckBox.isChecked = false
-            preferences.edit().putInt("RTBackgroundMode", 0).apply()
+            settingsPreferences.edit().putInt("RTBackgroundMode", 0).apply()
         }
         bgPlaybackCheckBox.setOnClickListener {
             noneCheckBox.isChecked = false
             bgPlaybackCheckBox.isChecked = true
             pipCheckBox.isChecked = false
-            preferences.edit().putInt("RTBackgroundMode", 1).apply()
+            settingsPreferences.edit().putInt("RTBackgroundMode", 1).apply()
         }
         pipCheckBox.setOnClickListener {
             noneCheckBox.isChecked = false
             bgPlaybackCheckBox.isChecked = false
             pipCheckBox.isChecked = true
-            preferences.edit().putInt("RTBackgroundMode", 2).apply()
+            settingsPreferences.edit().putInt("RTBackgroundMode", 2).apply()
         }
     }
 
