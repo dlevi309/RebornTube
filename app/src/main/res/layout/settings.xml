@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/black"
@@ -8,143 +8,158 @@
     android:id="@+id/settingsLayout"
     tools:context=".settings.Settings">
 
-    <TableLayout
-        android:id="@+id/settingsTableLayout"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:stretchColumns="1">
+        android:layout_height="50dp"
+        android:background="@color/darkgrey"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="Settings"
+        android:textColor="@color/white"
+        tools:ignore="HardcodedText" />
 
-        <TableRow
-            android:id="@+id/themeSettingsRow"
-            android:background="@color/darkgrey"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="52dp">
+
+        <TableLayout
+            android:id="@+id/settingsTableLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nextFocusDown="@id/sponsorBlockSettingsRow"
-            android:minHeight="50dp">
-            <TextView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:text="Theme"
-                android:textColor="@color/white"
-                android:paddingStart="16dp"
-                tools:ignore="HardcodedText,RtlSymmetry" />
-        </TableRow>
+            android:stretchColumns="1">
 
-        <TableRow
-            android:id="@+id/backgroundModeSettingsRow"
-            android:background="@color/darkgrey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:minHeight="50dp">
-            <TextView
-                android:layout_height="match_parent"
+            <TableRow
+                android:id="@+id/themeSettingsRow"
+                android:background="@color/darkgrey"
                 android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:text="Background Mode"
-                android:textColor="@color/white"
-                android:paddingStart="16dp"
-                tools:ignore="HardcodedText,RtlSymmetry" />
-        </TableRow>
+                android:layout_height="wrap_content"
+                android:nextFocusDown="@id/sponsorBlockSettingsRow"
+                android:minHeight="50dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Theme"
+                    android:textColor="@color/white"
+                    android:paddingStart="16dp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
+            </TableRow>
 
-        <TableRow
-            android:id="@+id/sponsorBlockSettingsRow"
-            android:background="@color/darkgrey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:nextFocusUp="@id/themeSettingsRow"
-            android:nextFocusDown="@id/enableCaptionsSwitch"
-            android:minHeight="50dp">
-            <TextView
-                android:layout_height="match_parent"
+            <TableRow
+                android:id="@+id/backgroundModeSettingsRow"
+                android:background="@color/darkgrey"
                 android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:text="SponsorBlock"
-                android:textColor="@color/white"
-                android:paddingStart="16dp"
-                tools:ignore="HardcodedText,RtlSymmetry" />
-        </TableRow>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:minHeight="50dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Background Mode"
+                    android:textColor="@color/white"
+                    android:paddingStart="16dp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
+            </TableRow>
 
-        <TableRow
-            android:background="@color/darkgrey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:minHeight="50dp">
-            <TextView
-                android:layout_height="match_parent"
+            <TableRow
+                android:id="@+id/sponsorBlockSettingsRow"
+                android:background="@color/darkgrey"
                 android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:text="Enable Captions"
-                android:textColor="@color/white"
-                android:paddingStart="16dp"
-                tools:ignore="HardcodedText,RtlSymmetry" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:nextFocusUp="@id/themeSettingsRow"
+                android:nextFocusDown="@id/enableCaptionsSwitch"
+                android:minHeight="50dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="SponsorBlock"
+                    android:textColor="@color/white"
+                    android:paddingStart="16dp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
+            </TableRow>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/enableCaptionsSwitch"
-                android:layout_height="match_parent"
+            <TableRow
+                android:background="@color/darkgrey"
                 android:layout_width="match_parent"
-                android:layout_gravity="end"
-                android:layout_marginEnd="100dp"
-                android:nextFocusUp="@id/sponsorBlockSettingsRow"
-                android:nextFocusDown="@id/clearHistorySettingsRow" />
-        </TableRow>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:minHeight="50dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Enable Captions"
+                    android:textColor="@color/white"
+                    android:paddingStart="16dp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
 
-        <TableRow
-            android:id="@+id/clearHistorySettingsRow"
-            android:background="@color/darkgrey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:nextFocusUp="@id/enableCaptionsSwitch"
-            android:nextFocusDown="@id/creditsSettingsRow"
-            android:minHeight="50dp">
-            <TextView
-                android:layout_height="match_parent"
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/enableCaptionsSwitch"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="100dp"
+                    android:nextFocusUp="@id/sponsorBlockSettingsRow"
+                    android:nextFocusDown="@id/clearHistorySettingsRow" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/clearHistorySettingsRow"
+                android:background="@color/darkgrey"
                 android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:text="Clear History"
-                android:textColor="@color/white"
-                android:paddingStart="16dp"
-                tools:ignore="HardcodedText,RtlSymmetry" />
-        </TableRow>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:nextFocusUp="@id/enableCaptionsSwitch"
+                android:nextFocusDown="@id/creditsSettingsRow"
+                android:minHeight="50dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Clear History"
+                    android:textColor="@color/white"
+                    android:paddingStart="16dp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
+            </TableRow>
 
-        <TableRow
-            android:id="@+id/creditsSettingsRow"
-            android:background="@color/darkgrey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:nextFocusUp="@id/clearHistorySettingsRow"
-            android:minHeight="50dp">
-            <TextView
-                android:layout_height="match_parent"
+            <TableRow
+                android:id="@+id/creditsSettingsRow"
+                android:background="@color/darkgrey"
                 android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:text="Credits"
-                android:textColor="@color/white"
-                android:paddingStart="16dp"
-                tools:ignore="HardcodedText,RtlSymmetry" />
-        </TableRow>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:nextFocusUp="@id/clearHistorySettingsRow"
+                android:minHeight="50dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Credits"
+                    android:textColor="@color/white"
+                    android:paddingStart="16dp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
+            </TableRow>
 
-        <TableRow
-            android:id="@+id/opensourceLibrariesSettingsRow"
-            android:background="@color/darkgrey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:minHeight="50dp">
-            <TextView
-                android:layout_height="match_parent"
+            <TableRow
+                android:id="@+id/opensourceLibrariesSettingsRow"
+                android:background="@color/darkgrey"
                 android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:text="Open-Source Libraries"
-                android:textColor="@color/white"
-                android:paddingStart="16dp"
-                tools:ignore="HardcodedText,RtlSymmetry" />
-        </TableRow>
-
-    </TableLayout>
-</ScrollView>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:minHeight="50dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Open-Source Libraries"
+                    android:textColor="@color/white"
+                    android:paddingStart="16dp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</RelativeLayout>

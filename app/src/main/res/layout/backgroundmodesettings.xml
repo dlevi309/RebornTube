@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/black"
@@ -8,79 +8,95 @@
     android:id="@+id/backgroundModeSettingsLayout"
     tools:context=".settings.BackgroundModeSettings">
 
-    <TableLayout
-        android:background="@color/black"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:stretchColumns="1">
+        android:layout_height="50dp"
+        android:background="@color/darkgrey"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="Background Mode Settings"
+        android:textColor="@color/white"
+        tools:ignore="HardcodedText" />
 
-        <TableRow
-            android:background="@color/darkgrey"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="52dp">
+
+        <TableLayout
+            android:background="@color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="50dp">
-            <TextView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:text="None"
-                android:textColor="@color/white"
-                android:paddingStart="16dp"
-                tools:ignore="HardcodedText,RtlSymmetry" />
+            android:stretchColumns="1">
 
-            <CheckBox
-                android:id="@+id/noneCheckBox"
-                android:layout_height="match_parent"
+            <TableRow
+                android:background="@color/darkgrey"
                 android:layout_width="match_parent"
-                android:layout_gravity="end"
-                android:layout_marginEnd="100dp" />
-        </TableRow>
+                android:layout_height="wrap_content"
+                android:minHeight="50dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="None"
+                    android:textColor="@color/white"
+                    android:paddingStart="16dp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
 
-        <TableRow
-            android:background="@color/darkgrey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:minHeight="50dp">
-            <TextView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:text="Background Playback"
-                android:textColor="@color/white"
-                android:paddingStart="16dp"
-                tools:ignore="HardcodedText,RtlSymmetry" />
+                <CheckBox
+                    android:id="@+id/noneCheckBox"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="100dp" />
+            </TableRow>
 
-            <CheckBox
-                android:id="@+id/bgPlaybackCheckBox"
-                android:layout_height="match_parent"
+            <TableRow
+                android:background="@color/darkgrey"
                 android:layout_width="match_parent"
-                android:layout_gravity="end"
-                android:layout_marginEnd="100dp" />
-        </TableRow>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:minHeight="50dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Background Playback"
+                    android:textColor="@color/white"
+                    android:paddingStart="16dp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
 
-        <TableRow
-            android:id="@+id/pipTableRow"
-            android:background="@color/darkgrey"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:minHeight="50dp">
-            <TextView
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:text="Picture In Picture"
-                android:textColor="@color/white"
-                android:paddingStart="16dp"
-                tools:ignore="HardcodedText,RtlSymmetry" />
+                <CheckBox
+                    android:id="@+id/bgPlaybackCheckBox"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="100dp" />
+            </TableRow>
 
-            <CheckBox
-                android:id="@+id/pipCheckBox"
-                android:layout_height="match_parent"
+            <TableRow
+                android:id="@+id/pipTableRow"
+                android:background="@color/darkgrey"
                 android:layout_width="match_parent"
-                android:layout_gravity="end"
-                android:layout_marginEnd="100dp" />
-        </TableRow>
-    </TableLayout>
-</ScrollView>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:minHeight="50dp">
+                <TextView
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="Picture In Picture"
+                    android:textColor="@color/white"
+                    android:paddingStart="16dp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
+
+                <CheckBox
+                    android:id="@+id/pipCheckBox"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="100dp" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+</RelativeLayout>

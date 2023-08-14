@@ -15,7 +15,9 @@
         android:background="@color/darkgrey"
         android:inputType="text"
         android:layout_alignParentTop="true"
-        tools:ignore="Autofill,LabelFor" />
+        android:hint="Search Name Or Url"
+        android:textColor="@color/white"
+        tools:ignore="Autofill,LabelFor,HardcodedText" />
 
     <ScrollView
         android:id="@+id/searchScrollView"
@@ -31,5 +33,4 @@
             android:clickable="false" />
 
     </ScrollView>
-
 </RelativeLayout>
